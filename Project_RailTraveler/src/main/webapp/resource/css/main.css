@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+.text-center {
+	font-family: 'Lobster', cursive;
+}
+
+.subtitle {
+	font-family: 'Lobster', cursive !important;
+	font-size: 25px;
+}

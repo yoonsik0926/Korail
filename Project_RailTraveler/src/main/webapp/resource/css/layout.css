@@ -1,0 +1,13 @@
+﻿@CHARSET "UTF-8";
+.body-left{
+	width: 13%;
+	float: left;
+	margin-right: 2%;
+}
+.body-right{
+width: 85%;
+	float: left; 
+}
+.navbar-collapse{
+	max-height: 300px;
+}
