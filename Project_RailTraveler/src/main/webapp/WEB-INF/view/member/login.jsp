@@ -55,8 +55,7 @@ function sendLogin() {
 }
 </script>
 
-<div class="main">
-    <div class="container tim-container" style="max-width:800px; padding-top:100px">
+<div class="body-container">
     <div style="width:360px; margin: 0px auto; padding-top:90px;">
     	<div style="text-align: center;">
         	<span style="font-weight: bold; font-size:27px; color: #424951;">회원 로그인</span>
@@ -91,7 +90,7 @@ function sendLogin() {
 		  <tr align="center" height="45">
 		      <td>
 		       		<a href="<%=cp%>/">아이디찾기</a>&nbsp;&nbsp;&nbsp;
-		       		<a href="<%=cp%>/member/pwdFind">패스워드찾기</a>&nbsp;&nbsp;&nbsp;
+		       		<a href="<%=cp%>/">패스워드찾기</a>&nbsp;&nbsp;&nbsp;
 		       		<a href="<%=cp%>/member/member">회원가입</a>
 		      </td>
 		  </tr>
@@ -103,4 +102,4 @@ function sendLogin() {
 		  </table>
 		</form>           
 	</div>
-</div></div>
+</div>

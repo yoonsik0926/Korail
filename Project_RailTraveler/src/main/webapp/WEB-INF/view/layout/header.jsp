@@ -98,9 +98,15 @@ System.out.print(cp);
                       </ul>
                 	</li>
               </ul>
+             
               <ul class="nav navbar-nav navbar-right">
+               <c:if test="${not empty sessionScope.member}">
                     <li class="dropdown">
-                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">홍길동(마이페이지)<b class="caret"></b></a>
+                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown" style="FONT-SIZE: 30px;
+    FONT-FAMILY: Gungsuh,궁서;
+    COLOR: #fff;
+    text-shadow: 0 0 20px #fefcc9, 10px -10px 30px #feec85, -20px -20px 40px #ffae34, 20px -40px 50px #ec760c, -20px -60px 60px #cd4606, 0 -80px 70px #973716, 10px -90px 80px #451b0e;
+                      ">홍길동<b class="caret"></b></a>
                       <ul class="dropdown-menu">
                         <li><a href="<%=cp%>/member/update">정보 수정</a></li>
                         <li><a href="<%=cp%>/bookmark/bookmark">나의 북마크</a></li>
@@ -109,9 +115,13 @@ System.out.print(cp);
                         <li><a href="<%=cp%>/mypage/article">내가 쓴 게시물</a></li>
                       </ul>
                 	</li>
+                	<li><button onclick="javascript:location.href='<%=cp%>/member/logout';" class="btn btn-round btn-default">로그아웃</button></li>
+                	</c:if>
+                	<c:if test="${empty sessionScope.member}">
                     <li><a href="<%=cp%>/member/member">회원가입</a></li>
                     
                     <li><button onclick="javascript:location.href='<%=cp%>/member/login';" class="btn btn-round btn-default">로그인</button></li>
+                </c:if>
                </ul>
               <ul class="nav navbar-nav side navbar-right">
                <li class="active"><a href="#"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>

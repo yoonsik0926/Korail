@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
-    <!-- Uncomment and your base-package here:
-         <context:component-scan
-            base-package="org.springframework.samples.web"/>  -->
-
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <mvc:annotation-driven />
 
@@ -19,9 +26,9 @@
 	<context:component-scan base-package="com.railer.rt" />
 
 	 <!-- 트랜잭션 처리가 안되는 경우 mvc-config.xml 에 다음을 추가  -->
-<!--     <aop:config proxy-target-class="true"> -->
-<!-- 	   <aop:pointcut id="co`ntrollerOperation" expression="execution(public * com.sp..*Controller.*(..))" /> -->
-<!--    </aop:config> -->
+    <aop:config proxy-target-class="true">
+	   <aop:pointcut id="controllerOperation" expression="execution(public * com.railer.rt..*Controller.*(..))" />
+   </aop:config>
 	
 	<!-- 타일즈 환경 설정 -->
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
@@ -51,36 +58,14 @@
          <property name="maxUploadSize" value="10485760" />
     </bean>
 
-	<!-- Interceptor 설정. -->
-<!--  	<mvc:interceptors> -->
-<!--  		<mvc:interceptor> -->
-<!--  			인터셉터 적용, /**은 모든 부분을 말함 -->
-<!--  			<mvc:mapping path="/**"/> -->
- 			
-<!--  			제외가 필요한 부분 -->
-<!--  			<mvc:exclude-mapping path="/"/> -->
-<!--  			<mvc:exclude-mapping path="/main"/> -->
-<!--  			<mvc:exclude-mapping path="/resource/**"/> -->
-<!--  			<mvc:exclude-mapping path="/member/login"/> -->
-<!--  			<mvc:exclude-mapping path="/member/logout"/> -->
-<!--  			<mvc:exclude-mapping path="/member/member"/> -->
-<!--  			<mvc:exclude-mapping path="/member/userIdCheck"/> -->
-<!--  			<mvc:exclude-mapping path="/member/complete"/> -->
-<!--  			<mvc:exclude-mapping path="/member/pwdFind"/> -->
- 			
- 			
-<!--  			<bean class="com.railer.rt.member.LoginCheckInterceptor"/> -->
-<!--  		</mvc:interceptor> -->
-<!--  	</mvc:interceptors> -->
- 	
- 	<!-- 웹 소켓 -->
-<!--  	<bean id="mySocketHandler" class="com.railer.rt.chat.MySocketHandler"/> -->
+	<!-- 웹소켓 환경 설정 -->
 <!--  	<websocket:handlers> -->
 <!--  		<websocket:mapping handler="mySocketHandler" path="/chat.msg"/> -->
 <!--  	</websocket:handlers> -->
- 	
-    <!-- 예외처리 -->
-<!--     
+<!--  	<bean id="mySocketHandler" class="com.sp.chat.MySocketHandler" /> -->
+ 
+    <!-- 예외처리 : 마지막에 해제 -->
+ <!--    
     <bean id="exceptionResolver"
                class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="order" value="1" />
@@ -93,6 +78,5 @@
         </property>
         <property name="defaultErrorView" value=".error.error"/>
     </bean>
--->
-
+     -->
 </beans>

@@ -169,10 +169,9 @@ function userIdCheck() {
 }
 
 </script>
-<div class="main">
-    <div class="container tim-container" style="max-width:800px; padding-top:100px">
+<div class="body-container" style="width: 700px;">
     <div class="body-title">
-        <h3><span style="font-family: Webdings">2</span> ${mode=="member"?"회원 가입":"회원 정보 수정"} </h3>
+        <h3><i class="fas fa-user"></i> ${mode=="member"?"회원 가입":"회원 정보 수정"} </h3>
     </div>
     
         <div>
@@ -394,4 +393,4 @@ function userIdCheck() {
         }).open();
     }
 </script>
-</div></div>
+</div>
