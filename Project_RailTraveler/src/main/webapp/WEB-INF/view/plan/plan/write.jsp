@@ -124,6 +124,7 @@ function getNumber(day) {
 	document.getElementById("selectDays").src=day.src;
 	$('#myModal').hide();
 }
+
 </script>
 </head>
 
@@ -208,25 +209,32 @@ function getNumber(day) {
 					
 				marker.setMap(map);
 				
-				// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-				var iwContent ='<div style="padding:5px; width:350px; height:150px; margin:10px;"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><div style="width:100px; height:100px; border:1px solid black;"></div></div>',
-					// 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-				    iwRemoveable = false; // removeable 속성을 true로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-				// 인포윈도우를 생성합니다
-				var infowindow = new kakao.maps.InfoWindow({
-				    content : iwContent,
-				    removable : iwRemoveable
+				var content ='<div id="plusStation" style="padding:5px; width:350px; height:150px; margin:10px;"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><div style="width:100px; height:100px; border:1px solid black; display:block; float:left; margin-right:10px;"></div><div style="width: 200px; height: 100px; border: 1px solid black; display: block; float: left;"></div><div onclick="closeOverlay()" style="width: 310px; height: 30px; border: 1px solid black; display: block; float: left; margin:10px; margin-left:0; font-size:20px; text-align:center; cursor:pointer;"><div>추가하기</div></div></div>';
+				
+				// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+				var overlay = new kakao.maps.CustomOverlay({
+				    content: content,
+				    map: map,
+				    position: marker.getPosition()       
 				});
 
-				// 마커에 클릭이벤트를 등록합니다
+				// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
 				kakao.maps.event.addListener(marker, 'click', function() {
-				    // 마커 위에 인포윈도우를 표시합니다
-				    infowindow.open(map, marker);  
+				    overlay.setMap(map);
 				});
+
+				// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
+				function closeOverlay() {
+				    overlay.setMap(null);
+				}
 				</script>
 			</div>
 		</div>
 	</div>
+<script type="text/javascript">
+function plusStation() {
+// 	$('#plusStation').parent().parent().css("display","none");
+}
+</script>
 </body>
 </html>
