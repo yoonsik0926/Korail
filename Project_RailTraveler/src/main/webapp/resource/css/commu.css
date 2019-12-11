@@ -31,9 +31,8 @@
 	color: #101010;
 }
 
-table th td{
-	text-align: center;    
-	padding-left: 30%;
+table th, table td{
+	text-align: center;   
 }
 
 table th span {
@@ -41,5 +40,6 @@ table th span {
 	border-left: #d3d3d3 1px solid;
 	width: 100%;
 	display: inline-block;
-	left: -10px;
+	left: -10px; 
+	padding-left: 30%;
 }
