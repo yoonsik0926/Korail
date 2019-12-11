@@ -72,11 +72,6 @@ function memberOk() {
 
     str = f.tel2.value;
 	str = str.trim();
-    if(!str) {
-        alert("전화번호를 입력하세요. ");
-        f.tel2.focus();
-        return;
-    }
     if(!/^(\d+)$/.test(str)) {
         alert("숫자만 가능합니다. ");
         f.tel2.focus();
@@ -85,11 +80,7 @@ function memberOk() {
 
     str = f.tel3.value;
 	str = str.trim();
-    if(!str) {
-        alert("전화번호를 입력하세요. ");
-        f.tel3.focus();
-        return;
-    }
+
     if(!/^(\d+)$/.test(str)) {
         alert("숫자만 가능합니다. ");
         f.tel3.focus();
@@ -107,7 +98,7 @@ function memberOk() {
     str = f.email2.value;
 	str = str.trim();
     if(!str) {
-        alert("이메일을 입력하세요. ");
+        alert("이메일을 입력하세요.");
         f.email2.focus();
         return;
     }
@@ -141,7 +132,8 @@ function userIdCheck() {
 		return;
 	}
 	
-	var url="<%=cp%>/member/userIdCheck";
+	var url="<%=cp%>
+	/member/userIdCheck";
 		var q = "userId=" + str;
 
 		$.ajax({
@@ -182,44 +174,47 @@ input, select, .btnSearch {
 	border-radius: 4px;
 }
 
-.btnJoin{
-  background:#334393;
-  color:#fff;
-  border:none;
-  position:relative;
-  height:40px;
-  width: 250px;
-  padding:0 2em;
-  cursor:pointer;
-  transition:800ms ease all;
-  outline:none;
-  border-radius: 4px;
-}
-.btnJoin:hover{
-  background:#fff;
-  color:#334393;
-}
-.btnJoin:before,.btnJoin:after{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  height:2px;
-  width:0;
-  background: #334393;
-  transition:400ms ease all;
-}
-.btnJoin:after{
-  right:inherit;
-  top:inherit;
-  left:0;
-  bottom:0;
-}
-.btnJoin:hover:before,.btnJoin:hover:after{
-  width:100%;
-  transition:800ms ease all;
+.btnJoin {
+	background: #334393;
+	color: #fff;
+	border: none;
+	position: relative;
+	height: 40px;
+	width: 250px;
+	padding: 0 2em;
+	cursor: pointer;
+	transition: 800ms ease all;
+	outline: none;
+	border-radius: 4px;
 }
 
+.btnJoin:hover {
+	background: #fff;
+	color: #334393;
+}
+
+.btnJoin:before, .btnJoin:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 2px;
+	width: 0;
+	background: #334393;
+	transition: 400ms ease all;
+}
+
+.btnJoin:after {
+	right: inherit;
+	top: inherit;
+	left: 0;
+	bottom: 0;
+}
+
+.btnJoin:hover:before, .btnJoin:hover:after {
+	width: 100%;
+	transition: 800ms ease all;
+}
 </style>
 
 <div class="main">
@@ -229,7 +224,7 @@ input, select, .btnSearch {
 			<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png"
 				style="height: 80px;">
 		</div>
-		
+
 		<div>
 			<form name="memberForm" method="post">
 				<table
@@ -357,38 +352,6 @@ input, select, .btnSearch {
 							</p>
 						</td>
 					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">우편번호</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="text" name="zip" id="zip" value="${dto.zip}"
-									class="boxTF" readonly="readonly">
-								<button class="btnSearch" type="button" class="btn"
-									onclick="daumPostcode();">우편번호 찾기</button>
-							</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">주소</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="text" name="addr1" id="addr1" value="${dto.addr1}"
-									maxlength="50" class="boxTF" style="width: 95%;"
-									placeholder="&nbsp;&nbsp;기본 주소" readonly="readonly">
-							</p>
-							<p style="margin-bottom: 5px;">
-								<input type="text" name="addr2" id="addr2" value="${dto.addr2}"
-									maxlength="50" class="boxTF" style="width: 95%;"
-									placeholder="&nbsp;&nbsp;나머지 주소">
-							</p>
-						</td>
-					</tr>
 					<c:if test="${mode=='member'}">
 						<tr>
 							<td width="100" valign="top"
@@ -399,16 +362,13 @@ input, select, .btnSearch {
 									<label><input id="agree" name="agree" type="checkbox"
 										checked="checked"
 										onchange="form.sendButton.disabled = !checked"> <a
-										href="#">이용약관</a>에 동의합니다.
-									</label>
+										href="#">이용약관</a>에 동의합니다. </label>
 								</p>
 							</td>
-							
 						</tr>
 					</c:if>
 				</table>
-
-				<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+				<table style="width: 100%; margin: 20px auto; border-spacing: 0px;">
 					<tr height="45">
 						<td align="center">
 							<button class="btnJoin" type="button" name="sendButton"
@@ -416,7 +376,7 @@ input, select, .btnSearch {
 						</td>
 					</tr>
 					<tr height="15">
-						<td align="right"><a href='<%=cp%>/';">${mode=="member"? "가입취소":"수정취소"}</a></td>
+						<td align="right"><a href='<%=cp%>/'>${mode=="member"? "가입취소":"수정취소"}</a></td>
 					</tr>
 					<tr height="30">
 						<td align="center" style="color: blue;">${message}</td>
@@ -425,54 +385,5 @@ input, select, .btnSearch {
 				</table>
 			</form>
 		</div>
-
-		<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-		<script>
-			function daumPostcode() {
-				new daum.Postcode(
-						{
-							oncomplete : function(data) {
-								// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-								// 각 주소의 노출 규칙에 따라 주소를 조합한다.
-								// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-								var fullAddr = ''; // 최종 주소 변수
-								var extraAddr = ''; // 조합형 주소 변수
-
-								// 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-								if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-									fullAddr = data.roadAddress;
-
-								} else { // 사용자가 지번 주소를 선택했을 경우(J)
-									fullAddr = data.jibunAddress;
-								}
-
-								// 사용자가 선택한 주소가 도로명 타입일때 조합한다.
-								if (data.userSelectedType === 'R') {
-									//법정동명이 있을 경우 추가한다.
-									if (data.bname !== '') {
-										extraAddr += data.bname;
-									}
-									// 건물명이 있을 경우 추가한다.
-									if (data.buildingName !== '') {
-										extraAddr += (extraAddr !== '' ? ', '
-												+ data.buildingName
-												: data.buildingName);
-									}
-									// 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
-									fullAddr += (extraAddr !== '' ? ' ('
-											+ extraAddr + ')' : '');
-								}
-
-								// 우편번호와 주소 정보를 해당 필드에 넣는다.
-								document.getElementById('zip').value = data.zonecode; //5자리 새우편번호 사용
-								document.getElementById('addr1').value = fullAddr;
-
-								// 커서를 상세주소 필드로 이동한다.
-								document.getElementById('addr2').focus();
-							}
-						}).open();
-			}
-		</script>
 	</div>
 </div>
