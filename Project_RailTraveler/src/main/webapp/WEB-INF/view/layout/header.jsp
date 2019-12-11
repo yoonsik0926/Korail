@@ -31,9 +31,9 @@ System.out.print(cp);
               <ul class="nav navbar-nav side navbar-right side-toggle" style="float: right;">
                <li class="active"><a href="#"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
 <!--                <li class="bar">ㅣ</li> -->
-             <a href="#"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
+             <a href="http://info.korail.com/mbs/www/subview.jsp?id=www_020110010000"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
 <!--                <li class="bar">ㅣ</li> -->
-              <a href="#"><i class="far fa-clock"></i>&nbsp;&nbsp;열차시간표</a></li>
+              <a href="http://www.letskorail.com/ebizcom/cs/guide/guide/guide11.do"><i class="far fa-clock"></i>&nbsp;&nbsp;열차시간표</a></li>
               
               </ul>
               <a class="navbar-brand" href="<%=cp%>">
@@ -126,9 +126,9 @@ System.out.print(cp);
               <ul class="nav navbar-nav side navbar-right">
                <li class="active"><a href="#"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
 <!--                <li class="bar">ㅣ</li> -->
-             <a href="#"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
+             <a href="http://info.korail.com/mbs/www/subview.jsp?id=www_020110010000"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
 <!--                <li class="bar">ㅣ</li> -->
-              <a href="#"><i class="far fa-clock"></i>&nbsp;&nbsp;열차시간표</a></li>
+              <a href="http://www.letskorail.com/ebizcom/cs/guide/guide/guide11.do"><i class="far fa-clock"></i>&nbsp;&nbsp;열차시간표</a></li>
               
               </ul>
               
