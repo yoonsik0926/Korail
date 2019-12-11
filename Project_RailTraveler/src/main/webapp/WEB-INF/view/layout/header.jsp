@@ -29,7 +29,7 @@ System.out.print(cp);
                 <span class="icon-bar"></span>
               </button>
               <ul class="nav navbar-nav side navbar-right side-toggle" style="float: right;">
-               <li class="active"><a href="#"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
+               <li class="active"><a href="<%=cp%>/ticket/pay"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
 <!--                <li class="bar">ㅣ</li> -->
              <a href="http://info.korail.com/mbs/www/subview.jsp?id=www_020110010000"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
 <!--                <li class="bar">ㅣ</li> -->
@@ -124,7 +124,7 @@ System.out.print(cp);
                 </c:if>
                </ul>
               <ul class="nav navbar-nav side navbar-right">
-               <li class="active"><a href="#"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
+               <li class="active"><a href="<%=cp%>/ticket/pay"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;티켓 발권하기</a>
 <!--                <li class="bar">ㅣ</li> -->
              <a href="http://info.korail.com/mbs/www/subview.jsp?id=www_020110010000"><i class="far fa-map"></i>&nbsp;&nbsp;기차노선도</a>
 <!--                <li class="bar">ㅣ</li> -->
