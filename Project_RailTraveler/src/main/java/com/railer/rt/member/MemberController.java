@@ -21,10 +21,12 @@ public class MemberController {
 		
 		return ".member.login";
 	}
+	
 	@RequestMapping(value="/member/member")
 	public String memberForm() {
 		return ".member.member";
 	}
+	
 	@RequestMapping(value="/member/noAuthorized")
 	public String noAuth() {
 		// 접근 권한이 없는 경우
@@ -47,6 +49,16 @@ public class MemberController {
 			return "redirect:/";
 		
 		return ".member.complete";
+	}
+	
+	@RequestMapping(value="/member/pwd")
+	public String pwdForm() {
+		return ".member.pwd";
+	}
+	
+	@RequestMapping(value="/member/pwdFind")
+	public String pwdFind() {
+		return ".member.pwdFind";
 	}
 	
 }
