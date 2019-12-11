@@ -24,17 +24,19 @@
 			<hsts disabled="true"/>
 		</headers>
 		
-		<intercept-url pattern="/index.jsp" access="permitAll"/>
-		<intercept-url pattern="/main" access="permitAll"/>
-		<intercept-url pattern="/member/login" access="permitAll"/>
+		<intercept-url pattern="/**" access="permitAll"/>
+<!-- 		<intercept-url pattern="/index.jsp" access="permitAll"/> -->
+<!-- 		<intercept-url pattern="/main" access="permitAll"/> -->
+<!-- 		<intercept-url pattern="/plan/*" access="permitAll"/> -->
+<!-- 		<intercept-url pattern="/member/login" access="permitAll"/> -->
 <!-- 		<intercept-url pattern="/member/member" access="permitAll"/> -->
 <!-- 		<intercept-url pattern="/member/userIdCheck" access="permitAll"/> -->
-		<intercept-url pattern="/member/complete" access="permitAll"/>
+<!-- 		<intercept-url pattern="/member/complete" access="permitAll"/> -->
 		
 		<intercept-url pattern="/resource/**" access="permitAll"/>
 		
-		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')"/>
+<!-- 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
+<!-- 		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/> -->
 		
 		<form-login
 			login-page="/member/login"

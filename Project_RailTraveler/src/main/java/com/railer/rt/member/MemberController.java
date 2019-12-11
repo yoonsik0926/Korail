@@ -21,7 +21,10 @@ public class MemberController {
 		
 		return ".member.login";
 	}
-	
+	@RequestMapping(value="/member/member")
+	public String memberForm() {
+		return ".member.member";
+	}
 	@RequestMapping(value="/member/noAuthorized")
 	public String noAuth() {
 		// 접근 권한이 없는 경우
