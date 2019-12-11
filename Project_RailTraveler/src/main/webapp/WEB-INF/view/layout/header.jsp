@@ -108,7 +108,7 @@ System.out.print(cp);
     text-shadow: 0 0 20px #fefcc9, 10px -10px 30px #feec85, -20px -20px 40px #ffae34, 20px -40px 50px #ec760c, -20px -60px 60px #cd4606, 0 -80px 70px #973716, 10px -90px 80px #451b0e;
                       ">홍길동<b class="caret"></b></a>
                       <ul class="dropdown-menu">
-                        <li><a href="<%=cp%>/member/update">정보 수정</a></li>
+                        <li><a href="<%=cp%>/member/pwd">정보 수정</a></li>
                         <li><a href="<%=cp%>/bookmark/bookmark">나의 북마크</a></li>
                         <li><a href="<%=cp%>/ticket/myticket">나의 승차권</a></li>
                         <li><a href="<%=cp%>/plan/planlist">나의 여행 플랜</a></li>
