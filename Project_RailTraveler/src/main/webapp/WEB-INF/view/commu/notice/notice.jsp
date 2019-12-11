@@ -11,14 +11,16 @@
          <h3>공지사항</h3>
      </div>
      
-     <div>
+     <div id="sir_lbo" class="sir_lbo" style="padding: 0;
+    margin: 0;
+    font-size: 1.025em;">
       
 	<table class="table table-hover" style="padding: 0;
     margin: 0;
     font-size: 1.025em;">
             <thead>
               <tr class="lbo_li lbo_legend lbo_legend_like">
-                <th>#</th>
+                <th><span> #</span></th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Username</th>

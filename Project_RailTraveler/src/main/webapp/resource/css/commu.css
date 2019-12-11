@@ -29,3 +29,11 @@
     color: #101010;
 }
 
+table th{
+	text-align: center;
+}
+
+table th span{
+	border-left: #d3d3d3;
+}
+

@@ -144,7 +144,7 @@ body {
 
 .main {
   background-color: #FFFFFF;
-  position: relative; }
+  position: relative; padding: 0% 10% 2% 10%;}
 
 a {
   color: #2CA8FF; }
