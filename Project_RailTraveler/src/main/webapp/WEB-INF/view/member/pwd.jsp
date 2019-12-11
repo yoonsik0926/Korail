@@ -6,23 +6,6 @@
    String cp = request.getContextPath();
 %>
 
-<style type="text/css">
-.lbl {
-   position:absolute; 
-   margin-left:15px; margin-top: 17px;
-   color: #999999; font-size: 11pt;
-}
-.loginTF {
-  width: 340px; height: 35px;
-  padding: 5px;
-  padding-left: 15px;
-  border:1px solid #999999;
-  color:#333333;
-  margin-top:5px; margin-bottom:5px;
-  font-size:14px;
-  border-radius:4px;
-}
-</style>
 <script type="text/javascript">
 	function bgLabel(ob, id) {
 	    if(!ob.value) {
@@ -46,18 +29,94 @@
         f.submit();
 	}
 </script>
+<style>
+.lbl {
+   position:absolute; 
+   margin-left:15px; margin-top: 17px;
+   color: #999999; font-size: 11pt;
+}
+.loginTF {
+  width: 340px; height: 35px;
+  padding: 5px;
+  padding-left: 15px;
+  border:1px solid #999999;
+  color:#333333;
+  margin-top:5px; margin-bottom:5px;
+  font-size:14px;
+  border-radius:4px;
+}
 
+.main {
+	background: #F9F0DA !important;
+}
+
+input{
+	background : #8fbbf9 !important;
+	border : none !important;
+	height: 45px !important;
+}
+
+.btnConfirm:hover {
+	width: 185px;
+	height: 40px;
+	border: none;
+	background : #a1b1f7;
+	border-radius: 4px;
+	color : white;
+}
+
+.btnConfirm{
+  background:#a1b1f7;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:40px;
+  width: 185px;
+  padding:0 2em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+  border-radius: 4px;
+}
+.btnConfirm:hover{
+  background:#fff;
+  color:#a1b1f7;
+}
+.btnConfirm:before,.btnConfirm:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #a1b1f7;
+  transition:400ms ease all;
+}
+.btnConfirm:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btnConfirm:hover:before,.btnConfirm:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+
+</style>
+<div class="main">
+	<div class="container tim-container" style="max-width: 1200px; padding-top: 100px; background:#F9F0DA;">
 <div class="body-container">
-    <div style="width:420px; margin: 0px auto; padding-top:90px;">
+    <div style="width:420px; margin: 0px auto; padding-top:70px;">
 	
-    	<div style="text-align: center;">
-        	<span style="font-weight: bold; font-size:27px; color: #424951;">패스워드 재확인</span>
-        </div>
+		<div style="text-align: center;">
+				<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png" style="height: 80px;">
+		</div>
 	
 		<form name="pwdForm" method="post" action="">
-		  <table style="width:100%; margin: 20px auto; padding:30px;  border-collapse: collapse; border: 1px solid #DAD9FF;">
+		  <table style="width:100%; margin: 20px auto; padding:30px;  border-collapse: collapse;">
 		  <tr style="height:50px;"> 
-		      <td style="padding-left: 30px; text-align: left;">
+		      <td style="padding: 0 30px; text-align: center;">
 		          정보보호를 위해 패스워드를 다시 한 번 입력해주세요.
 		      </td>
 		  </tr>
@@ -75,11 +134,12 @@
 		  <tr align="center" height="60"> 
 		      <td>
 		        &nbsp;
-		        <label for="userPwd" id="lblUserPwd" class="lbl" >패스워드</label>
+		        <label for="userPwd" id="lblUserPwd" class="lbl"></label>
 		        <input type="password" name="userPwd" id="userPwd" class="loginTF" maxlength="20" 
 		                   tabindex="2"
                            onfocus="document.getElementById('lblUserPwd').style.display='none';"
-                           onblur="bgLabel(this, 'lblUserPwd');">
+                           onblur="bgLabel(this, 'lblUserPwd');"
+                           placeholder="Password">
 		        &nbsp;
 		      </td>
 		  </tr>
@@ -103,4 +163,6 @@
 		  </tr>
 		</table>
 	</div>
+</div>
+</div>
 </div>
