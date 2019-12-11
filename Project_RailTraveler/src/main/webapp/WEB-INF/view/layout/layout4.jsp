@@ -35,8 +35,11 @@
   
   <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
   
-	<link href="<%=cp%>/resource/css/gsdk.css" rel="stylesheet" /> </head>
-	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> </head>
+	<link href="<%=cp%>/resource/css/gsdk.css" rel="stylesheet" /> 
+	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> 
+	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
+	
+</head> 
 
 <body>
 
