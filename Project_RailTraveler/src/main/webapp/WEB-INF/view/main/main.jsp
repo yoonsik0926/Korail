@@ -4,6 +4,98 @@
 <%
 	String cp = request.getContextPath();
 %>
+<link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+.carousel {
+  background: white;
+}
+
+.carousel-cell {
+  width: 25%;
+  height: 300px;
+  margin-right: 10px;
+  margin-top : 22.5px;
+  margin-bottom : 22.5px;
+  background: #ED2;
+  border-radius: 5px;
+  counter-increment: carousel-cell;
+}
+
+.carousel-cell.is-selected {
+  background: #ED2;
+}
+
+/* cell number */
+.carousel-cell:before {
+  display: block;
+  text-align: center;
+  line-height: 300px;
+  font-size: 80px;
+  color: white;
+}
+
+.fPlan {
+	width: 100%;
+    height: 300px;
+    margin-right: 10px;
+    margin-bottom: 22.5px;
+    border-radius: 5px;
+ 
+}
+
+.btnPlan:hover {
+	width: 185px;
+	height: 40px;
+	border: none;
+	background : #a1b1f7;
+	border-radius: 4px;
+	color : white;
+}
+
+.btnPlan{
+  background:#a1b1f7;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:40px;
+  width: 185px;
+  padding:0 2em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+  border-radius: 4px;
+}
+.btnPlan:hover{
+  background:#fff;
+  color:#a1b1f7;
+}
+.btnPlan:before,.btnPlan:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #a1b1f7;
+  transition:400ms ease all;
+}
+.btnPlan:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btnPlan:hover:before,.btnPlan:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+
+</style>
+
 
 <div class="main">
 	<div class="container tim-container"
@@ -13,16 +105,19 @@
 				Rail Traveler</small>
 		</h1>
 
-		<table style="text-align: center; height: 300px; margin: 20px 0">
-			<tbody>
-				<tr>
-					<td style="width: 300px;">친구의 여행 플랜1</td>
-					<td style="width: 300px;">친구의 여행 플랜2</td>
-					<td style="width: 300px;">친구의 여행 플랜3</td>
-					<td style="width: 300px;">친구의 여행 플랜4</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="carousel" data-flickity='{"groupCells": true }' style="height: 350px;">
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+			<div class="carousel-cell"><img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG"/></div>
+		</div>
+		
+		<div style="text-align: center; margin: 30px 0;">
+			<button class="btnPlan" type="button" onclick="javascript:location.href='<%=cp%>/plan/write';">나의 플래너 시작</button>
+		</div>
 
 		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
 			do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
