@@ -100,8 +100,8 @@
 }
 
 .rc {
-	height: 300px;
-	margin-left: 5px;
+	width : 280px;
+	margin-left: 10px;
 	display: inline;
 	float: left;
 }
@@ -361,7 +361,7 @@ figure.snip1132.hover img {
 }
 
 .st {
-	margin-left: 6px;
+	margin-left: 30px;
 	display: inline;
 	float: left;
 }
@@ -451,13 +451,24 @@ figure.snip1132.hover img {
 						<a href="#"></a>
 					</figure>
 				</div>
+				<div class="rc">
+					<figure class="snip1384">
+						<img src="<%=cp%>/resource/img/snow.jpg"/>
+						<figcaption>
+							<h3>겨울 분위기 가득 여행</h3>
+							<p>겨울 분위기를 느끼고 싶은 여러분들께 추천합니다!</p>
+							<i class="ion-ios-arrow-right"></i>
+						</figcaption>
+						<a href="#"></a>
+					</figure>
+				</div>
 			</div>
 		</div>
 
 		<div class="main4" style="margin-top: 60px;">
 			<h4 style="margin-bottom: 30px;">| 역소개</h4>
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
-				<div class="st">
+				<div class="st" style="margin-left: 10px !important;">
 				<figure class="snip1132" style="width: 200px; height: 180px;">
 					<img src="<%=cp%>/resource/img/sudo.jpg"/>
 					<figcaption style="margin-top: 5px;">
@@ -530,7 +541,7 @@ figure.snip1132.hover img {
 			</div>
 		</div>
 		
-		<div class="main5" style="margin-top: 60px;">
+		<div class="main5" style="margin-top: 60px; width: 50%;">
 			<h4 style="margin-bottom: 30px;">| 커뮤니티</h4>
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
@@ -540,7 +551,7 @@ figure.snip1132.hover img {
 		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">동행구하기</button></td>
 		 		</tr>
 			</table>
- 			<table class="table table-striped" style="width: 50%; margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
+ 			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
 		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
 			      <td width="60">번호</td>
 			      <td >제목</td>
@@ -565,9 +576,9 @@ figure.snip1132.hover img {
 			</table>
 		</div>
 		
-		<div class="main6" style="margin-top: 60px;">
+		<div class="main6" style="margin-top: 60px; width: 50%;">
 			<h4 style="margin-bottom: 30px;">| 이벤트</h4>
-			<div style="width: 50%;"><img src="<%=cp%>/resource/img/eventex.jpg" style="width: 100%;"></div>
+			<div><img src="<%=cp%>/resource/img/eventex.jpg" style="width: 100%;"></div>
 		</div>
 
 	</div>
