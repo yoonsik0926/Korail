@@ -194,5 +194,10 @@ public class MemberController {
 		return ".member.pwdFind";
 	}
 	
+	@RequestMapping(value="/member/idFind")
+	public String idFind() {
+		return ".member.idFind";
+	}
+	
 }
 

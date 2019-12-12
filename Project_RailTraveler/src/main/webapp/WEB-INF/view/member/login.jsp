@@ -151,7 +151,7 @@ input{
 					</tr>
 					
 					<tr align="center" height="45">
-						<td><a href="<%=cp%>/" style="color: #999999;">아이디찾기</a>&nbsp;&nbsp;&nbsp; <a
+						<td><a href="<%=cp%>/member/idFind" style="color: #999999;">아이디찾기</a>&nbsp;&nbsp;&nbsp; <a
 							href="<%=cp%>/member/pwdFind" style="color: #999999;">패스워드찾기</a>&nbsp;&nbsp;&nbsp; <a
 							href="<%=cp%>/member/member" style="color: #999999;">회원가입</a></td>
 					</tr>
