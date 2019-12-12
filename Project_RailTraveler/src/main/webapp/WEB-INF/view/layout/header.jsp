@@ -115,12 +115,12 @@ System.out.print(cp);
                         <li><a href="<%=cp%>/mypage/article">내가 쓴 게시물</a></li>
                       </ul>
                 	</li>
-                	<li><button onclick="javascript:location.href='<%=cp%>/member/logout';" class="btn btn-round btn-default">로그아웃</button></li>
+                	<li><button onclick="javascript:location.href='<%=cp%>/member/logout';" class="loginbtn btn-round btn-default">로그아웃</button></li>
                 	</c:if>
                 	<c:if test="${empty sessionScope.member}">
                     <li><a href="<%=cp%>/member/member">회원가입</a></li>
                     
-                    <li><button onclick="javascript:location.href='<%=cp%>/member/login';" class="btn btn-round btn-default">로그인</button></li>
+                    <li><button onclick="javascript:location.href='<%=cp%>/member/login';" class="loginbtn btn-round btn-default">로그인</button></li>
                 </c:if>
                </ul>
               <ul class="nav navbar-nav side navbar-right">

@@ -43,3 +43,102 @@ table th span {
 	left: -10px; 
 	padding-left: 30%;
 }
+.page-three-title h3 {
+   margin: 20px 0 10px;
+    background: linear-gradient(#e28ff1, #68d0fd) no-repeat 0 0 / 7px 100%;
+    line-height: 30px;
+    padding-left: 20px;
+    font-weight: 550;
+    color: #1b1b1b;
+    /* margin: 0; */
+    font-family: Roboto, 'Nanum Square', Helvetica, Arial, sans-serif;}
+
+.btn-sns {
+    right: 20px;
+    padding-left: 15px;
+}
+
+.btn-sns {
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    padding-left: 7px;
+}
+
+.btn-sns .ico-sns {
+    width: 40px;
+    height: 40px;
+    background-position: -120px 0;
+}
+.ico-sns {
+    background: url(../images/comm/ico-sns.png) no-repeat 0 0 / 160px;
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle;
+}
+.open-sns-group {
+    display: none;
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: rgba(255, 255, 255, .98);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, .08);
+    border: 1px solid #555;
+}
+.open-sns-group .sns-title {
+    font-weight: 600;
+    margin: 0;
+    padding: 15px 20px;
+    background: #3e54a7 linear-gradient(45deg, #3e54a7, #5f59c8, #1bad83);
+    color: #fff;
+    position: relative;
+    opacity: .95;
+}
+.open-sns-group .sns-title .sns-close .ico-station {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 20px;
+    height: 20px;
+    background: url(../images/station/icon-station.png) no-repeat -276px -4px;
+}
+
+.ico-station {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle;
+}
+.open-sns-group .list-inline-box {
+    padding: 20px;
+}
+
+.boxTF
+{
+	display: inline-block;
+    width: 56%;
+    padding: 6px 6px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 0;
+    float: left;
+    border-left: 1px solid #cccccc;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

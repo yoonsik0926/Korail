@@ -14,7 +14,11 @@ $(function(){
 	$(subMenu).addClass("active");
 });
 </script>
-<h3><span style="font-family: Webdings">2</span> 커뮤니티 </h3>
+<%-- <h3><img alt="커뮤니티" src="<%=cp%>/resource/images/iconcommu1.png" style="width: 100%; --%>
+<!--     margin: 10px 0px;"></h3> -->
+<img alt="커뮤니티" src="<%=cp%>/resource/images/commuIcon.png" style="width: 29%;
+    margin: 20px auto 0; display: block;">
+<img alt="커뮤니티" src="<%=cp%>/resource/images/commuTitle.png" style="width: 100%;margin: 10px 0px;">
 <div class="list-group">
     <a href="<%=cp%>/notice/notice" class="list-group-item">공지사항</a>
     <a href="<%=cp%>/qna/qna" class="list-group-item">묻고 답하기</a>
