@@ -541,7 +541,8 @@ figure.snip1132.hover img {
 			</div>
 		</div>
 		
-		<div class="main5" style="margin-top: 60px; width: 50%;">
+		<div style="display: inline-block; width: 100%;">
+		<div class="main5" style="margin-top: 60px; width: 45%; display: inline; float: left; margin-right: 110px;">
 			<h4 style="margin-bottom: 30px;">| 커뮤니티</h4>
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
@@ -575,11 +576,13 @@ figure.snip1132.hover img {
 		 		 </tr>
 			</table>
 		</div>
-		
-		<div class="main6" style="margin-top: 60px; width: 50%;">
+		<div class="main6" style="margin-top: 60px; width: 45%; display: inline; float: left;">
 			<h4 style="margin-bottom: 30px;">| 이벤트</h4>
 			<div><img src="<%=cp%>/resource/img/eventex.jpg" style="width: 100%;"></div>
 		</div>
-
+		
+		</div>
+		
+		<div class="service" style="margin-bottom: 120px;"></div>
 	</div>
 </div>
