@@ -20,31 +20,88 @@
     font-size: 1.025em;">
             <thead>
               <tr class="lbo_li lbo_legend lbo_legend_like">
-                <th><span> #</span></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th width="60" style="    padding-left: 1.5%;">번호</th>
+                <th><span style="padding-left: 50%;">제목</span></th>
+                <th width="120"><span>작성자</span></th>
+                <th width="100"><span>작성일</span></th>
+                <th width="80"><span>조회수</span></th>
               </tr>
             </thead>
             <tbody>
+            
               <tr class="lbo_li lbo_notice li_bg0 lbo_like">
                 <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <td style="text-align: left;">제목입니다1111111</td>
+                <td>관리자</td>
+                <td>2018-10-23</td>
+                <td>123</td>
               </tr>
+              
+              <tr class="lbo_li lbo_notice li_bg0 lbo_like">
+                <td>1</td>
+                <td style="text-align: left;">제목입니다1111111</td>
+                <td>관리자</td>
+                <td>2018-10-23</td>
+                <td>123</td>
+              </tr>
+              
               <tr>
                 <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
+                <td style="text-align: left;">제목입니다22222222</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>1</td>
               </tr>
               <tr>
                 <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <td style="text-align: left;">제목입니다333333333333</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>22</td>
               </tr>
+              <tr>
+                <td>2</td>
+                <td style="text-align: left;">제목입니다22222222</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td style="text-align: left;">제목입니다333333333333</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>22</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td style="text-align: left;">제목입니다22222222</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td style="text-align: left;">제목입니다333333333333</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>22</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td style="text-align: left;">제목입니다22222222</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td style="text-align: left;">제목입니다333333333333</td>
+                <td>겨레리</td>
+                <td>2018-10-23</td>
+                <td>22</td>
+              </tr>
+              
             </tbody>
           </table>
 

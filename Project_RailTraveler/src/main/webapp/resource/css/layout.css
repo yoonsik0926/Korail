@@ -1,11 +1,11 @@
 ﻿@CHARSET "UTF-8";
 .body-left{
-	width: 13%;
+	width: 15%;
 	float: left;
 	margin-right: 2%;
 }
 .body-right{
-width: 85%;
+width: 83%;
 	float: left; 
 }
 .navbar-collapse{

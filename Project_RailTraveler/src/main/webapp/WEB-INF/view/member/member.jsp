@@ -132,8 +132,7 @@ function userIdCheck() {
 		return;
 	}
 	
-	var url="<%=cp%>
-	/member/userIdCheck";
+	var url="<%=cp%>/member/userIdCheck";
 		var q = "userId=" + str;
 
 		$.ajax({
@@ -224,9 +223,9 @@ input, select, .btnSearch {
 			<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png"
 				style="height: 80px;">
 		</div>
-
 		<div>
 			<form name="memberForm" method="post">
+			
 				<table
 					style="width: 100%; margin: 20px auto 0px; border-spacing: 0px;">
 					<tr>
@@ -308,8 +307,7 @@ input, select, .btnSearch {
 							style="font-weight: 900; color: #1f364d;">이메일</label></td>
 						<td style="padding: 0 0 15px 15px;">
 							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<select name="selectEmail" onchange="changeEmail();"
-									class="selectField">
+								<select name="selectEmail" onchange="changeEmail();" class="selectField">
 									<option value="">선 택</option>
 									<option value="naver.com"
 										${dto.email2=="naver.com" ? "selected='selected'" : ""}>naver.com</option>
@@ -318,9 +316,10 @@ input, select, .btnSearch {
 									<option value="gmail.com"
 										${dto.email2=="gmail.com" ? "selected='selected'" : ""}>gmail.com</option>
 									<option value="direct">직접입력</option>
-								</select> <input type="text" name="email1" value="${dto.email1}"
-									size="13" maxlength="30" class="boxTF"> @ <input
-									type="text" name="email2" value="${dto.email2}" size="13"
+								</select> 
+								<input type="text" name="email1" value="${dto.email1}"
+									size="13" maxlength="30" class="boxTF"> @ 
+								<input type="text" name="email2" value="${dto.email2}" size="13"
 									maxlength="30" class="boxTF" readonly="readonly">
 							</p>
 						</td>
