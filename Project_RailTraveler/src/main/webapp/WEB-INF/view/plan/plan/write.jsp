@@ -86,9 +86,56 @@
 	color: black;
 }
 
+
+.planList {
+	width: 100%;
+	height: 90px;
+	border: 1px solid blue;
+}
+
+.dayCount {
+	margin:15px 5px 10px 5px;
+    width: 20%;
+    height: 60px;
+    font-size: 25px;
+    display: block;
+    float: left;
+/* 	border: 1px solid black; */
+}
+
+.selectedStation {
+	margin:5% 3% 0 3%;
+	width: 35%;
+	height: 60px;
+	display: block;
+	float: left;
+	font-size: 16px;
+	text-align: center;
+/* 	border: 1px solid black; */
+}
+
+.selectedDay {
+	width: 90px;
+	font-size:15px;
+	height: 30px;
+	display: block;
+	float: left;
+/* 	border: 1px solid black; */
+}
+
+.detailPlanning {
+	margin:15px 0 15px 10px;
+	border: 0; outline: 0;
+	width: 30%;
+	height: 60px;
+	font-size: 25px;
+	display: block;
+	float: left;
+}
+
 /* Modal Content/Box */
 .modal-content {
-	background:#77c3ef;
+	background:white;
     margin-top: 130px;
     margin-left: 12%;
     padding: 10px;
@@ -112,19 +159,45 @@
 $(function() {
 	$("#datepicker").datepicker();
 });
-	
+
+// 일수 선택 모달
 function selectTripDay() {
     $('#myModal').show();
 };
-//팝업 Close 기능
+// 팝업 Close 기능
 function close_pop(flag) {
      $('#myModal').hide();
 };
+
 function getNumber(day) {
+	var f=$(".planList").length;
+	
+	if(f) {
+		if(! confirm("작성중이던 계획을 모두 지우시겠습니까?")) {
+			return;
+		}
+	$('#myModal').hide();
+	}
+	
+	$('#planListForm').empty();
 	document.getElementById("selectDays").src=day.src;
+	
+	for (var i = 1; i <=day.value; i++) {
+		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><span>12월12일(목)</span></div></div><div class='selectedStation'><span>여수역, 서울역, 용산역, 청량리역, 강릉역</span></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
+	}
 	$('#myModal').hide();
 }
 
+
+$(document).ready(function(){
+	$('#plusStation').parent().hide();
+});
+
+// $("#marker").click(function(){
+// 	$('#plusStation').parent().show();
+// 	$('#plusStation').parent().css('background', 'white');
+// 	$('#plusStation').parent().css('margin', '-210px 0px 0px -185px');
+// });
 </script>
 </head>
 
@@ -157,25 +230,26 @@ function getNumber(day) {
 						</div>
 					</div>
 				</div>
-				<div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
-          <div style="text-align: center;">
-          	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/threeDays.png" value="3" onclick="getNumber(this);"></span></div>
-           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/fiveDays.png" value="5" onclick="getNumber(this);"></span></div>
-           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/sevenDays.png" value="7" onclick="getNumber(this);"></span></div>
-          </div>
-          <div style="cursor:pointer; text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-            <span class="pop_bt" style="font-size: 13pt;" >닫기</span>
-          </div>
-      </div>
- 
-    </div>
-
-
+				<div id="planListForm">	</div>
 				
-			</div>
-			<div id="mapControllerRight" style="float: left; width: 75%;">
+				
+			<div id="myModal" class="modal">
+		      <!-- Modal content -->
+		      <div class="modal-content">
+		          <div style="text-align: center;">
+		          	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/threeDays.png" value="3" onclick="getNumber(this);"></span></div>
+		           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/fiveDays.png" value="5" onclick="getNumber(this);"></span></div>
+		           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/sevenDays.png" value="7" onclick="getNumber(this);"></span></div>
+		          </div>
+		          <div style="cursor:pointer; text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
+		            <span class="pop_bt" style="font-size: 13pt;">닫기</span>
+		          </div>
+		      </div>
+    		</div>
+		</div>
+		
+		
+		<div id="mapControllerRight" style="float: left; width: 75%;">
 			<div style="z-index: 5; padding: 20px; position: absolute;">
 				<div style="width: 250px; background-color: white;">
 					<input type="text" id="findStation" style="width: 225px; padding:0 8px; height:35px; z-index: 3; font-size: 16px; border: none;" placeholder="검색할 역을 입력하세요">
@@ -206,21 +280,25 @@ function getNumber(day) {
 				    position: markerPosition, 
 				    image: markerImage // 마커이미지 설정 
 				});
-					
 				marker.setMap(map);
-				
-				var content ='<div id="plusStation" style="padding:5px; width:350px; height:150px; margin:10px;"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><div style="width:100px; height:100px; border:1px solid black; display:block; float:left; margin-right:10px;"></div><div style="width: 200px; height: 100px; border: 1px solid black; display: block; float: left;"></div><div onclick="closeOverlay()" style="width: 310px; height: 30px; border: 1px solid black; display: block; float: left; margin:10px; margin-left:0; font-size:20px; text-align:center; cursor:pointer;"><div>추가하기</div></div></div>';
+				    
+				var content ='<div id="plusStation" style="padding:5px; width:350px; height:150px; margin:10px;"><button type="button" onclick="closeOverlay()" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><div style="width:100px; height:100px; border:1px solid black; display:block; float:left; margin-right:10px;"></div><div style="width: 200px; height: 100px; border: 1px solid black; display: block; float: left;"></div><div style="width: 310px; height: 30px; border: 1px solid black; display: block; float: left; margin:10px; margin-left:0; font-size:20px; text-align:center; cursor:pointer;"><div>추가하기</div></div></div>';
 				
 				// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
 				var overlay = new kakao.maps.CustomOverlay({
 				    content: content,
 				    map: map,
-				    position: marker.getPosition()       
+				    position: marker.getPosition()
 				});
+				
+				    overlay.setMap(null);
 
 				// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
 				kakao.maps.event.addListener(marker, 'click', function() {
-				    overlay.setMap(map);
+					 overlay.setMap(map);
+				    $('#plusStation').parent().show();
+					$('#plusStation').parent().css('background', 'white');
+					$('#plusStation').parent().css('margin', '-210px 0px 0px -185px');
 				});
 
 				// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
@@ -228,13 +306,9 @@ function getNumber(day) {
 				    overlay.setMap(null);
 				}
 				</script>
-			</div>
 		</div>
 	</div>
-<script type="text/javascript">
-function plusStation() {
-// 	$('#plusStation').parent().parent().css("display","none");
-}
-</script>
+</div>
+
 </body>
 </html>
