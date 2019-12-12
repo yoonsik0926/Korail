@@ -415,7 +415,7 @@ figure.snip1132.hover img {
 			</div>
 		</div>
 
-		<div class="main3" style="argin-top: 60px;">
+		<div class="main3" style="margin-top: 100px;">
 			<h4 style="margin-bottom: 30px;">| 추천 코스</h4>
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<div class="rc">
@@ -465,7 +465,7 @@ figure.snip1132.hover img {
 			</div>
 		</div>
 
-		<div class="main4" style="margin-top: 60px;">
+		<div class="main4" style="margin-top: 100px;">
 			<h4 style="margin-bottom: 30px;">| 역소개</h4>
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<div class="st" style="margin-left: 10px !important;">
@@ -541,15 +541,15 @@ figure.snip1132.hover img {
 			</div>
 		</div>
 		
-		<div style="display: inline-block; width: 100%;">
-		<div class="main5" style="margin-top: 60px; width: 45%; display: inline; float: left; margin-right: 110px;">
+		<div class="main5" style="margin-top: 100px;">
 			<h4 style="margin-bottom: 30px;">| 커뮤니티</h4>
+			
+			<div class="commu1" style="display: inline-block; width: 100%;">
+			
+			<div class="notice" style="width: 46%; display: inline; float: left; margin-right: 80px;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
 		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">공지사항</button></td>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">묻고답하기</button></td>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">자유게시판</button></td>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">동행구하기</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
@@ -574,14 +574,201 @@ figure.snip1132.hover img {
 		 		 	<td>2019-12-11</td>
 		 		 	<td>1</td>
 		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>3</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>4</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>5</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
 			</table>
+			</div>
+			
+			<div class="qna" style="width: 46%; display: inline; float: left;">
+			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
+				<tr>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">묻고 답하기</button></td>
+		 		</tr>
+			</table>
+ 			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
+		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
+			      <td width="60">번호</td>
+			      <td >제목</td>
+			      <td width="100">작성자</td>
+			      <td width="100">작성일</td>
+			      <td width="60">조회수</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>1</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>2</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>3</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>4</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>5</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+			</table>
+			</div>
+			
+			</div>
+			
+			<div class="commu2" style="display: inline-block; width: 100%; margin-top: 60px;">
+			
+			<div class="board" style="width: 46%; display: inline; float: left; margin-right: 80px;">
+			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
+				<tr>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">자유 게시판</button></td>
+		 		</tr>
+			</table>
+ 			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
+		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
+			      <td width="60">번호</td>
+			      <td >제목</td>
+			      <td width="100">작성자</td>
+			      <td width="100">작성일</td>
+			      <td width="60">조회수</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>1</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>2</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>3</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>4</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>5</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+			</table>
+			</div>
+			
+			<div class="friend" style="width: 46%; display: inline; float: left;">
+			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
+				<tr>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">동행 구하기</button></td>
+		 		</tr>
+			</table>
+ 			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
+		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
+			      <td width="60">번호</td>
+			      <td >제목</td>
+			      <td width="100">작성자</td>
+			      <td width="100">작성일</td>
+			      <td width="60">조회수</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>1</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>2</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>3</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>4</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+		 		 <tr align="center">
+		 		 	<td>5</td>
+		 		 	<td>제목입니다</td>
+		 		 	<td>이유진</td>
+		 		 	<td>2019-12-11</td>
+		 		 	<td>1</td>
+		 		 </tr>
+			</table>
+			</div>
+			
+			</div>
+			
+			
 		</div>
-		<div class="main6" style="margin-top: 60px; width: 45%; display: inline; float: left;">
+		
+		<div class="main6" style="margin-top: 60px;">
 			<h4 style="margin-bottom: 30px;">| 이벤트</h4>
 			<div><img src="<%=cp%>/resource/img/eventex.jpg" style="width: 100%;"></div>
 		</div>
 		
-		</div>
+		
 		
 		<div class="service" style="margin-bottom: 120px;"></div>
 	</div>
