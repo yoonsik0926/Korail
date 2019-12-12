@@ -40,8 +40,8 @@ table th span {
 	border-left: #d3d3d3 1px solid;
 	width: 100%;
 	display: inline-block;
-	left: -10px; 
-	padding-left: 30%;
+	left: -9px; 
+	padding-left: 18%;
 }
 .page-three-title h3 {
    margin: 20px 0 10px;
@@ -129,8 +129,28 @@ table th span {
     border-left: 1px solid #cccccc;
 }
 
+.lbo_notice td .noticeBox{
+	    padding: 2px;
+    margin: 0 auto;
+    color: white;
+    display: block;
+    width: 58px;
+    height: 21px;
+    border-radius: 15px;
+    background: #283164;
+    float: left;
+  box-shadow: 1px 1px 3px #333333;
+}
+.list-group {
+    box-shadow: 1px 1px 2px #333333;
+    padding-left: 0;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
 
-
+table.table.table-hover th, table.table.table-hover td {
+	padding:8px 8px 8px 15px;
+}
 
 
 
