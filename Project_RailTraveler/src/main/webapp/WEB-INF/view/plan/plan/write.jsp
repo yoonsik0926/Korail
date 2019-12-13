@@ -32,6 +32,8 @@
 
 
 <script type="text/javascript"
+	src="<%=cp%>/resource/js/util.js"></script>
+<script type="text/javascript"
 	src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript"
 	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
@@ -123,6 +125,7 @@
 /* 	border: 1px solid black; */
 }
 
+
 .detailPlanning {
 	margin:15px 0 15px 10px;
 	border: 0; outline: 0;
@@ -156,9 +159,53 @@
 
 </style>
 <script type="text/javascript">
-$(function() {
-	$("#datepicker").datepicker();
+$(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
+		$("#datepicker").datepicker({
+			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+			altField:"#selectedDay1",
+			showAnim: "fold"
+		});
+	        
+		$("#datepicker").change(function(){	        
+	        var tempDate=$("#selectedDay1").val();
+	       
+	        for (var i = 1; i <= $("#selectDays").val(); i++) {
+	        	$("#selectedDay"+i).val(getDaysLater1(tempDate, i));
+			}
+	  
+	    });
 });
+
+//기준일부터 몇일후(기준일 포함)
+function getDaysLater1(sDate, days) {
+	var week = ['일', '월', '화', '수', '목', '금', '토'];
+    var y, m, d, s;
+    
+    var date=new Date();
+    
+    var regexp=/(\.)|(\-)|(\/)/g;
+    sDate=sDate.replace(regexp, "");
+    if(sDate.length!=8)
+        return "";
+    
+    y = parseInt(sDate.substr(0, 4));
+    m = parseInt(sDate.substr(4, 2));
+    // d = parseInt(sDate.substr(6, 2))+parseInt(days);
+    d = parseInt(sDate.substr(6, 2))+parseInt(days)-1;
+
+    date.setFullYear(y, m-1, d);
+
+    y=date.getFullYear();
+    m=date.getMonth()+1;
+    dd=week[date.getDay()];
+    if(m<10) m="0"+m;
+    d=date.getDate();
+    if(d<10) d='0'+d;
+    
+    s=m+"월"+d+"일("+dd+")";
+
+    return s;
+}
 
 // 일수 선택 모달
 function selectTripDay() {
@@ -171,7 +218,7 @@ function close_pop(flag) {
 
 function getNumber(day) {
 	var f=$(".planList").length;
-	
+	$("#selectDays").val(day.value);
 	if(f) {
 		if(! confirm("작성중이던 계획을 모두 지우시겠습니까?")) {
 			return;
@@ -183,7 +230,7 @@ function getNumber(day) {
 	document.getElementById("selectDays").src=day.src;
 	
 	for (var i = 1; i <=day.value; i++) {
-		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><span>12월12일(목)</span></div></div><div class='selectedStation'><span>여수역, 서울역, 용산역, 청량리역, 강릉역</span></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
+		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'><span>여수역, 서울역, 용산역, 청량리역, 강릉역</span></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
 	}
 	$('#myModal').hide();
 }
