@@ -173,6 +173,8 @@ $("figure").mouseleave(
 	      $(this).removeClass("hover");
 	    }
 	  );
+	  
+	  
 </script>
 
 <div class="body-content-container">
@@ -194,9 +196,7 @@ $("figure").mouseleave(
 				<button class="btnLoc" type="button" onclick="">경상권</button></div>
 		</div>
 		
-		
 
-		
 		<!-- 버튼 누를 때마다 디비에서 역 정보 받아와서 리스트 변화하도록 -->
 		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px;">
 			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	

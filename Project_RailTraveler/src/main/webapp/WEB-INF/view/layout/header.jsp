@@ -106,14 +106,16 @@ System.out.print(cp);
     FONT-FAMILY: Gungsuh,궁서;
     COLOR: #fff;
     text-shadow: 0 0 20px #fefcc9, 10px -10px 30px #feec85, -20px -20px 40px #ffae34, 20px -40px 50px #ec760c, -20px -60px 60px #cd4606, 0 -80px 70px #973716, 10px -90px 80px #451b0e;
-                      ">홍길동<b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="<%=cp%>/member/pwd">정보 수정</a></li>
-                        <li><a href="<%=cp%>/bookmark/bookmark">나의 북마크</a></li>
-                        <li><a href="<%=cp%>/ticket/myticket">나의 승차권</a></li>
-                        <li><a href="<%=cp%>/plan/planlist">나의 여행 플랜</a></li>
-                        <li><a href="<%=cp%>/mypage/article">내가 쓴 게시물</a></li>
-                      </ul>
+                      ">${sessionScope.member.userName}<b class="caret"></b></a>
+                      <c:if test="${sessionScope.member.userId!='admin'}">
+	                      <ul class="dropdown-menu">
+	                        <li><a href="<%=cp%>/member/pwd">정보 수정</a></li>
+	                        <li><a href="<%=cp%>/bookmark/bookmark">나의 북마크</a></li>
+	                        <li><a href="<%=cp%>/ticket/myticket">나의 승차권</a></li>
+	                        <li><a href="<%=cp%>/plan/planlist">나의 여행 플랜</a></li>
+	                        <li><a href="<%=cp%>/mypage/article">내가 쓴 게시물</a></li>
+	                      </ul>
+                      </c:if>
                 	</li>
                 	<li><button onclick="javascript:location.href='<%=cp%>/member/logout';" class="loginbtn btn-round btn-default">로그아웃</button></li>
                 	</c:if>
