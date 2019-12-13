@@ -88,7 +88,9 @@ System.out.print(cp);
                         <li><a href="<%=cp%>/event/last">지난 이벤트</a></li>
                       </ul>
                 </li>
-                <li class="dropdown">
+                
+                <c:if test="${sessionScope.member.userId=='admin'}">
+               	 <li class="dropdown">
                       <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">신고 목록 <b class="caret"></b></a>
                       <ul class="dropdown-menu">
                         <li><a href="<%=cp%>/singo/plan">플래너</a></li>
@@ -97,6 +99,8 @@ System.out.print(cp);
                         <li><a href="<%=cp%>/singo/friend">동행 구하기</a></li>
                       </ul>
                 	</li>
+                </c:if>
+                
               </ul>
              
               <ul class="nav navbar-nav navbar-right">
