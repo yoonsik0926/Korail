@@ -6,7 +6,6 @@
 	String cp = request.getContextPath();
 %>
 
-<div class="main">
 	<div class="container tim-container"
 		style="max-width: 1200px; padding-top: 100px">
 <!-- 		위에 div 두개로 감싸면 됨. 밑에는 내용 -->
@@ -20,4 +19,3 @@
 		
 		
 	</div>
-</div>

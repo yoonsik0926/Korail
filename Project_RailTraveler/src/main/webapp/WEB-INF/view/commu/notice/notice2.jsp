@@ -19,12 +19,13 @@
 		<table class="table table-hover"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<tr>
-				
-					<td width="200" colspan="5"
-						style="background: #fbfbfb; text-align: left; border-radius: 5px;">
-						<span
-						style="font-size: 20px;">공지목록
-					</span></td>
+				<td width="200" colspan="5"
+					style="background: whitesmoke; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;"><span
+					style="display: block; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">공지글
+						<span style="color: #ca4a0d;">3569건 </span> <img alt=""
+						src="/Project_RailTraveler/resource/images/close_icon.png"
+						style="background: #dadada; width: 20px; padding: 3px; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+				</span></td>
 			</tr>
 			<tr class="lbo_li lbo_notice li_bg0 lbo_like">
 				<td width="75">
@@ -36,34 +37,21 @@
 				</td>
 				<td style="text-align: left; padding-left: 20px; font-weight: 900;">※
 					공지사항 게시판의 공지입니다 ※</td>
-				<td width="120">2018-10-23</td>
-			</tr>
-			<tr class="lbo_li lbo_notice li_bg0 lbo_like">
-				<td width="75">
-					<div class="noticeBox">
-						<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
-							width="18" style="display: inline-block; float: left;"> <span
-							style="font-size: 14px; font-weight: 600; display: block;">공지</span>
-					</div>
-				</td>
-				<td style="text-align: left; padding-left: 20px; font-weight: 900;">※
-					예약하실 때 주의할 점!!! ※</td>
-				<td width="120">2018-10-23</td>
+				<td width="100">2018-10-23</td>
 			</tr>
 		</table>
-		<div style="margin-bottom: 30px;"></div>
+		<div style=""></div>
 		<table class="table table-hover"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr>
-				<td width="200" colspan="5"
-					style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-<!-- 					<span -->
-<!-- 					style="display: block; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과 -->
-<!-- 						<span style="color: #ca4a0d;">3569건 </span> <img alt="" -->
-<!-- 						src="/Project_RailTraveler/resource/images/close_icon.png" -->
-<!-- 						style="background: #dadada; width: 20px; padding: 3px; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;"> -->
-<!-- 				</span> -->
+					<td width="200" colspan="5"
+						style="background: whitesmoke; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;"><span
+						style="display: block; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+							<span style="color: #ca4a0d;">3569건 </span> <img alt=""
+							src="<%=cp%>/resource/images/close_icon.png"
+							style="background: #dadada; width: 20px; padding: 3px; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+					</span>
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/notice/created';"
 							style="float: right; margin-left: 6px;">
@@ -101,6 +89,35 @@
 				</tr>
 			</thead>
 			<tbody style="border-bottom: 2px solid black;">
+				<tr class="lbo_li lbo_notice li_bg0 lbo_like">
+					<td>
+						<div class="noticeBox">
+							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+								width="18" style="display: inline-block; float: left;"> <span
+								style="font-size: 14px; font-weight: 600; display: block;">공지</span>
+						</div>
+					</td>
+					<td style="text-align: left; padding-left: 20px; font-weight: 900;">※
+						공지사항 게시판의 공지입니다 ※</td>
+					<td>관리자</td>
+					<td>2018-10-23</td>
+					<td>123</td>
+				</tr>
+
+				<tr class="lbo_li lbo_notice li_bg0 lbo_like">
+					<td>
+						<div class="noticeBox">
+							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+								width="18" style="display: inline-block; float: left;"> <span
+								style="font-size: 14px; font-weight: 600; display: block;">공지</span>
+						</div>
+					</td>
+					<td style="text-align: left; padding-left: 20px;">제목입니다1111111</td>
+					<td>관리자</td>
+					<td>2018-10-23</td>
+					<td>123</td>
+				</tr>
+
 				<%
 					for (int i = 10; i >= 1; i--) {
 				%>

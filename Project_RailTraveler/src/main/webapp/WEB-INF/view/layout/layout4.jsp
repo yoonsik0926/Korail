@@ -35,6 +35,9 @@
   
   <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
   
+  <script type="text/javascript" src="<%=cp%>/resource/js/util-jquery.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/js/util.js"></script> 
+
 	<link href="<%=cp%>/resource/css/gsdk.css" rel="stylesheet" /> 
 	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> 
 	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
