@@ -16,22 +16,20 @@ $(function(){
 </script>
 <%-- <h3><img alt="커뮤니티" src="<%=cp%>/resource/images/iconcommu1.png" style="width: 100%; --%>
 <!--     margin: 10px 0px;"></h3> -->
-<div style="        box-shadow: 1px 1px 2px #333333;
-    background: #ffffff;
-    width: 100%;
-    color: white;
+<div style="    width: 100%;
     margin: 10px auto;
-    padding: 20px 10px;
+    padding: 10px 20px;
     display: block;
     border: 1px solid;
-    border-radius: 5px;
-">
-<img alt="커뮤니티로고" src="<%=cp%>/resource/images/commuIcon.png" style="    width: 28px;
-    position: absolute;
-    margin: 0 0 0 5px;">
-<img alt="커뮤니티" src="<%=cp%>/resource/images/commuTitle.png" style="width: 78%;
-    margin: 0px 0 0 41px;
-    padding: 0;"></div>
+    border-radius: 50px;">
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/commuIcon.png" style="width: 28%;
+    margin: 20px auto 0; display: block;">
+<img alt="커뮤니티" src="<%=cp%>/resource/images/commuTitle.png" style="width: 100%;
+    margin: 10px auto;
+    padding: 10px 20px;
+    display: block;
+    border: 1px solid;
+    border-radius: 50px;"></div>
 <div class="list-group">
     <a href="<%=cp%>/notice/notice" class="list-group-item">공지사항</a>
     <a href="<%=cp%>/qna/qna" class="list-group-item">묻고 답하기</a>
