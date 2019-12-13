@@ -6,10 +6,9 @@
 	String cp = request.getContextPath();
 %>
 <style>
-.main {
+.container tim-container , .mem-member {
 	background: #F9F0DA !important;
 }
-
 .btnConfirm:hover {
 	width: 185px;
 	height: 40px;
@@ -58,8 +57,7 @@
 }
 
 </style>
-
-<div class="main">
+<div class="mem-member">
 	<div class="container tim-container"
 		style="max-width: 1200px; padding-top: 100px; background: #F9F0DA;">
 		<div class="body-container">
