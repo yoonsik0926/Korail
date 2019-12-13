@@ -7,7 +7,7 @@
    String cp = request.getContextPath();
 %>
 <style type="text/css">
-.main {
+.container tim-container , .mem-member {
 	background: #F9F0DA !important;
 }
 
@@ -50,7 +50,7 @@
 }
 
 </style>
-<div class="main">
+<div class="mem-member">
 	<div class="container tim-container" style="max-width: 1200px; padding-top: 100px; background:#F9F0DA;">
 	<div class="body-container">
 	    <div style="margin: 0px auto; padding-bottom:90px; width:420px; ">

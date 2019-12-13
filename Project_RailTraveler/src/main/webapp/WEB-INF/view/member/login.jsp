@@ -61,6 +61,9 @@ function sendLogin() {
 	}
 </script>
 <style>
+.container tim-container , .mem-member {
+	background: #F9F0DA !important;
+}
 
 .btnlogIn{
   background:#a1b1f7;
@@ -101,9 +104,7 @@ function sendLogin() {
 }
 
 
-.main {
-	background : #F9F0DA !important;
-}
+
 
 input{
 	background : #8fbbf9 !important;
@@ -112,7 +113,8 @@ input{
 }
 
 </style>
-<div class="main">
+
+<div class="mem-member">
 	<div class="container tim-container"
 		style="max-width: 800px; padding-top: 80px; background:#F9F0DA; ">
 		<div style="width: 360px; margin: 0px auto; padding-top: 70px; ">
@@ -165,6 +167,7 @@ input{
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 <script type="text/javascript">
 		var clientId = "e2FLdnwqeota8urONJ21";

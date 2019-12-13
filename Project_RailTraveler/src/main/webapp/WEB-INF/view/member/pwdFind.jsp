@@ -60,10 +60,9 @@
   font-size:14px;
   border-radius:4px;
 }
-.main{
+.container tim-container , .mem-member {
 	background: #F9F0DA !important;
 }
-
 input{
 	background : #8fbbf9 !important;
 	border : none !important;
@@ -94,7 +93,7 @@ input{
         f.submit();
 	}
 </script>
-<div class="main">
+<div class="mem-member">
 	<div class="container tim-container" style="max-width: 1200px; padding-top: 100px; background:#F9F0DA;">
 	<div class="body-container">
 	    <div style="width:420px; margin: 0px auto; padding-top:70px;">
