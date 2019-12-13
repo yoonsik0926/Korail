@@ -240,8 +240,8 @@ figure.snip1132 {
   font-family: 'Raleway', Arial, sans-serif;
   position: relative;
   overflow: hidden;
-  max-width: 310px;
-  max-height: 220px;
+ /*  max-width: 310px;
+  max-height: 220px; */
   width: 100%;
   background: #000000;
   color: #ffffff;
@@ -258,7 +258,7 @@ figure.snip1132 * {
 
 figure.snip1132 img {
   max-width: 100%;
-  height: 180px;
+  height: 200px;
   position: relative;
   opacity: 1;
 }
@@ -349,7 +349,7 @@ figure.snip1132 a {
   bottom: 0;
   position: absolute;
   z-index: 1;
-   height: 180px;
+   height: 200px;
 }
 
 figure.snip1132:hover img,
@@ -357,11 +357,11 @@ figure.snip1132.hover img {
   opacity: 0.35;
   -webkit-transform: scale(1.15);
   transform: scale(1.15);
-   height: 180px;
+   height: 200px;
 }
 
 .st {
-	margin-left: 30px;
+	margin-left: 15px;
 	display: inline;
 	float: left;
 }
@@ -468,7 +468,7 @@ figure.snip1132.hover img {
 			<h4 style="margin-bottom: 30px;">| 역소개</h4>
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<div class="st" style="margin-left: 10px !important;">
-				<figure class="snip1132" style="width: 200px; height: 180px;">
+				<figure class="snip1132" style="width: 220px; height: 200px;">
 					<img src="<%=cp%>/resource/img/sudo.jpg"/>
 					<figcaption style="margin-top: 5px;">
 						<div class="heading">
@@ -482,7 +482,7 @@ figure.snip1132.hover img {
 				</figure>
 				</div>
 				<div class="st">
-				<figure class="snip1132" style="width: 200px; height: 180px;">
+				<figure class="snip1132" style="width: 220px; height: 200px;">
 					<img src="<%=cp%>/resource/img/gang.jpg"/>
 					<figcaption style="margin-top: 5px;">
 						<div class="heading">
@@ -496,7 +496,7 @@ figure.snip1132.hover img {
 				</figure>
 				</div>
 				<div class="st">
-				<figure class="snip1132" style="width: 200px; height: 180px;">
+				<figure class="snip1132" style="width: 220px; height: 200px;">
 					<img src="<%=cp%>/resource/img/chung.jpg"  />
 					<figcaption style="margin-top: 5px;">
 						<div class="heading">
@@ -510,7 +510,7 @@ figure.snip1132.hover img {
 				</figure>
 				</div>
 				<div class="st">
-				<figure class="snip1132" style="width: 200px; height: 180px;">
+				<figure class="snip1132" style="width: 220px; height: 200px;">
 					<img src="<%=cp%>/resource/img/jun.jpg"/>
 					<figcaption style="margin-top: 5px;">
 						<div class="heading">
@@ -524,7 +524,7 @@ figure.snip1132.hover img {
 				</figure>
 				</div>
 				<div class="st">
-				<figure class="snip1132" style="width: 200px; height: 180px;">
+				<figure class="snip1132" style="width: 220px; height: 200px;">
 					<img src="<%=cp%>/resource/img/gyeong.jpg"/>
 					<figcaption style="margin-top: 5px;">
 						<div class="heading">

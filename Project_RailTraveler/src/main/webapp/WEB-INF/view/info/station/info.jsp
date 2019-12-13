@@ -43,11 +43,6 @@
 	color: #283164;
 }
 
-#stationDetail {
-	width: 80%;
-	margin-bottom: 20px;
-}
-
 
 </style>
 
@@ -307,25 +302,39 @@ $("figure").mouseleave(
 		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">서울역</h4>
 		      </div>
 		      <!-- body -->
-		      <div class="modal-body" style="width: 700px;">
-		      	<img src="<%=cp%>/resource/img/sudo.jpg" style="width: 80%; margin-bottom: 20px;">
-		         <table id="stationDetail">
-		         	<tr>
-		         		<td style="width:20%;border-right:2px solid #939394; text-align:right;">주소&nbsp;&nbsp;</td>
-						<td style="width:80%; text-align:left;">&nbsp;&nbsp;&nbsp;서울시 용산구 한강대로 405 KTX서울역 2층 여행상담센터</td>
-		         	</tr>
-		         	<tr>
-		         		<td style="width:20%;border-right:2px solid #939394; text-align:right;">전화번호&nbsp;&nbsp;</td>
-						<td style="width:80%; text-align:left;">&nbsp;&nbsp;&nbsp;02-3149-3333</td>
-		         	</tr>
-		         	<tr>
-		         		<td style="width:20%;border-right:2px solid #939394; text-align:right;">역별 혜택&nbsp;&nbsp;</td>
-						<td style="width:80%;text-align:left;">&nbsp;&nbsp;&nbsp;할인~</td>
-		         	</tr>
-		         </table>
+		      <div class="modal-body" style="text-align: center;">
+		      	<img src="<%=cp%>/resource/img/sudo.jpg" style="width: 90%; margin-bottom: 20px;">
+		      	<div style="width: 90%; margin: 0 auto; line-height: 2.5;">
+					<div style="text-align: left;">
+						<span style="font-size: 18px; font-weight: 800;">
+							<i class="fas fa-map-marker-alt" style="color:#e82b2b; font-size: 23px;"></i>&nbsp;&nbsp;위치&nbsp;&nbsp;</span>
+						<span style="font-size: 15px; color: #636363;">서울시 용산구 한강대로 405 KTX서울역 2층 여행상담센터</span>
+					</div>
+				
+					<div style="text-align: left;">
+						<span style="font-size: 18px; font-weight: 800;">
+							<i class="fas fa-phone-volume" style="color: #368416; font-size: 23px;"></i>&nbsp;&nbsp;전화번호&nbsp;&nbsp;</span>
+						<span style="font-size: 15px; color: #636363;">02-3149-3333</span>
+					</div>
+					
+					<div style="text-align: left;">
+						<span style="font-size: 18px; font-weight: 800;">
+							<i class="fas fa-gift" style="color: #1c549a; font-size: 23px;"></i>&nbsp;&nbsp;혜택&nbsp;&nbsp;</span>
+						<span style="font-size: 15px; color: #636363;">
+							<ul>
+								<li>역 방문 사은품 증정</li>
+								<li>숙박 10% 할인 쿠폰 증정</li>
+								<li>닭갈비 5% 할인 </li>
+							</ul>
+						</span>
+					</div>
+		        </div>
+
 		      </div>
+		      
+		      
 		      <!-- Footer -->
-		      <div class="modal-footer" style="text-align: center; margin-bottom: 20px;">
+		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
 		        <button type="button" class="btnTour">관광정보 보러가기</button>
 		      </div>
 		    </div>

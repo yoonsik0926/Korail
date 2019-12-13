@@ -5,7 +5,6 @@
 <%
 	String cp = request.getContextPath();
 %>
-
 <script type="text/javascript">
 function memberOk() {
 	var f = document.memberForm;
@@ -160,6 +159,8 @@ function userIdCheck() {
 		});
 
 	}
+
+
 </script>
 
 <style>
@@ -168,7 +169,7 @@ function userIdCheck() {
 }
 
 input, select, .btnSearch {
-	border: #334393 3px solid !important;
+	border: #334393 2px solid !important;
 	height: 45px !important;
 	border-radius: 4px;
 }
