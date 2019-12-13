@@ -42,6 +42,16 @@
 	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> 
 	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
 	
+	<style type="text/css">
+	a.list-group-item {
+    color: #555555;
+    font-size: 14px;
+    font-weight: 600;
+}
+.list-group-item {
+    padding: 20px 15px;   
+}
+	</style>
 </head> 
 
 <body>
