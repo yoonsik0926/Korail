@@ -48,7 +48,8 @@
     <tiles:insertAttribute name="header"/>
 </div>
 	
-<div class="container" style="margin: 0; padding: 0;">
+<div class="container" style="margin: 0; padding: 0;    background-color: #FFFFFF;
+    position: relative;">
     <tiles:insertAttribute name="body"/>
 </div>
 

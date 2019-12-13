@@ -372,7 +372,6 @@ figure.snip1132.hover img {
 	});
 </script>
 
-<div class="main">
 	<div class="container tim-container"
 		style="max-width: 1200px; padding-top: 100px">
 		<div class="main1">
@@ -772,4 +771,3 @@ figure.snip1132.hover img {
 		
 		<div class="service" style="margin-bottom: 120px;"></div>
 	</div>
-</div>

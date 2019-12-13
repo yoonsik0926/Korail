@@ -47,7 +47,8 @@
     <tiles:insertAttribute name="header"/>
 </div>
 
-<div class="container" style="margin: 0; padding: 0;">
+<div class="container" style="margin: 0; padding: 0;    background-color: #FFFFFF;
+    position: relative;">
     <div class="main">
     <div class="container tim-container" style="max-width:100%; padding-top:10px; margin: 0;">
         <div class="body-left">
