@@ -12,5 +12,9 @@ public class NoticeController {
 		model.addAttribute("subMenu", "0");
 		return ".four.commu.notice.notice";
 	}
-
+	@RequestMapping(value="/notice/created")
+	public String createdForm(Model model) throws Exception {
+		model.addAttribute("mode", "created");
+		return ".four.commu.notice.created";
+	}
 }

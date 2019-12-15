@@ -32,7 +32,7 @@ function reset() {
 		<table class="table table-hover"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
-				<tr class="#sir_lbo .lbo_li">
+				<tr class="sir_lbo lbo_li">
 					<td width="200" colspan="5"
 						style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 											<span id="searchCount" 					style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
