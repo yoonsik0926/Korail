@@ -15,7 +15,6 @@
 	<link rel="apple-touch-icon" sizes="76x76" href="<%=cp%>/resource/img/apple-icon.png">
 	<link rel="icon" type="image/png" href="<%=cp%>/resource/img/favicon.png">	
 	
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>내일로</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -31,7 +30,6 @@
   	<!-- Font Lobster -->
  	<link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
  	
-  <script src="https://kit.fontawesome.com/9a196cb2bb.js" crossorigin="anonymous"></script>
   
   <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
   
