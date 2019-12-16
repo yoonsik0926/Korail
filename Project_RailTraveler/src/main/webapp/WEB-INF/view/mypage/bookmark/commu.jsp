@@ -103,19 +103,7 @@ $(function(){
 					</tr>
 				</thead>
 				<tbody style="border-bottom: 2px solid black;">
-					<tr class="lbo_li lbo_notice li_bg0 lbo_like"
-						style="font-weight: 600;">
-						<td>
-							<div class="noticeBox">
-								<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
-									width="18" style="display: inline-block; float: left;"> <span
-									style="font-size: 14px; font-weight: 600; display: block;">공지</span>
-							</div>
-						</td>
-						<td colspan="2" style="text-align: left; padding-left: 20px;">※
-							자유게시판의 공지입니다 ※</td>
-						<td colspan="2" style="text-align: right; padding-right: 20px;"><i>2018-10-23</i></td>
-					</tr>
+	
 					<%
 						for (int i = 10; i >= 1; i--) {
 					%>
@@ -132,19 +120,21 @@ $(function(){
 
 				</tbody>
 			</table>
-
-			<nav style="text-align: center;">
-				<ul class="pagination">
-					<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-					</span></li>
-					<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-					</li>
-					<li><span>2</span></li>
-					<li><span>3</span></li>
-					<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-					</span></li>
-				</ul>
-			</nav>
+			
+			<div>
+				<nav style="text-align: center;">
+					<ul class="pagination">
+						<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
+						</span></li>
+						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
+						</li>
+						<li><span>2</span></li>
+						<li><span>3</span></li>
+						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
+						</span></li>
+					</ul>
+				</nav>
+			</div>
 
 
 

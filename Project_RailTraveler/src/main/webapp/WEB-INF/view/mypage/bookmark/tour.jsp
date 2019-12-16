@@ -84,7 +84,7 @@ function test(ob){
 					style="padding: 6px; cursor: pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 			</form>
 		</div>
-
+		
 		<div style="width: 100%; display: inline-block;">
 			<div class="map" style="width: 45%; margin-right: 20px; display: inline; float: left;">
 				<img src="<%=cp%>/resource/images/map.PNG" style="width: 100%; height: 70%;">
@@ -185,19 +185,20 @@ function test(ob){
 
 				</div>
 				
-				<nav style="text-align: center;">
-					<ul class="pagination">
-						<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-						</span></li>
-						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-						</li>
-						<li><span>2</span></li>
-						<li><span>3</span></li>
-						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-						</span></li>
-					</ul>
-				</nav>
-
+				<div>
+					<nav style="text-align: center;">
+						<ul class="pagination">
+							<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
+							</span></li>
+							<li class="active"><span>1 <span class="sr-only">(current)</span></span>
+							</li>
+							<li><span>2</span></li>
+							<li><span>3</span></li>
+							<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
+							</span></li>
+						</ul>
+					</nav>
+				</div>
 
 
 			</div>

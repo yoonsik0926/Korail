@@ -92,7 +92,7 @@ function test(ob){
 						<div style="margin-top: 10px">
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 40px;">
-									<td style="font-size: 18px; font-weight: 900; width: 80%;">겨울 느낌 뿜뿜 여행</td>
+									<td style="font-size: 18px; font-weight: 900; width: 90%;">겨울 느낌 뿜뿜 여행</td>
 									<td style="text-align: right;" >
 										<button class="img-button">
 											<i class="fas fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
@@ -102,7 +102,7 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  작성자 : </td>
+									<td style="font-weight: 700; width:40%; "><i class="fas fa-check"></i>  작성자 : </td>
 									<td style=" text-align: left;" colspan="2">이유진</td>
 								</tr>
 								<tr style="height: 30px;">
@@ -133,7 +133,7 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  작성자 : </td>
+									<td style="font-weight: 700; width:40%; "><i class="fas fa-check"></i>  작성자 : </td>
 									<td style=" text-align: left;" colspan="2">이유진</td>
 								</tr>
 								<tr style="height: 30px;">
@@ -164,7 +164,7 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  작성자 : </td>
+									<td style="font-weight: 700; width:40%; "><i class="fas fa-check"></i>  작성자 : </td>
 									<td style=" text-align: left;" colspan="2">이유진</td>
 								</tr>
 								<tr style="height: 30px;">
@@ -195,7 +195,7 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  작성자 : </td>
+									<td style="font-weight: 700; width:40%; "><i class="fas fa-check"></i>  작성자 : </td>
 									<td style=" text-align: left;" colspan="2">이유진</td>
 								</tr>
 								<tr style="height: 30px;">
