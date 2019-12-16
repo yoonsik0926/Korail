@@ -7,11 +7,13 @@
 %>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>묻고 답하기 </h3>
-     </div>
+	<div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 내가 쓴 게시물</span>
+		</h3>
+	</div>
      
      <div>
-        qna
+         내가 쓴 게시물
      </div>
 </div>

@@ -7,11 +7,13 @@
 %>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>동행 구하기 </h3>
-     </div>
+	<div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 나의 승차권</span>
+		</h3>
+	</div>
      
      <div>
-      friend입니다~
+         승차권
      </div>
 </div>

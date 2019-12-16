@@ -13,12 +13,14 @@ $(function(){
 	var subMenu=$(".list-group-item")[idx];
 	$(subMenu).addClass("active");
 });
+
 </script>
 <h3><span style="font-family: Webdings">2</span> 마이페이지</h3>
 <div class="list-group">
-    <a href="<%=cp%>/member/update" class="list-group-item">정보 수정</a>
-    <a href="<%=cp%>/singo/qna" class="list-group-item" >나의 북마크</a>
-    <a href="<%=cp%>/singo/board" class="list-group-item">나의 승차권</a>
-    <a href="<%=cp%>/plan/planlist" class="list-group-item">나의 여행 플랜</a>
-    <a href="<%=cp%>/singo/friend" class="list-group-item" disabled="disabled">내가 쓴 게시물</a>
+    <a href="<%=cp%>/member/pwd" class="list-group-item">정보 수정</a>
+    <a href="<%=cp%>/bookmark/bookmark" class="list-group-item" >나의 북마크</a>
+    <a href="<%=cp%>/ticket/ticket" class="list-group-item" id="major-item">나의 승차권</a>
+    <a href="<%=cp%>/stamp/stamp" class="list-group-item" id="sub-item">전국 스탬프 지도</a>
+    <a href="<%=cp%>/plan/plan" class="list-group-item">나의 여행 플랜</a>
+    <a href="<%=cp%>/bbs/mybbs" class="list-group-item">내가 쓴 게시물</a>
 </div> 

@@ -7,10 +7,11 @@
 %>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>플래너</h3>
-     </div>
-     
+     <div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 나의 여행 플랜</span>
+		</h3>
+	</div>
      <div>
      plan입니다~
      </div>
