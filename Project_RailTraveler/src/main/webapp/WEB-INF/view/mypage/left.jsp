@@ -23,7 +23,7 @@ $(function(){
 <h3><span style="font-family: Webdings">2</span> 마이페이지</h3>
 <div class="list-group">
     <a href="<%=cp%>/member/pwd" class="list-group-item">정보 수정</a>
-    <a href="<%=cp%>/bookmark/bookmark" class="list-group-item">나의 북마크</a>
+    <a href="<%=cp%>/bookmark/tour" class="list-group-item">나의 북마크</a>
 	<a href="<%=cp%>/bookmark/tour" class="list-group-item">  ㄴ관광 정보</a>
 	<a href="<%=cp%>/bookmark/recommend" class="list-group-item">  ㄴ여행 플랜</a>
 	<a href="<%=cp%>/bookmark/commu" class="list-group-item">  ㄴ커뮤니티</a>
