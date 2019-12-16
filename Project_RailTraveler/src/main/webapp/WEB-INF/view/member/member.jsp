@@ -5,6 +5,8 @@
 <%
 	String cp = request.getContextPath();
 %>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
 function memberOk() {
@@ -160,15 +162,23 @@ function userIdCheck() {
 		});
 
 	}
+
+/* $(function(){
+	$("form input[name=birth]").datepicker({
+	});
+	
+	$(".ui-datepicker-trigger").css({position:"relative",top:"3px"});
+});  */
+
 </script>
 
 <style>
-.main {
+.container tim-container , .mem-member {
 	background: #F9F0DA !important;
 }
 
 input, select, .btnSearch {
-	border: #334393 3px solid !important;
+	border: #334393 2px solid !important;
 	height: 45px !important;
 	border-radius: 4px;
 }
@@ -214,100 +224,82 @@ input, select, .btnSearch {
 	width: 100%;
 	transition: 800ms ease all;
 }
+
+.form-group {
+	width: 60%;
+}
 </style>
 
-<div class="main">
+<div class="mem-member">
 	<div class="container tim-container"
 		style="max-width: 800px; padding: 100px 0; background: #F9F0DA;">
 		<div style="text-align: center; margin-bottom: 45px;">
 			<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png"
 				style="height: 80px;">
 		</div>
-		<div>
-			<form name="memberForm" method="post">
-			
-				<table
-					style="width: 100%; margin: 20px auto 0px; border-spacing: 0px;">
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">아이디</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="text" name="userId" id="userId"
+		<div style="text-align: center;">
+			<form class="form-inline" name="memberForm" method="post">
+				  <div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="userId" >id</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">UserId</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="far fa-id-badge" style="color:#334393; font-weight: 900;"></i></div>
+				      <input type="text" class="form-control" type="text" name="userId" id="userId"
 									value="${dto.userId}" onchange="userIdCheck();"
-									style="width: 95%;"
-									${mode=="update" ? "readonly='readonly' ":""} maxlength="15"
-									class="boxTF" placeholder="&nbsp;&nbsp;아이디">
-							</p>
-							<p class="help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">패스워드</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="password" name="userPwd" maxlength="15"
-									class="boxTF" style="width: 95%;"
-									placeholder="&nbsp;&nbsp;패스워드">
-							</p>
-							<p class="help-block">패스워드는 5~10자 이내이며, 하나 이상의 숫자나 특수문자가
-								포함되어야 합니다.</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">패스워드 확인</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="password" name="userPwdCheck" maxlength="15"
-									class="boxTF" style="width: 95%;"
-									placeholder="&nbsp;&nbsp;패스워드 확인">
-							</p>
-							<p class="help-block">패스워드를 한번 더 입력해주세요.</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">이름</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="text" name="userName" value="${dto.userName}"
-									maxlength="30" class="boxTF" style="width: 95%;"
-									${mode=="update" ? "readonly='readonly' ":""}
-									placeholder="&nbsp;&nbsp;이름">
-							</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">생년월일</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<input type="text" name="birth" value="${dto.birth}"
-									maxlength="10" class="boxTF" style="width: 95%;"
-									placeholder="&nbsp;&nbsp;생년월일">
-							</p>
-							<p class="help-block">생년월일은 YYYY-MM-DD 형식으로 입력 합니다.</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">이메일</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<select name="selectEmail" onchange="changeEmail();" class="selectField">
+									placeholder="&nbsp;UserId">
+				    </div>
+				  </div>
+				  
+				   <div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="password">password</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Password</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-unlock" style="color:#334393;"></i></div>
+				      <input type="password" class="form-control" type="text" name="userPwd"
+									placeholder="&nbsp;Password">
+				    </div>
+				  </div>
+			
+				<div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="userPwdCheck">ConfirmPassword</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Confirm Password</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-lock" style="color:#334393;"></i></div>
+				      <input type="password" class="form-control" type="text" name="userPwdCheck"
+									placeholder="&nbsp;Confirm Password">
+				    </div>
+				  </div>
+				  
+				<div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="userName" >userName</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Name</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-user" style="color:#334393;"></i></div>
+				      <input type="text" class="form-control" type="text" name="userName" id="userName"
+									value="${dto.userName}"
+									placeholder="&nbsp;Name">
+				    </div>
+				  </div>
+				  
+				  <div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="birth" >birth</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Birth</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-birthday-cake" style="color:#334393;"></i></div>
+				      <input type="text" class="form-control" type="text" name="birth"
+									value="${dto.birth}"
+									readonly="readonly"
+									placeholder="&nbsp;Birth">
+				    </div>
+				  </div>
+				  
+				  <div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="email" >email</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Email</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-envelope" style="color:#334393;"></i></div>
+				      <div>
+				      <select name="selectEmail" onchange="changeEmail();" class="selectField" style="width:23%;">
 									<option value="">선 택</option>
 									<option value="naver.com"
 										${dto.email2=="naver.com" ? "selected='selected'" : ""}>naver.com</option>
@@ -317,21 +309,21 @@ input, select, .btnSearch {
 										${dto.email2=="gmail.com" ? "selected='selected'" : ""}>gmail.com</option>
 									<option value="direct">직접입력</option>
 								</select> 
-								<input type="text" name="email1" value="${dto.email1}"
-									size="13" maxlength="30" class="boxTF"> @ 
-								<input type="text" name="email2" value="${dto.email2}" size="13"
-									maxlength="30" class="boxTF" readonly="readonly">
-							</p>
-						</td>
-					</tr>
-
-					<tr>
-						<td width="100" valign="top"
-							style="text-align: right; padding-top: 15px;"><label
-							style="font-weight: 900; color: #1f364d;">전화번호</label></td>
-						<td style="padding: 0 0 15px 15px;">
-							<p style="margin-top: 1px; margin-bottom: 5px;">
-								<select class="selectField" id="tel1" name="tel1">
+				      <input type="text" class="form-control" type="text" name="email1"
+									value="${dto.email1}" style="width:27%;"> @
+					  <input type="text" class="form-control" type="text" name="email2"
+									value="${dto.email2}" readonly="readonly" style="width:44%;">
+									</div>
+				    </div>
+				  </div>
+				  
+				   <div class="form-group" style="margin:15px 0; ">
+				    <label class="sr-only" for="tel" >tel</label>
+				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Tel</p>
+				  	<div class="input-group">
+				      <div class="input-group-addon"><i class="fas fa-phone-square-alt" style="color:#334393;"></i></div>
+				      	<div>
+				      		<select class="selectField" id="tel1" name="tel1">
 									<option value="">선 택</option>
 									<option value="010"
 										${dto.tel1=="010" ? "selected='selected'" : ""}>010</option>
@@ -345,29 +337,15 @@ input, select, .btnSearch {
 										${dto.tel1=="018" ? "selected='selected'" : ""}>018</option>
 									<option value="019"
 										${dto.tel1=="019" ? "selected='selected'" : ""}>019</option>
-								</select> - <input type="text" name="tel2" value="${dto.tel2}"
-									class="boxTF" maxlength="4"> - <input type="text"
-									name="tel3" value="${dto.tel3}" class="boxTF" maxlength="4">
-							</p>
-						</td>
-					</tr>
-					<c:if test="${mode=='member'}">
-						<tr>
-							<td width="100" valign="top"
-								style="text-align: right; padding-top: 15px;"><label
-								style="font-weight: 900; color: #1f364d;">약관동의</label></td>
-							<td style="padding: 0 0 15px 15px;">
-								<p style="margin-top: 7px; margin-bottom: 5px;">
-									<label><input id="agree" name="agree" type="checkbox"
-										checked="checked"
-										onchange="form.sendButton.disabled = !checked"> <a
-										href="#">이용약관</a>에 동의합니다. </label>
-								</p>
-							</td>
-						</tr>
-					</c:if>
-				</table>
-				<table style="width: 100%; margin: 20px auto; border-spacing: 0px;">
+							</select> - 
+				      		<input type="text" class="form-control" name="tel2" value="${dto.tel2}" style="width:40%;"> - 
+							<input type="text" class="form-control" name="tel3" value="${dto.tel3}" style="width:40%;">
+				      	</div>
+				      
+				    </div>
+				  </div>
+				  
+				  <table style="width: 100%; margin: 20px auto; border-spacing: 0px;">
 					<tr height="45">
 						<td align="center">
 							<button class="btnJoin" type="button" name="sendButton"
@@ -382,7 +360,12 @@ input, select, .btnSearch {
 					</tr>
 
 				</table>
+	  
+			
 			</form>
+				
+
+				
 		</div>
 	</div>
 </div>
