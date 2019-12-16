@@ -27,6 +27,8 @@
     <!--     Font Awesome     -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  	
   	<!-- Font Lobster -->
  	<link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
  	

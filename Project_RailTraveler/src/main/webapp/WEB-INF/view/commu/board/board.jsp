@@ -27,7 +27,7 @@ function reset() {
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-top: 5px;"></div>
 		
-		<table class="table table-hover"
+		<table class="table table-hover tb-board"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr>
@@ -39,7 +39,7 @@ function reset() {
 												style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
 										</span>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/notice/created';"
+							onclick="javascript:location.href='<%=cp%>/board/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> 글쓰기
@@ -91,7 +91,7 @@ function reset() {
 				<%
 					for (int i = 10; i >= 1; i--) {
 				%>
-				<tr>
+				<tr onclick="javascript:location.href='<%=cp%>/board/article'">
 					<td><%=i%></td>
 					<td style="text-align: left; padding-left: 20px;">제목입니다22222222</td>
 					<td>겨레리</td>

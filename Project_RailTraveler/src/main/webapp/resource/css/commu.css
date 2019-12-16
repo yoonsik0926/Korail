@@ -32,7 +32,7 @@
 	color: #101010;
 }
 
-table th, table td{
+.tb-notice th, .tb-notice td, .tb-board th, .tb-board td{
 	text-align: center;   
 }
 
@@ -45,7 +45,7 @@ table th span {
 	padding-left: 18%;
 }
 .page-three-title h3 {
-   margin: 20px 0 10px;
+   margin: 10px 0;
     background: linear-gradient(#e28ff1, #68d0fd) no-repeat 0 0 / 7px 100%;
     line-height: 30px;
     padding-left: 20px;
@@ -160,6 +160,31 @@ table.table.table-hover th{
 
 
 
+.tb-row {
+	text-align: left;
+	height: 50px;
+	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}
+
+.tb-title {
+	text-align: center;
+	background: #f7f9ff;
+}
+
+.tb-content {
+	text-align: left;
+	padding: 5px 1% 5px 10px;
+}
+
+.tb-created {
+	width: 100%;
+	margin: 0px auto 5px;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+}
 
 
 

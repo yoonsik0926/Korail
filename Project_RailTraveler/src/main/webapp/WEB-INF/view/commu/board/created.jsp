@@ -80,7 +80,7 @@ input[type=text], input[type=file] {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 공지게시판 - 글쓰기</span>
+			<span style="padding: 10px 0px; display: block;"> 자유게시판 - 글쓰기</span>
 		</h3>
 	</div>
 
@@ -88,7 +88,7 @@ input[type=text], input[type=file] {
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<form name="boardForm" method="post" enctype="multipart/form-data"
 			onsubmit="return submitContents(this);">
-			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
+			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px; ">
 				<tr>
 					<td style="    text-align: right;"><button type="reset" class="btn btn-default"  style="
     padding: 6px 6px;
@@ -101,7 +101,13 @@ input[type=text], input[type=file] {
 						maxlength="100" class="boxTF" style="padding: 5px 5px;"
 						value="${dto.subject}"></td>
 				</tr>
-
+<%--  <c:if test="${sessionScope.member.userId=='admin'}">	 --%>
+				<tr class="tb-row">
+					<td width="100" class="tb-title">공지여부</td>
+					<td class="tb-content"><input type="checkbox" name="notice" id="notice">
+   </td>
+				</tr>
+				<%-- 				</c:if> --%>
 				<tr class="tb-row">
 					<td width="100" class="tb-title">작성자</td>
 					<td class="tb-content">${sessionScope.member.userName}</td>
@@ -133,7 +139,7 @@ input[type=text], input[type=file] {
 				</c:if>
 
 			</table>
-			<table style="width: 100%; margin: 0px auto; border-spacing: 0px;    text-align: center;">
+			<table class="tb-board" style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 				<tr>
 					<td>
 					<button type="button" class="btn btn-default" style="padding: 6px 20px;"

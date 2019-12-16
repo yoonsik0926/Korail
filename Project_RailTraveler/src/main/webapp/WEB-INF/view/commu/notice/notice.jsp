@@ -29,7 +29,7 @@ function reset() {
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-top: 5px;"></div>
-		<table class="table table-hover"
+		<table class="table table-hover tb-notice"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr class="sir_lbo lbo_li">
@@ -70,7 +70,7 @@ function reset() {
 					</td>
 				</tr>
 				<tr class="lbo_li lbo_legend lbo_legend_like">
-					<th width="200" colspan="5">공지목록</th>
+					<th width="200" colspan="5" style="text-align: center;">공지목록</th>
 				</tr>
 			</thead>
 			<tbody style="border-bottom: 2px solid black;">
@@ -78,7 +78,7 @@ function reset() {
 					for (int i = 14; i >= 5; i--) {
 				%>
 
-				<tr class="lbo_li lbo_notice li_bg0 lbo_like">
+				<tr class="lbo_li lbo_notice li_bg0 lbo_like" onclick="javascript:location.href='<%=cp%>/notice/article'">
 <%-- 					<td width="75"><%=i%></td> --%>
 <%-- 					<td width="75"><%=i%></td> --%>
 					<td width="75">
