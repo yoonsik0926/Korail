@@ -138,7 +138,7 @@ font-weight: bold;
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 자유게시판</span>
+			<span style="padding: 10px 0px; display: block;"> 묻고 답하기</span>
 		</h3>
 	</div>
 
@@ -165,7 +165,7 @@ font-weight: bold;
 			<tr>
 			    <td colspan="3" style="    padding-top: 15px;">
 			    	<h3 style="margin: 10px 0 2px;
-    font-size: 25px;">자유게시판의 공지입니다.</h3>
+    font-size: 25px;">공지게시판의 공지입니다.</h3>
 			    </td>
 			</tr>
 			
@@ -185,22 +185,36 @@ font-weight: bold;
 			   </td>
 			</tr>
 			
-			<tr class="tb-row" style="border-bottom: 0;">
-				<td colspan="3" height="40" align="center">
-					<button type="button" class="btn btnSendBoardLike btn-default" title="좋아요" style="padding: 6px 8px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-bottom: 5px;" onclick="clickLikeBtn();"><i id="boardLikeIcon" class="far fa-heart" style="font-size: 20px;display: block;
-    margin: 0 auto; color: orangered;"></i><span id="boardLikeCount" >${dto.boardLikeCount}0</span></button>
-				</td>
-			</tr>
 			<tr class="tb-row">
 			    <td colspan="3" align="left" style="padding-left: 5px; color:blue;">
 			     <a onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (0)</a>
 			    </td>
 			</tr>
-			<tfoot>
+			</table>
+			<table style='width: 100%; margin: 10px auto 30px; border-spacing: 0px;'>
+		<tr height='35' style="background: #ccc;">
+		    <td colspan='3'>
+		           <div style='float: left;'>댓글 1개</div>
+		    </td>
+		</tr>
+	    <tr height='35'>
+	       <td width='20%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
+	           <span><b>관리자</b></span>
+	        </td>
+	        <td width='60%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
+	           <span>내용입니다다다다다다ㅏ</span>
+	        </td>
+	       <td width='20%' style='padding:5px 5px; border:1px solid #cccccc; border-left:none;' align='right'>
+	           <span>2019-12-16 18:03:22</span> |
+	                <span class="deleteReply" style="cursor: pointer;" data-replyNum='0' data-pageNo='0'>삭제</span>
+	           		<span class="notifyReply">신고</span>
+	        </td>
+	    </tr>
+	    </table>
+			
+			
+			
+			<table>
 			<tr class="tb-row">
 			    <td align="left" style="padding-left: 5px;" width="100">
 			       이전글<i class="fas fa-caret-up" style="    margin: 5px;"></i> : 
@@ -224,7 +238,6 @@ font-weight: bold;
 			    2018-12-14
 			    </td>
 			</tr>
-			</tfoot>
 			</table>
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">
@@ -252,141 +265,13 @@ font-weight: bold;
     <img src="<%=cp%>/resource/images/commu/kakaotalk.png" width=36 alt="Kakaotalk">
   </a>
 </span>
-			          <button type="button" class="btn btn-danger" onclick="deleteBoard();"><i class="far fa-bell" style="color: white"></i>신고</button>
 			    </td>
 			</tr>
 			</table>
+			
+			
+			
     </div>
-    
-    <div>
-		<table style='width: 100%; margin: 15px auto 10px; border-spacing: 0px;'>
-			<tr height='30'> 
-				 <td align='left' >
-				 	<span style='font-weight: bold;' >댓글쓰기</span><span> - 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가 주세요.</span>
-				 </td>
-			</tr>
-			<tr>
-			   	<td style='padding: 5px 0px 0px;'>
-					<textarea class='boxTA' style='width: 89%;
-    height: 50px;
-    float: left;
-    resize: none;
-    overflow-y: scroll;'></textarea> <button type='button' class='btn btnSendReply btn-default' data-num='10' style='margin-left: 1%;
-    width: 10%;
-    height: 50px;
-    padding: 10px 1px;
-    float: left;'>등록</button>
-			    
-			    </td>
-			</tr>
-		</table>
-		     <a id="MOVE_TOP_BTN" href="#"><i class="fas fa-chevron-up"></i><br>TOP</a>
-		<div id="listReply">
-		
-<table style='width: 100%; margin: 10px auto 30px; border-spacing: 0px;'>
-	<thead id='listReplyHeader'>
-		<tr height='35'>
-		    <td colspan='2'>
-		       <div style='clear: both;'>
-		           <div style='float: left;'><span style='color: #3EA9CD; font-weight: bold;'>댓글 1개</span> <span>[댓글 목록, 1/1 페이지]</span></div>
-		           <div style='float: right; text-align: right;'></div>
-		       </div>
-		    </td>
-		</tr>
-	</thead>
-	
-	<tbody id='listReplyBody'>
-	    <tr height='35' style='background: #eeeeee;'>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
-	           <span><b>관리자</b></span>
-	        </td>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-left:none;' align='right'>
-	           <span>2019-12-16 18:03:22</span> |
-	                <span class="deleteReply" style="cursor: pointer;" data-replyNum='0' data-pageNo='0'>삭제</span>
-	           		<span class="notifyReply">신고</span>
-	        </td>
-	    </tr>
-	    <tr>
-	        <td colspan='2' valign='top' style='padding:5px 5px;'>
-	              2019-12-16 18:03:22
-	        </td>
-	    </tr>
-	    
-	    <tr>
-	        <td style='padding:7px 5px;'>
-	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='0'>답글 <span id="answerCount$0">1</span></button>
-	        </td>
-	        <td style='padding:7px 5px;' align='right'>
-                <button type='button' class='btn btnSendReplyLike' data-replyNum='0' data-replyLike='1' title="좋아요"><i class="far fa-hand-point-up"></i> <span>3</span></button>
-                <button type='button' class='btn btnSendReplyLike' data-replyNum='0' data-replyLike='0' title="싫어요"><i class="far fa-hand-point-down"></i> <span>0</span></button>	        
-	        </td>
-	    </tr>
-	
-	    <tr class='replyAnswer' style='display: none;'>
-	        <td colspan='2'>
-	            <div id='listReplyAnswer$0' class='answerList' style='border-top: 1px solid #cccccc;'>
-	             <div class='answer' style='padding: 0px 10px;'>
-        <div style='clear:both; padding: 10px 0px;'>
-            <div style='float: left; width: 5%;'>└</div>
-            <div style='float: left; width:95%;'>
-                <div style='float: left;'><b>관리자</b></div>
-                <div style='float: right;'>
-                    <span>2019-12-16 18:03:22</span> |
-                    	<span class='deleteReplyAnswer' style='cursor: pointer;' data-replyNum='0' data-answer='0'>삭제</span>
-                    	<span class="notifyReply">신고</span>
-                </div>
-            </div>
-        </div>
-        <div style='clear:both; padding: 5px 5px 5px 5%; border-bottom: 1px solid #ccc;'>
-            1빠~~~ ^^
-        </div>
-    </div>	
-	            </div>
-	            <div style='clear: both; padding: 10px 10px;'>
-	                <div style='float: left; width: 5%;'>└</div>
-	                <div style='float: left; width:95%'>
-	                    <textarea cols='72' rows='12' class='boxTA' style='width:98%; height: 70px;'></textarea>
-	                 </div>
-	            </div>
-	             <div style='padding: 0px 13px 10px 10px; text-align: right;'>
-	                <button type='button' class='btn btnSendReplyAnswer' data-replyNum='0'>답글 등록</button>
-	            </div>
-	        
-	        </td>
-	    </tr>
-	</tbody>
-	
-	<tfoot id='listReplyFooter'>
-		<tr height='40' align="left">
-            <td colspan='2' >
-            <button type="button" class="btn btn-default" onclick="javascript:location.href='/Project_RailTraveler/bbs/list?';">목록</button>
-              <nav style="text-align: center;">
-			<ul class="pagination">
-				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-				</span></li>
-				<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-				</li>
-				<li><span>2</span></li>
-				<li><span>3</span></li>
-				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-				</span></li>
-			</ul>
-		</nav>
-            </td>
-           </tr>
-	</tfoot>
-</table>
-		
-		
-		</div>
-    
-    <div style="
-    margin-bottom: 5px;
-">
-
-			    </div>
-    </div>
-    
 </div>
 <script>
 Kakao.init('43fed4f22c437dfe99e213d8555c56e0');

@@ -93,7 +93,10 @@ function reset() {
 				%>
 				<tr onclick="javascript:location.href='<%=cp%>/board/article'">
 					<td><%=i%></td>
-					<td style="text-align: left; padding-left: 20px;">제목입니다22222222</td>
+					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
+    font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
+    color: #969696;"></i>3 <i class="far fa-comment-alt" style="margin-right: 2px;
+    color: #969696;"></i>5</span></td>
 					<td>겨레리</td>
 					<td>2018-10-23</td>
 					<td>1</td>
@@ -101,7 +104,6 @@ function reset() {
 				<%
 					}
 				%>
-
 			</tbody>
 		</table>
 

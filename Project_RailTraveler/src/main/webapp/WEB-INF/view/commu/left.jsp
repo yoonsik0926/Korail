@@ -5,7 +5,11 @@
 <%
 	String cp=request.getContextPath();
 %>
-
+<style type="text/css">
+.none{
+display: none;
+}
+</style>
 <script type="text/javascript">
 $(function(){
 	var idx="${subMenu}";
@@ -13,6 +17,10 @@ $(function(){
 	var subMenu=$(".list-group-item")[idx];
 	$(subMenu).addClass("active");
 });
+function show() {
+	$(".sub-item").css("display","block");
+}
+
 </script>
 <%-- <h3><img alt="커뮤니티" src="<%=cp%>/resource/images/iconcommu1.png" style="width: 100%; --%>
 <!--     margin: 10px 0px;"></h3> -->
@@ -33,7 +41,7 @@ $(function(){
     margin: 0px 0 0 41px;
     padding: 0;"></div>
 <div class="list-group">
-    <a href="<%=cp%>/notice/notice" class="list-group-item">공지게시판</a>
+    <a href="<%=cp%>/notice/notice" class="list-group-item" onclick="show(this);">공지게시판</a>
     <a href="<%=cp%>/qna/qna" class="list-group-item">묻고 답하기</a>
     <a href="<%=cp%>/board/board" class="list-group-item">자유게시판</a>
     <a href="<%=cp%>/friend/friend" class="list-group-item">동행 구하기</a>

@@ -90,7 +90,8 @@ function reset() {
 					</div>
 						</td>
 					<td style="text-align: left; padding-left: 20px; font-weight: 400;">※
-						공지사항 게시판의 공지입니다 ※</td>
+						공지사항 게시판의 공지입니다 ※<span style="
+    font-size: 14px; color: #969696;"> <i class="far fa-image" style="display: inline-block; margin-left: 5px;"></i><i class="far fa-save" style="display: inline-block; margin-left: 5px;"></i></span></td>
 					<td width="120">2018-10-23</td>
 				</tr>
 				<%
