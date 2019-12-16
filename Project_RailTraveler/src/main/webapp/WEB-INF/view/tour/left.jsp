@@ -5,6 +5,11 @@
 <%
 	String cp=request.getContextPath();
 %>
+<style type="text/css">
+.none{
+display: none;
+}
+</style>
 
 <script type="text/javascript">
 $(function(){
@@ -13,10 +18,31 @@ $(function(){
 	var subMenu=$(".list-group-item")[idx];
 	$(subMenu).addClass("active");
 });
+function show() {
+	$(".sub-item").css("display","block");
+}
+
 </script>
-<h3><span style="font-family: Webdings">2</span> 관광정보 </h3>
+<%-- <h3><img alt="커뮤니티" src="<%=cp%>/resource/images/iconcommu1.png" style="width: 100%; --%>
+<!--     margin: 10px 0px;"></h3> -->
+<div style="        box-shadow: 1px 1px 2px #333333;
+    background: #ffffff;
+    width: 100%;
+    color: white;
+    margin: 10px auto;
+    padding: 20px 10px;
+    display: block;
+    border: 1px solid;
+    border-radius: 5px;
+">
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/commuIcon.png" style="    width: 28px;
+    position: absolute;
+    margin: 0 0 0 5px;">
+<img alt="커뮤니티" src="<%=cp%>/resource/images/commuTitle.png" style="width: 78%;
+    margin: 0px 0 0 41px;
+    padding: 0;"></div>
 <div class="list-group">
-    <a href="<%=cp%>/tour/sudo" class="list-group-item">수도권</a>
+    <a href="<%=cp%>/tour/sudo" class="list-group-item" onclick="show(this);">수도권</a>
     <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>
     <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>
     <a href="<%=cp%>/tour/jeonla" class="list-group-item">전라권</a>

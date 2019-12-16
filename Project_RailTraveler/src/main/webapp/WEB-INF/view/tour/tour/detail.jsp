@@ -28,6 +28,9 @@
 	src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 
 
+<!--지도 정보를 가져오는 API 스크립트-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=134ec7b5b1389d0316b7c1bed3033f48"></script>
+
 
 <!--이미지 슬라이드 스크립트-->
 <script>
@@ -49,6 +52,17 @@
 	});
 </script>
 
+<script type="text/javascript">
+
+
+function replyreview(ob){
+
+ alert(ob);
+
+
+}
+</script>
+
 <style type="text/css">
 .box1 {
 	margin: 0 auto
@@ -66,91 +80,231 @@
 			<li><img src="<%=cp%>/resource/img/friendPlan.PNG" /></li>
 		</ul>
 	</div>
-	
+
 	<div class="box1" style="width: 90%; border: 2px solid #eeeeee">
-	<!--상단 메뉴-->
-	<div class="box1" style="margin-top: 20px">
-		<div class="box1"
-			style="width: 93%; border: 1px solid #eeeeee; align-content: center">
-			<h3 align="center">강릉 라테라스리조트</h3>
-			<h6 align="center">펜션</h6>
+		<!--상단 메뉴-->
+		<div class="box1" style="margin-top: 20px">
+			<div class="box1"
+				style="width: 93%; border: 1px solid #eeeeee; margin-top:10px; " >
+				<h3 align="center">강릉 라테라스리조트</h3>
+				<h6 align="center">펜션</h6>
 
 
-			<div class="row" style="width: 38%; margin: 0 auto;">
+				<div class="row" style="width: 33%; margin: 10px auto;">
+					<div class="col" style="font-size: 18px; font-weight: 600;">
+						<ul class="nav nav-tabs">
+							<li class="nav-item "><a class="nav-link active"
+								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+									길찾기</a></li>
+
+							<li class="nav-item "><a class="nav-link active"
+								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+									로드뷰</a></li>
+
+							<li class="nav-item "><a class="nav-link active"
+								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+									공유하기</a></li>
+
+
+						</ul>
+					</div>
+				</div>
+
+
+
+			</div>
+
+		</div>
+
+		<!--장소 설명-->
+		<div class="box1" style="margin-top: 20px;">
+			<div class="box1"
+				style="width: 93%; border: 1px solid #eeeeee; align-content: center">
+
+				<div class="col"
+					style="font-size: 18px; font-weight: 600; margin-top: 10px; margin-left: 10px">
+					<p>
+						<i class="fas fa-phone"></i> 070-4320-7476
+					</p>
+					<p>
+						<i class="fas fa-map-marker-alt"></i> 전남 여수시 돌산읍 진모1길 29-12
+					</p>
+					<p>
+						<i class="fas fa-home"></i> 바닷가, 신축펜션
+					</p>
+				</div>
+			</div>
+
+		</div>
+
+		<!--리뷰창-->
+		<div class="container"
+			style="margin-top: 40px; border-top: 2px solid black; width: 93%">
+			<div class="row" style="width: 100%; margin: 10px auto;">
 				<div class="col" style="font-size: 18px; font-weight: 600;">
 					<ul class="nav nav-tabs">
-						<li class="nav-item "><a class="nav-link active"
-							href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
-							길찾기</a></li>
+						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+							style="text-align: center" class="nav-link active"
+							href="<%=cp%>/main">주요 정보</a></li>
 
-						<li class="nav-item "><a class="nav-link active"
-							href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
-							로드뷰</a></li>
-							
-						<li class="nav-item "><a class="nav-link active"
-							href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
-							공유하기</a></li>
+						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+							style="text-align: center" class="nav-link active"
+							href="<%=cp%>/main">후기/리뷰</a></li>
 
+						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+							style="text-align: center" class="nav-link active"
+							href="<%=cp%>/main">자유게시판</a></li>
 
+						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+							style="text-align: center" class="nav-link active"
+							href="<%=cp%>/main">사진 요약</a></li>
 					</ul>
 				</div>
 			</div>
-			
-
-
 		</div>
-
-	</div>
-	
-	<!--장소 설명-->			
-	<div class="box1" style="margin-top: 20px;">
-		<div class="box1"
-			style="width: 93%; border: 1px solid #eeeeee; align-content: center">
-
-
-
 		
-				<div class="col" style="font-size: 18px; font-weight: 600; margin-top: 10px; margin-left: 10px">
-					<p><i class="fas fa-phone"></i>  070-4320-7476</p>
-					<p><i class="fas fa-map-marker-alt"></i>  전남 여수시 돌산읍 진모1길 29-12</p>
-					<p><i class="fas fa-home"></i>  바닷가, 신축펜션</p>
-				</div>
+		
+		
+
+		<!--찾아가는 길 설명-->
+		<div class="container"
+			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
+
+
+			<div class="row" style="width: 100%; ">
+				<p style="font-size: 25px; font-weight: 700">강릉 라테라스리조트 교통정보</p>
+			</div>
+			<div id="map" style="width:100%;height:350px;margin-bottom: 50px;"></div>
 		</div>
 
-	</div>
-	
-	<!--리뷰창-->
-	<div class="container" style="margin-top: 40px; border-top: 2px solid black; width: 93%">
-		<div class="row" style="width: 100%; margin-top: 5px;">
-			<div class="col" style="font-size: 18px; font-weight: 600;">
-				<ul class="nav nav-tabs">
-					<li class="nav-item " style="width: 130px; margin: 0 auto;"><a style="text-align: center" class="nav-link active"
-						href="<%=cp%>/main">주요 정보</a></li>
-						
-					<li class="nav-item " style="width: 130px; margin: 0 auto;"><a style="text-align: center" class="nav-link active"
-						href="<%=cp%>/main">후기/리뷰</a></li>
-						
-					<li class="nav-item " style="width: 130px; margin: 0 auto;"><a style="text-align: center" class="nav-link active"
-						href="<%=cp%>/main">자유게시판</a></li>
-												
-					<li class="nav-item " style="width: 130px; margin: 0 auto;"><a style="text-align: center" class="nav-link active"
-						href="<%=cp%>/main">사진 요약</a></li>
-				</ul>
+		<!--후기 리뷰창 설명-->
+		<div class="container"
+			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
+			<div class="row" style="width: 100%; margin-bottom: 5px; ">
+				<p style="font-size: 25px; font-weight: 700">후기/리뷰</p>
+			</div>
+			<div style="margin-bottom: 50px;">
+				네이버 블로그 형태로 집어넣을 것
 			</div>
 		</div>
-	</div>
-	
-	<!--설명-->
-	<div class="container" style="margin-top: 40px; border-top: 2px solid black; width: 93%">
-		<div class="row" style="width: 100%; margin-top: 5px;">
+
+
+
+
+
+		<div class="container" style="margin-top: 10px; border-bottom: 2px solid #eeeeee; width: 93%">
+		
+			<div class="row" style="width: 100%;  margin-bottom: 5px;">
+				<p style="font-size: 25px; font-weight: 700">자유게시판</p>
+			</div>
 			
+			<div>
+
+<%-- 				<table style="width: 100%; margin: 10px auto 10px; border-spacing: 0px;">
+					<tr height="35">
+						<td align="left" width="50%">
+							${dataCount}123개(${page}/${total_page} 페이지)
+						</td>
+					</tr>
+				</table> --%>
+
+				<table style="width: 100%; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;">
+
+					<tr align="left" bgcolor="#ffffff" height="35" style="margin-bottom:20px; margin-top:20px; border-bottom: 1px solid #cccccc;">
+						<td >
+							<span style="font-weight: 700; font-size: 17px;">헬로우굿쏘</span>님
+							<p style="font-size: 15px">좋은 여행이였습니다~</p>
+							<span style="font-size: 15px; color: gray">2019.10.12</span>
+							<button type="button" class="" onclick="replyreview(this);">답글</button>
+						
+						</td>
+					</tr>
+					
+					<tr align="left" bgcolor="#ffffff" height="35" style="margin-bottom:20px; padding-top:20px; border-bottom: 1px solid #cccccc;">
+						<td >
+							<span style="font-weight: 700; font-size: 17px;">유진몬짱짱</span>님
+							<p style="font-size: 15px">숙소가 더러웠어요</p>
+							<span style="font-size: 15px; color: gray">2019.11.12</span>
+							<button type="button" class="" onclick="">답글</button>
+							<p> </p>
+						</td>
+					</tr>
+
+
+				</table>
+
+
+
+			<table style='width: 100%; margin: 10px auto 0px; border-spacing: 0px; margin-top: 20px; margin-bottom: 50px;'>
+					<tr height='30'>
+						<td align='left'><span style='font-weight: bold;'>댓글쓰기</span><span>
+								- 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가 주세요.</span></td>
+					</tr>
+					<tr>
+						<td style='padding: 5px 5px 0px;'><textarea class='boxTA'
+								style='width: 100%; height: 70px;'></textarea></td>
+					</tr>
+					<tr>
+						<td align='right'>
+							<button type='button' class='' data-num='10'
+								style='padding: 10px 20px;'>댓글 등록</button>
+						</td>
+					</tr>
+				</table>
+
+				<div id="listReply"></div>
+			</div>
 		</div>
-	</div>
+		
+				<!--후기 리뷰창 설명-->
+		<div class="container" style="margin-top: 50px;  width: 93%">
+			<div class="row" style="width: 100%; margin-top: 5px;">
+				<p style="font-size: 25px; font-weight: 700">사진 요약</p>
+			</div>
+			<div style="margin-bottom: 50px;">
+				네이버 블로그 형태로 집어넣을 것
+
+			</div>
+		</div>
 
 
-	
-	
-	
-	
+
+
+
+
 	</div>
 </div>
+
+<!--지도 API 스크립트!!!-->
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+        center: new kakao.maps.LatLng(34.708763, 127.756664), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+// 지도를 클릭한 위치에 표출할 마커입니다
+var marker = new kakao.maps.Marker({ 
+    // 지도 중심좌표에 마커를 생성합니다 
+    position: map.getCenter() 
+}); 
+// 지도에 마커를 표시합니다
+marker.setMap(map);
+
+var iwContent = '<div><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue; text-align:right; target="_blank">큰지도보기</a> </div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
+
+//인포윈도우를 생성합니다
+var infowindow = new kakao.maps.InfoWindow({
+position : iwPosition, 
+content : iwContent 
+});
+
+//마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+infowindow.open(map, marker); 
+
+map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);  
+
+</script>

@@ -103,13 +103,9 @@ a {
 
 
 <div class="body-content-container">
-	<div class="body-title">
-		<h3>${title}</h3>
-	</div>
 
-
-	<div class="body-title" style="margin-top: 5%; margin-bottom: 20px">
-		<h3>강원권 추천 장소</h3>
+	<div class="body-title" style="margin-top: 3%; margin-bottom: 35px">
+		<h3 style="font-weight: 700">${title} 추천 장소</h3>
 	</div>
 
 
