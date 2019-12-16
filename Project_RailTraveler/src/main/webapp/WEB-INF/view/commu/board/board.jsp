@@ -5,7 +5,17 @@
 <%
 	String cp = request.getContextPath();
 %>
+<script>
+function searchList() {
+	$("#searchCount").css("display","block");
+}
+function reset() {
+	$("#searchCount").css("display","none");
+}
+</script>
+<style type="text/css">
 
+</style>
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
@@ -17,20 +27,19 @@
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-top: 5px;"></div>
 		
-		<table class="table table-hover"
+		<table class="table table-hover tb-board"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr>
 				<td width="200" colspan="5"
 					style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-<!-- 					<span -->
-<!-- 					style="display: block; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과 -->
-<!-- 						<span style="color: #ca4a0d;">3569건 </span> <img alt="" -->
-<!-- 						src="/Project_RailTraveler/resource/images/close_icon.png" -->
-<!-- 						style="background: #dadada; width: 20px; padding: 3px; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;"> -->
-<!-- 				</span> -->
+<span id="searchCount" 					style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+												<span style="color: #ca4a0d;">3569건 </span> <img alt=""
+												src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
+												style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+										</span>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/notice/created';"
+							onclick="javascript:location.href='<%=cp%>/board/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> 글쓰기
@@ -51,10 +60,10 @@
 							</select> <input type="text" name="keyword" value="${keyword}"
 								class="boxTF"
 								style="display: inline-block; height: 100%; width: 58%;">
-							<input type="image"
+							<img
 								src="<%=cp%>/resource/images/magnifying-glass.png" class=""
 								onclick="searchList()"
-								style="padding: 6px; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
+								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 						</form></td>
 				</tr>
 				<tr class="lbo_li lbo_legend lbo_legend_like">
@@ -75,14 +84,14 @@
 					</div>
 				</td>
 				<td colspan="2" style="text-align: left; padding-left: 20px;">※
-					자유사항 게시판의 공지입니다 ※</td>
+					자유게시판의 공지입니다 ※</td>
 				<td colspan="2" style="text-align: right;
-    padding-right: 20px;">2018-10-23</td>
+    padding-right: 20px;"><i>2018-10-23</i></td>
 			</tr>
 				<%
 					for (int i = 10; i >= 1; i--) {
 				%>
-				<tr>
+				<tr onclick="javascript:location.href='<%=cp%>/board/article'">
 					<td><%=i%></td>
 					<td style="text-align: left; padding-left: 20px;">제목입니다22222222</td>
 					<td>겨레리</td>

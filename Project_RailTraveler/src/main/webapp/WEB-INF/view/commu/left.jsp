@@ -33,7 +33,7 @@ $(function(){
     margin: 0px 0 0 41px;
     padding: 0;"></div>
 <div class="list-group">
-    <a href="<%=cp%>/notice/notice" class="list-group-item">공지사항</a>
+    <a href="<%=cp%>/notice/notice" class="list-group-item">공지게시판</a>
     <a href="<%=cp%>/qna/qna" class="list-group-item">묻고 답하기</a>
     <a href="<%=cp%>/board/board" class="list-group-item">자유게시판</a>
     <a href="<%=cp%>/friend/friend" class="list-group-item">동행 구하기</a>

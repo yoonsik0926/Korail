@@ -3,7 +3,6 @@ package com.railer.rt.commu;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller("commu.boardController")
 public class BoardController {
@@ -12,5 +11,16 @@ public class BoardController {
 		model.addAttribute("subMenu", "2");
 		return ".four.commu.board.board";
 	}
-
+	@RequestMapping(value="/board/created")
+	public String createdForm(Model model) throws Exception {
+		model.addAttribute("subMenu", "2");
+		model.addAttribute("mode", "created");
+		return ".four.commu.board.created";
+	}
+	@RequestMapping(value="/board/article")
+	public String article(Model model) throws Exception {
+		model.addAttribute("subMenu", "2");
+		
+		return ".four.commu.board.article";
+	}
 }

@@ -15,7 +15,6 @@
 	<link rel="apple-touch-icon" sizes="76x76" href="<%=cp%>/resource/img/apple-icon.png">
 	<link rel="icon" type="image/png" href="<%=cp%>/resource/img/favicon.png">	
 	
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>내일로</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -28,10 +27,11 @@
     <!--     Font Awesome     -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  	
   	<!-- Font Lobster -->
  	<link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
  	
-  <script src="https://kit.fontawesome.com/9a196cb2bb.js" crossorigin="anonymous"></script>
   
   <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
   
@@ -42,6 +42,16 @@
 	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> 
 	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
 	
+	<style type="text/css">
+	a.list-group-item {
+    color: #555555;
+    font-size: 14px;
+    font-weight: 600;
+}
+.list-group-item {
+    padding: 20px 15px;   
+}
+	</style>
 </head> 
 
 <body>
