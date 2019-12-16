@@ -97,6 +97,7 @@ a {
 	width: 30px;
 	height: 30px;
 	cursor: pointer;
+	outline: 0;
 }
 </style>
 
@@ -232,7 +233,7 @@ a {
 				</div>
 				<p>...</p>
 				<p align="right">
-					<button class="btn btn-info">알아보기</button>
+					<button class="btn btn-info" onclick="javascript:location.href='<%=cp%>/tour/detail';">알아보기</button>
 				</p>
 			</div>
 		</div>
