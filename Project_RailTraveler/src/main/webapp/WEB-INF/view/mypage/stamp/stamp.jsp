@@ -6,6 +6,7 @@
    String cp = request.getContextPath();
 %>
 
+
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
@@ -14,6 +15,11 @@
 	</div>
      
      <div>
-         스탬프 목록
+
+         
+         
+         
+         
+         
      </div>
 </div>

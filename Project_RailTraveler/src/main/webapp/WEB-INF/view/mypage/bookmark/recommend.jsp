@@ -37,16 +37,7 @@ $(function(){
 	</div>
 
 	<div>
-		<div style="clear: both;">
-			<ul class="tabs">
-				<li id="tab-${vo.categoryNum}" data-tab="${vo.categoryNum}">
-					관광정보</li>
-				<li id="tab-${vo.categoryNum}" data-tab="${vo.categoryNum}">
-					커뮤니티</li>
-				<li id="tab-${vo.categoryNum}" data-tab="${vo.categoryNum}">여행
-					플랜</li>
-			</ul>
-		</div>
+추천코스
 
 		<div style="width: 100%;">
 			<div style="margin-bottom: 10px;">

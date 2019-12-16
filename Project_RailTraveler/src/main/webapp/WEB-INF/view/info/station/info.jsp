@@ -5,167 +5,9 @@
 <%
    String cp = request.getContextPath();
 %>
-<style>
-.btnLoc {
-	border : none;
-	width : 100%;
-	height: 40px;
-	background: #283164;
-	border-radius: 4px;
-	color: #fff;
-}
 
-.btnLoc:hover {
-	border: #283164 1px solid;
-	width : 100%;
-	height : 40px;
-	background : #fff;
-	border-radius : 4px;
-	color : #283164;
-}
+<link rel="stylesheet" href="<%=cp%>/resource/css/info.css" type="text/css">
 
-.btnTour {
-	border : none;
-	width : 200px;
-	height: 40px;
-	background: #283164;
-	border-radius: 4px;
-	color: #fff;
-	margin-bottom: 35px;
-}
-
-.btnTour:hover {
-	border : #283164 1px solid;
-	width : 200px;
-	height: 40px;
-	background: #fff;
-	border-radius: 4px;
-	color: #283164;
-}
-
-
-</style>
-
-<style>
-@import url(https://fonts.googleapis.com/css?family=Raleway:400,800);
-figure.snip1104 {
-  font-family: 'Raleway', Arial, sans-serif;
-  position: relative;
-  float: left;
-  overflow: hidden;
-  width: 100%;
-  background: #000000;
-  color: #ffffff;
-  text-align: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-}
-
-figure.snip1104 * {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-}
- 
-figure.snip1104 img {
-  position: relative;
-  opacity: 0.4;
-  width: 100%;
-}
- 
-figure.snip1104 figcaption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
- 
-figure.snip1104 h4 {
-  position: absolute;
-  left: 40px;
-  right: 40px;
-  display: inline-block;
-  background: #000000;
-  -webkit-transform: skew(-10deg) rotate(-10deg) translate(0, -50%);
-  transform: skew(-10deg) rotate(-10deg) translate(0, -50%);
-  padding: 12px 5px;
-  margin: 0;
-  top: 50%;
-  text-transform: uppercase;
-  font-weight: 400;
-}
- 
-figure.snip1104 h4 span {
-  font-weight: 800;
-}
- 
-figure.snip1104:before {
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  content: '';
-  background: #ffffff;
-  position: absolute;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  -webkit-transform: rotate(110deg) translateY(-50%);
-  transform: rotate(110deg) translateY(-50%);
-}
- 
-figure.snip1104 a {
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  position: absolute;
-  z-index: 1;
-}
- 
-figure.snip1104.blue {
-  background: #123851;
-}
- 
-figure.snip1104.blue h4 {
-  background: #0a212f;
-}
- 
-figure.snip1104.red {
-  background: #581a14;
-}
- 
-figure.snip1104.red h4 {
-  background: #36100c;
-}
- 
-figure.snip1104.yellow {
-  background: #7f5006;
-}
- 
-figure.snip1104.yellow h4 {
-  background: #583804;
-}
- 
-figure.snip1104:hover img,
-figure.snip1104.hover img {
-  opacity: 1;
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
- 
-figure.snip1104:hover h4,
-figure.snip1104.hover h4 {
-  -webkit-transform: skew(-10deg) rotate(-10deg) translate(-150%, -50%);
-  transform: skew(-10deg) rotate(-10deg) translate(-150%, -50%);
-}
- 
-figure.snip1104:hover:before,
-figure.snip1104.hover:before {
-  -webkit-transform: rotate(110deg) translateY(-150%);
-  transform: rotate(110deg) translateY(-150%);
-}
-</style>
 
 <script type="text/javascript">
 $("figure").mouseleave(
@@ -173,8 +15,7 @@ $("figure").mouseleave(
 	      $(this).removeClass("hover");
 	    }
 	  );
-	  
-	  
+
 </script>
 
 <div class="body-content-container">
