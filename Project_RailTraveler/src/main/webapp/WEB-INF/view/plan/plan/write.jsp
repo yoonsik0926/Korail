@@ -31,8 +31,7 @@
 	crossorigin="anonymous"></script>
 
 
-<script type="text/javascript"
-	src="<%=cp%>/resource/js/util.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/js/util.js"></script>
 <script type="text/javascript"
 	src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript"
@@ -88,7 +87,6 @@
 	color: black;
 }
 
-
 .planList {
 	width: 100%;
 	height: 90px;
@@ -96,39 +94,39 @@
 }
 
 .dayCount {
-	margin:15px 5px 10px 5px;
-    width: 20%;
-    height: 60px;
-    font-size: 25px;
-    display: block;
-    float: left;
-/* 	border: 1px solid black; */
+	margin: 15px 5px 10px 5px;
+	width: 20%;
+	height: 60px;
+	font-size: 25px;
+	display: block;
+	float: left;
+	/* 	border: 1px solid black; */
 }
 
 .selectedStation {
-	margin:5% 3% 0 3%;
+	margin: 5% 3% 0 3%;
 	width: 35%;
 	height: 60px;
 	display: block;
 	float: left;
 	font-size: 16px;
 	text-align: center;
-/* 	border: 1px solid black; */
+	/* 	border: 1px solid black; */
 }
 
 .selectedDay {
 	width: 90px;
-	font-size:15px;
+	font-size: 15px;
 	height: 30px;
 	display: block;
 	float: left;
-/* 	border: 1px solid black; */
+	/* 	border: 1px solid black; */
 }
 
-
-.detailPlanning {
-	margin:15px 0 15px 10px;
-	border: 0; outline: 0;
+#detailPlanning {
+	margin: 15px 0 15px 10px;
+	border: 0;
+	outline: 0;
 	width: 30%;
 	height: 60px;
 	font-size: 25px;
@@ -138,25 +136,98 @@
 
 /* Modal Content/Box */
 .modal-content {
-	background:white;
-    margin-top: 130px;
-    margin-left: 12%;
-    padding: 10px;
-    border: 2px solid #1000b5;
-    width: 360px; /* Could be more or less, depending on screen size */    
-    height: 105px; 
-    z-index: 1;                      
+	background: white;
+	margin-top: 130px;
+	margin-left: 12%;
+	padding: 10px;
+	border: 2px solid #1000b5;
+	width: 360px; /* Could be more or less, depending on screen size */
+	height: 105px;
+	z-index: 1;
 }
 
 .modalDays {
 	width: 112px;
 	height: 60px;
-	display:block;
+	display: block;
 	float: left;
 	margin: auto;
 	cursor: pointer;
 }
 
+.modal-planning {
+	background: blue;
+	/* 	opacity: 0.7; */
+	/* 	padding: 10px; */
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	/*     float: right;  */
+	/*     z-index: 3;   */
+}
+
+.modal2 {
+	width: 75%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	/* left: 0; */
+	z-index: 1040;
+	display: none;
+	overflow: auto;
+	overflow-y: scroll;
+	position: fixed;
+}
+
+.plusStation {
+	padding: 5px;
+	width: 350px;
+	height: 150px;
+	margin: 10px;
+	border: 1px solid black;
+	background: white;
+	margin
+}
+
+.insertStaPlan {
+	width: 310px;
+	height: 30px;
+	border: 1px solid black;
+	display: block;
+	float: left;
+	margin:10px;
+	margin-left:0;
+	font-size:20px;
+	text-align:center;
+	cursor:pointer;
+}
+
+/* .carousel-cell {
+	counter-increment: carousel-cell;
+}
+
+.carousel-cell.is-selected {
+	background: #ED2;
+}
+
+.carousel-cell:before {
+	display: block;
+	text-align: center;
+	line-height: 300px;
+	font-size: 80px;
+	color: white;
+}
+
+.fPlan {
+	width: 100%;
+	height: 300px;
+	margin-right: 10px;
+	margin-bottom: 22.5px;
+	border-radius: 5px;
+} */
 </style>
 <script type="text/javascript">
 $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
@@ -211,9 +282,15 @@ function getDaysLater1(sDate, days) {
 function selectTripDay() {
     $('#myModal').show();
 };
+
 // 팝업 Close 기능
 function close_pop(flag) {
      $('#myModal').hide();
+};
+
+
+function close_planning() {
+	$("#planModal").hide();
 };
 
 function getNumber(day) {
@@ -230,21 +307,18 @@ function getNumber(day) {
 	document.getElementById("selectDays").src=day.src;
 	
 	for (var i = 1; i <=day.value; i++) {
-		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'><span>여수역, 서울역, 용산역, 청량리역, 강릉역</span></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
+		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button id='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
 	}
 	$('#myModal').hide();
 }
 
 
 $(document).ready(function(){
-	$('#plusStation').parent().hide();
+	$('.plusStation').parent().hide();
 });
 
-// $("#marker").click(function(){
-// 	$('#plusStation').parent().show();
-// 	$('#plusStation').parent().css('background', 'white');
-// 	$('#plusStation').parent().css('margin', '-210px 0px 0px -185px');
-// });
+
+
 </script>
 </head>
 
@@ -252,7 +326,7 @@ $(document).ready(function(){
 	<div class="main" style="height: 100%;">
 		<div>
 			<div id="mapControllerLeft"
-				style="width: 25%; height: 100%; float: left; margin-top: 0px; margin-left: 0px; background: rgb(255, 255, 255); border-right: 1px solid;">
+				style="width: 25%; z-index: 5; height: 100%; float: left; margin-top: 0px; margin-left: 0px; background: rgb(255, 255, 255); border-right: 1px solid;">
 				<div id="searchStation">
 					<div>
 						<div style="float: left; width: 70%; height: 100%;">
@@ -270,92 +344,155 @@ $(document).ready(function(){
 						</div>
 						<div>
 							<div id="selectTripDay" onclick="selectTripDay();">
-								<input type="image" id="selectDays" src="<%=cp%>/resource/images/plan/threeDays.png" style="padding: 8px;">
-								<span>일수선택</span>
-								<i class="fa fa-angle-down"></i>
+								<input type="image" id="selectDays"
+									src="<%=cp%>/resource/images/plan/threeDays.png"
+									style="padding: 8px;"> <span>일수선택</span> <i
+									class="fa fa-angle-down"></i>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="planListForm">	</div>
-				
-				
-			<div id="myModal" class="modal">
-		      <!-- Modal content -->
-		      <div class="modal-content">
-		          <div style="text-align: center;">
-		          	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/threeDays.png" value="3" onclick="getNumber(this);"></span></div>
-		           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/fiveDays.png" value="5" onclick="getNumber(this);"></span></div>
-		           	<div class="modalDays"><span><input type="image" src="<%=cp%>/resource/images/plan/sevenDays.png" value="7" onclick="getNumber(this);"></span></div>
-		          </div>
-		          <div style="cursor:pointer; text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-		            <span class="pop_bt" style="font-size: 13pt;">닫기</span>
-		          </div>
-		      </div>
-    		</div>
-		</div>
-		
-		
-		<div id="mapControllerRight" style="float: left; width: 75%;">
-			<div style="z-index: 5; padding: 20px; position: absolute;">
-				<div style="width: 250px; background-color: white;">
-					<input type="text" id="findStation" style="width: 225px; padding:0 8px; height:35px; z-index: 3; font-size: 16px; border: none;" placeholder="검색할 역을 입력하세요">
-					<i class="fas fa-search"></i>
+				<div id="planListForm"></div>
+
+
+				<div id="myModal" class="modal" style="z-index: 1045;">
+					<!-- Modal content -->
+					<div class="modal-content">
+						<div style="text-align: center;">
+							<div class="modalDays">
+								<span><input type="image"
+									src="<%=cp%>/resource/images/plan/threeDays.png" value="3"
+									onclick="getNumber(this);"></span>
+							</div>
+							<div class="modalDays">
+								<span><input type="image"
+									src="<%=cp%>/resource/images/plan/fiveDays.png" value="5"
+									onclick="getNumber(this);"></span>
+							</div>
+							<div class="modalDays">
+								<span><input type="image"
+									src="<%=cp%>/resource/images/plan/sevenDays.png" value="7"
+									onclick="getNumber(this);"></span>
+							</div>
+						</div>
+						<div
+							style="cursor: pointer; text-align: center; padding-bottom: 10px; padding-top: 10px;"
+							onClick="close_pop();">
+							<span class="pop_bt" style="font-size: 13pt;">닫기</span>
+						</div>
+					</div>
 				</div>
 			</div>
+
+
+			<div id="mapControllerRight" style="float: left; width: 75%;">
+				<div style="z-index: 5; padding: 20px; position: absolute;">
+					<div style="width: 250px; background-color: white;">
+						<input type="text" id="findStation"
+							style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;"
+							placeholder="검색할 역을 입력하세요"> <i class="fas fa-search"></i>
+					</div>
+				</div>
 				<div id="map" style="width: 100%; height: 100%; z-index: 2;"></div>
-					<script type="text/javascript"
+				<script type="text/javascript"
 					src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ea24f69cc8602cd4d0ce33868b3dd46d"></script>
 				<script>
-					var container = document.getElementById('map');
-					var options = {
-						center : new kakao.maps.LatLng(36.656960, 128.134321),
-						level : 11
-					};
-					var map = new kakao.maps.Map(container, options);
-					
-					var imageSrc = '<%=cp%>/resource/images/plan/markerBlack.png', // 마커이미지의 주소입니다     
-				    imageSize = new kakao.maps.Size(16, 32), // 마커이미지의 크기입니다
-				    imageOption = {offset: new kakao.maps.Point(8, 32)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-				      
-				// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-				var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-				    markerPosition = new kakao.maps.LatLng(36.656960, 128.134321); // 마커가 표시될 위치입니다
+				var container = document.getElementById('map');
+	               var options = {
+	                  center : new kakao.maps.LatLng(36.656960, 128.134321),
+	                  level : 11
+	               };
+	               var map = new kakao.maps.Map(container, options);
+	               
+	               var positions = [
+	                   {
+	                      latlng: new kakao.maps.LatLng(36.656960, 128.134321) // 마커가 표시될 위치입니다
+	                      ,content:'하위하위1'
+	                   },
+	                   {   
+	                      latlng: new kakao.maps.LatLng(35.821812, 128.564345) // 마커가 표시될 위치입니다
+	                   	  ,content:'하위하위2'
+	                   },
+	                   {
+	                      latlng: new kakao.maps.LatLng(35.839614, 127.1151431) // 마커가 표시될 위치입니다
+	                   		,content:'하위하위3'
+	                   }
+	                ];
+	             
+	            // 마커이미지의 주소입니다
+	            var imageSrc = '<%=cp%>/resource/images/plan/markerBlack.png';      
+	            var imageSize = new kakao.maps.Size(16, 32); // 마커이미지의 크기입니다
+	            var imageOption = {offset: new kakao.maps.Point(8, 32)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+	           	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
-				// 마커를 생성합니다
-				var marker = new kakao.maps.Marker({
-				    position: markerPosition, 
-				    image: markerImage // 마커이미지 설정 
-				});
-				marker.setMap(map);
-				    
-				var content ='<div id="plusStation" style="padding:5px; width:350px; height:150px; margin:10px;"><button type="button" onclick="closeOverlay()" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><div style="width:100px; height:100px; border:1px solid black; display:block; float:left; margin-right:10px;"></div><div style="width: 200px; height: 100px; border: 1px solid black; display: block; float: left;"></div><div style="width: 310px; height: 30px; border: 1px solid black; display: block; float: left; margin:10px; margin-left:0; font-size:20px; text-align:center; cursor:pointer;"><div>추가하기</div></div></div>';
+	            var markers=[];
+	            var contents=[];
+	        	var i=0;
+	          positions.forEach(function(pos) {
+	            var marker = new kakao.maps.Marker({
+	            	position:pos.latlng,
+	            	map: map,
+	                image: markerImage // 마커이미지 설정 
+	            });
+	            
+	            var closeOverlay = function() {
+	            	customOverlay.setMap(null);
+	            };
+	            var $plusStation=$('<div class="plusStation" />');
+	            var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" />').click(closeOverlay);
+	            var $span=$('<span aria-hidden="true">&times;</span>');
+				var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
 				
-				// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-				var overlay = new kakao.maps.CustomOverlay({
-				    content: content,
-				    map: map,
-				    position: marker.getPosition()
+	            $plusStation.append($close);
+				$plusStation.append($insertStaPlan);
+	            $close.append($span);
+	            
+	            var content=$plusStation[0];
+	            
+	            var customOverlay = new kakao.maps.CustomOverlay({
+	            	content: content,
+	            	position: pos.latlng
+	            });
+	            markers[i]=marker;
+	            contents[i]=content;
+	            
+	            kakao.maps.event.addListener(markers[i], 'click', function() {
+	            	customOverlay.setMap(map);
+	            	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
+	            	$('.plusStation').parent().show();
 				});
-				
-				    overlay.setMap(null);
+	            i++;
+	          });
+	         </script>
 
-				// 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-				kakao.maps.event.addListener(marker, 'click', function() {
-					 overlay.setMap(map);
-				    $('#plusStation').parent().show();
-					$('#plusStation').parent().css('background', 'white');
-					$('#plusStation').parent().css('margin', '-210px 0px 0px -185px');
-				});
+				<div id="planModal" class="modal2">
+					<div class="modal-planning">
+						<button type="button" class="close" aria-label="Close"
+							onclick="close_planning();"
+							style="display: block; font-size: 40px; margin: 10px;">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
 
-				// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-				function closeOverlay() {
-				    overlay.setMap(null);
-				}
-				</script>
+			</div>
 		</div>
 	</div>
-</div>
+	<script type="text/javascript">
+$(function() {
+	$("body").on('click', "#detailPlanning", function() {		
+		$(".carousel-cell2").hide();
+		$("#planModal").show();
+		$(".modal-planning").append("<div class='carousel-cell2' style='width: 350px; height: 100%; background: black;'></div>");
+		
+	});
+});
 
+$(function() {
+	$("body").on('click', ".insertStaPlan", function() {
+		
+	});
+});
+</script>
 </body>
 </html>
