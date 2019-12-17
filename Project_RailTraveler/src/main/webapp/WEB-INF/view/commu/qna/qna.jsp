@@ -109,8 +109,8 @@ optgroup {
 				<tr onclick="javascript:location.href='<%=cp%>/qna/article'">
 					<td><%=i%></td>
 					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
-    font-size: 13px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>3 <i class="far fa-comment-alt" style="margin-right: 2px;
+    font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
+    color: #969696;"></i>3 <i class="far fa-comments" style="margin-right: 2px;
     color: #969696;"></i>5</span></td>
 					<td>겨레리</td>
 					<td>2018-10-23</td>
