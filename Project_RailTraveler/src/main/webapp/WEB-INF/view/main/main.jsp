@@ -22,27 +22,41 @@
 	margin-right: 10px;
 	margin-top: 22.5px;
 	margin-bottom: 22.5px;
-	background: #ED2;
 	border-radius: 5px;
 	counter-increment: carousel-cell;
 }
 
-.carousel-cell.is-selected {
-	background: #ED2;
+.carousel-cell2 {
+	width: 25%;
+	height: 350px;
+	margin-right: 10px;
+	margin-top: 22.5px;
+	margin-bottom: 22.5px;
+	border-radius: 5px;
+	counter-increment: carousel-cell;
 }
 
+
 /* cell number */
-.carousel-cell:before {
+.carousel-cell:before  {
 	display: block;
 	text-align: center;
 	line-height: 300px;
 	font-size: 80px;
 	color: white;
 }
+.carousel-cell2:before{
+	display: block;
+	text-align: center;
+	line-height: 350px;
+	font-size: 80px;
+	color: white;
+}
 
-.fPlan {
+
+.fPlan, .event {
 	width: 100%;
-	height: 300px;
+	height: 100%;
 	margin-right: 10px;
 	margin-bottom: 22.5px;
 	border-radius: 5px;
@@ -111,6 +125,16 @@
 	border: none;
 }
 
+.page-three-title h4 {
+    margin-bottom : 30px;
+    background: linear-gradient(#e28ff1, #68d0fd) no-repeat 0 0 / 7px 100%;
+    line-height: 30px;
+    padding-left: 20px;
+    font-weight: 550;
+    color: #1b1b1b;
+    /* margin: 0; */
+    font-family: Roboto, 'Nanum Square', Helvetica, Arial, sans-serif;
+}
 </style>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,700);
@@ -415,7 +439,12 @@ figure.snip1132.hover img {
 		</div>
 
 		<div class="main3" style="margin-top: 100px;">
-			<h4 style="margin-bottom: 30px;">| 추천 코스</h4>
+			<div class="page-three-title mt40">
+				<h4 class="fs26">
+				<span style="padding: 10px 0px; display: block;"> 추천 코스</span>
+				</h4>
+			</div>
+			
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<div class="rc">
 					<figure class="snip1384">
@@ -465,7 +494,11 @@ figure.snip1132.hover img {
 		</div>
 
 		<div class="main4" style="margin-top: 100px;">
-			<h4 style="margin-bottom: 30px;">| 역소개</h4>
+			<div class="page-three-title mt40">
+				<h4 class="fs26">
+				<span style="padding: 10px 0px; display: block;"> 역 소개</span>
+				</h4>
+			</div>
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<div class="st" style="margin-left: 10px !important;">
 				<figure class="snip1132" style="width: 220px; height: 200px;">
@@ -541,7 +574,11 @@ figure.snip1132.hover img {
 		</div>
 		
 		<div class="main5" style="margin-top: 100px;">
-			<h4 style="margin-bottom: 30px;">| 커뮤니티</h4>
+			<div class="page-three-title mt40">
+				<h4 class="fs26">
+				<span style="padding: 10px 0px; display: block;"> 커뮤니티</span>
+				</h4>
+			</div>
 			
 			<div class="commu1" style="display: inline-block; width: 100%;">
 			
@@ -763,8 +800,32 @@ figure.snip1132.hover img {
 		</div>
 		
 		<div class="main6" style="margin-top: 60px;">
-			<h4 style="margin-bottom: 30px;">| 이벤트</h4>
-			<div><img src="<%=cp%>/resource/img/eventex.jpg" style="width: 100%;"></div>
+			<div class="page-three-title mt40">
+				<h4 class="fs26">
+				<span style="padding: 10px 0px; display: block;"> 이벤트</span>
+				</h4>
+			</div>
+			
+			<div class="carousel" data-flickity='{"groupCells": true }'
+				style="height: 350px;">
+				<div class="carousel-cell2">
+					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+				</div>
+				<div class="carousel-cell2">
+					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+				</div>
+				<div class="carousel-cell2">
+					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+				</div>
+				<div class="carousel-cell2">
+					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+				</div>
+				<div class="carousel-cell2">
+					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+				</div>
+
+
+		</div>
 		</div>
 		
 		

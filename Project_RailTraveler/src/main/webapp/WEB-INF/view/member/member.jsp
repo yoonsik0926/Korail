@@ -5,14 +5,10 @@
 <%
 	String cp = request.getContextPath();
 %>
-<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+
+<link rel="stylesheet" href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css" type="text/css">
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
-
-<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
-<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
 
 <script type="text/javascript">
 function memberOk() {
@@ -171,10 +167,13 @@ function userIdCheck() {
 
 $(function() {
     //input을 datepicker로 선언
-    $('[data-toggle="datepicker"]').datepicker({
-    	calendarWeeks: true,
+    $('form input[name=birth]').datepicker({
+    	/* calendarWeeks: true, 
         todayHighlight: true,
-        autoclose: true
+        autoclose: true */
+    	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+    	todayHighlight: true
+        
     });                    
     
     //초기값을 오늘 날짜로 설정
@@ -297,11 +296,10 @@ input, select, .btnSearch {
 				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Birth</p>
 				  	<div class="input-group">
 				      <div class="input-group-addon"><i class="fas fa-birthday-cake" style="color:#334393;"></i></div>
-				      <input type="text" class="form-control" type="text" name="birth" id="datepicker"
+				      <input type="text" class="form-control" type="text" name="birth"
 									value="${dto.birth}"
 									readonly="readonly"
-									placeholder="&nbsp;Birth"
-									data-toggle="datepicker">
+									placeholder="&nbsp;Birth">
 				    </div>
 				  </div>
 				  
