@@ -33,9 +33,9 @@ var cnt =1;
 function test(ob){
 
   if(cnt%2==1){
-	  ob.className = "fas fa-heart"; 
+	  ob.className = "far fa-heart"; 
   }else{
-	  ob.className = "far fa-heart";
+	  ob.className = "fas fa-heart";
   }
 
 	cnt++;	
