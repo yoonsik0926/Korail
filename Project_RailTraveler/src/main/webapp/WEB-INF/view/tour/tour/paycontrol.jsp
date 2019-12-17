@@ -5,13 +5,13 @@
 <%
 	String cp=request.getContextPath();
 %>
-<%
+<%-- <%
     String name = "김윤식";//(String)request.getAttribute("name");
     String email = "yoonsik0926@naver.com";//(String)request.getAttribute("email");
     String phone = "01084727476";//(String)request.getAttribute("phone");
     String address = "서울시 양천구 신월로 20길 7";//(String)request.getAttribute("address");
     int totalPrice = 1;//(int)request.getAttribute("totalPrice");    
-%>
+%> --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,17 +26,19 @@
         var IMP = window.IMP; // 생략가능
         IMP.init('imp68825719'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
         var msg;
+        /* 이렇게 담겨서 넘기면 됨*/
+        /* var query = "userName='${dto.userName}'+"; */
         
         IMP.request_pay({
             pg : 'kakaopay',
             pay_method : 'card',
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : 'KH Books 도서 결제',
-            amount : <%=totalPrice%>,
-            buyer_email : '<%=email%>',
-            buyer_name : '<%=name%>',
-            buyer_tel : '<%=phone%>',
-            buyer_addr : '<%=address%>',
+            amount : 100,
+            buyer_email : '${dto.email}',
+            buyer_name : '${dto.userName}',
+            buyer_tel : '${dto.tel}',
+            buyer_addr : '-',
             buyer_postcode : '123-456',
             //m_redirect_url : 'http://www.naver.com'
         }, function(rsp) {
@@ -53,25 +55,26 @@
                 }).done(function(data) {
                     //[2] 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
                     if ( everythings_fine ) {
-                        msg = '결제가 완료되었습니다.';
+                        msg = '쌍용교육센터 코레일에서 결제가 완료되었습니다.';
                         msg += '\n고유ID : ' + rsp.imp_uid;
                         msg += '\n상점 거래ID : ' + rsp.merchant_uid;
                         msg += '\결제 금액 : ' + rsp.paid_amount;
                         msg += '카드 승인번호 : ' + rsp.apply_num;
                         
-                        alert(msg);
+                       
                     } else {
-                        //[3] 아직 제대로 결제가 되지 않았습니다.
+                        alert("아직 제대로 결제가 되지 않았습니다.");
                         //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
                     }
                 });
                 //성공시 이동할 페이지
+                
                 location.href='<%=cp%>/tour/paydone?msg='+msg;
             } else {
                 msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
                 //실패시 이동할 페이지
-                location.href="<%=cp%>/tour/main";
+                location.href="<%=cp%>/main";
                 alert(msg);
             }
         });

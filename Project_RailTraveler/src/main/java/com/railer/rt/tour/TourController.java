@@ -51,7 +51,7 @@ public class TourController {
 		return ".four.tour.tour.detail";
 	}
 	
-	@RequestMapping(value="/tour/pay")
+	@RequestMapping(value="/tour/paycontrol")
 	public String pay(Model model) throws Exception {
 		
 		
@@ -60,6 +60,7 @@ public class TourController {
 	
 	@RequestMapping(value="/tour/paydone")
 	public String paydone(Model model, @RequestParam String msg) throws Exception {
+		System.out.println(msg);
 		
 		model.addAttribute("msg", msg);
 		
