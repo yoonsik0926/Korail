@@ -30,8 +30,8 @@ $(function(){
 
 $(function(){
 	$(".book").click(function(){
-		
 		$(".sub-items").slideToggle();
+		
 	});
 });
 

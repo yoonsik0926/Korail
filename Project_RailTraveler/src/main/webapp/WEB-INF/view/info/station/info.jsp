@@ -26,20 +26,29 @@ $("figure").mouseleave(
 	</div>
 	
      <div class="body-main">
-		<div class="chooseLoc" style="display: inline-block; width: 100%; margin-bottom: 40px;">
-			<div style="display: inline; width:16%; float: left; margin: 0 10px;">
-				<button class="btnLoc" type="button" onclick="">수도권</button></div>
-			<div style="display: inline;  width:16%; float: left; margin: 0 10px;">
-				<button class="btnLoc" type="button" onclick="">강원권</button></div>
-			<div style="display: inline; width:16%;  float: left; margin: 0 10px;">
-				<button class="btnLoc" type="button" onclick="">충청권</button></div>
-			<div style="display: inline; width:16%;  float: left; margin: 0 10px;">
-				<button class="btnLoc" type="button" onclick="">전라권</button></div>
-			<div style="display: inline; width:16%;  float: left; margin: 0 10px;">
-				<button class="btnLoc" type="button" onclick="">경상권</button></div>
+     	<div style="margin-bottom: 20px;">
+     	</div>
+     	
+  		<div class="container">
+		<div class="row">
+			<div class="col" style="font-size: 18px; font-weight: 600;margin: 0 10px;width: 88%;">
+				<ul class="nav nav-tabs" style="margin-bottom: 30px;">
+					<li class="nav-item active"><a class="nav-link active" href="<%=cp%>/main">전체</a></li>
+					<li class="nav-item "><a class="nav-link active" href="<%=cp%>/main">수도권</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#">강원권</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#">충청권</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#">전라권</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#">경상권</a></li>
+				</ul>
+			</div>
+			<div style="width: 89%; text-align: right; margin-bottom: 20px;">
+				<c:if test="${sessionScope.member.userId=='admin'}">
+					<button class="btn btn-success" type="button" onclick="javascript:location.href='<%=cp%>/station/created';"><i class="fas fa-plus"></i>&nbsp;&nbsp;추가하기</button>
+				</c:if>
+			</div>
 		</div>
-		
-
+		</div>
+  			
 		<!-- 버튼 누를 때마다 디비에서 역 정보 받아와서 리스트 변화하도록 -->
 		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px;">
 			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
@@ -130,9 +139,27 @@ $("figure").mouseleave(
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
+			
+			
+			
 		</div>
 		
-		
+		<div style="width: 89%;">
+				<nav style="text-align: center;">
+					<ul class="pagination">
+						<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
+						</span></li>
+						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
+						</li>
+						<li><span>2</span></li>
+						<li><span>3</span></li>
+						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
+						</span></li>
+					</ul>
+				</nav>
+			</div>
+			
+
 		<!-- 모달 -->
 		<div class="modal fade" id="layerpop">
 		  <div class="modal-dialog">
@@ -178,7 +205,23 @@ $("figure").mouseleave(
 		      
 		      <!-- Footer -->
 		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
-		        <button type="button" class="btnTour">관광정보 보러가기</button>
+		      	<c:if test="${sessionScope.member.userId!='admin'}">
+		        	<button type="button" class="btnTour">관광정보 보러가기</button>
+		        </c:if>
+		        
+		        <c:if test="${sessionScope.member.userId=='admin'}">
+			        <div>
+						<table style="width: 100%;border-spacing: 0px;">
+							<tr height="45">
+								<td width="300" style="text-align: center; height: 80px;">    
+					        		<button type="button" class="btn btn-default" onclick="javascript:location.href='<%=cp%>/station/update'">수정</button>    
+					        		<button type="button" class="btn btn-danger" onclick="deleteBoard();">삭제</button>
+					    		</td>
+							</tr>
+						</table>
+					</div>
+		        </c:if>
+		        
 		      </div>
 		    </div>
 		  </div>

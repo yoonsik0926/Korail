@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("mypage.mypageController")
 public class MypageController {
 	
-	
 	@RequestMapping(value="/bookmark/tour")
 	public String bookmarkTour(
 			Model model) {
