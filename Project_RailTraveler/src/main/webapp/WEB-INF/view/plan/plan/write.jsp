@@ -225,7 +225,7 @@ body::-webkit-scrollbar {
 }
 
 .insertStaPlan {
-	width: 310px;
+	width: 100%;
 	height: 30px;
 	border: 1px solid black;
 	display: block;
@@ -239,6 +239,23 @@ body::-webkit-scrollbar {
 
 .active1 {
 	background: red;
+}
+
+.staContent {
+	width:100px;
+	height:100px;
+	border:1px solid black;
+	display:block;
+	float:left;
+	margin-right:10px;
+}
+
+.staName {
+	width: 200px;
+	height: 100px;
+	border: 1px solid black;
+	display: block;
+	float: left;
 }
 /* .carousel-cell {
 	counter-increment: carousel-cell;
@@ -439,16 +456,19 @@ $(document).ready(function(){
 	               
 	               var positions = [
 	                   {
-	                      latlng: new kakao.maps.LatLng(36.656960, 128.134321) // 마커가 표시될 위치입니다
-	                      ,content:'하위하위1'
+	                    	latlng: new kakao.maps.LatLng(36.656960, 128.134321) // 마커가 표시될 위치입니다
+	                    	,staContent:'하위하위1'
+	                    	,staName:'문경역'
 	                   },
 	                   {   
-	                      latlng: new kakao.maps.LatLng(35.821812, 128.564345) // 마커가 표시될 위치입니다
-	                   	  ,content:'하위하위2'
+	                      	latlng: new kakao.maps.LatLng(35.821812, 128.564345) // 마커가 표시될 위치입니다
+	                   	  	,staContent:'하위하위2'
+	                   	  	,staName:'전주역'
 	                   },
 	                   {
-	                      latlng: new kakao.maps.LatLng(35.839614, 127.1151431) // 마커가 표시될 위치입니다
-	                   		,content:'하위하위3'
+	                      	latlng: new kakao.maps.LatLng(35.839614, 127.1151431) // 마커가 표시될 위치입니다
+	                   	  	,staContent:'하위하위3'
+	                   	  	,staName:'예비역'
 	                   }
 	                ];
 	             
@@ -472,12 +492,19 @@ $(document).ready(function(){
 	            	customOverlay.setMap(null);
 	            };
 	            var $plusStation=$('<div class="plusStation" />');
-	            var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" />').click(closeOverlay);
+	            var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
 	            var $span=$('<span aria-hidden="true">&times;</span>');
+	            var $staContent=$('<div class="staContent" />');
+	            var $staName=$('<div class="staName" />')
 				var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
 				
 	            $plusStation.append($close);
+	            $plusStation.append($staContent);
+	            $staContent.append(pos.staContent);
+	            $plusStation.append($staName);
+	            $($staName).append(pos.staName);
 				$plusStation.append($insertStaPlan);
+				
 	            $close.append($span);
 	            
 	            var content=$plusStation[0];
@@ -524,7 +551,7 @@ $(document).ready(function(){
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
     	for(var i=0; i<5; i++) {
-    		$("<div class='planListDetail'>슈루루룩</div>").insertAfter($(this).parent().parent());
+    		$("<div class='planListDetail'></div>").insertAfter($(this).parent().parent());
     	}
         $(this).parent().parent().children().find("input[name='selectedDay']").css("background", "#8a8a8a");
         $(this).children().slideDown();
@@ -553,12 +580,17 @@ $(function() {
 		}
 	});
 });
-// $(function() {
-// 	$("body").on('click', ".insertStaPlan", function() {
-// 		var station=new Array();
-			
-// 	});
-// });
+
+
+$(function() {
+	$("body").on('click', ".insertStaPlan", function() {
+		if($(".planListDetail.active1").length) {
+			$(".planListDetail.active1").append($('.plusStation').find('.staName').text());
+		} else {
+			alert("역을 추가할 곳을 먼저 선택해주세요.");
+		}
+	});
+});
 </script>
 </body>
 </html>
