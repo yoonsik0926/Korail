@@ -61,9 +61,11 @@
 </style>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>내일로 소개 </h3>
-     </div>
+     <div class="page-three-title mt40">
+		<h3 class="fs26">
+		<span style="padding: 10px 0px; display: block;"> 내일로 소개</span>
+		</h3>
+	</div>
      
      <div style="width: 100%;">
         <img alt="내일로 소개 준비중.." src="<%=cp%>/resource/images/intro.png">

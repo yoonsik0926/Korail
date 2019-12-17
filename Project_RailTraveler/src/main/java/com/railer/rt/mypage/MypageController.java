@@ -7,21 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("mypage.mypageController")
 public class MypageController {
 	
-	@RequestMapping(value="/bookmark/bookmark")
-	public String bookmark(
-			Model model) {
-		
-		model.addAttribute("subMenu", "1");
-		
-		return ".four.mypage.bookmark.bookmark";
-	}
 	
 	@RequestMapping(value="/bookmark/tour")
 	public String bookmarkTour(
 			Model model) {
 		
 		model.addAttribute("subMenu", "2");
-		
+		model.addAttribute("subItems", "0");
 		return ".four.mypage.bookmark.tour";
 	}
 	
@@ -30,7 +22,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "3");
-		
+		model.addAttribute("subItems", "1");
 		return ".four.mypage.bookmark.recommend";
 	}
 	
@@ -39,6 +31,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "4");
+		model.addAttribute("subItems", "2");
 		
 		return ".four.mypage.bookmark.commu";
 	}
@@ -50,7 +43,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "5");
-		
+
 		return ".four.mypage.ticket.ticket";
 	}
 	
@@ -59,7 +52,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "6");
-		
+
 		return ".four.mypage.stamp.stamp";
 	}
 
@@ -68,7 +61,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "7");
-		
+
 		return ".four.mypage.plan.plan";
 	}
 	
@@ -77,7 +70,7 @@ public class MypageController {
 			Model model) {
 		
 		model.addAttribute("subMenu", "8");
-		
+
 		return ".four.mypage.bbs.mybbs";
 	}
 	
