@@ -63,8 +63,19 @@
 	margin-left: 0px;
 	background: rgb(255, 255, 255);
 	border-right: 1px solid;
+	
 }
-
+body::-webkit-scrollbar {
+	display:none;
+}
+#planListForm::-webkit-scrollbar {
+	display:none;
+}
+#planListForm {
+	height:85%;
+	overflow: scroll;
+}
+ 
 #searchStation #selectTripDay {
 	width: 30%;
 	height: 90.5%;
@@ -87,10 +98,30 @@
 	color: black;
 }
 
-.planList {
+.planList1, .planList2, .planList3, .planList4, .planList5, .planList6, .planList7 {
 	width: 100%;
 	height: 90px;
 	border: 1px solid blue;
+	background: white;
+}
+
+.planList-selected {
+	width: 100%;
+	height: 90px;
+	border: 1px solid blue;
+	background: #8a8a8a;
+}
+
+
+.planListDetail {
+	width: 100%;
+	height: 90px;
+	border: 2px solid red;
+	display: none;
+}
+
+.planListDetail:hover {
+	background: red;
 }
 
 .dayCount {
@@ -123,7 +154,7 @@
 	/* 	border: 1px solid black; */
 }
 
-#detailPlanning {
+.detailPlanning {
 	margin: 15px 0 15px 10px;
 	border: 0;
 	outline: 0;
@@ -133,6 +164,7 @@
 	display: block;
 	float: left;
 }
+
 
 /* Modal Content/Box */
 .modal-content {
@@ -205,6 +237,9 @@
 	cursor:pointer;
 }
 
+.active1 {
+	background: red;
+}
 /* .carousel-cell {
 	counter-increment: carousel-cell;
 }
@@ -307,7 +342,7 @@ function getNumber(day) {
 	document.getElementById("selectDays").src=day.src;
 	
 	for (var i = 1; i <=day.value; i++) {
-		$("#planListForm").append("<div class='planList'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button id='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
+		$("#planListForm").append("<div class='planList"+i+"'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' name='selectedDay' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
 	}
 	$('#myModal').hide();
 }
@@ -316,8 +351,6 @@ function getNumber(day) {
 $(document).ready(function(){
 	$('.plusStation').parent().hide();
 });
-
-
 
 </script>
 </head>
@@ -353,7 +386,7 @@ $(document).ready(function(){
 					</div>
 				</div>
 				<div id="planListForm"></div>
-
+				
 
 				<div id="myModal" class="modal" style="z-index: 1045;">
 					<!-- Modal content -->
@@ -479,20 +512,53 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<script type="text/javascript">
-$(function() {
-	$("body").on('click', "#detailPlanning", function() {		
-		$(".carousel-cell2").hide();
-		$("#planModal").show();
-		$(".modal-planning").append("<div class='carousel-cell2' style='width: 350px; height: 100%; background: black;'></div>");
+// $(function() {
+// 	$("body").on('click', "#detailPlanning", function() {		
+// 		$(".carousel-cell2").hide();
+// 		$("#planModal").show();
+// 		$(".modal-planning").append("<div class='carousel-cell2' style='width: 350px; height: 100%; background: black;'></div>");
 		
-	});
+// 	});
+// });
+
+$(function() {
+    $("body").on('click', '.detailPlanning', function(){
+    	for(var i=0; i<5; i++) {
+    		$("<div class='planListDetail'>슈루루룩</div>").insertAfter($(this).parent().parent());
+    	}
+        $(this).parent().parent().children().find("input[name='selectedDay']").css("background", "#8a8a8a");
+        $(this).children().slideDown();
+        
+//  submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
+        if($(".planListDetail").is(":visible") ){
+        	$(this).parent().parent().toggleClass("planList-selected");
+        	$(".selectedDay").children().css("background", "white");
+    		$(".planListDetail").remove();
+        	$(".planListDetail").slideUp();
+        } else {
+        	$(this).parent().parent().toggleClass("planList-selected");
+        	$(".planListDetail").slideDown();
+        }
+    });
 });
 
 $(function() {
-	$("body").on('click', ".insertStaPlan", function() {
+	$("body").on('click', '.planListDetail', function() {
 		
+		if($(this).hasClass('active1')) {
+			$(this).removeClass('active1');
+		} else {
+			$(".planListDetail").removeClass('active1');
+			$(this).addClass('active1');
+		}
 	});
 });
+// $(function() {
+// 	$("body").on('click', ".insertStaPlan", function() {
+// 		var station=new Array();
+			
+// 	});
+// });
 </script>
 </body>
 </html>
