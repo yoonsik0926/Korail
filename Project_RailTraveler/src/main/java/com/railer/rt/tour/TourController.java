@@ -1,9 +1,14 @@
 package com.railer.rt.tour;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller("tour.tourController")
 public class TourController {
@@ -45,5 +50,65 @@ public class TourController {
 		
 		return ".four.tour.tour.detail";
 	}
+	
+	@RequestMapping(value="/tour/pay")
+	public String pay(Model model) throws Exception {
+		
+		
+		return ".four.tour.tour.paydone";
+	}
+	
+	@RequestMapping(value="/tour/paydone")
+	public String paydone(Model model, @RequestParam String msg) throws Exception {
+		
+		model.addAttribute("msg", msg);
+		
+		return ".four.tour.tour.paydone";
+	}
+	
+	
+	
+	// 댓글 리스트 : AJAX-TEXT
+		@RequestMapping(value="/tour/listReply")
+		public String listReply(
+				@RequestParam int num,
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				Model model
+				) throws Exception {
+			
+			int rows=5;
+			int total_page=0;
+			int dataCount=0;
+			
+			Map<String, Object> map=new HashMap<>();
+			map.put("num", num);
+			
+			//dataCount=service.replyCount(map);
+			//total_page = myUtil.pageCount(rows, dataCount);
+			if(current_page>total_page)
+				current_page=total_page;
+			
+	        int offset = (current_page-1) * rows;
+			if(offset < 0) offset = 0;
+	        map.put("offset", offset);
+	        map.put("rows", rows);
+			//List<Reply> listReply=service.listReply(map);
+			
+			//for(Reply dto : listReply) {
+			//	dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			//}
+			
+			// AJAX 용 페이징
+			//String paging=myUtil.pagingMethod(current_page, total_page, "listPage");
+			
+			// 포워딩할 jsp로 넘길 데이터
+			//model.addAttribute("listReply", listReply);
+			model.addAttribute("pageNo", current_page);
+			model.addAttribute("replyCount", dataCount);
+			model.addAttribute("total_page", total_page);
+			//model.addAttribute("paging", paging);
+			
+			return ".four.tour.tour.detailReply";
+		}
 	
 }

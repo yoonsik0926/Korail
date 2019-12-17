@@ -10,7 +10,7 @@ public class ticketController {
 	@RequestMapping(value="/ticket/pay")
 	public String writeForm(Model model) throws Exception {
 	
-		return ".ticket.pay";
+		return ".ticket.ticket";
 	}
 	
 }

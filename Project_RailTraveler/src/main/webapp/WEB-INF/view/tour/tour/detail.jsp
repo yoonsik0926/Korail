@@ -55,11 +55,33 @@
 <script type="text/javascript">
 
 
-function replyreview(ob){
+//페이징 처리
+$(function(){
+	listPage(1);
+});
 
- alert(ob);
-
-
+function listPage(page) {
+	var url="<%=cp%>/tour/listReply";
+	var query="num=${dto.num}&pageNo="+page;
+	
+	$.ajax({
+		type:"get"
+		,url:url
+		,data:query
+		,success:function(data) {
+			$("#listReply").html(data);
+		}
+	    ,beforeSend :function(jqXHR) {
+	    	jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		location.href="<%=cp%>/member/login";
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
 }
 </script>
 
@@ -198,43 +220,10 @@ function replyreview(ob){
 				<p style="font-size: 25px; font-weight: 700">자유게시판</p>
 			</div>
 			
-			<div>
 
-<%-- 				<table style="width: 100%; margin: 10px auto 10px; border-spacing: 0px;">
-					<tr height="35">
-						<td align="left" width="50%">
-							${dataCount}123개(${page}/${total_page} 페이지)
-						</td>
-					</tr>
-				</table> --%>
-
-				<table style="width: 100%; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;">
-
-					<tr align="left" bgcolor="#ffffff" height="35" style="margin-bottom:20px; margin-top:20px; border-bottom: 1px solid #cccccc;">
-						<td >
-							<span style="font-weight: 700; font-size: 17px;">헬로우굿쏘</span>님
-							<p style="font-size: 15px">좋은 여행이였습니다~</p>
-							<span style="font-size: 15px; color: gray">2019.10.12</span>
-							<button type="button" class="" onclick="replyreview(this);">답글</button>
-						
-						</td>
-					</tr>
-					
-					<tr align="left" bgcolor="#ffffff" height="35" style="margin-bottom:20px; padding-top:20px; border-bottom: 1px solid #cccccc;">
-						<td >
-							<span style="font-weight: 700; font-size: 17px;">유진몬짱짱</span>님
-							<p style="font-size: 15px">숙소가 더러웠어요</p>
-							<span style="font-size: 15px; color: gray">2019.11.12</span>
-							<button type="button" class="" onclick="">답글</button>
-							<p> </p>
-						</td>
-					</tr>
-
-
-				</table>
-
-
-
+				<div id="listReply">여기에 AJAX 처리</div>
+			
+			
 			<table style='width: 100%; margin: 10px auto 0px; border-spacing: 0px; margin-top: 20px; margin-bottom: 50px;'>
 					<tr height='30'>
 						<td align='left'><span style='font-weight: bold;'>댓글쓰기</span><span>
@@ -251,9 +240,6 @@ function replyreview(ob){
 						</td>
 					</tr>
 				</table>
-
-				<div id="listReply"></div>
-			</div>
 		</div>
 		
 				<!--후기 리뷰창 설명-->
