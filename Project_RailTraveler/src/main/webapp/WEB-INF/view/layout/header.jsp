@@ -114,10 +114,11 @@ System.out.print(cp);
                       <c:if test="${sessionScope.member.userId!='admin'}">
 	                      <ul class="dropdown-menu">
 	                        <li><a href="<%=cp%>/member/pwd">정보 수정</a></li>
-	                        <li><a href="<%=cp%>/mypage/bookmark">나의 북마크</a></li>
-	                        <li><a href="<%=cp%>/ticket/myticket">나의 승차권</a></li>
-	                        <li><a href="<%=cp%>/plan/planlist">나의 여행 플랜</a></li>
-	                        <li><a href="<%=cp%>/mypage/article">내가 쓴 게시물</a></li>
+	                        <li><a href="<%=cp%>/bookmark/tour">나의 북마크</a></li>
+	                        <li><a href="<%=cp%>/ticket/ticket">나의 승차권</a></li>
+	                        <li><a href="<%=cp%>/stamp/stamp">전국 스탬프 지도</a></li>
+	                        <li><a href="<%=cp%>/plan/plan">나의 여행 플랜</a></li>
+	                        <li><a href="<%=cp%>/bbs/mybbs">내가 쓴 게시물</a></li>
 	                      </ul>
                       </c:if>
                 	</li>

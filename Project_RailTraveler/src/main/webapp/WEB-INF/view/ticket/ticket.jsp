@@ -7,11 +7,13 @@
 %>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>묻고 답하기 </h3>
-     </div>
+	<div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 나의 북마크</span>
+		</h3>
+	</div>
      
      <div>
-        qna
+         북마크
      </div>
 </div>

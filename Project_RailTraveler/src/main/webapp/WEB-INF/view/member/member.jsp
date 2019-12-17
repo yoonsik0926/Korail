@@ -8,6 +8,12 @@
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
+<script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+
 <script type="text/javascript">
 function memberOk() {
 	var f = document.memberForm;
@@ -163,12 +169,17 @@ function userIdCheck() {
 
 	}
 
-/* $(function(){
-	$("form input[name=birth]").datepicker({
-	});
-	
-	$(".ui-datepicker-trigger").css({position:"relative",top:"3px"});
-});  */
+$(function() {
+    //input을 datepicker로 선언
+    $('[data-toggle="datepicker"]').datepicker({
+    	calendarWeeks: true,
+        todayHighlight: true,
+        autoclose: true
+    });                    
+    
+    //초기값을 오늘 날짜로 설정
+    $('[data-toggle="datepicker"]').datepicker('setDate', 'today');           
+});
 
 </script>
 
@@ -286,10 +297,11 @@ input, select, .btnSearch {
 				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Birth</p>
 				  	<div class="input-group">
 				      <div class="input-group-addon"><i class="fas fa-birthday-cake" style="color:#334393;"></i></div>
-				      <input type="text" class="form-control" type="text" name="birth"
+				      <input type="text" class="form-control" type="text" name="birth" id="datepicker"
 									value="${dto.birth}"
 									readonly="readonly"
-									placeholder="&nbsp;Birth">
+									placeholder="&nbsp;Birth"
+									data-toggle="datepicker">
 				    </div>
 				  </div>
 				  
@@ -321,7 +333,7 @@ input, select, .btnSearch {
 				    <label class="sr-only" for="tel" >tel</label>
 				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Tel</p>
 				  	<div class="input-group">
-				      <div class="input-group-addon"><i class="fas fa-phone-square-alt" style="color:#334393;"></i></div>
+				      <div class="input-group-addon"><i class="fas fa-mobile-alt" style="color:#334393;"></i></div>
 				      	<div>
 				      		<select class="selectField" id="tel1" name="tel1">
 									<option value="">선 택</option>

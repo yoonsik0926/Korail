@@ -12,5 +12,16 @@ public class QnaController {
 		model.addAttribute("subMenu", "1");
 		return ".four.commu.qna.qna";
 	}
-
+	@RequestMapping(value="/qna/created")
+	public String createdForm(Model model) throws Exception {
+		model.addAttribute("subMenu", "1");
+		model.addAttribute("mode", "created");
+		return ".four.commu.qna.created";
+	}
+	@RequestMapping(value="/qna/article")
+	public String article(Model model) throws Exception {
+		model.addAttribute("subMenu", "1");
+		
+		return ".four.commu.qna.article";
+	}
 }

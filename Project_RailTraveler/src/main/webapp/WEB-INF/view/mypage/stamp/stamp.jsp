@@ -6,12 +6,20 @@
    String cp = request.getContextPath();
 %>
 
+
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>자유게시판 </h3>
-     </div>
+	<div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 전국 스탬프 지도</span>
+		</h3>
+	</div>
      
      <div>
-       자유게시판입니다~
+
+         
+         
+         
+         
+         
      </div>
 </div>

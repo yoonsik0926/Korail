@@ -38,4 +38,12 @@ public class TourController {
 		return ".four.tour.tour.list";
 	}
 	
+	
+	@RequestMapping(value="/tour/detail")
+	public String detail(Model model) throws Exception {
+		
+		
+		return ".four.tour.tour.detail";
+	}
+	
 }
