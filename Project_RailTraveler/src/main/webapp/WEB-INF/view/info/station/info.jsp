@@ -19,10 +19,12 @@ $("figure").mouseleave(
 </script>
 
 <div class="body-content-container">
-     <div class="body-title">
-         <h3>역 소개 </h3>
-     </div>
-     
+    <div class="page-three-title mt40">
+		<h3 class="fs26">
+		<span style="padding: 10px 0px; display: block;"> 역 소개</span>
+		</h3>
+	</div>
+	
      <div class="body-main">
 		<div class="chooseLoc" style="display: inline-block; width: 100%; margin-bottom: 40px;">
 			<div style="display: inline; width:16%; float: left; margin: 0 10px;">
