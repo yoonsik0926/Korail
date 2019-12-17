@@ -77,7 +77,7 @@ ul{
     	  
       });
     });
-        
+    
 </script>
 
 
@@ -149,7 +149,7 @@ ul{
                             <span>기간: </span>2019.11.19 ~ 2019.12.15
                         </p>
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
+                     	<tr height="45">
 						    <td width="300" align="left" >
 						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
@@ -233,7 +233,7 @@ ul{
                             <p>이벤트 설명4</p>
                         </a>
                         <p class="date">
-                            <span>기간: </span>2019.11.14 ~ 2019.12.20
+                            <span>기간: </span>2019.11.14 ~ 2019.12.21
                         </p>
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
