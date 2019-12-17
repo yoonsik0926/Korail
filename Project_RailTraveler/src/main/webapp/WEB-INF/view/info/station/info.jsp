@@ -50,99 +50,97 @@ $("figure").mouseleave(
 		</div>
   			
 		<!-- 버튼 누를 때마다 디비에서 역 정보 받아와서 리스트 변화하도록 -->
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px;">
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red">
-				  <img src="<%=cp%>/resource/img/sudo.jpg" style="width: 100%;"/>
+		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 red" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
-				  <figcaption>
-				    <h4>  <span> 광명역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
-				  <figcaption>
-				    <h4><span> 용산역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-		</div>
-
-
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px;">
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red">
-				  <img src="<%=cp%>/resource/img/sudo.jpg" style="width: 100%;"/>
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 blue" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
-				    <h4>  <span> 광명역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
-				  <figcaption>
-				    <h4><span> 용산역</span></h4>
+				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
 		</div>
+
+<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 red" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
+				  <figcaption>
+				    <h4><span> 서울역</span></h4>
+				  </figcaption>
+				  <a data-target="#layerpop" data-toggle="modal"></a>
+				</figure>
+			</div>
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 blue" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
+				  <figcaption>
+				    <h4><span> 서울역</span></h4>
+				  </figcaption>
+				  <a data-target="#layerpop" data-toggle="modal"></a>
+				</figure>
+			</div>
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
+				  <figcaption>
+				    <h4><span> 서울역</span></h4>
+				  </figcaption>
+				  <a data-target="#layerpop" data-toggle="modal"></a>
+				</figure>
+			</div>
+		</div>
+
 		
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px;">
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red">
-				  <img src="<%=cp%>/resource/img/sudo.jpg" style="width: 100%;"/>
+		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 red" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104 blue" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
-				    <h4>  <span> 광명역</span></h4>
+				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
-			<div style="display: inline; width:28%; float: left; margin: 0 10px;">	
-				<figure class="snip1104">
-					<img src="<%=cp%>/resource/img/sudo.jpg" />
+			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
+				<figure class="snip1104" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
 				  <figcaption>
-				    <h4><span> 용산역</span></h4>
+				    <h4><span> 서울역</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
 				</figure>
 			</div>
-			
-			
-			
 		</div>
+
 		
 		<div style="width: 89%;">
 				<nav style="text-align: center;">
