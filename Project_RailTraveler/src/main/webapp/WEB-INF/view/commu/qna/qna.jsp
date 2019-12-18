@@ -111,7 +111,12 @@ optgroup {
 					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
     color: #969696;"></i>3 <i class="far fa-comments" style="margin-right: 2px;
-    color: #969696;"></i>5</span></td>
+    color: #969696;"></i>5</span> <span style="    display: inline-block;
+    padding: 1px 3px;
+    background: #f97509;
+    color: #FFFFFF;
+    margin-left: 10px;
+    border: 1px solid #777777;">채택완료</span> </td>
 					<td>겨레리</td>
 					<td>2018-10-23</td>
 					<td>1</td>
