@@ -13,5 +13,12 @@
 		SELECT ticketNum, tDays, tname, tprice, tamount,year,division
 		FROM ticket
 		where ticketNum = #{ticketNum}
+	</select>
+	
+	<select id="readMember" parameterType="String" resultType="com.railer.rt.ticket.Ticket">
+		SELECT userId, userName,birth,email,tel 
+		FROM member2 mm
+		JOIN member1 m ON mm.userNum = m.userNum
+		WHERE userId =#{userId}	
 	</select>	
 </mapper>

@@ -5,12 +5,12 @@ package com.railer.rt.ticket;
  *
  */
 public class Ticket {
-	
+	private String userId;
 	private String userName;
+	private String birth;
 	private String email;
 	private String tel1 ,tel2,tel3;
 	private String tel;
-	private int price;
 	
 	//DB에 있는 칼럼
 	private int ticketNum;
@@ -23,11 +23,18 @@ public class Ticket {
 	
 	
 	
-	public int getPrice() {
-		return price;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setPrice(int price) {
-		this.price = price;
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 	public String getTel() {
 		return tel;

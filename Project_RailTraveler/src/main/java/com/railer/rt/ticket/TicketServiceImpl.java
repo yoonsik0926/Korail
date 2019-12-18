@@ -30,7 +30,19 @@ public class TicketServiceImpl implements TicketService{
 		try {
 			dto = dao.selectOne("ticket.selectedTicket", ticketNum);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public Ticket readMember(String userId) {
+		Ticket dto = null;
+		
+		try {
+			dto = dao.selectOne("ticket.readMember", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return dto;
 	}

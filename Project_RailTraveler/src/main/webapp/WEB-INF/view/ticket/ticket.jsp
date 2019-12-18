@@ -11,12 +11,16 @@
 	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"type="text/css">
 <script type="text/javascript"src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript"src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+ <script type="text/javascript" src="libs/angular/angular.js"></script>
+ <script type="text/javascript" src="libs/angular/angular-animate.js"></script>
 <style>
 .form-control[readonly] {
 	cursor: pointer;
 	background: white;
 	text-align: center;
 }
+
+
 </style>
 
 <script type="text/javascript">
@@ -30,6 +34,7 @@ function dateToYYYYMMDD(date){
     }
     return date.getFullYear() + '-' + pad(date.getMonth()+1) + '-' + pad(date.getDate());
 }
+
 
 $(function() {
 	var ticketday;
@@ -60,8 +65,13 @@ $(function() {
 	
 
 	$("#startdatepicker").datepicker(
-			{
+			{   minDate: 0,
 				onSelect : function(dateText) {
+					
+					if(! $('input[name="jb-radio"]').is(":checked")){
+						 $("#modalPush").modal();
+						return;
+					}
 					
 					var split = dateText.split("-");  
 					var year =split[0];
@@ -179,7 +189,7 @@ function paymemberOk() {
             style="width: 100%; height: 40%; border-spacing: 20px; border-collapse: separate;">
 		
             <tr height="100px">
-            <c:forEach var="dto" items="${list}">
+            <c:forEach var="vo" items="${list}">
                <td><img style="max-width: 100%; height: auto;"
                   src="<%=cp%>/resource/img/carousel_green.png" /></td>
             </c:forEach>
@@ -187,9 +197,9 @@ function paymemberOk() {
           
 
             <tr>
-            <c:forEach var="dto" items="${list}">
-					<td align="center"><input type="radio" value="${dto.ticketNum}-${dto.tDays}-${dto.tprice}-${dto.tName}" name="jb-radio" 
-					id="jb-radio-${dto.ticketNum}"></td>			
+            <c:forEach var="vo" items="${list}">
+					<td align="center"><input type="radio" value="${vo.ticketNum}-${vo.tDays}-${vo.tprice}-${vo.tName}" name="jb-radio" 
+					id="jb-radio-${vo.ticketNum}"></td>			
 				</c:forEach>
             </tr>
          </table>
@@ -203,7 +213,7 @@ function paymemberOk() {
 				<div class="input-group">
 
 					<input type="text" class="form-control" type="text" name="birth"
-						id="startdatepicker" value="${dto.birth}" placeholder="시작 날짜를 선택해주세요" readonly="readonly">
+						id="startdatepicker" value="" placeholder="시작 날짜를 선택해주세요" readonly="readonly">
 				</div>
 			</div>
 
@@ -215,7 +225,7 @@ function paymemberOk() {
 				<div class="input-group">
 
 					<input type="text" class="form-control" type="text" name="birth"
-						id="enddatepicker" placeholder="마지막 날짜" value="${dto.birth}" readonly="readonly">
+						id="enddatepicker" placeholder="마지막 날짜" value="" readonly="readonly">
 				</div>
 			</div>
 		</div>
@@ -262,7 +272,7 @@ function paymemberOk() {
 							<label for="inputinputName" class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="userName"
-									name="userName" placeholder="Name" style="width: 90%">
+									name="userName" value="${dto.userName}" style="width: 90%">
 							</div>
 						</div>
 
@@ -271,7 +281,7 @@ function paymemberOk() {
 							<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
 							<div class="col-sm-10">
 								<input type="email" class="form-control" id="email" name="email"
-									placeholder="Email" style="width: 90%">
+									value="${dto.email}" style="width: 90%">
 							</div>
 						</div>
 
@@ -282,19 +292,19 @@ function paymemberOk() {
 							<label for="inputEmail3" class="col-sm-2 control-label">Tel</label>
 
 							<div style="float: left; padding-left: 15px;">
-								<input type="email" class="form-control" id="tel1" name="tel1"
-									placeholder="Tel" style="width: 100px">
+								<input type="tel" class="form-control" id="tel1" name="tel1"
+									value="${dto.tel1}" style="width: 100px">
 							</div>
 							<div style="float: left; margin: 0px 10px;">_</div>
 							<div class="" style="float: left">
-								<input type="email" class="form-control" id="tel2" name="tel2"
-									placeholder="" style="width: 142px">
+								<input type="tel" class="form-control" id="tel2" name="tel2"
+									value="${dto.tel2}" style="width: 142px">
 							</div>
 
 							<div style="float: left; margin: 0px 10px;">_</div>
 							<div class="" style="float: left">
-								<input type="email" class="form-control" id="tel3" name="tel3"
-									placeholder="" style="width: 142px">
+								<input type="tel" class="form-control" id="tel3" name="tel3"
+									value="${dto.tel3}"  style="width: 142px">
 							</div>
 						</div>
 						
@@ -315,3 +325,36 @@ function paymemberOk() {
 		</div>
 	</div>
 </div>
+
+
+
+  
+<!--Modal: modalPush-->
+<div class="modal fade  bd-example-modal-sm" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px;">
+        <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
+
+        <p style="font-size: 17px; font-weight:500; margin-top: 10px;">티켓을 먼저 선택해 주세요!</p>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: modalPush-->
+
+
