@@ -4,15 +4,20 @@
 <mapper namespace="member">
 	<select id="loginMember" parameterType="String"
 		resultType="com.railer.rt.member.Member">
-		SELECT userId, mm.userNum, userName, userPwd, birth,email,tel ,enabled
+		SELECT userId, mm.userNum, userName, userPwd, birth,email,tel,enabled,created,modify_date, last_login 
 		FROM member2 mm
 		JOIN member1 m ON mm.userNum = m.userNum
-		WHERE userId = #{userId} AND enabled != 0
+		WHERE userId = #{userId} AND enabled = 1
 	</select>
+	
+	<update id="updateLastLogin" parameterType="String">
+		UPDATE  member2 SET last_login = SYSDATE
+		WHERE userId=#{userId}
+	</update>
 	
 	<select id="readMember" parameterType="String"
 		resultType="com.railer.rt.member.Member">
-		SELECT userId, mm.userNum, userName, userPwd, birth,email,tel, created
+		SELECT userId, mm.userNum, userName, userPwd, birth,email,tel, created,enabled,modify_date, last_login 
 		FROM member2 mm
 		JOIN member1 m ON mm.userNum = m.userNum
 		WHERE userId =#{userId}
@@ -33,12 +38,6 @@
 		   #{email}, #{tel, jdbcType=VARCHAR})    
 	</insert>
 
-	<!-- 권한 저장 -->
-	<insert id="insertAuthority"
-		parameterType="com.railer.rt.member.Member">
-		INSERT INTO memberAuthority(userId, authority)
-		VALUES(#{userId},#{authority})
-	</insert>
 
 	<!-- 정보 수정 -->
 	<update id="updateMember" parameterType="com.railer.rt.member.Member">
@@ -49,10 +48,58 @@
 	<!-- 탈퇴 -->
 	<update id="updateMemberEnabled" parameterType="map">
 		UPDATE member1 SET enabled = #{enabled}
+		WHERE userNum = #{userNum}
+	</update>
+	
+	<delete id="deleteMember" parameterType="Long">
+		DELETE FROM member2 WHERE userNum = #{userNum}
+	</delete>
+	
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="map" resultType="com.railer.rt.member.Member">
+		SELECT userId, userName, userPwd
+		FROM member2
+		WHERE email = #{email} AND birth = #{birth}	
+	</select>
+	
+	<!-- 패스워드 실패 / 회원 상태 -->
+	<select id="checkFailureCount" parameterType="String" resultType="Integer">
+		SELECT NVL(failure_cnt, 0) failure_cnt
+		FROM member2
+		WHERE userId = #{userId}
+	</select>
+	
+	<update id="updateFailureCountReset" parameterType="String">
+		UPDATE member2 SET failure_cnt = 0
 		WHERE userId = #{userId}
 	</update>
 	
-	<delete id="deleteMember" parameterType="String">
-		DELETE FROM member2 WHERE userId = #{userId}
-	</delete>
+	<update id="updateFailureCount" parameterType="String">
+		UPDATE member2 SET failure_cnt = failure_cnt + 1
+		WHERE userId = #{userId}
+	</update>
+	
+	<insert id="insertMemberState" parameterType="com.railer.rt.member.Member">
+		INSERT INTO memberState(num, userId, stateCode, memo)
+			VALUES (memberState_seq.NEXTVAL, #{userId}, #{stateCode}, #{memo})
+	</insert>
+	
+	<!-- 권한 저장 -->
+	<insert id="insertAuthority"
+		parameterType="com.railer.rt.member.Member">
+		INSERT INTO memberAuthority(userId, authority)
+		VALUES(#{userId},#{authority})
+	</insert>
+	
+	<select id="listAuthority" parameterType="String" resultType="com.railer.rt.member.Member">
+		SELECT userId, authority
+		FROM memberAuthority
+		WHERE userId=#{userId}
+	</select>
+
+	<update id="updateAuthority" parameterType="map">
+		UPDATE memberAuthority SET authority=#{authority}
+		WHERE userId=#{userId} AND authority=#{oldAuthority}
+	</update>
+	
 </mapper>

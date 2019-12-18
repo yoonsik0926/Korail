@@ -5,6 +5,9 @@
 <%
    String cp = request.getContextPath();
 %>
+<link rel="stylesheet" href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css" type="text/css">
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
 
 <style type="text/css">
 .btnFindPwd{
@@ -82,7 +85,7 @@ input{
 	}
 
 	function sendOk() {
-        var f = document.pwdFindForm;
+        var f = document.idFindForm;
 
         var str = f.email.value;
         if(!str) {
@@ -90,10 +93,31 @@ input{
             f.email.focus();
             return;
         }
+        
+        var str = f.birth.value;
+        if(!str) {
+            alert("생년월일을 입력하세요. ");
+            f.birth.focus();
+            return;
+        }
 
         f.action = "<%=cp%>/member/idFind";
         f.submit();
 	}
+	
+	
+	$(function() {
+	    //input을 datepicker로 선언
+	    $('form input[name=birth]').datepicker({
+	    	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+	    	todayHighlight: true
+	    });                    
+	    
+	    //초기값을 오늘 날짜로 설정
+	    $('[data-toggle="datepicker"]').datepicker('setDate', 'today');           
+	});	
+	
+
 </script>
 <div class="mem-member">
 	<div class="container tim-container" style="max-width: 1200px; padding-top: 100px; background:#F9F0DA;">
@@ -104,11 +128,17 @@ input{
 				<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png" style="height: 80px;">
 			</div>
 	
+			 <table style="width:100%; margin: 10px auto 0; border-collapse: collapse;">
+			  <tr align="center" height="30" >
+			    	<td><span style="color: red;">${message}</span></td>
+			  </tr>
+			</table>
+			
 			<form name="idFindForm" method="post" action="">
 			  <table style="width:100%; margin: 20px auto; padding:30px;">
 			  <tr style="height:50px;"> 
 			      <td style="text-align: center;">
-			        가입한 이메일을 입력하세요
+			        이메일을 입력하세요
 			      </td>
 			  </tr>
 	
@@ -121,6 +151,24 @@ input{
 	                           onfocus="document.getElementById('lblEmail').style.display='none';"
 	                           onblur="bgLabel(this, 'lblEmail');"
 	                           placeholder="Email">
+			        &nbsp;
+			      </td>
+			  </tr>
+			  <tr style="height:50px;"> 
+			      <td style="text-align: center;">
+			        생년월일을 입력하세요
+			      </td>
+			  </tr>
+	
+			  <tr align="center" height="60"> 
+			      <td>
+			        &nbsp;
+			        <label for="birth" id="lblBirth" class="lbl" ></label>
+			        <input type="text" name="birth" id="birth" class="loginTF" maxlength="20" 
+			                   tabindex="2"
+	                           onfocus="document.getElementById('lblBirth').style.display='none';"
+	                           onblur="bgLabel(this, 'lblBirth');"
+	                           placeholder="Birth">
 			        &nbsp;
 			      </td>
 			  </tr>
@@ -140,11 +188,7 @@ input{
 		    </table>
 			</form>
 			           
-		    <table style="width:100%; margin: 10px auto 0; border-collapse: collapse;">
-			  <tr align="center" height="30" >
-			    	<td><span style="color: blue;">${message}</span></td>
-			  </tr>
-			</table>
+		   
 		</div>
 	</div>
 	</div>

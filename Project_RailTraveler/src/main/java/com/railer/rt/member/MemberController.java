@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.railer.rt.mail.Mail;
+import com.railer.rt.mail.MailSender;
 
 
 @Controller("member.memberController")
@@ -24,6 +26,9 @@ public class MemberController {
 	
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;	
+	
+	@Autowired
+	private MailSender mailSender;
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
 	public String memberForm(Model model) {
@@ -54,7 +59,9 @@ public class MemberController {
 		sb.append(dto.getUserName()+ "님의 회원 가입이 정상적으로 처리되었습니다.<br>");
 		sb.append("당신만의 내일로 여행 계획을 RailTraveler와 함께 만들어보세요 ! <br>");
 		
-		 // 리다이렉트된 페이지에 값 넘기기
+		String title = "회원 가입 완료 !";
+		
+		reAttr.addFlashAttribute("title", title);
         reAttr.addFlashAttribute("message", sb.toString());
         reAttr.addFlashAttribute("button","login");
 		
@@ -73,8 +80,7 @@ public class MemberController {
 		return ".member.complete";
 	}
 	
-	@RequestMapping(value="/member/userIdCheck", method=RequestMethod.POST)
-	@ResponseBody
+	@RequestMapping(value="/member/userIdCheck", method=RequestMethod.GET)
 	public Map<String, Object> idCheck(
 			@RequestParam(value="userId") String userId
 			) throws Exception {
@@ -89,7 +95,8 @@ public class MemberController {
 		return model;
 	}
 	
-	@RequestMapping(value="/member/login", method=RequestMethod.GET)
+/*	@RequestMapping(value="/member/login", method=RequestMethod.GET)*/
+	@RequestMapping(value="/member/login")
 	public String loginForm(String login_error, Model model) {
 		
 		boolean bLoginError=login_error !=null;
@@ -100,6 +107,40 @@ public class MemberController {
 		}
 		
 		return ".member.login";
+	}
+	
+	@RequestMapping(value="/member/login", method=RequestMethod.POST)
+	public String loginSubmit(
+			@RequestParam String userId,
+			@RequestParam String userPwd,
+			HttpSession session,
+			Model model
+			) {
+		
+		Member dto=service.loginMember(userId);
+		if(dto==null ||  !  userPwd.equals(dto.getUserPwd())) {
+			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
+			return ".member.login";
+		}
+		
+		// 세션에 로그인 정보 저장
+		SessionInfo info=new SessionInfo();
+		info.setUserId(dto.getUserId());
+		info.setUserName(dto.getUserName());
+		
+		session.setMaxInactiveInterval(30*60); // 세션유지시간 30분, 기본:30분
+
+		session.setAttribute("member", info);
+		
+		// 로그인 이전 URI로 이동
+		String uri=(String)session.getAttribute("preLoginURI");
+		session.removeAttribute("preLoginURI");
+		if(uri==null)
+			uri="redirect:/";
+		else
+			uri="redirect:"+uri;
+		
+		return uri;
 	}
 	
 	@RequestMapping(value="/member/noAuthorized")
@@ -181,7 +222,9 @@ public class MemberController {
 		sb.append(dto.getUserName()+ "님의 회원정보가 정상적으로 변경되었습니다.<br>");
 		sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
 		
-		//reAttr.addFlashAttribute("title", "회원 정보 수정");
+		String title = "회원 정보 수정 완료 !";
+		
+		reAttr.addFlashAttribute("title", title);
 		reAttr.addFlashAttribute("message", sb.toString());
 		reAttr.addFlashAttribute("button","main");
 		
@@ -189,14 +232,152 @@ public class MemberController {
 		
 	}
 
-	@RequestMapping(value="/member/pwdFind")
+	@RequestMapping(value="/member/pwdFind", method=RequestMethod.GET)
 	public String pwdFind() {
 		return ".member.pwdFind";
 	}
 	
-	@RequestMapping(value="/member/idFind")
+	@RequestMapping(value="/member/pwdFind", method=RequestMethod.POST)
+	public String pwdFindSubmit(
+			@RequestParam String userId,
+			final RedirectAttributes reAttr,
+			Model model
+			) throws Exception{
+		
+		Member dto = service.readMember(userId);
+		if(dto == null) {
+			model.addAttribute("message","아이디가 일치하지 않습니다.");
+			return ".member.pwdFind";
+		}
+		
+		Mail mail = new Mail();
+		mail.setSenderEmail("railtraveler12@gmail.com");
+		mail.setSenderName("레일 트레블러");
+		mail.setReceiverEmail(dto.getEmail());
+		
+		String newPwd = "";
+		char[] c = new char[3];
+		int[] num = new int[3];
+		
+		for(int i = 0;i<3;i++) {
+			c[i] = (char)((Math.random()*26)+65);
+			num[i] = (int)(Math.random()*10)+1;
+		}
+		String p1 = String.valueOf(c);
+		String p2 = String.valueOf(num);
+		String [] s = {"!","@","#","$","%","^","&","*"};
+		
+		int j = (int)(Math.random()*7);
+		String p3 = s[j];
+		
+		newPwd = p1+p2+p3;
+		
+		StringBuilder sb=new StringBuilder();
+		sb.append("새로운 비밀번호는  "+newPwd+" 입니다.");
+		sb.append("Rail Traveler 서비스를 이용하려면 해당 비밀번호로 재로그인 해주세요.");
+		
+		mail.setContent(sb.toString()); //내용
+		mail.setSubject("Rail Traveler 비밀번호 찾기 결과");
+		
+		boolean b = mailSender.mailSend(mail);
+		String title = null;
+		String msg="<span style='color:blue;'>"+dto.getUserName()+"</span> 님에게<br>";
+		String encPwd = null;
+		
+		if(b) {
+			msg+="해당 메일로 새로운 비밀번호를 성공적으로 전송 했습니다.";
+			title = "비밀번호 찾기 성공 !";
+			
+			encPwd = bcryptEncoder.encode(newPwd);
+			dto.setUserPwd(encPwd);
+			try {
+				service.updateMember(dto);
+			} catch (Exception e) {
+			}
+		} else {
+			title = "비밀번호 찾기 실패 !";
+			msg+="메일을 전송하는데 실패했습니다.";
+		}
+		
+		reAttr.addFlashAttribute("title", title);
+		reAttr.addFlashAttribute("message", msg);
+		
+		
+		return "redirect:/member/complete";
+	}
+	
+	
+	
+	@RequestMapping(value="/member/idFind" , method=RequestMethod.GET)
 	public String idFind() {
+		
 		return ".member.idFind";
+	}
+	
+	@RequestMapping(value="/member/idFind", method=RequestMethod.POST)
+	public String idFindSubmit(
+			@RequestParam String email,
+			@RequestParam String birth,
+			final RedirectAttributes reAttr,
+			Model model) {
+		Member dto = null;
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", email);
+		map.put("birth", birth);
+		
+		try {
+			dto = service.findId(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		if(dto==null) {
+			model.addAttribute("message", "해당 회원정보가 존재하지 않습니다.");
+			return ".member.idFind";
+		}
+		
+		StringBuilder sb=new StringBuilder();
+		sb.append("회원님의 아이디는 <b>"+dto.getUserId()+"</b>입니다.");
+		
+		String title = "아이디 찾기 성공 !";
+		
+		reAttr.addFlashAttribute("title", title);
+        reAttr.addFlashAttribute("message", sb.toString());
+        reAttr.addFlashAttribute("button","pwdFind");
+		
+		
+        return "redirect:/member/complete";
+	}
+	
+	@RequestMapping(value="/member/deleteMember", method= RequestMethod.GET)
+	public String deleteMember(
+			@RequestParam long userNum,
+			HttpSession session,
+			final RedirectAttributes reAttr) {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("enabled", 0);
+		map.put("userNum",userNum);
+		
+		try {
+			service.updateEnabled(map);
+			/*service.deleteMember(userNum);*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 세션 정보 삭제
+		session.removeAttribute("member");
+		session.invalidate();
+
+		StringBuilder sb=new StringBuilder();
+		sb.append("회원 탈퇴 처리가 정상적으로 처리되었습니다.<br>");
+		sb.append("그동안 Rail Traveler를 이용해주셔서 감사합니다.<br>");
+					
+		reAttr.addFlashAttribute("title", "회원 탈퇴 성공!");
+		reAttr.addFlashAttribute("message", sb.toString());
+					
+		return "redirect:/member/complete";
 	}
 	
 }

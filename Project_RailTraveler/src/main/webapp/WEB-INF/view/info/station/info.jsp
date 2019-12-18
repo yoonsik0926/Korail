@@ -50,7 +50,7 @@ $("figure").mouseleave(
 		</div>
   			
 		<!-- 버튼 누를 때마다 디비에서 역 정보 받아와서 리스트 변화하도록 -->
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
 			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
 				<figure class="snip1104 red" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
@@ -80,7 +80,7 @@ $("figure").mouseleave(
 			</div>
 		</div>
 
-<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
 			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
 				<figure class="snip1104 red" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
@@ -111,7 +111,7 @@ $("figure").mouseleave(
 		</div>
 
 		
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 188px;">
+		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
 			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
 				<figure class="snip1104 red" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
@@ -188,13 +188,28 @@ $("figure").mouseleave(
 					<div style="text-align: left;">
 						<span style="font-size: 18px; font-weight: 800;">
 							<i class="fas fa-gift" style="color: #1c549a; font-size: 23px;"></i>&nbsp;&nbsp;혜택&nbsp;&nbsp;</span>
-						<span style="font-size: 15px; color: #636363;">
-							<ul>
-								<li>역 방문 사은품 증정</li>
-								<li>숙박 10% 할인 쿠폰 증정</li>
-								<li>닭갈비 5% 할인 </li>
-							</ul>
-						</span>
+						<div style="font-size: 15px; color: #636363;">
+							<table style="margin-left:20px; text-align: center;">
+								<tr style="background: #283164; color: white;">
+									<td width="60">분류</td>
+									<td width="250">내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용</td>
+									<td width="100">시작 날짜</td>
+									<td width="100">종료 날짜</td>
+								</tr>
+								<tr style="border-bottom: 1px solid #d4cbcb;">
+									<td>숙소</td>
+									<td>서울 펜션 10% 할인</td>
+									<td>2019-03-02</td>
+									<td>2019-12-31</td>
+								</tr>
+								<tr style="border-bottom: 1px solid #d4cbcb;">
+									<td>맛집</td>
+									<td>닭갈비 10% 할인</td>
+									<td>2019-03-02</td>
+									<td>2019-12-31</td>
+								</tr>
+							</table>
+						</div>
 					</div>
 		        </div>
 

@@ -66,8 +66,12 @@
 					<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png" style="height: 80px;">
 				</div>
 				<div class="messageBox">
+					<div style="line-height: 150%; padding-top: 35px; text-align: center; font-size:25px; font-weight: 900; color: #28a928;">
+						${title}
+					</div>
 					<div style="line-height: 150%; padding-top: 35px; text-align: center; font-size:15px;">
-						${message}</div>
+						${message}
+					</div>
 					<div style="margin-top: 40px; text-align: center;">
 						<c:if test="${button=='login'}">
 							<button type="button"
@@ -76,6 +80,10 @@
 						<c:if test="${button=='main'}">
 							<button type="button"
 								onclick="javascript:location.href='<%=cp%>/';" class="btnConfirm">Back to Main</button>
+						</c:if>
+						<c:if test="${button=='pwdFind'}">
+							<button type="button"
+								onclick="javascript:location.href='<%=cp%>/member/pwdFind';" class="btnConfirm">비밀번호 찾기</button>
 						</c:if>
 					</div>
 				</div>

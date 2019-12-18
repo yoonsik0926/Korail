@@ -1,5 +1,8 @@
 package com.railer.rt.member;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,17 @@ public class MemberServiceImpl implements MemberService {
 		
 		return dto;
 	}
+	
+	@Override
+	public void updateLastLogin(String userId) throws Exception {
+		try {
+			dao.updateData("member.updateLastLogin", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 	
 	@Override
 	public Member readMember(String userId) {
@@ -103,10 +117,106 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void deleteMember(String userId) throws Exception {
-		// TODO Auto-generated method stub
+	public void updateEnabled(Map<String, Object> map) throws Exception {
+		try {
+			dao.updateData("member.updateMemberEnabled",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}	
+	}
+	
+	@Override
+	public void deleteMember(long userNum) throws Exception {
+		try {
+			dao.deleteData("member.deleteMember",userNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 		
 	}
+	
+	@Override
+	public Member findId(Map<String, Object> map) throws Exception {
+		Member dto = null;
+		try {
+			dto = dao.selectOne("member.findId",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public void updateAuthority(Map<String, Object> map) throws Exception {
+		try {
+			dao.updateData("member.updateAuthority", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<Member> listAuthority(String userId) {
+		List<Member> list = null;
+		try {
+			list = dao.selectList("member.listAuthority",userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int checkFailureCount(String userId) {
+		int result = 0;
+		try {
+			result = dao.selectOne("member.checkFailureCount", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public void updateFailureCount(String userId) throws Exception {
+		try {
+			dao.updateData("member.updateFailureCount", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateFailureCountReset(String userId) throws Exception {
+		try {
+			dao.updateData("member.updateFailureCountReset", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void insertMemberState(Member dto) throws Exception {
+		try {
+			dao.updateData("member.insertMemberState", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+
 	
 	
 }

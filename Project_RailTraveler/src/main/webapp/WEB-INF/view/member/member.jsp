@@ -165,6 +165,19 @@ function userIdCheck() {
 
 	}
 
+<c:if test="${mode=='update'}">
+function confirmDelete(){
+	var s = "정말 탈퇴하시겠습니까?\n\n탈퇴 후 5개월 간 회원 정보가 유지됩니다.";
+	var result = confirm(s);
+	var userNum = ${dto.userNum};
+
+	if(result) {
+		location.href='<%=cp%>/member/deleteMember?userNum='+userNum;
+	} else {
+	}
+}
+</c:if>
+
 $(function() {
     //input을 datepicker로 선언
     $('form input[name=birth]').datepicker({
@@ -362,15 +375,17 @@ input, select, .btnSearch {
 								class="btn" onclick="memberOk();">${mode=="member"? "회원가입":"정보수정"}</button>
 						</td>
 					</tr>
-					<tr height="15">
-						<td align="right"><a href='<%=cp%>/'>${mode=="member"? "가입취소":"수정취소"}</a></td>
-					</tr>
-					<tr height="30">
-						<td align="center" style="color: blue;">${message}</td>
-					</tr>
-
-				</table>
-	  
+						<tr height="30">
+							<td align="center" style="color: blue;">${message}</td>
+						</tr>	
+					</table>
+					
+					<table style="margin: 20px auto; border-spacing: 0px;">
+						<tr height="15">
+							<td align="right" style="padding: 0 10px;"><a href='#' style="color: red;" onclick="confirmDelete();">${mode=="member"? "":"회원 탈퇴"}</a></td>
+							<td align="right" style="padding: 0 10px;"><a href='<%=cp%>/'>${mode=="member"? "가입취소":"수정취소"}</a></td>
+						</tr>
+					</table>
 			
 			</form>
 				

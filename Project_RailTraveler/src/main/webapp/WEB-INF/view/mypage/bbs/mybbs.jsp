@@ -129,11 +129,7 @@ $(function(){
 			</ul>
 		</nav>
 
-		
-
-
-
-
 
 	</div>
+</div>
 </div>
