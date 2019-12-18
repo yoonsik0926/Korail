@@ -117,7 +117,7 @@ body::-webkit-scrollbar {
 	width: 100%;
 	height: 90px;
 	border: 2px solid red;
-	display: none;
+	display: none; 
 }
 
 .planListDetail:hover {
@@ -257,6 +257,17 @@ body::-webkit-scrollbar {
 	display: block;
 	float: left;
 }
+
+.pickedStation {
+	margin: auto;
+	width: 20%;
+	height: 100%;
+	border: 1px solid black;
+	text-align: center;
+	font-size: 20px;
+	display: block;
+	float: left;
+}
 /* .carousel-cell {
 	counter-increment: carousel-cell;
 }
@@ -358,8 +369,9 @@ function getNumber(day) {
 	$('#planListForm').empty();
 	document.getElementById("selectDays").src=day.src;
 	
+	
 	for (var i = 1; i <=day.value; i++) {
-		$("#planListForm").append("<div class='planList"+i+"'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' name='selectedDay' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button class='detailPlanning'>계획짜기</button></div><div style='clear:both;'></div></div>");
+		$("#planListForm").append("<div class='planList"+i+"'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' name='selectedDay' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button class='detailPlanning'>계획짜기</button></div></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div>");
 	}
 	$('#myModal').hide();
 }
@@ -539,32 +551,18 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<script type="text/javascript">
-// $(function() {
-// 	$("body").on('click', "#detailPlanning", function() {		
-// 		$(".carousel-cell2").hide();
-// 		$("#planModal").show();
-// 		$(".modal-planning").append("<div class='carousel-cell2' style='width: 350px; height: 100%; background: black;'></div>");
-		
-// 	});
-// });
+
 
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
-    	for(var i=0; i<5; i++) {
-    		$("<div class='planListDetail'></div>").insertAfter($(this).parent().parent());
-    	}
-        $(this).parent().parent().children().find("input[name='selectedDay']").css("background", "#8a8a8a");
-        $(this).children().slideDown();
-        
-//  submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
-        if($(".planListDetail").is(":visible") ){
-        	$(this).parent().parent().toggleClass("planList-selected");
-        	$(".selectedDay").children().css("background", "white");
-    		$(".planListDetail").remove();
-        	$(".planListDetail").slideUp();
+	
+		var cname="."+$(this).parent().parent().attr("class")+".planListDetail";
+		
+    	if($(this).parent().parent().parent().find(cname).css("display")=="none"){
+        	$(this).parent().parent().parent().find(cname).slideDown();
         } else {
-        	$(this).parent().parent().toggleClass("planList-selected");
-        	$(".planListDetail").slideDown();
+        	$(this).parent().parent().parent().find(cname).slideUp();
+    		$(cname+".active1").toggleClass("active1");
         }
     });
 });
@@ -585,7 +583,7 @@ $(function() {
 $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
 		if($(".planListDetail.active1").length) {
-			$(".planListDetail.active1").append($('.plusStation').find('.staName').text());
+			$(".planListDetail.active1").append("<div class='pickedStation'>"+$(this).prev().text()+"</div>");
 		} else {
 			alert("역을 추가할 곳을 먼저 선택해주세요.");
 		}
