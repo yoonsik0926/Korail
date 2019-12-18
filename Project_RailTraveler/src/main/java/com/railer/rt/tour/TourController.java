@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import com.railer.rt.ticket.Ticket;
+
+
 
 @Controller("tour.tourController")
 public class TourController {
@@ -51,21 +54,7 @@ public class TourController {
 		return ".four.tour.tour.detail";
 	}
 	
-	@RequestMapping(value="/tour/paycontrol")
-	public String pay(Model model) throws Exception {
-		
-		
-		return ".four.tour.tour.paydone";
-	}
-	
-	@RequestMapping(value="/tour/paydone")
-	public String paydone(Model model, @RequestParam String msg) throws Exception {
-		System.out.println(msg);
-		
-		model.addAttribute("msg", msg);
-		
-		return ".four.tour.tour.paydone";
-	}
+
 	
 	
 	

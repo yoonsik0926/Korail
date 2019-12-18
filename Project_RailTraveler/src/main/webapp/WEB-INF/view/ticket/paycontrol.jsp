@@ -27,14 +27,14 @@
         IMP.init('imp68825719'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
         var msg;
         /* 이렇게 담겨서 넘기면 됨*/
-        /* var query = "userName='${dto.userName}'+"; */
+        var query = "&ticketNum=${dto.ticketNum}";
         
         IMP.request_pay({
             pg : 'kakaopay',
             pay_method : 'card',
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : 'KH Books 도서 결제',
-            amount : 100,
+            amount : '${dto.tprice}',
             buyer_email : '${dto.email}',
             buyer_name : '${dto.userName}',
             buyer_tel : '${dto.tel}',
@@ -69,7 +69,7 @@
                 });
                 //성공시 이동할 페이지
                 
-                location.href='<%=cp%>/tour/paydone?msg='+msg;
+                location.href='<%=cp%>/ticket/paydone?msg='+msg+query;
             } else {
                 msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;

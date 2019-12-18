@@ -32,10 +32,10 @@
 					<p style="font-size: 20px; font-weight: 900">
 						Rail Travler에서 결제하신 내용입니다.
 					</p>
-					</br>
+				
 					
 					<p style="font-size: 15px; font-weight: 700">
-						고객명 : 김*식님
+						고객명 : ${userName}
 					</p>
 					
 					<p style="font-size: 15px; font-weight: 700">
@@ -70,7 +70,7 @@
 				<tr height="150px" align="center">
 				<td width="200px" style="font-size: 13px">1231548857</td>
 				<td width="500px"style="font-size: 13px">코레일 내일로 7일권</td>
-				<td width="200px"style="font-size: 13px">69000원</td>
+				<td width="200px"style="font-size: 13px">${price}</td>
 				<td width="200px"style="font-size: 13px">결제준비</td>				
 				</tr>
 				

@@ -10,6 +10,25 @@ public class Ticket {
 	private String email;
 	private String tel1 ,tel2,tel3;
 	private String tel;
+	private int price;
+	
+	//DB에 있는 칼럼
+	private int ticketNum;
+	private String tDays;
+	private String tName;
+	private String tprice;
+	private int tAmount;
+	private String year;
+	private String division;
+	
+	
+	
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	public String getTel() {
 		return tel;
 	}
@@ -46,6 +65,51 @@ public class Ticket {
 	public void setTel3(String tel3) {
 		this.tel3 = tel3;
 	}
+	public int getTicketNum() {
+		return ticketNum;
+	}
+	public void setTicketNum(int ticketNum) {
+		this.ticketNum = ticketNum;
+	}
+
+	public String gettDays() {
+		return tDays;
+	}
+	public void settDays(String tDays) {
+		this.tDays = tDays;
+	}
+	public String gettName() {
+		return tName;
+	}
+	public void settName(String tName) {
+		this.tName = tName;
+	}
+	public String getTprice() {
+		return tprice;
+	}
+	public void setTprice(String tprice) {
+		this.tprice = tprice;
+	}
+	public int gettAmount() {
+		return tAmount;
+	}
+	public void settAmount(int tAmount) {
+		this.tAmount = tAmount;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public String getDivision() {
+		return division;
+	}
+	public void setDivision(String division) {
+		this.division = division;
+	}
+	
+	
 	
 	
 	

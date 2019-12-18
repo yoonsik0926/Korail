@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticket">
+	
+	<select id="ticketList" resultType="com.railer.rt.ticket.Ticket">
+		SELECT ticketNum, tDays, tname, tprice, tamount,year,division
+		FROM ticket
+	</select>		
+	
+	
+	<select id="selectedTicket" resultType="com.railer.rt.ticket.Ticket">
+		SELECT ticketNum, tDays, tname, tprice, tamount,year,division
+		FROM ticket
+		where ticketNum = #{ticketNum}
+	</select>	
+</mapper>
