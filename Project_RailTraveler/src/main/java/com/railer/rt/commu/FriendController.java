@@ -18,9 +18,9 @@ public class FriendController {
 		return ".four.commu.friend.created";
 	}
 	@RequestMapping(value="/friend/article")
-	public String article(Model model) throws Exception {
+	public String article(Model model) throws Exception { 
 		model.addAttribute("subMenu", "3");
 		
-		return ".four.commu.friend	.article";
+		return ".four.commu.friend.article";
 	}
 }

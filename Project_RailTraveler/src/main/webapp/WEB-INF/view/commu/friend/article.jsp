@@ -63,7 +63,7 @@
 			cs.className = 'far fa-heart';
 		}
 	}
-	
+
 	function snsShare() {
 		$('#cocoaModal').modal('toggle');
 	}
@@ -71,9 +71,10 @@
 	// http://www.libertypage.net/myblog/post/18/
 </script>
 <style type="text/css">
-tfoot td{
- padding: 6px 10px;
+tfoot td {
+	padding: 6px 10px;
 }
+
 .tb-row span {
 	display: inline-block;
 	float: left;
@@ -130,174 +131,180 @@ a#MOVE_TOP_BTN {
 .btnSendBoardLike:active, .btnSendBoardLike:hover {
 	background: none;
 }
+
 .reBoardBtn {
-  display: inline-block;
-  padding: 10px 25px;
-  font-size: 15px;
-  cursor: pointer;
-  text-align: center;	
-  text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: #283164;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
+	display: inline-block;
+	padding: 10px 25px;
+	font-size: 15px;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	outline: none;
+	color: #fff;
+	background-color: #283164;
+	border: none;
+	border-radius: 15px;
+	box-shadow: 0 9px #999;
 }
 
-.reBoardBtn:hover {background-color: #283164}
+.reBoardBtn:hover {
+	background-color: #283164
+}
 
 .reBoardBtn:active {
-  background-color: black;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+	background-color: black;
+	box-shadow: 0 5px #666;
+	transform: translateY(4px);
 }
 
 /* SNS 공유하기 모달 */
 .modal_post_social .modal-content {
-    padding: 8px 0;
+	padding: 8px 0;
 }
+
 .text-basic, .text-basic a {
-    color: #212121;
+	color: #212121;
 }
 
 .modal_post_social .social-btn {
-    overflow: hidden;
+	overflow: hidden;
 }
+
 .social-btn ul {
-    list-style: outside none none;
-    padding: 0;
+	list-style: outside none none;
+	padding: 0;
 }
+
 .modal_post_social li:first-child, .modal_post_social li:nth-child(5) {
-    margin-left: 5px;
+	margin-left: 5px;
 }
+
 .modal_post_social li {
-    float: left;
-    width: 68px;
-    margin-top: 10px;
+	float: left;
+	width: 68px;
+	margin-top: 10px;
 }
+
 .modal_post_social li a {
-    text-align: center;
-    padding: 0;
-    font-size: 12px;
-    line-height: 1;
-    display: block;
-    width: 68px;
-    height: 80px;
-    background: url(//vendor-cdn.imweb.me/images/site/social_icon3.png?487487) no-repeat;
-    background-size: 56px;
-    padding-top: 63px;
+	text-align: center;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1;
+	display: block;
+	width: 68px;
+	height: 80px;
+	background:
+		url(//vendor-cdn.imweb.me/images/site/social_icon3.png?487487)
+		no-repeat;
+	background-size: 56px;
+	padding-top: 63px;
 }
+
 .modal_post_social li.kakao a {
-    background-position: 7px 0;
+	background-position: 7px 0;
 }
+
 .modal_post_social li.story a {
-    background-position: 7px -325px;
-    letter-spacing: -1px;
+	background-position: 7px -325px;
+	letter-spacing: -1px;
 }
 
 .modal_post_social li.line a {
-    background-position: 7px -81px;
+	background-position: 7px -81px;
 }
+
 .modal_post_social li.band a {
-    background-position: 7px -406px;
+	background-position: 7px -406px;
 }
+
 .modal_post_social li.naver a {
-    background-position: 7px -648px;
+	background-position: 7px -648px;
 }
+
 .modal_post_social li.face a {
-    background-position: 7px -163px;
+	background-position: 7px -163px;
 }
+
 .modal_post_social li.twitter a {
-    background-position: 7px -244px;
+	background-position: 7px -244px;
 }
+
 .modal_post_social li.googleplus a {
-    background-position: 7px -568px;
+	background-position: 7px -568px;
 }
+
 .modal_post_social .url-copy {
-    clear: both;
-    padding: 0 8px;
-    margin-top: 20px;
+	clear: both;
+	padding: 0 8px;
+	margin-top: 20px;
 }
+
 .holder {
-    position: relative;
+	position: relative;
 }
+
 .modal_post_social .url-copy .form-control {
-    border: 1px solid rgba(155, 155, 155, 0.4);
-    box-shadow: none;
-    color: #212121;
-    /* padding-right: 65px; */
+	border: 1px solid rgba(155, 155, 155, 0.4);
+	box-shadow: none;
+	color: #212121;
+	/* padding-right: 65px; */
 }
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #eee;
-    opacity: 1;
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
+	{
+	background-color: #eee;
+	opacity: 1;
 }
+
 .form-control {
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+
 .modal_post_social .url-copy button {
-    border-radius: 0;
-    color: #000;
-    border: 1px solid rgba(155, 155, 155, 0.4);
-    font-size: 13px;
-    padding: 7px 16px;
-    height: 34px;
-    position: absolute;
-    right: 8px;
-    top: 0;
-    background: #fff;
-    letter-spacing: 0;
+	border-radius: 0;
+	color: #000;
+	border: 1px solid rgba(155, 155, 155, 0.4);
+	font-size: 13px;
+	padding: 7px 16px;
+	height: 34px;
+	position: absolute;
+	right: 8px;
+	top: 0;
+	background: #fff;
+	letter-spacing: 0;
 }
 
 .text-center {
-    text-align: center;
+	text-align: center;
 }
 
+.reTbody tr td {
+	padding: 10px 20px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.reTbody tr td .btn {
+	width: 25px;
+	height: 25px;
+	padding: 0px;
+	border-radius: 5px;
+}
 </style>
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
@@ -345,15 +352,17 @@ a#MOVE_TOP_BTN {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<button class="comment_num btn btn-flat" type="button" onclick="snsShare()"><i class="icon-share board-summary-icon"></i></button>
+		<button class="comment_num btn btn-flat" type="button"
+			onclick="snsShare()">
+			<i class="icon-share board-summary-icon"></i>
+		</button>
 		<div style="padding-bottom: 10px;"></div>
 		<table style="width: 100%; border-spacing: 0px;">
 			<tr height="45">
 				<td width="300" align="left">
 					<button type="button" class="btn btn-default"
 						onclick="javascript:location.href='<%=cp%>/bbs/list?${query}';">
-						목록 <span>></span> 맛집
-					</button>
+						목록</button>
 				</td>
 
 				<td align="right"><c:if
@@ -364,7 +373,11 @@ a#MOVE_TOP_BTN {
 						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
 						<button type="button" class="btn btn-default"
 							onclick="deleteBoard();">삭제</button>
-					</c:if></td>
+					</c:if>
+					<button type="button" class="btn btn-danger"
+						onclick="deleteBoard();">
+						<i class="far fa-bell" style="color: white"></i>신고
+					</button></td>
 			</tr>
 		</table>
 		<table
@@ -372,14 +385,13 @@ a#MOVE_TOP_BTN {
 			<thead>
 				<tr>
 					<td colspan="3" style="padding-top: 15px;">
-						<h3 style="margin: 10px 0 2px; font-size: 25px;">묻고답하기 게시물입니당 
-						
-						<span style="float: right;">
-						
-						<i class="fa fa-heart" style="width: 22px;"></i>&nbsp;5
-						<i class="fas fa-comments"></i> 5
-						
-						</span> </h3>
+						<h3 style="margin: 10px 0 2px; font-size: 25px;">
+							동행구하기 게시물입니당 <span style="float: right;"> <i
+								class="fa fa-heart" style="width: 22px;"></i>&nbsp;5 <i
+								class="fas fa-comments"></i> 5
+
+							</span>
+						</h3>
 					</td>
 				</tr>
 
@@ -391,8 +403,11 @@ a#MOVE_TOP_BTN {
 				</tr>
 				<tr>
 					<td colspan="3" style="padding: 20px 5px;" valign="top"
-						height="200">내용입니드아아아 내용입니드아아아 내용입니드아아아 내용입니드아아아 내용입니드아아아
-						내용입니드아아아</td>
+						height="200">그 머냐 그 12월 29일에 서울 가시는분/?!!? 당일치기로 청계천+홍대
+						돌아다니려구요~ 여자분 환영
+
+						<h3>밑에 제 여행 계획표 첨부합니다~</h3>
+					</td>
 				</tr>
 
 				<tr class="tb-row" style="border-bottom: 0;">
@@ -403,7 +418,7 @@ a#MOVE_TOP_BTN {
 							onclick="clickLikeBtn();">
 							<i id="boardLikeIcon" class="far fa-heart"
 								style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
-								id="boardLikeCount">${dto.boardLikeCount}0</span>
+								id="boardLikeCount">${dto.boardLikeCount}3</span>
 						</button>
 					</td>
 				</tr>
@@ -413,177 +428,179 @@ a#MOVE_TOP_BTN {
 						onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (0)</a></td>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="reTbody">
 				<tr height='30'>
-					<td align='left' colspan="3"><span style='font-weight: bold;'>댓글
-							(3)</span></td>
+					<td align='left' colspan="3" style="background: beige;"><span
+						style='font-weight: bold;'>댓글 (3)</span></td>
 				</tr>
-				<tr>
-					<td style='padding: 5px 0px 15px;' colspan="3"><textarea
-							class='boxTA'
-							style='width: 89%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
-						<button type='button' class='btn btnSendReply btn-default'
-							data-num='10'
-							style='margin-left: 1%; width: 10%; height: 50px; padding: 10px 1px; float: left;'>등록</button>
-
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-
-
-
-
-
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span><b>작성자</b></span></td>
-					<td>| 내용이 이렇게 적히는거죠??????????????????????????</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
-				</tr>
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span>관리자</span></td>
-					<td>| 자제좀요</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
-				</tr>
-			</tfoot>
-		</table>
-<!-- List group -->
-				<ul class="list-group" style="margin: 20px 0;
-    box-shadow: none;">
-
-					<li id="note-title" class="list-group-item note-title"
-						style="background: beige;">
-						<h3 class="panel-title" style="    float: left;">
-							답글 <span id="note-count">2</span>
-						</h3>
-						<h3 class="panel-title" style="float: right;">
-							<a href="#">최신순<a href="#"></a> | <a href="#">추천순</a>
-						</h3>
-						<div style="clear: both;"></div>
-					</li>
-
-					<li class="list-group-item note-item clearfix" id="note-1861368">
-					<div style="padding: 5px 0 10px 10px;">
-					<div style="color: red;font-size: 15px;text-shadow: 1px 1px yellow;">* 채택 된 답변입니다 *</div>
-    
-    </div>
-							<div class="content-body panel-body pull-left" style="padding: 0 15px; width: 92%">
-
-
-								<div class="avatar avatar-medium clearfix ">
-								<div style="height: 50px;
-    float: left;
-    width: 50px;"><i class="far fa-comment-dots" style="font-size: 35px;"></i></div>
-									<div class="avatar-info">
-									관리자
-										<div class="date-created">
-											<span class="timeago" title="2019-12-16 22:20:55.0">2019-12-16
-												22:20:55</span>
-										</div>
+				<tr height='35'
+					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
+					<td colspan="3">
+						<div style="float: left;">
+							<div style="clear: both;">
+									<div>
+										<b>작성자</b>
 									</div>
+								<div style="clear: both;">
+									<span>내용이 이렇게 적히는거죠??????????????????????????</span>
 								</div>
-								<fieldset class="form">
-									<article id="note-text-1861368"
-										class="list-group-item-text note-text">
-
-										<p>둘다 합격했다는 전제하에.......</p>
-										<p>가고 싶은데 가세요. 근데 두군데 다 합격???</p>
-
-									</article>
-								</fieldset>
+								
 							</div>
-
-							<div class="content-function pull-right text-center" style="width: 60px;">
-								<div class="content-function-group">
-								<button type="button" class="btn btn-warning"
-							onclick="updateBoard();" style="width: 60px;
-    margin-bottom: 5px;"> 채택</button>
-									<button type="button" class="btn btn-default"
-							onclick="clickReLikeBtn();" style="width: 60px;
-    margin-bottom: 5px;"><i id="boardReLikeIcon" class="far fa-heart" style="font-size: 15px;
-    margin: 0 auto; color: orangered;"></i>&nbsp;${dto.boardLikeCount}0</button>
-    
-    <button type="button" class="btn btn-default"
-							onclick="updateBoard();" style="width: 60px;
-    margin-bottom: 5px;">수정</button>
-						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();" style="width: 60px;">삭제</button>
-							
-							
+							<div style="clear: both;">
+							<button class="btn btn-default">
+										<i class="fas fa-reply" style="transform: rotate(180deg);"></i>
+									</button>
+									<button class="btn btn-default">
+										<i class="fas fa-times"></i>
+									</button>
+									<button class="btn btn-danger"
+										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;">
+										<i class="far fa-bell" style="color: white"></i>
+									</button>
 								</div>
-							</div>
-<table
-			style="width: 100%; margin: 10px auto; border-spacing: 0px; border-collapse: collapse;">
-			 
-			<tbody>
-				<tr height='30'>
-					<td align='left' colspan="3"><span style='font-weight: bold;'>댓글
-							(3)</span></td>
+						</div>
+						<div style="float: right; text-align: right;">
+							<div>2019-12-16 18:03:22</div>
+						</div>
+					</td>
 				</tr>
-				<tr>
-					<td style='padding: 5px 0px 15px;' colspan="3"><textarea
-							class='boxTA'
-							style='width: 89%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
-						<button type='button' class='btn btnSendReply btn-default'
-							data-num='10'
-							style='margin-left: 1%; width: 10%; height: 50px; padding: 10px 1px; float: left;'>등록</button>
-
+				<tr height='35'
+					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
+					<td colspan="3">
+						<div style="float: left;margin-right: 10px;">
+							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
+						</div>
+						<div style="float: left;">
+							<div style="clear: both;">
+									<div>
+										<b>작성자</b>
+									</div>
+								<div style="clear: both;">
+									<span>내용이 이렇게 적히는거죠??????????????????????????</span>
+								</div>
+								
+							</div>
+							<div style="clear: both;">
+							
+									<button class="btn btn-default">
+										<i class="fas fa-times"></i>
+									</button>
+									<button class="btn btn-danger"
+										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;">
+										<i class="far fa-bell" style="color: white"></i>
+									</button>
+								</div>
+						</div>
+						<div style="float: right; text-align: right;">
+							<div>2019-12-16 18:03:22</div>
+						</div>
+					</td>
+				</tr>
+				<tr height='35'
+					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
+					<td colspan="3">
+						<div style="float: left;margin-right: 10px;">
+							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
+						</div>
+						<div>비밀글입니다.</div>
+<!-- 						<div style="float: left;"> -->
+<!-- 							<div style="clear: both;"> -->
+<!-- 									<div> -->
+<!-- 										<b>작성자</b> -->
+<!-- 									</div> -->
+<!-- 								<div style="clear: both;"> -->
+<!-- 									<span>내용이 이렇게 적히는거죠??????????????????????????</span> -->
+<!-- 								</div> -->
+								
+<!-- 							</div> -->
+<!-- 							<div style="clear: both;"> -->
+<!-- 									<button class="btn btn-default"> -->
+<!-- 										<i class="fas fa-times"></i> -->
+<!-- 									</button> -->
+<!-- 									<button class="btn btn-danger" -->
+<!-- 										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;"> -->
+<!-- 										<i class="far fa-bell" style="color: white"></i> -->
+<!-- 									</button> -->
+<!-- 								</div> -->
+<!-- 						</div> -->
+<!-- 						<div style="float: right; text-align: right;"> -->
+<!-- 							<div>2019-12-16 18:03:22</div> -->
+<!-- 						</div> -->
 					</td>
 				</tr>
 			</tbody>
 			<tfoot>
+				<tr>
+					<td style='padding: 15px 20px;' colspan="3"><textarea
+							class='boxTA'
+							style='width: 92%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
+						<div
+							style='padding: 0 10px;
+    width: 8%; height: 50px; float: left; font-size: 15px;'>
+							<input type="checkbox" name="ss"><label
+								style="margin: 0 0 0px 3px;">비밀글</label>
+							<button type='button' class='btn btnSendReply btn-default'
+								data-num='10'
+								style='width: 100%; height: 29px; padding: 2px 1px;'>등록</button>
 
-
-
-
-
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span><b>관리자</b></span></td>
-					<td>내용이 이렇게 적히는거죠??????????????????????????</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
+						</div></td>
 				</tr>
+
+
+
+
+
 			</tfoot>
 		</table>
-					</li>
-					<li class="list-group-item note-form" style="padding: 5px 0 15px 0;
-    text-align: center;">
-<button class="reBoardBtn" style="font-weight: 900;
-    width: 20%;
-    height: 45px;
-    border-radius: 10px 0 10px 0;
-    text-shadow: 1px 2px #ffffff59;">답글 쓰기</button>
-					</li>
-					
-					<li class="list-group-item note-form clearfix">
-
-
-						<div class="">
-							<h5 class="" style="text-align: center;">
-								<a href="/login/auth?redirectUrl=%2Farticle%2F661621"
-									class="link">로그인</a>을 하시면 답글을 등록할 수 있습니다.
-							</h5>
-						</div>
-
-					</li>
-				</ul>
-			
-			
+<div id="ex1" class="modal">
+  <p>안녕하세요. 모달창안의 내용부분입니다.</p>
+  <a href="#" rel="modal:close">닫기</a>
 </div>
+ 
+<p><a href="#ex1" rel="modal:open">모달창띄우기</a></p>
+	</div>
 </div>
-<div id="cocoaModal" role="dialog" 
- tabindex="-1" aria-labelledby="mySmallModalLabel"
-aria-hidden="true" data-backdrop="true" data-keyboard="true"  class="in modal_post_social">
+<div id="cocoaModal" role="dialog" tabindex="-1"
+	aria-labelledby="mySmallModalLabel" aria-hidden="true"
+	data-backdrop="true" data-keyboard="true" class="in modal_post_social">
 	<div class="modal-dialog">
-		<div class="modal-content"><div class="text-basic"><div class="social-btn"><ul><li role="" class="kakao"><a href="javascript:;" onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li><li role="" class="story"><a href="javascript:;" onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li><li role="" class="line"><a href="javascript:;" onclick="SNS.setSnsApi('line')">라인</a></li><li role="" class="band"><a href="javascript:;" onclick="SNS.setSnsApi('band')">밴드</a></li><li role="" class="naver"><a href="javascript:;" onclick="SNS.setSnsApi('naver')">네이버</a></li><li role="" class="face"><a href="javascript:;" onclick="SNS.setSnsApi('facebook')">페이스북</a></li><li role="" class="twitter"><a href="javascript:;" onclick="SNS.setSnsApi('twitter')">트위터</a></li><li role="" class="googleplus"><a href="javascript:;" onclick="SNS.setSnsApi('googleplus')">Google+</a></li></ul></div><div class="url-copy holder"><div class="form-control-line"><input type="text" id="sns_copy_url" class="_sns_copy_url form-control" value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board" readonly="readonly"><button type="button" class="_sns_copy_btn sns_copy_btn btn btn-default" onclick="SNS.copyToClipboard()" data-clipboard-target="._sns_copy_url">복사</button></div></div><div id="copy_complete" class="text-center"></div></div></div>
+		<div class="modal-content">
+			<div class="text-basic">
+				<div class="social-btn">
+					<ul>
+						<li role="" class="kakao"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li>
+						<li role="" class="story"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li>
+						<li role="" class="line"><a href="javascript:;"
+							onclick="SNS.setSnsApi('line')">라인</a></li>
+						<li role="" class="band"><a href="javascript:;"
+							onclick="SNS.setSnsApi('band')">밴드</a></li>
+						<li role="" class="naver"><a href="javascript:;"
+							onclick="SNS.setSnsApi('naver')">네이버</a></li>
+						<li role="" class="face"><a href="javascript:;"
+							onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
+						<li role="" class="twitter"><a href="javascript:;"
+							onclick="SNS.setSnsApi('twitter')">트위터</a></li>
+						<li role="" class="googleplus"><a href="javascript:;"
+							onclick="SNS.setSnsApi('googleplus')">Google+</a></li>
+					</ul>
+				</div>
+				<div class="url-copy holder">
+					<div class="form-control-line">
+						<input type="text" id="sns_copy_url"
+							class="_sns_copy_url form-control"
+							value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board"
+							readonly="readonly">
+						<button type="button"
+							class="_sns_copy_btn sns_copy_btn btn btn-default"
+							onclick="SNS.copyToClipboard()"
+							data-clipboard-target="._sns_copy_url">복사</button>
+					</div>
+				</div>
+				<div id="copy_complete" class="text-center"></div>
+			</div>
+		</div>
 	</div>
 </div>
 <script>

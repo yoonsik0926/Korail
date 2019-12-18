@@ -65,7 +65,7 @@
 	}
 	
 	function snsShare() {
-		$('#cocoaModal').modal('toggle');
+// 		$('#cocoaModal').css("display","block");
 	}
 
 	// http://www.libertypage.net/myblog/post/18/

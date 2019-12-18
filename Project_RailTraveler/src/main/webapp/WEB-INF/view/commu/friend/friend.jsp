@@ -36,17 +36,7 @@ optgroup {
 				<tr>
 					<td width="200" colspan="5"
 						style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-						<select class="boxTF"
-						style="border-radius: 3px; width: 12%; height: 100%; border: 1px solid #ccc; margin-right: 10px;"><option>전체</option>
-							<optgroup label="플래너">
-								<option>여행 계획</option>
-							</optgroup>
-							<optgroup label="관광정보">
-								<option>맛집</option>
-								<option>숙박</option>
-								<option>명소</option>
-							</optgroup>
-					</select> <span id="searchCount"
+						<span id="searchCount"
 						style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
 							<span style="color: #ca4a0d;">3569건 </span> <img alt=""
 							src="/Project_RailTraveler/resource/images/close_icon.png"
@@ -106,7 +96,7 @@ optgroup {
 				<%
 					for (int i = 10; i >= 1; i--) {
 				%>
-				<tr onclick="javascript:location.href='<%=cp%>/qna/article'">
+				<tr onclick="javascript:location.href='<%=cp%>/friend/article'">
 					<td><%=i%></td>
 					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
