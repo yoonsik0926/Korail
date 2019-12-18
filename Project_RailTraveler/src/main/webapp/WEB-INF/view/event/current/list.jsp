@@ -99,6 +99,8 @@ ul{
      <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
     	<h3> 이벤트 모음 </h3>
 	 </div>
+	 
+	 
 	 	 	  
 	 <div class="type-section">
                         <div class="type-list-pc" style="float: left; border: 1px solid grey; height: 55px;">
@@ -109,11 +111,11 @@ ul{
 								<div class="list"><a href="#" onclick="#"><h3>최신순</h3></a></div>
 								
 								<div class="list"><a href="#" onclick="#"><h3>마감순</h3></a></div>
-																
-								
+															
                             </div>
                         </div>
                     </div>
+                                       
                     <!-- type-section -->
                     <div class="search-section" style="float: right">
                          <div class="input-area">
@@ -123,9 +125,7 @@ ul{
                              <button type="submit" title="검색" class="btn-event-search" onclick="#"><span class="blind"></span></button>
                          </div>
                      </div>
-             
-                  
-          
+                                
 			 <div class="sect-eventlist highlight" style=" display: block; padding-top: 150px;
 		    width: 100%; min-height: 350px; ">
 		    		    
@@ -134,24 +134,25 @@ ul{
     			<ul>
     	         <li>
                     <div class="box-image">
-                        <a href="#">
+                        
                             <span class="thumb-image">
+                            <a data-target="#layerpop" data-toggle="modal">
                                 <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
+                             </a>   
                             </span>
-                        </a>
                     </div>
                     <div class="box-contents">
-                        <a href="#">
+                        <a data-target="#layerpop" data-toggle="modal">
                             <em class="txt-lightblue">이벤트1</em>
                             <p>이벤트 설명1</p>
-                        </a>
+                        </a>   
                         <p class="date">
                             <span>기간: </span>2019.11.19 ~ 2019.12.15
                         </p>
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
                      	<tr height="45">
 						    <td width="300" align="left" >
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -181,7 +182,7 @@ ul{
                     <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
 						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -210,7 +211,7 @@ ul{
                        <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
 						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -238,7 +239,7 @@ ul{
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
 						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -267,7 +268,7 @@ ul{
                         <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
 						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -294,7 +295,7 @@ ul{
                      	<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 						<tr height="45">
 						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/bbs/update?num=${dto.num}&page=${page}';">수정</button>
+						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
 						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 						    </td>
 						
@@ -307,7 +308,17 @@ ul{
     	    		
     	</div>
     </div>
-		
+       
+    <table style="width: 100%; margin: 10px auto; border-spacing: 0px;">
+		   <tr height="40">
+		      <td align="center" width="100">
+		      <c:if test="${sessionScope.member.userId=='admin'}">
+		          <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/created';">등록하기</button>
+		      </c:if>
+		      </td>
+		   </tr>
+		</table>
+     
 	<nav style="text-align: center;">
 			<ul class="pagination">
 				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
@@ -319,4 +330,41 @@ ul{
 				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
 				</span></li>
 			</ul>
-		</nav>	
+	</nav>
+	
+	<div class="modal fade" id="layerpop">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <!-- header -->
+		      <div class="modal-header">
+		        <!-- 닫기(x) 버튼 -->
+		        <button type="button" class="close" data-dismiss="modal">×</button>
+		        <!-- header title -->
+		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">이벤트1</h4>
+		      </div>
+		      <!-- body -->
+		      <div class="modal-body" style="text-align: center;">
+		      	<img src="<%=cp%>/resource/img/aaa.jpg" style="width: 90%; margin-bottom: 20px;">
+		      	<div style="width: 90%; margin: 0 auto; line-height: 2.5;">
+					<div style="text-align: left;">
+						<span style="font-size: 18px; font-weight: 800;">
+							<i class="fas fa-map-marker-alt" style="color:#e82b2b; font-size: 23px;"></i>&nbsp;&nbsp;내용&nbsp;&nbsp;</span>
+						<span style="font-size: 15px; color: #636363;">이벤트 설명1</span>
+					</div>
+									
+					</div>
+		        </div>
+
+		      </div>
+		      
+		      </div>
+		      		      
+		      <!-- Footer -->
+		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
+		      	<c:if test="${sessionScope.member.userId!='admin'}">
+		        	<button type="button" class="btnTour">이벤트정보 보러가기</button>
+		        </c:if>
+		     		        
+		      </div>
+		    </div>
+		
