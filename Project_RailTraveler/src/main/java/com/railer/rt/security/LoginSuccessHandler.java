@@ -41,6 +41,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		SessionInfo info=new SessionInfo();
 		info.setUserId(member.getUserId());
 		info.setUserName(member.getUserName());
+		info.setUserNum(member.getUserNum());
 		
 		session.setAttribute("member", info);	
 

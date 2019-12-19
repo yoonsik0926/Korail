@@ -2,7 +2,7 @@ package com.railer.rt.member;
 
 public class Member {
 	private int listNum;
-	private long userNum;
+	private int userNum;
 	private int membership;
 	private String userId, userName, userPwd;
 	private String authority;
@@ -16,10 +16,10 @@ public class Member {
 	private String memo;
 	private String registration_date;
 
-	public long getUserNum() {
+	public int getUserNum() {
 		return userNum;
 	}
-	public void setUserNum(long userNum) {
+	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
 	public int getMembership() {
