@@ -65,7 +65,14 @@
 	}
 
 	function snsShare() {
-		$('#cocoaModal').modal('toggle');
+		$('#snsModal').modal('show');
+		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
+		$(".modal-backdrop").remove();
+	}
+	function declare() {
+		$('#declarationModal').modal('show');
+		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
+		$(".modal-backdrop").remove();
 	}
 
 	// http://www.libertypage.net/myblog/post/18/
@@ -305,7 +312,62 @@ a#MOVE_TOP_BTN {
 	padding: 0px;
 	border-radius: 5px;
 }
+.modal1 {
+    z-index: 9999;
+    background: #8080807a;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 </style>
+<div id="snsModal" role="dialog" tabindex="-1"
+	aria-labelledby="mySmallModalLabel" aria-hidden="true"
+	data-backdrop="true" data-keyboard="true" class="modal1 modal_post_social" style="display: none;">
+	<div class="modal-dialog" style="    width: 315px;
+    position: absolute;
+    right: 37%;
+    top: 25%;">
+		<div class="modal-content">
+			<div class="text-basic">
+				<div class="social-btn">
+					<ul>
+						<li role="" class="kakao"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li>
+						<li role="" class="story"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li>
+						<li role="" class="line"><a href="javascript:;"
+							onclick="SNS.setSnsApi('line')">라인</a></li>
+						<li role="" class="band"><a href="javascript:;"
+							onclick="SNS.setSnsApi('band')">밴드</a></li>
+						<li role="" class="naver"><a href="javascript:;"
+							onclick="SNS.setSnsApi('naver')">네이버</a></li>
+						<li role="" class="face"><a href="javascript:;"
+							onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
+						<li role="" class="twitter"><a href="javascript:;"
+							onclick="SNS.setSnsApi('twitter')">트위터</a></li>
+						<li role="" class="googleplus"><a href="javascript:;"
+							onclick="SNS.setSnsApi('googleplus')">Google+</a></li>
+					</ul>
+				</div>
+				<div class="url-copy holder">
+					<div class="form-control-line">
+						<input type="text" id="sns_copy_url"
+							class="_sns_copy_url form-control"
+							value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board"
+							readonly="readonly">
+						<button type="button"
+							class="_sns_copy_btn sns_copy_btn btn btn-default"
+							onclick="SNS.copyToClipboard()"
+							data-clipboard-target="._sns_copy_url">복사</button>
+					</div>
+				</div>
+				<div id="copy_complete" class="text-center"></div>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
 	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -352,10 +414,6 @@ a#MOVE_TOP_BTN {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<button class="comment_num btn btn-flat" type="button"
-			onclick="snsShare()">
-			<i class="icon-share board-summary-icon"></i>
-		</button>
 		<div style="padding-bottom: 10px;"></div>
 		<table style="width: 100%; border-spacing: 0px;">
 			<tr height="45">
@@ -375,9 +433,46 @@ a#MOVE_TOP_BTN {
 							onclick="deleteBoard();">삭제</button>
 					</c:if>
 					<button type="button" class="btn btn-danger"
-						onclick="deleteBoard();">
+						onclick="declare();">
 						<i class="far fa-bell" style="color: white"></i>신고
-					</button></td>
+					</button>
+					<div id="declarationModal" role="dialog" tabindex="-1"
+	aria-labelledby="mySmallModalLabel" aria-hidden="true"
+	data-backdrop="true" data-keyboard="true" class="modal1 modal_post_social" style="display: none;">
+	<div class="modal-dialog" style="    width: 35%;
+    position: absolute;
+    right: 30%;
+    top: 25%;">
+		<div class="modal-content" style="background: aliceblue;
+    text-align: center;
+    border: 10px solid;
+">
+			<div class="text-basic">
+				<div>
+					<h2>신고하기</h2>
+					<div style="    padding: 10px 20px;">
+					<span>*신고 사유*</span>
+					<textarea
+							class='boxTA'
+							style='width: 100%;
+    height: 150px;
+    resize: none;
+    border-radius: 7px;'></textarea>
+							<button type='button' class='btn btnSendReply btn-default'
+								data-num='10'
+								style='width: 100%;
+    height: 60px;
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 0px 0px;'>등록</button>
+					</div>
+				</div>
+				<div id="copy_complete" class="text-center"></div>
+			</div>
+		</div>
+	</div>
+</div>
+					</td>
 			</tr>
 		</table>
 		<table
@@ -419,6 +514,14 @@ a#MOVE_TOP_BTN {
 							<i id="boardLikeIcon" class="far fa-heart"
 								style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
 								id="boardLikeCount">${dto.boardLikeCount}3</span>
+						</button>
+						<button type="button" class="btn btnSendBoardLike btn-default"
+							title="공유하기"
+							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
+							onclick="snsShare();">
+							<i class="far fa-share-square"
+								style="font-size: 20px; display: block; margin: 0 auto; color: #555555;"></i><span
+								id="boardLikeCount">공유</span>
 						</button>
 					</td>
 				</tr>
@@ -552,55 +655,7 @@ a#MOVE_TOP_BTN {
 
 			</tfoot>
 		</table>
-<div id="ex1" class="modal">
-  <p>안녕하세요. 모달창안의 내용부분입니다.</p>
-  <a href="#" rel="modal:close">닫기</a>
-</div>
- 
-<p><a href="#ex1" rel="modal:open">모달창띄우기</a></p>
-	</div>
-</div>
-<div id="cocoaModal" role="dialog" tabindex="-1"
-	aria-labelledby="mySmallModalLabel" aria-hidden="true"
-	data-backdrop="true" data-keyboard="true" class="in modal_post_social">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="text-basic">
-				<div class="social-btn">
-					<ul>
-						<li role="" class="kakao"><a href="javascript:;"
-							onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li>
-						<li role="" class="story"><a href="javascript:;"
-							onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li>
-						<li role="" class="line"><a href="javascript:;"
-							onclick="SNS.setSnsApi('line')">라인</a></li>
-						<li role="" class="band"><a href="javascript:;"
-							onclick="SNS.setSnsApi('band')">밴드</a></li>
-						<li role="" class="naver"><a href="javascript:;"
-							onclick="SNS.setSnsApi('naver')">네이버</a></li>
-						<li role="" class="face"><a href="javascript:;"
-							onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
-						<li role="" class="twitter"><a href="javascript:;"
-							onclick="SNS.setSnsApi('twitter')">트위터</a></li>
-						<li role="" class="googleplus"><a href="javascript:;"
-							onclick="SNS.setSnsApi('googleplus')">Google+</a></li>
-					</ul>
-				</div>
-				<div class="url-copy holder">
-					<div class="form-control-line">
-						<input type="text" id="sns_copy_url"
-							class="_sns_copy_url form-control"
-							value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board"
-							readonly="readonly">
-						<button type="button"
-							class="_sns_copy_btn sns_copy_btn btn btn-default"
-							onclick="SNS.copyToClipboard()"
-							data-clipboard-target="._sns_copy_url">복사</button>
-					</div>
-				</div>
-				<div id="copy_complete" class="text-center"></div>
-			</div>
-		</div>
+
 	</div>
 </div>
 <script>

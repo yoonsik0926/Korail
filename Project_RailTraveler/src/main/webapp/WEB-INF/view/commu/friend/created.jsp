@@ -80,7 +80,7 @@ input[type=text], input[type=file] {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 묻고 답하기 - 글쓰기</span>
+			<span style="padding: 10px 0px; display: block;"> 동행 구하기 - 글쓰기</span>
 		</h3>
 	</div>
 
@@ -95,22 +95,6 @@ input[type=text], input[type=file] {
     border-radius: 5px;" onclick="resetContent(this);"><img alt="" src="<%=cp%>/resource/images/resetIcon1.png" style="width: 20px;"> </button>
 					</td></tr></table>
 			<table class="tb-created">
-				<tr class="tb-row">
-					<td width="100" class="tb-title">카네고리</td>
-					<td class="tb-content"><select class="boxTF"
-						style="border-radius: 3px; width: 12%; height: 100%; border: 1px solid #ccc; margin-right: 10px;"><option>전체</option>
-							<optgroup label="플래너">
-								<option>여행 계획</option>
-							</optgroup>
-							<optgroup label="관광정보">
-								<option>맛집</option>
-								<option>숙박</option>
-								<option>명소</option>
-							</optgroup>
-					</select>
-   </td>
-				</tr>
-				
 				<tr class="tb-row">
 					<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 					<td class="tb-content"><input type="text" name="subject"
