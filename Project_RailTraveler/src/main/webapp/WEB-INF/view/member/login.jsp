@@ -141,6 +141,10 @@ input{
 							onblur="bgLabel(this, 'lblUserPwd');"
 							placeholder="Password"></td>
 					</tr>
+					<tr align="center" height="40">
+						<td><span style="color: red;">${errorMsg}</span></td>
+					</tr>
+					
 					<tr align="center" height="60">
 						<td>
 							<button class="btnlogIn" type="button" onclick="sendLogin();" class="btnConfirm">로그인</button>
@@ -158,9 +162,7 @@ input{
 							href="<%=cp%>/member/member" style="color: #999999;">회원가입</a></td>
 					</tr>
 
-					<tr align="center" height="40">
-						<td><span style="color: blue;">${message}</span></td>
-					</tr>
+					
 				</table>
 			</form>
 			

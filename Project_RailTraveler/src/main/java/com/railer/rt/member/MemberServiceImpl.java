@@ -127,9 +127,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public void deleteMember(long userNum) throws Exception {
+	public void deleteMember(String userId) throws Exception {
 		try {
-			dao.deleteData("member.deleteMember",userNum);
+			dao.deleteData("member.deleteMember",userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

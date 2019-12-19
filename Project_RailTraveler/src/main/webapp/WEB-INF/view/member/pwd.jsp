@@ -143,6 +143,9 @@ input{
 		        &nbsp;
 		      </td>
 		  </tr>
+		  <tr align="center" height="30" >
+		    	<td><span style="color: red;">${message}</span></td>
+		  </tr>
 		  <tr align="center" height="65" > 
 		      <td>
 		        &nbsp;
@@ -156,12 +159,7 @@ input{
 		  </tr>
 	    </table>
 		</form>
-		           
-	    <table style="width:100%; margin: 10px auto 0; border-collapse: collapse;">
-		  <tr align="center" height="30" >
-		    	<td><span style="color: blue;">${message}</span></td>
-		  </tr>
-		</table>
+		         
 	</div>
 </div>
 </div>

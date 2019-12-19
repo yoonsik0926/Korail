@@ -43,10 +43,11 @@
 			login-processing-url="/member/login"
 			username-parameter="userId"
 			password-parameter="userPwd"
-			authentication-failure-url="/member/login?login_error"
+			
 			default-target-url="/"
-			always-use-default-target="true"
-			authentication-success-handler-ref="myAuthenticationSuccessHandler"
+			always-use-default-target="false"
+			authentication-success-handler-ref="loginSuccessHandler"
+			authentication-failure-handler-ref="loginFailureHandler"
 		/>
 		
 		<logout
@@ -56,7 +57,7 @@
 		/>
 		
 		<access-denied-handler error-page="/member/noAuthorized"/>
-		
+			
 		<session-management>
 			<concurrency-control max-sessions="1" expired-url="/member/expired"/>
 		</session-management>
@@ -66,13 +67,21 @@
 		
 	</http>
 	
-	<beans:bean id="myAuthenticationSuccessHandler" class="com.railer.rt.security.LoginSuccessHandler"/>
+	<!-- <beans:bean id="myAuthenticationSuccessHandler" class="com.railer.rt.security.LoginSuccessHandler"/> -->
+	
+	<beans:bean id="loginSuccessHandler" class="com.railer.rt.security.LoginSuccessHandler">
+    	<beans:property name="defaultUrl" value="/"/>
+    </beans:bean>
+               
+    <beans:bean id="loginFailureHandler" class="com.railer.rt.security.LoginFailureHandler">
+    	<beans:property name="defaultFailureUrl" value="/member/login?login_error"/> 
+    </beans:bean>
+	
 	
 	<jdbc-user-service data-source-ref="dataSource"
 		id="userService"
 		users-by-username-query="SELECT userId username, userPwd password, enabled enabled 
-        FROM member2 m2
-        JOIN member1 m1 on m2.userNum= m1.userNum
+        FROM member2
         WHERE userId=?"
 		authorities-by-username-query="SELECT userId username, authority FROM memberAuthority WHERE userId=?"
 	/>

@@ -29,9 +29,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
 			AuthenticationException exception) throws IOException, ServletException {
 		
         String userId = request.getParameter("userId");
-        long userNum = Long.parseLong(request.getParameter("userNum"));
-        // String userPwd = request.getParameter("userPwd");
-        
+     
 		String errorMsg = "아이디 또는 패스워드가 일치하지 않습니다.";
 		try {
 	        if(exception instanceof BadCredentialsException) {
@@ -39,12 +37,18 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
 	        	
 	        	service.updateFailureCount(userId);
 	        	int cnt = service.checkFailureCount(userId);
+	        	errorMsg = "아이디 또는 패스워드가 일치하지 않습니다.<br>";
+	        	
+	        	if(cnt!=0) {
+	        		errorMsg += (cnt)+"번 로그인 오류입니다.(5회 이상 계정 잠금)";
+	        	}
+	        	
 	        	if(cnt>=5) {
 	        		// 계정 비활성화
 	        		Map<String, Object> map = new HashMap<>();
-	        		map.put("enabled", 3);
-	        		/*map.put("userId", userId);*/
-	        		map.put("userNum", userNum);
+	        		map.put("enabled", 0);
+	        		map.put("userId", userId);
+	        		
 	        		service.updateEnabled(map);
 	        		
 	        		// 비활성화 상태 저장
@@ -55,7 +59,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
 	        		service.insertMemberState(dto);
 	        	}
 	        	
-	        	errorMsg = "아이디 또는 패스워드가 일치하지 않습니다.";
+	        	
 	        } else if(exception instanceof InternalAuthenticationServiceException) {
 	        	// 존재하지 않는 아이디일 때 던지는 예외
 	        	errorMsg = "아이디 또는 패스워드가 일치하지 않습니다.";

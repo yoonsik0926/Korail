@@ -97,27 +97,19 @@ public class MemberController {
 	
 /*	@RequestMapping(value="/member/login", method=RequestMethod.GET)*/
 	@RequestMapping(value="/member/login")
-	public String loginForm(String login_error, Model model) {
-		
-		boolean bLoginError=login_error !=null;
-		String msg="";
-		if(bLoginError) {
-			msg="아이디 또는 비밀번호가 일치하지 않습니다.";
-			model.addAttribute("message", msg);
-		}
-		
+	public String loginForm() throws Exception {		
 		
 		return ".member.login";
 	}
 
 	@RequestMapping(value="/member/noAuthorized")
-	public String noAuth() {
+	public String noAuth() throws Exception {
 		// 접근 권한이 없는 경우
 		return ".member.noAuthorized";
 	}
 	
 	@RequestMapping(value="/member/expired")
-	public String expired() {
+	public String expired() throws Exception {
 		// 세션이 만료된 경우
 		return ".member.expired";
 	}
@@ -318,17 +310,25 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/deleteMember", method= RequestMethod.GET)
 	public String deleteMember(
-			@RequestParam int userNum,
+/*			@RequestParam String userId,*/
 			HttpSession session,
 			final RedirectAttributes reAttr) {
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("enabled", 0);
-		map.put("userNum",userNum);
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
 		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("enabled", 0);
+			map.put("userId",info.getUserId());
+			
 			service.updateEnabled(map);
-			/*service.deleteMember(userNum);*/
+			
+			Member dto = new Member();
+    		dto.setUserId(info.getUserId());
+    		dto.setStateCode(2);
+    		dto.setMemo("회원 탈퇴");
+    		service.insertMemberState(dto);
+    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

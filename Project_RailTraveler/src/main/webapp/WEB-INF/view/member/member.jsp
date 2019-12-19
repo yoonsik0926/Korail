@@ -169,10 +169,10 @@ function userIdCheck() {
 function confirmDelete(){
 	var s = "정말 탈퇴하시겠습니까?\n\n탈퇴 후 5개월 간 회원 정보가 유지됩니다.";
 	var result = confirm(s);
-	var userNum = ${dto.userNum};
+	var userId = "${dto.userId}";
 
 	if(result) {
-		location.href='<%=cp%>/member/deleteMember?userNum='+userNum;
+		location.href='<%=cp%>/member/deleteMember?userId='+userId;
 	} else {
 	}
 }

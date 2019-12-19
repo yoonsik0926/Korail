@@ -20,6 +20,6 @@ public interface MemberService {
 	public void updateEnabled(Map<String, Object> map) throws Exception;
 	public void insertMemberState(Member dto) throws Exception;
 	
-	public void deleteMember(long userNum) throws Exception;
+	public void deleteMember(String userId) throws Exception;
 	public Member findId(Map<String, Object> map) throws Exception;
 }

@@ -127,12 +127,6 @@ input{
 			<div style="text-align: center;">
 				<img id="logoImg" alt="" src="<%=cp%>/resource/img/logo-title.png" style="height: 80px;">
 			</div>
-	
-			 <table style="width:100%; margin: 10px auto 0; border-collapse: collapse;">
-			  <tr align="center" height="30" >
-			    	<td><span style="color: red;">${message}</span></td>
-			  </tr>
-			</table>
 			
 			<form name="idFindForm" method="post" action="">
 			  <table style="width:100%; margin: 20px auto; padding:30px;">
@@ -171,6 +165,9 @@ input{
 	                           placeholder="Birth">
 			        &nbsp;
 			      </td>
+			  </tr>
+			  <tr align="center" height="30" >
+			    	<td><span style="color: red;">${message}</span></td>
 			  </tr>
 			  <tr align="center" height="65" > 
 			      <td>
