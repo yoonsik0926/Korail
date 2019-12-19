@@ -3,6 +3,7 @@ package com.railer.rt.member;
 // 세션에 저장할 정보(아이디, 이름, 권한등)
 public class SessionInfo {
 	private long memberIdx;
+	private int userNum;
 	private String userId;
 	private String userName;
 	private int memberLevel;
@@ -12,6 +13,12 @@ public class SessionInfo {
 	}
 	public void setMemberIdx(long memberIdx) {
 		this.memberIdx = memberIdx;
+	}
+	public int getUserNum() {
+		return userNum;
+	}
+	public void setUserNum(int userNum) {
+		this.userNum = userNum;
 	}
 	public String getUserId() {
 		return userId;

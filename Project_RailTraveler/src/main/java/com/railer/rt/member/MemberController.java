@@ -86,7 +86,7 @@ public class MemberController {
 			) throws Exception {
 		
 		String p="true";
-		Member dto=service.loginMember(userId);
+		Member dto=service.readMember(userId);
 		if(dto!=null)
 			p="false";
 		
@@ -106,43 +106,10 @@ public class MemberController {
 			model.addAttribute("message", msg);
 		}
 		
+		
 		return ".member.login";
 	}
-	
-	@RequestMapping(value="/member/login", method=RequestMethod.POST)
-	public String loginSubmit(
-			@RequestParam String userId,
-			@RequestParam String userPwd,
-			HttpSession session,
-			Model model
-			) {
-		
-		Member dto=service.loginMember(userId);
-		if(dto==null ||  !  userPwd.equals(dto.getUserPwd())) {
-			model.addAttribute("message", "아이디 또는 패스워드가 일치하지 않습니다.");
-			return ".member.login";
-		}
-		
-		// 세션에 로그인 정보 저장
-		SessionInfo info=new SessionInfo();
-		info.setUserId(dto.getUserId());
-		info.setUserName(dto.getUserName());
-		
-		session.setMaxInactiveInterval(30*60); // 세션유지시간 30분, 기본:30분
 
-		session.setAttribute("member", info);
-		
-		// 로그인 이전 URI로 이동
-		String uri=(String)session.getAttribute("preLoginURI");
-		session.removeAttribute("preLoginURI");
-		if(uri==null)
-			uri="redirect:/";
-		else
-			uri="redirect:"+uri;
-		
-		return uri;
-	}
-	
 	@RequestMapping(value="/member/noAuthorized")
 	public String noAuth() {
 		// 접근 권한이 없는 경우
