@@ -62,7 +62,10 @@ public class TicketController {
 	@RequestMapping(value="/ticket/purchaseticket")
 	public String submit(Model model, Ticket dto,HttpSession session) throws Exception {
 		//ticketNum 자동으로 넘어옴
-
+		
+		
+		
+		
 		//로그인 한 사람에 대한 정보를 가져온다.
 		SessionInfo info = (SessionInfo)session.getAttribute("member");					
 		int userNum =info.getUserNum();
@@ -85,7 +88,7 @@ public class TicketController {
 		
 
 		boolean check = true;
-		String checkmsg ="";
+
 	
 		try {
 			//실제 구매 테이블에 저장한다.
@@ -97,22 +100,36 @@ public class TicketController {
 		} catch (Exception e) {
 			
 			check = false;
-			checkmsg = "시스템 문제로 결제가 취소되었습니다.";
 			e.printStackTrace();
 		}
 		
-
+		//구매번호를 가져온다.
+		int saleNum = service.readSaleNum(dto.getMerchant_uid());	
 		
-		//추가된 구매 번호를 가져옴
+		
 		Map<String, Object> map=new HashMap<>();
 		map.put("check", check);
-		map.put("checkmsg", checkmsg);
-
+		map.put("saleNum", saleNum);
 		
 	
 		return map;
 		
 
+	}
+	
+	@RequestMapping(value="/ticket/payfail")
+	public String payFail(Model model, 
+			@RequestParam String saleNum
+			) throws Exception {
+		//디비로 들어가서 sale 이랑 pay 테이블 삭제하는거
+		
+		//결제된거 환불..
+		
+		
+		String msg ="시스템 오류로 결제가 취소되었습니다. 다시 시도해주세요";
+		
+
+		return ".ticket.payFail";
 	}
 	
 	
@@ -129,11 +146,14 @@ public class TicketController {
 		
 		//그 구매번호로 정보를 얻어온다.
 		dto = service.readPurchasedinfo(saleNum);
-
+		dto.setMerchant_uid(merchant_uid);
 		
 		model.addAttribute("dto", dto);
 
 		return ".ticket.paydone";
 	}
+	
+	
+	
 	
 }

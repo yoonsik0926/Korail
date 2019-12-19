@@ -67,7 +67,7 @@
         					query = "merchant_uid="+rsp.merchant_uid;
 	                		location.href='<%=cp%>/ticket/paydone?'+query;
 	                    } else {
-	                    	location.href="<%=cp%>/main"; 
+	                    	location.href='<%=cp%>/ticket/payfail?saleNum='+data.saleNum; 
 		                   	 //[2] 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
 	                    }
 
@@ -75,10 +75,12 @@
 
 
                  }else {
-                msg = '결제에 실패하였습니다.';
-                msg += '에러내용 : ' + rsp.error_msg;
-                //실패시 이동할 페이지
-                location.href="<%=cp%>/main";               
+                	 msg = '결제에 실패하였습니다.';
+                     msg += '에러내용 : ' + rsp.error_msg;
+                     //실패시 이동할 페이지
+                     location.href="<%=cp%>/main";   
+                     alert(msg);
+            
             }
     });
         

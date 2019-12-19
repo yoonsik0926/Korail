@@ -7,6 +7,8 @@
 %>
 
 
+
+
 <link rel="stylesheet"
 	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"type="text/css">
 <script type="text/javascript"src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
@@ -37,7 +39,10 @@ function dateToYYYYMMDD(date){
 
 
 $(function() {
+
 	var ticketday;
+    var cnt= false;
+	$("#secondperson").hide();
 	
     $("input[name=jb-radio]").change(function() {
     	ticketday=0;
@@ -60,14 +65,20 @@ $(function() {
 			$("#aaa").text("선택한 티켓 : 코레일 티켓 "+tName);
 			$("#bbb").text("티켓 가격 : "+tprice+"원");
 			
-
+			if(ticketNum==4 ||ticketNum==5||ticketNum==6){
+				$("#secondperson").show();
+			}else if(ticketNum==1 ||ticketNum==2||ticketNum==3){
+				$("#secondperson").hide();
+			}
   		});
 	
+	
 
+    
 	$("#startdatepicker").datepicker(
 			{   minDate: 0,
 				onSelect : function(dateText) {
-					
+
 					if(! $('input[name="jb-radio"]').is(":checked")){
 						 $("#modalPush").modal();
 						return;
@@ -94,15 +105,13 @@ $(function() {
 
 				}
 			});
+	
+
 });
 	
 
  
- $(document).ready(function(){
 
-
-
-	});
  </script>
 <script type="text/javascript">
 function paymemberOk() {
@@ -162,6 +171,19 @@ function paymemberOk() {
         f.email.focus();
         return;
     }
+	
+	if(! $('input[name="jb-radio"]').is(":checked")){
+		$("#modaltext").text("티켓을 선택해주세요!");
+		 $("#modalPush").modal();
+		return;
+	}
+	
+	if($("#sdate").val()==-1){
+		$("#modaltext").text("시작 날짜를 선택해주세요!");
+		$("#modalPush").modal();
+		return;
+	}
+	
 
    
 
@@ -188,14 +210,14 @@ function paymemberOk() {
 
 
 	<div>
-		<div>
+		<div style="widows: 100%">
 			<table
-            style="width: 100%; height: 40%; border-spacing: 20px; border-collapse: separate;">
+            style="width: 100%; height: 40%; border-spacing: 10px; border-collapse: separate;">
 		
             <tr height="100px">
             <c:forEach var="vo" items="${list}">
                <td><img style="max-width: 100%; height: auto;"
-                  src="<%=cp%>/resource/img/carousel_green.png" /></td>
+                  src="<%=cp%>/resource/img/ticket${vo.ticketNum}.jpg" /></td>
             </c:forEach>
             </tr>
           
@@ -254,7 +276,7 @@ function paymemberOk() {
 				<div class="box1"
 					style="width: 100%; height: 200px; border: 1px solid #eeeeee; margin: 10px auto;">
 					<img style="width: 100%; height: 100%;"
-						src="<%=cp%>/resource/img/advertisement.jpg" />
+						src="<%=cp%>/resource/img/adver.jpg" />
 
 				</div>
 
@@ -265,13 +287,13 @@ function paymemberOk() {
 				style="padding-left: 10px; float: right; width: 55%;">
 				<h3 align="left" style="margin-top: 30px">결제 정보</h3>
 				<div class="box1"
-					style="margin: 10px auto; width: 100%; border: 1px solid #eeeeee;">
+					style="margin: 10px auto; width: 100%; border: 1px solid #eeeeee; ">
 
 
 
 					<form class="form-horizontal" name="payInfoForm" method="post">
 
-
+					<div>
 						<div class="form-group" style="margin: 30px auto;">
 							<label for="inputinputName" class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-10">
@@ -288,9 +310,8 @@ function paymemberOk() {
 									value="${dto.email}" style="width: 90%">
 							</div>
 						</div>
-
-
-
+						
+					
 						<div class="form-group" style="margin: 30px auto;"
 							style="float: left">
 							<label for="inputEmail3" class="col-sm-2 control-label">Tel</label>
@@ -309,19 +330,69 @@ function paymemberOk() {
 							<div class="" style="float: left">
 								<input type="tel" class="form-control" id="tel3" name="tel3"
 									value="${dto.tel3}"  style="width: 142px">
+								</div>
 							</div>
 						</div>
+						
+						
+					<div id="secondperson">
+						
+						<div class="form-group" style="margin: 30px auto;">
+						
+							<label for="inputinputName" class="col-sm-2 control-label">2P.Name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="userName2"
+									name="userName2" placeholder="두번째 사람의 이름" style="width: 90%">
+							</div>
+						</div>
+
+
+						<div class="form-group" style="margin: 30px auto;">
+							<label for="inputEmail3" class="col-sm-2 control-label">2P.Email</label>
+							<div class="col-sm-10">
+								<input type="email" class="form-control" id="email2" name="email2"
+									placeholder="두번째 사람의 이메일" style="width: 90%">
+							</div>
+						</div>
+						
+					
+						<div class="form-group" style="margin: 30px auto;"
+							style="float: left">
+							<label for="inputEmail3" class="col-sm-2 control-label">2P.Tel</label>
+
+							<div style="float: left; padding-left: 15px;">
+								<input type="tel" class="form-control" id="tel1-2" name="tel1-2"
+									style="width: 100px">
+							</div>
+							<div style="float: left; margin: 0px 10px;">_</div>
+							<div class="" style="float: left">
+								<input type="tel" class="form-control" id="tel2-2" name="tel2-2"
+									 style="width: 142px">
+							</div>
+
+							<div style="float: left; margin: 0px 10px;">_</div>
+							<div class="" style="float: left">
+								<input type="tel" class="form-control" id="tel3-2" name="tel3-2"
+									  style="width: 142px">
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						
 						
 						<input type="hidden"  id="ticketprice" value="0" name="tprice"> 
 						<input type="hidden"  id="ticketNum"  name="ticketNum">
 						
-					<input type="hidden"  id="sdate" value="" name="sDate"> 
+					<input type="hidden"  id="sdate" value="-1" name="sDate"> 
 					<input type="hidden"  id="edate" value="" name="eDate"> 
 
 						<div class="form-group">
 							<div align="center">
 								<button type="button" class="btn" onclick="paymemberOk();">
 									결제하기</button>
+
 							</div>
 						</div>
 					</form>
@@ -351,7 +422,7 @@ function paymemberOk() {
       <div class="modal-body" style="padding: 5px 5px;">
         <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
 
-        <p style="font-size: 17px; font-weight:500; margin-top: 10px;">티켓을 먼저 선택해 주세요!</p>
+        <p id="modaltext" style="font-size: 17px; font-weight:500; margin-top: 10px;">티켓을 먼저 선택해 주세요!</p>
 
       </div>
 

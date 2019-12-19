@@ -46,7 +46,7 @@
 	
 	<select id="readPurchasedinfo" parameterType="Integer"
 		resultType="com.railer.rt.ticket.Ticket">
-		select s.sdate,s.edate,s.created,m2.username,p.serial,p.paytype,t.tname,
+		select s.ticketnum, s.created,s.sdate,s.edate,s.created,m2.username,p.serial,p.paytype,t.tname,
 		t.tprice from sale s join member2 m2 on m2.usernum = s.usernum
 		join pay p on p.salenum = s.salenum join ticket t on t.ticketnum = s.ticketnum
 		where s.salenum =#{saleNum}

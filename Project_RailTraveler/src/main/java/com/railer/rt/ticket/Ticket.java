@@ -5,8 +5,12 @@ package com.railer.rt.ticket;
  *
  */
 public class Ticket {
+
 	private String userId;
 	private int userNum;
+	
+	
+	//결제자에 대한것..
 	private String userName;
 	private String birth;
 	private String email;
@@ -27,10 +31,16 @@ public class Ticket {
 	private String sDate;
 	private String paytype;
 	private String merchant_uid;
-	
+	private String created; 
 	
 	
 
+	public String getCreated() {
+		return created;
+	}
+	public void setCreated(String created) {
+		this.created = created;
+	}
 	public String getPaytype() {
 		return paytype;
 	}

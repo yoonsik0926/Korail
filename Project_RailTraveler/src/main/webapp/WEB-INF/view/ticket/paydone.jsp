@@ -39,11 +39,11 @@
 					</p>
 					
 					<p style="font-size: 15px; font-weight: 700">
-						주문번호	2019121641078171
+						주문번호 : ${dto.merchant_uid}
 					</p>
 					
 					<p style="font-size: 15px; font-weight: 700">
-						주문일자	2019.12.16 17:46
+						주문일자 : ${dto.created}
 					</p>
 				</div>
 		
@@ -51,8 +51,8 @@
 		
 						<h3 align="left" style="font-weight: 700">주문/배송 상세정보</h3>
 			<div  class="box1" style="width: 100%; border: 3px solid #eeeeee; margin-top: 20px; padding: 10px 10px 10px 10px; ">
-				<p align="center" style="font-size: 20px; float: left">주문일자 : 2019.10.10&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;주문번호 : 1231548857</p>
-				&nbsp;&nbsp;&nbsp;&nbsp;<button>재구매</button>
+				<p align="center" style="font-size: 20px; float: left">주문일자 : ${dto.created}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;주문번호 : ${dto.merchant_uid}</p>
+				&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn" onclick="location.href='<%=cp%>/ticket/purchaseticket'">재구매</button>
 			</div>
 			
 		<!--결제 상품 보기-->
@@ -61,17 +61,17 @@
 
 				<table style="font-size: 15px;" >
 				<tr height="30px" align="center" style="border-bottom: 1px solid #eeeeee; ">
-				<td width="200px">상품주문번호</td>
+				<td width="200px">티켓번호</td>
 				<td width="500px">상품명</td>
 				<td width="200px">상품금액</td>
 				<td width="200px">진행상태</td>
 				</tr>
 
 				<tr height="150px" align="center">
-				<td width="200px" style="font-size: 13px">1231548857</td>
-				<td width="500px"style="font-size: 13px">코레일 내일로 7일권</td>
-				<td width="200px"style="font-size: 13px">${price}</td>
-				<td width="200px"style="font-size: 13px">결제준비</td>				
+				<td width="200px" style="font-size: 13px">${dto.ticketNum}</td>
+				<td width="500px"style="font-size: 13px">${dto.tName}</td>
+				<td width="200px"style="font-size: 13px">${dto.tprice}</td>
+				<td width="200px"style="font-size: 13px">결제완료</td>				
 				</tr>
 				
 				
@@ -88,18 +88,18 @@
 				<div class="col"style="font-size: 20px; font-weight: 600; margin-top: 10px; margin-left: 10px">
 
 					<p>
-						상품 금액 : 69000원
+						상품 금액 : ${dto.tprice}원
 					</p>
 					<p>
 						할인 금액 : 0원
 					</p>
 					
 					<p>
-						결제 수단 : 카드
+						결제 수단 : ${dto.paytype}
 					</p>
 					
 					<p style="font-size: 23px; font-weight: 900">
-						총 결제 금액 : 69000원
+						총 결제 금액 : ${dto.tprice}원
 					</p>
 				</div>
 			</div>
