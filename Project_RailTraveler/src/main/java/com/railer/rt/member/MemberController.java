@@ -318,7 +318,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/deleteMember", method= RequestMethod.GET)
 	public String deleteMember(
-			@RequestParam long userNum,
+			@RequestParam int userNum,
 			HttpSession session,
 			final RedirectAttributes reAttr) {
 

@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
 							dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
 			
-			long userNum = dao.selectOne("member.memberSeq");
+			int userNum = dao.selectOne("member.memberSeq");
 			dto.setUserNum(userNum);
 			
 			//회원정보 저장
