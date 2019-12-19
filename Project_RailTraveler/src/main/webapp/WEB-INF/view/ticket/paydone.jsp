@@ -16,7 +16,7 @@
 
 <div class="box1" style="width: 85%; margin: 20px auto; border: 3px solid #eeeeee; ">
 	
-		<h3 align="center" style="font-weight: 700;margin-top: 80px;">결제가 완료되었습니다!</h3>
+		<h3 align="center" style="font-weight: 700;margin-top: 80px;">결제가 완료되었습니다!<br>${msg}</h3>
 			
 
 		<!--상단 메뉴-->
@@ -35,7 +35,7 @@
 				
 					
 					<p style="font-size: 15px; font-weight: 700">
-						고객명 : ${userName}
+						고객명 : ${dto.userName}
 					</p>
 					
 					<p style="font-size: 15px; font-weight: 700">

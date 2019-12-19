@@ -87,6 +87,10 @@ $(function() {
 															
 					$( "#enddatepicker" ).val(e);
 					
+					
+					$("#sdate").val(dateText);		
+					$("#edate").val(e);	
+					
 
 				}
 			});
@@ -310,11 +314,14 @@ function paymemberOk() {
 						
 						<input type="hidden"  id="ticketprice" value="0" name="tprice"> 
 						<input type="hidden"  id="ticketNum"  name="ticketNum">
+						
+					<input type="hidden"  id="sdate" value="" name="sDate"> 
+					<input type="hidden"  id="edate" value="" name="eDate"> 
 
 						<div class="form-group">
 							<div align="center">
 								<button type="button" class="btn" onclick="paymemberOk();">
-									카카오페이 결제</button>
+									결제하기</button>
 							</div>
 						</div>
 					</form>

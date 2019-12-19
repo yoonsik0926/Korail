@@ -1,6 +1,8 @@
 package com.railer.rt.ticket;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.member.SessionInfo;
 
@@ -18,7 +22,7 @@ public class TicketController {
 	@Autowired
 	private TicketService service;
 	
-	
+
 	@RequestMapping(value="/ticket/pay")
 	public String writeForm(Model model,HttpSession session) throws Exception {
 		
@@ -38,6 +42,7 @@ public class TicketController {
 		list = service.listticket();
 		
 		
+		//로그인된 유저에 대한 정보를 가져온다.
 		String userId =info.getUserId();		
 		dto = service.readMember(userId);
 		
@@ -55,34 +60,79 @@ public class TicketController {
 	}
 	
 	@RequestMapping(value="/ticket/purchaseticket")
-	public String submit(Model model, Ticket dto) throws Exception {
+	public String submit(Model model, Ticket dto,HttpSession session) throws Exception {
+		//ticketNum 자동으로 넘어옴
 
-	
+		//로그인 한 사람에 대한 정보를 가져온다.
+		SessionInfo info = (SessionInfo)session.getAttribute("member");					
+		int userNum =info.getUserNum();
+		dto.setUserNum(userNum);
+
 		//전화번호 합치기
 		dto.setTel(dto.getTel1()+dto.getTel2()+dto.getTel3());
 		dto.settName(dto.gettName());
 		dto.setEmail(dto.getEmail());
-		
-		
+	
 		model.addAttribute("dto", dto);
-		model.addAttribute("ticketNum", dto.getTicketNum());
+		
 		return ".ticket.paycontrol";
 	}
-	
 
 	
+	@RequestMapping(value="/ticket/complete", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> payComplete( Sale dto, HttpSession session) throws Exception {
+		
+
+		boolean check = true;
+		String checkmsg ="";
+	
+		try {
+			//실제 구매 테이블에 저장한다.
+			service.insertTicket(dto);	
+			
+			//결제(pay) 테이블에 저장
+			service.insertpay(dto);
+			
+		} catch (Exception e) {
+			
+			check = false;
+			checkmsg = "시스템 문제로 결제가 취소되었습니다.";
+			e.printStackTrace();
+		}
+		
+
+		
+		//추가된 구매 번호를 가져옴
+		Map<String, Object> map=new HashMap<>();
+		map.put("check", check);
+		map.put("checkmsg", checkmsg);
+
+		
+	
+		return map;
+		
+
+	}
+	
+	
+
 	@RequestMapping(value="/ticket/paydone")
 	public String paydone(Model model, 
-			@RequestParam String msg,
-			@RequestParam String ticketNum		
+			@RequestParam String merchant_uid
 			) throws Exception {
 		Ticket dto = null;
 		
+		System.out.println(merchant_uid);
+		//구매번호를 가져온다.
+		int saleNum = service.readSaleNum(merchant_uid);	
 		
-		dto = service.selectedticket(Integer.parseInt(ticketNum));
+		//그 구매번호로 정보를 얻어온다.
+		dto = service.readPurchasedinfo(saleNum);
+
 		
 		model.addAttribute("dto", dto);
-		model.addAttribute("msg", msg);		
+
 		return ".ticket.paydone";
 	}
 	

@@ -2,23 +2,53 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ticket">
-	
+
 	<select id="ticketList" resultType="com.railer.rt.ticket.Ticket">
-		SELECT ticketNum, tDays, tname, tprice, tamount,year,division
+		SELECT ticketNum, tDays,
+		tname, tprice, tamount,year,division
 		FROM ticket
-	</select>		
-	
-	
-	<select id="selectedTicket" resultType="com.railer.rt.ticket.Ticket">
-		SELECT ticketNum, tDays, tname, tprice, tamount,year,division
+	</select>
+
+
+	<select id="selectedTicket"
+		resultType="com.railer.rt.ticket.Ticket">
+		SELECT ticketNum, tDays, tname, tprice,
+		tamount,year,division
 		FROM ticket
 		where ticketNum = #{ticketNum}
 	</select>
-	
-	<select id="readMember" parameterType="String" resultType="com.railer.rt.ticket.Ticket">
-		SELECT userId, userName,birth,email,tel 
+
+	<select id="readMember" parameterType="String"
+		resultType="com.railer.rt.ticket.Ticket">
+		SELECT userId, userName,birth,email,tel
 		FROM member2 mm
 		JOIN member1 m ON mm.userNum = m.userNum
-		WHERE userId =#{userId}	
-	</select>	
+		WHERE userId
+		=#{userId}
+	</select>
+
+	<insert id="insertBuyTicket">
+		insert into sale(saleNum , userNum
+		, ticketNum, sDate , eDate ) values (sale_seq.nextval , #{userNum}
+		,#{ticketNum},#{sDate},#{eDate})
+	</insert>
+
+	<insert id="insertpay">
+		insert into pay(saleNum , paytype ,
+		serial) values (sale_seq.currval , #{pay_method} ,#{merchant_uid})
+	</insert>
+	
+	
+	<select id="readsaleNum" parameterType="String" resultType="Integer">
+		select saleNum from pay where serial = #{merchant_uid}
+	</select>
+	
+	
+	<select id="readPurchasedinfo" parameterType="Integer"
+		resultType="com.railer.rt.ticket.Ticket">
+		select s.sdate,s.edate,s.created,m2.username,p.serial,p.paytype,t.tname,
+		t.tprice from sale s join member2 m2 on m2.usernum = s.usernum
+		join pay p on p.salenum = s.salenum join ticket t on t.ticketnum = s.ticketnum
+		where s.salenum =#{saleNum}
+	</select>
 </mapper>

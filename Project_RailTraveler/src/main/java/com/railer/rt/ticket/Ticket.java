@@ -6,6 +6,7 @@ package com.railer.rt.ticket;
  */
 public class Ticket {
 	private String userId;
+	private int userNum;
 	private String userName;
 	private String birth;
 	private String email;
@@ -21,9 +22,28 @@ public class Ticket {
 	private String year;
 	private String division;
 	
+	//
+	private String eDate;
+	private String sDate;
+	private String paytype;
+	private String merchant_uid;
+	
 	
 	
 
+	public String getPaytype() {
+		return paytype;
+	}
+	public void setPaytype(String paytype) {
+		this.paytype = paytype;
+	}
+
+	public String getMerchant_uid() {
+		return merchant_uid;
+	}
+	public void setMerchant_uid(String merchant_uid) {
+		this.merchant_uid = merchant_uid;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -115,6 +135,29 @@ public class Ticket {
 	public void setDivision(String division) {
 		this.division = division;
 	}
+
+	public int getUserNum() {
+		return userNum;
+	}
+	public void setUserNum(int userNum) {
+		this.userNum = userNum;
+	}
+	public String geteDate() {
+		return eDate;
+	}
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
+	}
+	public String getsDate() {
+		return sDate;
+	}
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+	
+
+
+	
 	
 	
 	

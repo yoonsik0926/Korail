@@ -46,6 +46,51 @@ public class TicketServiceImpl implements TicketService{
 		}
 		return dto;
 	}
+
+	@Override
+	public void insertTicket(Sale dto) {
+		try {
+			dao.insertData("ticket.insertBuyTicket", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void insertpay(Sale dto) {
+		try {
+			dao.insertData("ticket.insertpay", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public Ticket readPurchasedinfo(int saleNum) {
+			Ticket dto = null;
+		
+		try {
+			dto = dao.selectOne("ticket.readPurchasedinfo", saleNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public int readSaleNum(String merchant_uid) {
+		int result=-1;
+		
+		try {
+			result = dao.selectOne("ticket.readsaleNum", merchant_uid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
  
 	
 
