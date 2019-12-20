@@ -117,6 +117,18 @@ $(function() {
 function paymemberOk() {
 	var f = document.payInfoForm;
 	var str;
+	
+	if(! $('input[name="jb-radio"]').is(":checked")){
+		$("#modaltext").text("티켓을 선택해주세요!");
+		 $("#modalPush").modal();
+		return;
+	}
+	 
+	if($("#sdate").val()==-1){
+		$("#modaltext").text("시작 날짜를 선택해주세요!");
+		$("#modalPush").modal();
+		return;
+	}
 
 	
     str = f.userName.value;
@@ -172,20 +184,69 @@ function paymemberOk() {
         return;
     }
 	
-	if(! $('input[name="jb-radio"]').is(":checked")){
-		$("#modaltext").text("티켓을 선택해주세요!");
-		 $("#modalPush").modal();
-		return;
-	}
-	 
-	if($("#sdate").val()==-1){
-		$("#modaltext").text("시작 날짜를 선택해주세요!");
-		$("#modalPush").modal();
-		return;
-	}
-	
+    if(ticketNum==4 ||ticketNum==5||ticketNum==6){
+    	str = f.userName2.value;
+    	str = str.trim();
+        if(!str) {
+            alert("2P의 이름을 입력하세요. ");
+            f.userName2.focus();
+            return;
+        }
+        f.userName2.value = str;
+        
+                   
+        str = f.email2.value;
+    	str = str.trim();
+        if(!str) {
+            alert("2P의 이메일을 입력하세요. ");
+            f.email2.focus();
+            return;
+        }
+        
+        str = f.tel12.value;
+    	str = str.trim();
+        if(!str) {
+            alert("2P의 전화번호를 입력하세요. ");
+            f.tel12.focus();
+            return;
+        }
+        
+        if(!/^(\d+)$/.test(str)) {
+            alert("숫자만 가능합니다. ");
+            f.tel12.focus();
+            return;
+        }
 
-   
+        str = f.tel22.value;
+    	str = str.trim();
+        if(!str) {
+            alert("2P의 전화번호를 입력하세요. ");
+            f.tel22.focus();
+            return;
+        }
+        if(!/^(\d+)$/.test(str)) {
+            alert("숫자만 가능합니다. ");
+            f.tel22.focus();
+            return;
+        }
+
+        str = f.tel32.value;
+    	str = str.trim();
+        if(!str) {
+            alert("2P의 전화번호를 입력하세요. ");
+            f.tel32.focus();
+            return;
+        }
+        if(!/^(\d+)$/.test(str)) {
+            alert("숫자만 가능합니다. ");
+            f.tel32.focus();
+            return;
+        }
+
+              
+       
+	}
+
 
  	f.action = "<%=cp%>/ticket/purchaseticket";
 
@@ -361,18 +422,18 @@ function paymemberOk() {
 							<label for="inputEmail3" class="col-sm-2 control-label">2P.Tel</label>
 
 							<div style="float: left; padding-left: 15px;">
-								<input type="tel" class="form-control" id="tel1-2" name="tel1-2"
+								<input type="tel" class="form-control" id="tel12" name="tel12"
 									style="width: 100px">
 							</div>
 							<div style="float: left; margin: 0px 10px;">_</div>
 							<div class="" style="float: left">
-								<input type="tel" class="form-control" id="tel2-2" name="tel2-2"
+								<input type="tel" class="form-control" id="tel22" name="tel22"
 									 style="width: 142px">
 							</div>
 
 							<div style="float: left; margin: 0px 10px;">_</div>
 							<div class="" style="float: left">
-								<input type="tel" class="form-control" id="tel3-2" name="tel3-2"
+								<input type="tel" class="form-control" id="tel32" name="tel32"
 									  style="width: 142px">
 								</div>
 							</div>

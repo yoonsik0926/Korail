@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tour">
+
+	<select id="tourList" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
+		select t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
+		from tour t join tourfile tf on t.tournum = tf.tournum
+		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
+		join tourcategory tc on dtc.catenum = tc.catenum 
+
+		<where>
+			
+			<if test="cateNum !=0">
+				tc.catenum = #{tourcategoryNum}
+			</if>
+		</where>
+	
+	</select>
+	
+	<select id="tourCategoryList" resultType="com.railer.rt.tour.Tour">	
+	 select cateNum , cateName from tourcategory
+	</select>
+
+
+	
+</mapper>

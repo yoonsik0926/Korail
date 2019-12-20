@@ -27,6 +27,26 @@ function test(ob){
 	cnt++;	
 
 }
+
+
+$(function(){
+	$("#tab-${cateNum}").addClass("active");
+	
+	$("ul.tabs li").click(function(){
+		tab = $(this).attr("data-tab");
+		
+		$("ul.tabs li").each(function(){
+			$(this).removeClass("active");
+		});
+		
+		$("#tab-"+tab).addClass("active");
+		
+		var url = "<%=cp%>/tour/sudo?cateNum="+tab;
+		location.href=url;
+	});
+});
+
+
 </script>
 
 <style type="text/css">
@@ -112,24 +132,20 @@ a {
 	<div class="container">
 		<div class="row" style="width: 25%">
 			<div class="col" style="font-size: 18px; font-weight: 600;">
-				<ul class="nav nav-tabs">
-					<li class="nav-item active"><a class="nav-link active"
-						href="<%=cp%>/main">전체</a></li>
-
-					<li class="nav-item "><a class="nav-link active"
-						href="<%=cp%>/main">관광</a></li>
-					<li class="nav-item"><a class="nav-link active" href="#">맛집</a>
-					</li>
-					<li class="nav-item"><a class="nav-link active" href="#">숙소</a>
-					</li>
+				<ul class="nav nav-tabs tabs">
+					<li id="tab-0" class="nav-item active" data-tab="0"><a class="nav-link" >전체</a></li>				
+				<c:forEach var="vo" items="${tourCategoryList}">
+					<li class="nav-item" id="tab-${vo.cateNum}" data-tab="${vo.cateNum}">
+					<a class="nav-link" >${vo.cateName}</a></li>
+				</c:forEach>
+	
 
 				</ul>
 			</div>
 		</div>
 	</div>
-
-
-
+	
+	
 	<div class="recommend" style="width: 100%; height: 50% !important;">
 		<div class="carousel" data-flickity='{"groupCells": true }'
 			style="height: 350px;">
@@ -193,6 +209,8 @@ a {
 	</div>
 
 
+<%-- 
+	<c:forEach var="dto" items="${list}">
 	<div class="col-sm-6 col-md-4"
 		style="max-width: 25%; min-height: 200px">
 		<div class="thumbnail">
@@ -213,69 +231,8 @@ a {
 			</div>
 		</div>
 	</div>
-
-	<div class="col-sm-6 col-md-4"
-		style="max-width: 25%; min-height: 200px">
-		<div class="thumbnail">
-
-			<img style="height: 200px; width: 300px"
-				src="<%=cp%>/resource/img/friendPlan.PNG">
-			<div class="caption">
-				<div style="margin-top: 10px">
-					<span style="font-size: 25px;">테스트</span>
-					<button class="img-button" style="margin-left: 140px">
-						<i class="far fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-					</button>
-				</div>
-				<p>...</p>
-				<p align="right">
-					<button class="btn btn-info" onclick="javascript:location.href='<%=cp%>/tour/detail';">알아보기</button>
-				</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-6 col-md-4"
-		style="max-width: 25%; min-height: 200px">
-		<div class="thumbnail">
-
-			<img style="height: 200px; width: 300px"
-				src="<%=cp%>/resource/img/friendPlan.PNG">
-			<div class="caption">
-				<div style="margin-top: 10px">
-					<span style="font-size: 25px;">테스트</span>
-					<button class="img-button" style="margin-left: 140px">
-						<i class="far fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-					</button>
-				</div>
-				<p>...</p>
-				<p align="right">
-					<button class="btn btn-info">알아보기</button>
-				</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-6 col-md-4"
-		style="max-width: 25%; min-height: 200px">
-		<div class="thumbnail">
-
-			<img style="height: 200px; width: 300px"
-				src="<%=cp%>/resource/img/friendPlan.PNG">
-			<div class="caption">
-				<div style="margin-top: 10px">
-					<span style="font-size: 25px;">테스트</span>
-					<button class="img-button" style="margin-left: 140px">
-						<i class="far fa-heart" onclick="test(this);" style="font-size: 20px; color: tomato"></i>
-					</button>
-				</div>
-				<p>...</p>
-				<p align="right">
-					<button class="btn btn-info">알아보기</button>
-				</p>
-			</div>
-		</div>
-	</div>
+	</c:forEach> --%>
+	
 
 	<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">

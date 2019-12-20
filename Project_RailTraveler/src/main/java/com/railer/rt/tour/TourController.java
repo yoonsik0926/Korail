@@ -1,30 +1,40 @@
 package com.railer.rt.tour;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-import com.railer.rt.ticket.Ticket;
-
-
 
 @Controller("tour.tourController")
 public class TourController {
+	
+	@Autowired
+	private TourService service;
+	
 	@RequestMapping(value="/tour/sudo")
-	public String tour1(Model model) throws Exception {
-		model.addAttribute("subMenu", "0");
-		model.addAttribute("title", "수도권");
-		return ".four.tour.tour.list";
-	}
-	@RequestMapping(value="/tour/gangwon")
-	public String tour2(Model model) throws Exception {
+	public String tour1(Model model, @RequestParam(defaultValue ="0") int cateNum){
+
+		
+		//큰 카테고리의 정보를 가져온다.
+		List<Tour> tourCategoryList = service.tourCategoryList();
+		
+		
+		//tourcategoryNum를 갖고 서비스로 간다리~
+		List<Tour> list = service.listBoard(cateNum);
+				
+		model.addAttribute("cateNum", cateNum);
+		model.addAttribute("tourCategoryList", tourCategoryList);
+		model.addAttribute("list", list);		
 		model.addAttribute("subMenu", "1");
-		model.addAttribute("title", "강원권");
+		model.addAttribute("title", "수도권");
+		
 		return ".four.tour.tour.list";
 	}
 	@RequestMapping(value="/tour/chungcheong")
@@ -33,15 +43,21 @@ public class TourController {
 		model.addAttribute("title", "충청권");
 		return ".four.tour.tour.list";
 	}
+	@RequestMapping(value="/tour/gangwon")
+	public String tour2(Model model) throws Exception {
+		model.addAttribute("subMenu", "3");
+		model.addAttribute("title", "강원권");
+		return ".four.tour.tour.list";
+	}
 	@RequestMapping(value="/tour/jeonla")
 	public String tour4(Model model) throws Exception {
-		model.addAttribute("subMenu", "3");
+		model.addAttribute("subMenu", "4");
 		model.addAttribute("title", "전라권");
 		return ".four.tour.tour.list";
 	}
 	@RequestMapping(value="/tour/gyeongsang")
 	public String tour5(Model model) throws Exception {
-		model.addAttribute("subMenu", "4");
+		model.addAttribute("subMenu", "5");
 		model.addAttribute("title", "경상권");
 		return ".four.tour.tour.list";
 	}
@@ -53,6 +69,25 @@ public class TourController {
 		
 		return ".four.tour.tour.detail";
 	}
+	
+	
+	@RequestMapping(value="/tour/tourList")
+	public String d(Model model,
+					@RequestParam(defaultValue ="0")  int tourcategoryNum) throws Exception {
+		//큰 카테고리의 정보를 가져온다.
+		List<Tour> tourCategoryList = service.tourCategoryList();
+		
+		
+		//tourcategoryNum를 갖고 서비스로 간다리~
+		List<Tour> list = service.listBoard(tourcategoryNum);
+		
+		
+		model.addAttribute("tourcategoryNum", tourcategoryNum);
+		model.addAttribute("tourCategoryList", tourCategoryList);
+		model.addAttribute("list", list);
+		return ".four.tour.tour.list";
+	}
+	
 	
 
 	
