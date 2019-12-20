@@ -1,5 +1,5 @@
 package com.railer.rt.ticket;
-
+ 
 public class Sale {
 	
 	private String pay_method;

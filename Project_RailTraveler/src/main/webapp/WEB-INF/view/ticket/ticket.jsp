@@ -177,7 +177,7 @@ function paymemberOk() {
 		 $("#modalPush").modal();
 		return;
 	}
-	
+	 
 	if($("#sdate").val()==-1){
 		$("#modaltext").text("시작 날짜를 선택해주세요!");
 		$("#modalPush").modal();

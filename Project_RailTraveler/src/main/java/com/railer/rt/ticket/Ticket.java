@@ -107,7 +107,7 @@ public class Ticket {
 	}
 	public void setTicketNum(int ticketNum) {
 		this.ticketNum = ticketNum;
-	}
+	} 
 
 	public String gettDays() {
 		return tDays;

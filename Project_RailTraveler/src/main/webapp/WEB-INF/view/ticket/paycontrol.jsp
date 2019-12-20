@@ -26,7 +26,7 @@
         var IMP = window.IMP; // 생략가능
         IMP.init('imp68825719'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
         var query;
-        
+         
         
         IMP.request_pay({
             pg : 'inicis',

@@ -102,7 +102,7 @@ public class TicketController {
 			check = false;
 			e.printStackTrace();
 		}
-		
+		 
 		//구매번호를 가져온다.
 		int saleNum = service.readSaleNum(dto.getMerchant_uid());	
 		

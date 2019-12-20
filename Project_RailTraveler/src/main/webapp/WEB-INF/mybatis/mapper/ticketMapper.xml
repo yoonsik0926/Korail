@@ -50,5 +50,5 @@
 		t.tprice from sale s join member2 m2 on m2.usernum = s.usernum
 		join pay p on p.salenum = s.salenum join ticket t on t.ticketnum = s.ticketnum
 		where s.salenum =#{saleNum}
-	</select>
+	</select> 
 </mapper>

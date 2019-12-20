@@ -48,7 +48,7 @@
 				</div>
 		
 
-		
+		 
 						<h3 align="left" style="font-weight: 700">주문/배송 상세정보</h3>
 			<div  class="box1" style="width: 100%; border: 3px solid #eeeeee; margin-top: 20px; padding: 10px 10px 10px 10px; ">
 				<p align="center" style="font-size: 20px; float: left">주문일자 : ${dto.created}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;주문번호 : ${dto.merchant_uid}</p>
