@@ -113,11 +113,13 @@ body::-webkit-scrollbar {
 }
 
 
-.planListDetail {
+.planListDetail1, .planListDetail2, .planListDetail3, .planListDetail4,
+.planListDetail5, .planListDetail6, .planListDetail7 {
 	width: 100%;
-	height: 90px;
-	border: 2px solid red;
-	display: none; 
+	height: 450px;
+	border: 1px solid black;
+	display: none;
+	cursor: pointer;
 }
 
 .planListDetail:hover {
@@ -237,8 +239,8 @@ body::-webkit-scrollbar {
 	cursor:pointer;
 }
 
-.active1 {
-	background: red;
+.activeGreen {
+	background: #9af6b6;
 }
 
 .staContent {
@@ -260,6 +262,15 @@ body::-webkit-scrollbar {
 
 .pickedStation {
 	margin: auto;
+	width: 100%;
+	height: 90px;
+	border: 1px solid black;
+	display: block;
+	cursor: pointer;
+}
+
+.pickedStationCancel {
+	margin: auto;
 	width: 20%;
 	height: 100%;
 	border: 1px solid black;
@@ -267,6 +278,23 @@ body::-webkit-scrollbar {
 	font-size: 20px;
 	display: block;
 	float: left;
+	cursor: pointer;
+}
+
+.pickedStationDetail {
+	margin: auto;
+	width: 20%;
+	height: 100%;
+	border: 1px solid black;
+	text-align: center;
+	font-size: 60px;
+	display: block;
+	float: right;
+	cursor: pointer;
+}
+
+.redThing {
+	background: red;
 }
 /* .carousel-cell {
 	counter-increment: carousel-cell;
@@ -293,11 +321,12 @@ body::-webkit-scrollbar {
 } */
 </style>
 <script type="text/javascript">
+
 $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
 		$("#datepicker").datepicker({
 			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
 			altField:"#selectedDay1",
-			showAnim: "fold"
+			showAnim: "slide"
 		});
 	        
 		$("#datepicker").change(function(){	        
@@ -310,7 +339,7 @@ $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
 	    });
 });
 
-//기준일부터 몇일후(기준일 포함)
+// 기준일부터 몇일 후(기준일 포함)
 function getDaysLater1(sDate, days) {
 	var week = ['일', '월', '화', '수', '목', '금', '토'];
     var y, m, d, s;
@@ -357,22 +386,39 @@ function close_planning() {
 };
 
 function getNumber(day) {
-	var f=$(".planList").length;
+	days=new Array(day.value);
+	
+	var f=$(".planList1").length;
 	$("#selectDays").val(day.value);
 	if(f) {
-		if(! confirm("작성중이던 계획을 모두 지우시겠습니까?")) {
+		if(! confirm("작성중이던 계획을 모두 지우시겠습니까?")) {	
 			return;
 		}
-	$('#myModal').hide();
+		days=new Array(day.value);	
+		$('#myModal').hide();
 	}
 	
 	$('#planListForm').empty();
 	document.getElementById("selectDays").src=day.src;
 	
-	
+	days=new Array(day.value);
 	for (var i = 1; i <=day.value; i++) {
-		$("#planListForm").append("<div class='planList"+i+"'><div class='dayCount'><div style='width: 90px; text-align: center;'><span>"+i+"일차</span></div><div class='selectedDay'><input readonly='readonly' name='selectedDay' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'></div></div><div class='selectedStation'></div><div><button class='detailPlanning'>계획짜기</button></div></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div><div class='planList"+i+" planListDetail'></div>");
+		days[i-1]=new Array();
+		$("#planListForm").append(
+								"<div class='planList"+i+"'>"
+								+	"<div class='dayCount'>"
+								+		"<div style='width: 90px; text-align: center;'>"
+								+			"<span>"+i+"일차</span>"
+								+		"</div>"
+								+		"<input readonly='readonly' class='selectedDay' name='selectedDay' id='selectedDay"+i+"' style='display:block; border:none; outline: none; font-size:17px; width:110px;'>"
+								+	"</div>"
+								+	"<div class='selectedStation'></div>"
+								+	"<button class='detailPlanning'>계획짜기</button>"
+								+"</div>"
+								+"<div class='planListDetail"+i+" leftThing'></div>"
+								);
 	}
+	console.log(days);
 	$('#myModal').hide();
 }
 
@@ -555,40 +601,88 @@ $(document).ready(function(){
 
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
-	
-		var cname="."+$(this).parent().parent().attr("class")+".planListDetail";
+// 		console.log(detailPlan=$('.detailPlanning').parent().parent().next().attr("class"));
+// 		var cname="."+$(this).parent().parent().attr("class")+".planListDetail";
+		if($(this).parent().siblings().hasClass("activeGreen")) {
+			alert("이미 선택된 일차가 있습니다.");
+			return;
+		}
 		
-    	if($(this).parent().parent().parent().find(cname).css("display")=="none"){
-        	$(this).parent().parent().parent().find(cname).slideDown();
+    	if($(this).parent().next().css("display")=="none"){
+    		$(this).parent().next().slideDown();
+    		$(this).parent().addClass('activeGreen');
+    		$(this).prev().prev().find("input[name=selectedDay]").attr("class", "activeGreen");
         } else {
-        	$(this).parent().parent().parent().find(cname).slideUp();
-    		$(cname+".active1").toggleClass("active1");
+        	$(this).parent().next().slideUp();
+        	$(this).parent().removeClass('activeGreen');
+        	$(this).prev().prev().find("input[name=selectedDay]").removeClass("activeGreen");
+//         	$(this).parent().parent().next().toggleClass("activeGreen");
         }
     });
 });
 
+
+
+
+/*
+// 눌렀을때 붉게 변함
 $(function() {
+// 	var detailPlan="."+$('.detailPlanning').parent().parent().next().attr("class");
+	$("body").on('click', '.leftThing', function() {
+		if($(this).hasClass('activeGreen')) {
+			$(this).removeClass('activeGreen');
+		} else {
+			$(".planListDetail").removeClass('activeGreen');
+			$(this).addClass('activeGreen');
+		}
+	});
+});
+*/
+
+// 클릭했을때 빨간색으로 표시해주기
+/* $(function() {
 	$("body").on('click', '.planListDetail', function() {
 		
-		if($(this).hasClass('active1')) {
-			$(this).removeClass('active1');
+		if($(this).hasClass('activeGreen')) {
+			$(this).removeClass('activeGreen');
 		} else {
-			$(".planListDetail").removeClass('active1');
-			$(this).addClass('active1');
+			$(".planListDetail").removeClass('activeGreen');
+			$(this).addClass('activeGreen');
 		}
+		
 	});
-});
+}); */
 
 
+// 맵에서 역 선택해서 일차계획에 추가하기
 $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
-		if($(".planListDetail.active1").length) {
-			$(".planListDetail.active1").append("<div class='pickedStation'>"+$(this).prev().text()+"</div>");
+// 		console.log($(this).prev().text());
+		console.log($("#planListForm").children().hasClass("activeGreen"));
+		
+	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
+	var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
+	
+		if($("#planListForm").children().hasClass("activeGreen")) {
+			days[ilcha-1].push($(this).prev().text());
+			$(ilchaFullname).append("<div class='pickedStation'></div>");
 		} else {
-			alert("역을 추가할 곳을 먼저 선택해주세요.");
+			alert("역을 추가할 일차를 먼저 선택해주세요.");
+			return;
 		}
+	console.log(days);
 	});
 });
+
+$(function() {
+	$("body").on('click', ".pickedStationCancel", function() {
+		if(! confirm("추가한 역을 삭제하시겠습니까?")) {
+			return;
+		}
+		$(this).remove();
+	});
+});
+
 </script>
 </body>
 </html>
