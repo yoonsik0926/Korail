@@ -5,9 +5,11 @@
 <%
 	String cp = request.getContextPath();
 %>
+<link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
+<script src="<%=cp%>/resource/js/commu.js"></script>
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
-	function sendLinkFacebook() {
+	/* function sendLinkFacebook() {
 		var facebook_share_url = "https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}";
 		window.open(facebook_share_url, 'Share on Facebook',
 				'scrollbars=no, width=500, height=500');
@@ -43,7 +45,7 @@
 			}, 400);
 			return false;
 		});
-	});
+	}); */
 	function modalOn() {
 		$('#myModal').modal('toggle');
 	}
@@ -64,7 +66,7 @@
 		}
 	}
 
-	function snsShare() {
+	/* function snsShare() {
 		$('#snsModal').modal('show');
 		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
 		$(".modal-backdrop").remove();
@@ -73,7 +75,7 @@
 		$('#declarationModal').modal('show');
 		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
 		$(".modal-backdrop").remove();
-	}
+	} */
 
 	// http://www.libertypage.net/myblog/post/18/
 </script>
@@ -163,8 +165,8 @@ a#MOVE_TOP_BTN {
 	box-shadow: 0 5px #666;
 	transform: translateY(4px);
 }
-
 /* SNS 공유하기 모달 */
+/* 
 .modal_post_social .modal-content {
 	padding: 8px 0;
 }
@@ -254,9 +256,8 @@ a#MOVE_TOP_BTN {
 	border: 1px solid rgba(155, 155, 155, 0.4);
 	box-shadow: none;
 	color: #212121;
-	/* padding-right: 65px; */
 }
-
+*/
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
 	{
 	background-color: #eee;
@@ -296,7 +297,7 @@ a#MOVE_TOP_BTN {
 	top: 0;
 	background: #fff;
 	letter-spacing: 0;
-}
+} 
 
 .text-center {
 	text-align: center;
@@ -312,7 +313,7 @@ a#MOVE_TOP_BTN {
 	padding: 0px;
 	border-radius: 5px;
 }
-.modal1 {
+/* .modal1 {
     z-index: 9999;
     background: #8080807a;
     position: fixed;
@@ -320,7 +321,7 @@ a#MOVE_TOP_BTN {
     right: 0;
     bottom: 0;
     left: 0;
-}
+} */
 </style>
 <div id="snsModal" role="dialog" tabindex="-1"
 	aria-labelledby="mySmallModalLabel" aria-hidden="true"

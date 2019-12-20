@@ -1,10 +1,10 @@
-package com.railer.rt.commu;
+package com.railer.rt.commu.board;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller("commu.boardController")
+@Controller("commu.board.boardController")
 public class BoardController {
 	@RequestMapping(value="/board/board")
 	public String info(Model model) throws Exception {

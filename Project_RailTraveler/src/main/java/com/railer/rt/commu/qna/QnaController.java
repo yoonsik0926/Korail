@@ -1,11 +1,11 @@
-package com.railer.rt.commu;
+package com.railer.rt.commu.qna;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller("commu.qnaController")
+@Controller("commu.qna.qnaController")
 public class QnaController {
 	@RequestMapping(value="/qna/qna")
 	public String info(Model model) throws Exception {

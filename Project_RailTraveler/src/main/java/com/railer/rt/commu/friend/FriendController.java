@@ -1,10 +1,10 @@
-package com.railer.rt.commu;
+package com.railer.rt.commu.friend;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller("commu.friendController")
+@Controller("commu.friend.friendController")
 public class FriendController {
 	@RequestMapping(value="/friend/friend")
 	public String info(Model model) throws Exception {

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notice">
+
+	<!--현재 시퀀스 번호를 가져오는 쿼리 
+	return type : 정수형-->
+	<select id="seq" resultType="Integer">
+		SELECT notice_seq.nextval FROM dual
+	</select>
+	
+	<!--공지사항을 insert
+	parameter Type : Notice DTO-->
+	<insert id="insertNotice" parameterType="com.railer.rt.commu.notice.Notice">
+		INSERT INTO notice(noticeNum, userId, subject, content)
+		VALUES(#{noticeNum}, #{userId}, #{subject}, #{content})
+	</insert>
+	
+	<!--공지사항의 첨부파일을 insert
+	parameter Type : Notice DTO-->
+	<insert id="insertNoticeFile" parameterType="com.railer.rt.commu.notice.Notice">
+        INSERT INTO noticefile(noticeFileNum, noticeNum, saveFilename,originalFilename,fileSize)
+        VALUES(NOTICEF_SEQ.nextval, #{noticeNum},#{saveFilename},#{originalFilename},#{fileSize})
+	</insert>
+	
+	<!--검색 기능에 관련 된 where 조건에 관련된 sql
+	전체 / 내용 / 작성일 / 제목 / 작성자-->
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='all'">	
+				(INSTR(subject,#{keyword}) &gt; 0
+				OR
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition=='content'">
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
+			</when>
+			<when test="condition=='created'">
+				(TO_CHAR(created, 'YYYY-MM-DD')=#{keyword}
+				OR
+				TO_CHAR(created, 'YYYYMMDD')=#{keyword})
+			</when>
+			<otherwise>
+				INSTR(${condition},#{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!--공지사항 게시물 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM notice n
+		JOIN member2 m2 ON n.userId=m2.userId 
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				<include refid="where-list" />
+			</if>
+		</where>
+	</select>
+	
+	<!--해당 범위 안의 공지사항을 가져오는, 해당 페이지의 공지사항 게시물 리스트
+	parameter Type : map
+	result Type : Notice DTO-->
+	<select id="listNotice" parameterType="map" resultType="com.railer.rt.commu.notice.Notice">
+      SELECT n.noticeNum,n.userId,userName,subject,content,hitCount,n.created,
+            NVL(fileCount,0) fileCount 
+      FROM notice n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT noticeNum, COUNT(*) fileCount FROM noticeFile
+         GROUP BY noticeNum
+      ) f On n.noticeNum=f.noticeNum
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+      </where>
+      ORDER BY n.noticeNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+   </select>
+	
+	<!--공지사항 게시물 정보를 가져오기
+	parameter Type : 정수
+	result Type : Notice DTO-->
+	<select id="readNotice" parameterType="Integer"  resultType="com.railer.rt.commu.notice.Notice">
+		SELECT n.noticeNum,n.userId,userName,subject,content,hitCount,n.created, NVL(fileCount,0) fileCount
+      FROM notice n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT noticeNum, COUNT(*) fileCount FROM noticeFile
+         GROUP BY noticeNum
+      ) f On n.noticeNum=f.noticeNum
+      	WHERE n.noticeNum=#{noticeNum}
+	</select>
+	
+	<!--공지사항 해당 게시물에 대한 파일 리스트 정보 가져오기
+	parameter Type : 정수
+	result Type : Notice DTO (uploads)-->
+	<select id="listFile" parameterType="Integer" resultType="com.railer.rt.commu.notice.Notice">
+   	SELECT noticeFileNum, noticeNum, saveFilename, originalFilename, fileSize
+   	FROM noticeFile
+   	WHERE noticeNum=#{noticeNum}
+   </select>
+	
+	<!--공지사항 해당 게시물에 대한 이전글 정보 가져오기
+	parameter Type : map
+	result Type : Notice DTO-->
+	<select id="preReadNotice" parameterType="map" resultType="com.railer.rt.commu.notice.Notice">
+      SELECT noticeNum, subject,n.created 
+      FROM notice n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         AND (noticeNum &gt; #{noticeNum})
+      </where>
+      ORDER BY noticeNum ASC
+      FETCH FIRST 1ROWS ONLY
+	</select>
+	
+	<!--공지사항 해당 게시물에 대한 다음글 정보 가져오기
+	parameter Type : map
+	result Type : Notice DTO-->
+	<select id="nextReadNotice" parameterType="map" resultType="com.railer.rt.commu.notice.Notice">
+      SELECT noticeNum, subject,n.created 
+      FROM notice n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         AND (noticeNum &lt; #{noticeNum})
+      </where>
+      ORDER BY noticeNum DESC
+      FETCH FIRST 1ROWS ONLY
+	</select>
+	
+	<!--해당 공지사항의 조회수 증가
+	parameter Type : 공지사항번호-->
+	<select id="updateHitCount" parameterType="Integer">
+		UPDATE notice SET
+			hitCount=hitCount+1
+		WHERE noticeNum=#{noticeNum}
+	</select>
+	
+	<!--해당 공지사항 파일에 대한 상세정보
+	parameter Type : 공지사항 파일번호
+	result Type : Notice DTO-->
+	<select id="readFile" parameterType="Integer" resultType="com.railer.rt.commu.notice.Notice">
+   	SELECT noticeFileNum, noticeNum, saveFilename, originalFilename, fileSize
+   	FROM noticeFile
+   	WHERE noticeFileNum=#{noticeFileNum}
+   </select>
+   
+	<!--공지사항 제목, 내용 수정
+	parameter Type : map
+	result Type : Notice DTO-->
+	<update id="updateNotice" parameterType="com.railer.rt.commu.notice.Notice">
+		UPDATE notice SET subject=#{subject},content=#{content}
+		WHERE noticeNum=#{noticeNum}
+	</update>
+	
+	<!--공지사항 삭제
+	parameter Type : 정수
+	result Type : Notice DTO-->
+	<delete id="deleteNotice" parameterType="Integer">
+		DELETE FROM notice WHERE noticeNum=#{noticeNum}
+	</delete>
+	
+	<!--공지사항 게시물의 파일 삭제 (게시물 수정)
+	parameter Type : map-->
+	<delete id="deleteFile" parameterType="map">
+		DELETE FROM noticeFile WHERE ${field}=#{num}
+	</delete>
+</mapper>

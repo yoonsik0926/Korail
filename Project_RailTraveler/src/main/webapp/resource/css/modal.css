@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+/* SNS 공유하기 모달 */
+.modal_post_social .modal-content {
+	padding: 8px 0;
+}
+
+.text-basic, .text-basic a {
+	color: #212121;
+}
+
+.modal_post_social .social-btn {
+	overflow: hidden;
+}
+
+.social-btn ul {
+	list-style: outside none none;
+	padding: 0;
+}
+
+.modal_post_social li:first-child, .modal_post_social li:nth-child(5) {
+	margin-left: 5px;
+}
+
+.modal_post_social li {
+	float: left;
+	width: 68px;
+	margin-top: 10px;
+}
+
+.modal_post_social li a {
+	text-align: center;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1;
+	display: block;
+	width: 68px;
+	height: 80px;
+	background:
+		url(//vendor-cdn.imweb.me/images/site/social_icon3.png?487487)
+		no-repeat;
+	background-size: 56px;
+	padding-top: 63px;
+}
+
+.modal_post_social li.kakao a {
+	background-position: 7px 0;
+}
+
+.modal_post_social li.story a {
+	background-position: 7px -325px;
+	letter-spacing: -1px;
+}
+
+.modal_post_social li.line a {
+	background-position: 7px -81px;
+}
+
+.modal_post_social li.band a {
+	background-position: 7px -406px;
+}
+
+.modal_post_social li.naver a {
+	background-position: 7px -648px;
+}
+
+.modal_post_social li.face a {
+	background-position: 7px -163px;
+}
+
+.modal_post_social li.twitter a {
+	background-position: 7px -244px;
+}
+
+.modal_post_social li.googleplus a {
+	background-position: 7px -568px;
+}
+
+.modal_post_social .url-copy {
+	clear: both;
+	padding: 0 8px;
+	margin-top: 20px;
+}
+
+.holder {
+	position: relative;
+}
+
+.modal_post_social .url-copy .form-control {
+	border: 1px solid rgba(155, 155, 155, 0.4);
+	box-shadow: none;
+	color: #212121;
+	/* padding-right: 65px; */
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
+	{
+	background-color: #eee;
+	opacity: 1;
+}
+
+.form-control {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.modal_post_social .url-copy button {
+	border-radius: 0;
+	color: #000;
+	border: 1px solid rgba(155, 155, 155, 0.4);
+	font-size: 13px;
+	padding: 7px 16px;
+	height: 34px;
+	position: absolute;
+	right: 8px;
+	top: 0;
+	background: #fff;
+	letter-spacing: 0;
+}
+
+.modal1 {
+    z-index: 9999;
+    background: #8080807a;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
