@@ -6,12 +6,16 @@
    String cp = request.getContextPath();
 %>
 
-<meta property="og:url"           content="https://www.your-domain.com/your-page.html" />
+<meta property="og:url"           content="http://172.16.100.193:8080/Project_RailTraveler/notice/article?page=1&noticeNum=52" />
   <meta property="og:type"          content="website" />
   <meta property="og:title"         content="Your Website Title" />
   <meta property="og:description"   content="Your description" />
-  <meta property="og:image"         content="https://www.your-domain.com/path/image.jpg" />
-  
+  <meta property="og:image"         content="http://www.rail-ro.com/kor/images/content/pass-1-new.png" />
+ 
+ <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v5.0"></script>
+ <div class="fb-share-button" data-href="http://172.16.100.193:8080/Project_RailTraveler/notice/article?page=1&amp;noticeNum=52" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F172.16.100.193%3A8080%2FProject_RailTraveler%2Fnotice%2Farticle%3Fpage%3D1%26noticeNum%3D52&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">공유하기</a></div>
+ 
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
 <script src="<%=cp%>/resource/js/commu.js"></script>
@@ -311,18 +315,6 @@ font-weight: bold;
 			</table>
     </div>
 </div>
-<div id="fb-root"></div>
-  <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
- <div class="fb-share-button" 
-    data-href="https://www.your-domain.com/your-page.html" 
-    data-layout="button_count">
-  </div>
 
 <script>
 Kakao.init('43fed4f22c437dfe99e213d8555c56e0');
