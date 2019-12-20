@@ -41,7 +41,7 @@ $(function(){
 		
 		$("#tab-"+tab).addClass("active");
 		
-		var url = "<%=cp%>/tour/sudo?cateNum="+tab;
+		var url = "<%=cp%>/tour/${subTitle}?cateNum="+tab;
 		location.href=url;
 	});
 });
@@ -50,6 +50,13 @@ $(function(){
 </script>
 
 <style type="text/css">
+
+.nonscroll::-webkit-scrollbar { 
+
+    display: none; 
+
+}
+
 .carousel {
 	background: white;
 }
@@ -130,10 +137,10 @@ a {
 
 
 	<div class="container">
-		<div class="row" style="width: 25%">
-			<div class="col" style="font-size: 18px; font-weight: 600;">
+		<div class="row" style="width: 100%; cursor: pointer;" >
+			<div class="col" style="font-size: 18px; font-weight: 600; width: 100%">
 				<ul class="nav nav-tabs tabs">
-					<li id="tab-0" class="nav-item active" data-tab="0"><a class="nav-link" >전체</a></li>				
+					<li id="tab-0" class="nav-item" data-tab="0"><a class="nav-link" >전체</a></li>				
 				<c:forEach var="vo" items="${tourCategoryList}">
 					<li class="nav-item" id="tab-${vo.cateNum}" data-tab="${vo.cateNum}">
 					<a class="nav-link" >${vo.cateName}</a></li>
@@ -209,34 +216,40 @@ a {
 	</div>
 
 
-<%-- 
 	<c:forEach var="dto" items="${list}">
-	<div class="col-sm-6 col-md-4"
-		style="max-width: 25%; min-height: 200px">
+	<div class="col-sm-6 col-md-4" style="max-width: 33%; min-height: 200px; ">
 		<div class="thumbnail">
 
-			<img style="height: 200px; width: 300px"
-				src="<%=cp%>/resource/img/friendPlan.PNG">
-			<div class="caption">
-				<div style="margin-top: 10px">
-					<span style="font-size: 25px;">테스트</span>
-					<button class="img-button" style="margin-left: 140px">
-						<i class="far fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-					</button>
+			<img style="height: 200px; width: 300px" src="${dto.imagefilename}">
+			<div class="caption" style="width: 100%">
+				<div class="nonscroll" style="overflow: hidden;  width:100px; height: 30px">
+					<span style="font-size: 20px; ">${dto.name}</span>
+					</div>				
+
+				<div class="nonscroll" style="overflow-y: scroll; height: 35px">		
+				<p>${dto.address}</p>
 				</div>
-				<p>...</p>
-				<p align="right">
+				
+				<div style="margin-top: 5px">
+				<span >
+					<button class="img-button" style="">
+						<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
+					</button>
+				</span>	
+				<span style="float: right">	
 					<button class="btn btn-info" onclick="javascript:location.href='<%=cp%>/tour/detail';">알아보기</button>
-				</p>
+				</span>
+				</div>	
+
 			</div>
 		</div>
 	</div>
-	</c:forEach> --%>
+	</c:forEach>
 	
 
 	<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">
-			<td align="center">1 2 3 <%--  ${dataCount==0?"등록된 게시물이 없습니다.":paging} --%>
+			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging} 
 			</td>
 		</tr>
 	</table>

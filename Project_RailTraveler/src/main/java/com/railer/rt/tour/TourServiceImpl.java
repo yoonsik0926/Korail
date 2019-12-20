@@ -1,6 +1,7 @@
 package com.railer.rt.tour;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ public class TourServiceImpl implements TourService{
 	private CommonDAO dao;
 	
 	@Override
-	public List<Tour> listBoard(int tourcategoryNum) {
+	public List<Tour> listBoard(Map<String, Object> map) {
 		List<Tour> list = null;
 		
 		try {
-			list =dao.selectList("tour.tourList", tourcategoryNum);
+			list =dao.selectList("tour.tourList", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,6 +38,20 @@ public class TourServiceImpl implements TourService{
 		
 		return list;
 	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result =0;
+		try {
+			
+			result = dao.selectOne("tour.dataCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
 	
 	
 	

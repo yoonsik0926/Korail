@@ -3,23 +3,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tour">
 
-	<select id="tourList" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
+	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
 		select t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
+        join station st on st.stanum = t.stanum
+        join location loc on loc.locnum =st.locnum
 
 		<where>
-			
+			 loc.locNum = #{locNum}
 			<if test="cateNum !=0">
-				tc.catenum = #{tourcategoryNum}
+				and tc.catenum = #{cateNum} 
 			</if>
 		</where>
-	
+		and ROWNUM <![CDATA[ < ]]>  1000
+		ORDER BY t.tournum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{items} ROWS ONLY
 	</select>
 	
 	<select id="tourCategoryList" resultType="com.railer.rt.tour.Tour">	
 	 select cateNum , cateName from tourcategory
+	</select>
+	
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">	
+	 select nvl(count(*),0)
+		from tour t join tourfile tf on t.tournum = tf.tournum
+		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
+		join tourcategory tc on dtc.catenum = tc.catenum 
+        join station st on st.stanum = t.stanum
+        join location loc on loc.locnum =st.locnum
+
+		<where>
+			 loc.locNum = #{locNum}
+			<if test="cateNum !=0">
+				and tc.catenum = #{cateNum} 
+			</if>
+		</where>
+		and ROWNUM <![CDATA[ < ]]>  1000
 	</select>
 
 

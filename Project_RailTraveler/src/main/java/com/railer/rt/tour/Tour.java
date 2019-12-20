@@ -2,7 +2,10 @@ package com.railer.rt.tour;
 
 public class Tour {
 
+	private int listNum;
 	
+	private int tourNum;
+	private String imagefilename;
 	
 	private int cateNum; //전체.맛집..
 	private String cateName; //전체.맛집..이름
@@ -24,6 +27,28 @@ public class Tour {
 	private double longitude;
 	private double latitude;
 	private int hitCount;
+	
+	
+	
+	
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
+	public String getImagefilename() {
+		return imagefilename;
+	}
+	public void setImagefilename(String imagefilename) {
+		this.imagefilename = imagefilename;
+	}
+	public int getTourNum() {
+		return tourNum;
+	}
+	public void setTourNum(int tourNum) {
+		this.tourNum = tourNum;
+	}
 	public int getCateNum() {
 		return cateNum;
 	}
