@@ -157,3 +157,10 @@ figure.snip1104.hover:before {
 	color: #283164;
 }
 
+.displaySta2{
+	display: inline; 
+	width:28%; 
+	height:100%; 
+	float: left; 
+	margin: 0 10px;
+}

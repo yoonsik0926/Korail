@@ -7,7 +7,22 @@
 %>
 
 <link rel="stylesheet" href="<%=cp%>/resource/css/info.css" type="text/css">
+<style type="text/css">
+.displaySta2{
+	display: inline; 
+	width:28%; 
+	height:100%; 
+	float: left; 
+	margin: 0 10px;
+}
 
+.displaySta{
+	display: inline-block; 
+	width: 100%;
+	margin-bottom: 40px; 
+	height : 220px;
+}
+</style>
 
 <script type="text/javascript">
 $("figure").mouseleave(
@@ -15,6 +30,23 @@ $("figure").mouseleave(
 	      $(this).removeClass("hover");
 	    }
 	  );
+	  
+$(function(){
+	$("#nav-item-${locNum}").addClass("active");
+	
+	$("ul.nav-tabs li").click(function(){
+		locNum = $(this).attr("data-tab");
+		
+		$("ul.nav-tabs li").each(function(){
+			$(this).removeClass("active");
+		});
+		
+		$("#nav-item-"+locNum).addClass("active");
+		
+		var url = "<%=cp%>/station/info?locNum="+locNum;
+		location.href=url;
+	});
+});
 
 </script>
 
@@ -26,6 +58,7 @@ $("figure").mouseleave(
 	</div>
 	
      <div class="body-main">
+     
      	<div style="margin-bottom: 20px;">
      	</div>
      	
@@ -33,12 +66,10 @@ $("figure").mouseleave(
 		<div class="row">
 			<div class="col" style="font-size: 18px; font-weight: 600;margin: 0 10px;width: 88%;">
 				<ul class="nav nav-tabs" style="margin-bottom: 30px;">
-					<li class="nav-item active"><a class="nav-link active" href="<%=cp%>/main">전체</a></li>
-					<li class="nav-item "><a class="nav-link active" href="<%=cp%>/main">수도권</a></li>
-					<li class="nav-item"><a class="nav-link active" href="#">강원권</a></li>
-					<li class="nav-item"><a class="nav-link active" href="#">충청권</a></li>
-					<li class="nav-item"><a class="nav-link active" href="#">전라권</a></li>
-					<li class="nav-item"><a class="nav-link active" href="#">경상권</a></li>
+					<li id="nav-item-0" data-tab="0"><a class="nav-link" href="#">전체</a></li>
+					<c:forEach var="vo" items="${locList}">
+						<li id="nav-item-${vo.locNum}" data-tab="${vo.locNum}" ><a class="nav-link" href="#">${vo.locName}</a></li>
+					</c:forEach>
 				</ul>
 			</div>
 			<div style="width: 89%; text-align: right; margin-bottom: 20px;">
@@ -49,110 +80,50 @@ $("figure").mouseleave(
 		</div>
 		</div>
   			
-		<!-- 버튼 누를 때마다 디비에서 역 정보 받아와서 리스트 변화하도록 -->
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
+		<!-- 역 리스트 출력 -->
+		<c:forEach var="vo" items="${staList}" varStatus="status">
+			<c:if test="${status.index==0}">
+			    <c:out value="<div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
+			</c:if>
+			<c:if test="${status.index!=0 && status.index%3!=0}">
+			    <c:out value="</div><div class='displaySta2'>" escapeXml="false"/>
+			</c:if>
+			<c:if test="${status.index!=0 && status.index%3==0}">
+				<c:out value="</div></div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
+			</c:if>
+			<figure class="snip1104 ${status.index%3==0?'red':(status.index%3==1?'blue':'')}" style="height:100%;">
+				  <img src="<%=cp%>/resource/images/station/${vo.imageFilename}" style="width: 100%; height:100%;"/>
 				  <figcaption>
-				    <h4><span> 서울역</span></h4>
+				    <h4><span> ${vo.staName}</span></h4>
 				  </figcaption>
 				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-		</div>
-
-<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-		</div>
-
+			</figure>	
+		</c:forEach>	
 		
-		<div class="displaySta" style="display: inline-block; width: 100%; margin-bottom: 40px; height: 220px;">
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 red" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
+	</div>
+	
+	<c:set var="n" value="${staList.size()}"/>
+	<c:if test="${n>0&&n%3!=0}">
+		<c:forEach var="i" begin="${n%3+1}" end="3" step="1">
+			<div class='displaySta2'>
+				 &nbsp;
 			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104 blue" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/jumchon.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-			<div style="display: inline; width:28%; height:100%; float: left; margin: 0 10px;">	
-				<figure class="snip1104" style="height:100%;">
-				  <img src="<%=cp%>/resource/images/station/seoul.jpg" style="width: 100%; height:100%;"/>
-				  <figcaption>
-				    <h4><span> 서울역</span></h4>
-				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
-				</figure>
-			</div>
-		</div>
+		</c:forEach>
+	</c:if>
 
-		
+
 		<div style="width: 89%;">
 				<nav style="text-align: center;">
 					<ul class="pagination">
-						<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
+						<!-- <li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
 						</span></li>
 						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
 						</li>
 						<li><span>2</span></li>
 						<li><span>3</span></li>
 						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-						</span></li>
+						</span></li> -->
+						<li>${dataCount==0?"등록된 게시물이 없습니다.":paging}</li>
 					</ul>
 				</nav>
 			</div>
