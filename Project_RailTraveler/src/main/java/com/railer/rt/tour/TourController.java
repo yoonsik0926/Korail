@@ -45,6 +45,7 @@ public class TourController {
 
 		map.put("cateNum", cateNum);
 		map.put("locNum", locNum);
+		map.put("name", "totalData");
 		
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
@@ -263,17 +264,15 @@ public class TourController {
 	}
 	
 	
-	@RequestMapping(value = "/tour/detailTourList", method = RequestMethod.POST)
+	@RequestMapping(value = "/tour/detailTourList")
 	public String detailTourList(Model model,
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
 			@RequestParam int staNum,
 			@RequestParam int detailcateNum,
 			@RequestParam String subTitle,
 			HttpServletRequest req) {
-		
-		String cp = req.getContextPath();
-		
-		int items = 12;
+				
+		int items = 6;
 		int total_page = 0;
 		int dataCount = 0;
 		
@@ -282,14 +281,18 @@ public class TourController {
 
 		map.put("staNum", staNum);
 		map.put("detailcateNum", detailcateNum);
+		map.put("name", "detailData");
 		
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
-		
+	
+
 		
 		if (dataCount != 0)
 			total_page = myUtil.pageCount(items, dataCount);
+		
 
+		
 		if (total_page < current_page)
 			current_page = total_page;
 		
@@ -303,24 +306,13 @@ public class TourController {
 		
 		List<Tour> detailTourList = service.detailTourList(map);
 		
-		//String query = "";
-		//String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-	
 		
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
+		// AJAX 용 페이징
+		String paging=myUtil.pagingMethod(current_page, total_page, "listPage");
 		
-
-        
-        if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }
-        */
-        //String paging = myUtil.paging(current_page, total_page, listUrl);
-		
+				
 		model.addAttribute("list", detailTourList);
+		model.addAttribute("paging", paging);
 
 		return "tour/tour/optionsList";
 	}

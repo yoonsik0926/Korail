@@ -19,7 +19,8 @@
 var cnt =1;
 
 function test(ob){
-
+	
+	alert(this.closest("button"));
   if(cnt%2==1){
 	  ob.className = "fas fa-heart"; 
   }else{
@@ -132,8 +133,9 @@ $(function(){
 	});
 });
 
-function optionslist() {
-	
+
+
+function listPage(page) {
 	//셀렉트 박스 다 되어있는지 검사하고..
 	var staion = document.getElementById("stationSelect");
 	var detailcategory = document.getElementById("2stSelect");
@@ -142,18 +144,17 @@ function optionslist() {
 	var staNum =staion.options[staion.selectedIndex].value;
 	var detailcateNum =detailcategory.options[detailcategory.selectedIndex].value;
 	
-
-	
-
+				
 	var url = "<%=cp%>/tour/detailTourList";
-	var query = "staNum="+staNum+"&detailcateNum="+detailcateNum+"&subTitle=${subTitle}";
+	var query = "pageNo="+page+"&staNum="+staNum+"&detailcateNum="+detailcateNum+"&subTitle=${subTitle}";
 	var selector = "#please";
 
-	ajaxHTML(url, "post", query, selector);
-	
-	
-	
+	ajaxHTML(url, "get", query, selector);
+}
 
+
+function optionslist() {	
+	listPage(1);	
  }
 
 </script>
@@ -236,8 +237,59 @@ a {
 }
 </style>
 
+<script type="text/javascript">
+function aaa(ob) {
+
+
+	var a =$(ob).closest("div").find("input").val();
+	
+	
+	alert(a);
+}
+
+</script>
+
 
 <div class="body-content-container">
+
+   <!-- 역 리스트 출력 -->
+    <div class='displaySta'>
+      <div class='displaySta2'>
+      	<input type="hidden" name="staNum" value="0">
+  
+         <figure class="snip1104 red" style="height:100%;">
+              <img src="/Project_RailTraveler/resource/images/station/gapyeong.jpg" style="width: 100%; height:100%;"/>
+              <figcaption>
+                <h4><span> 가평</span></h4>
+              </figcaption>
+              <a onclick="aaa(this);" class="staModal" data-target="#layerpop0" data-toggle="modal" data-test="0">가평</a>
+         	</figure>   
+
+      </div>
+      
+      <div class='displaySta2'><input type="hidden" name="staNum" value="26">
+         <figure class="snip1104 blue" style="height:100%;">
+              <img src="/Project_RailTraveler/resource/images/station/gangleung.jpg" style="width: 100%; height:100%;"/>
+              <figcaption>
+                <h4><span> 강릉</span></h4>
+              </figcaption>
+              <a onclick="aaa(this);" class="staModal" data-target="#layerpop1" data-toggle="modal" data-test="26">강릉</a>
+         </figure>   
+
+      </div>
+      
+      <div class='displaySta2'><input type="hidden" name="staNum" value="45">
+         <figure class="snip1104 " style="height:100%;">
+              <img src="/Project_RailTraveler/resource/images/station/geongju.jpg" style="width: 100%; height:100%;"/>
+              <figcaption>
+                <h4><span> 경주</span></h4>
+              </figcaption>
+              <a  onclick="aaa(this);" class="staModal" data-target="#layerpop2" data-toggle="modal" data-test="45">경주</a>
+         		</figure>   
+
+      </div>
+      
+     </div>
 
 	<div class="body-title" style="margin-top: 3%; margin-bottom: 35px">
 		<h3 style="font-weight: 700">${title} 추천 장소</h3>
@@ -347,7 +399,7 @@ a {
 				
 				<div style="margin-top: 5px">
 				<span >
-					<button class="img-button" style="">
+					<button class="img-button" value="${dto.tourNum}" >
 						<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
 					</button>
 				</span>	
@@ -360,7 +412,7 @@ a {
 		</div>
 	</div>
 	</c:forEach>
-	</div>
+
 
 	<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">
@@ -368,7 +420,8 @@ a {
 			</td>
 		</tr>
 	</table>
-
+	
+	</div>
 
 
 </div>

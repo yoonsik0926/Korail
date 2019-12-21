@@ -28,7 +28,7 @@
 	
 	
 	<select id="dataCount" parameterType="map" resultType="Integer">	
-	 select nvl(count(*),0)
+	 	select nvl(count(*),0)
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
@@ -36,12 +36,27 @@
         join location loc on loc.locnum =st.locnum
 
 		<where>
-			 loc.locNum = #{locNum}
-			<if test="cateNum !=0">
-				and tc.catenum = #{cateNum} 
-			</if>
+			
+			<choose>
+
+				<when test = "name == totalData">
+
+					loc.locNum = #{locNum}
+					<if test="cateNum !=0">
+						and tc.catenum = #{cateNum} 
+					</if>
+
+				</when>
+
+				<otherwise>
+
+ 				t.stanum =#{staNum} and t.detailcatenum=#{detailcateNum}		
+
+				</otherwise>
+
+			</choose>
 		</where>
-		and ROWNUM <![CDATA[ < ]]>  1000
+
 	</select>
 	
 	<select id="localStation" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
@@ -60,8 +75,12 @@
 	join detailtourcategory d on t.detailcatenum = d.detailcatenum 
 	join tourcategory tc on d.catenum = tc.catenum 
 	where t.stanum =#{staNum} and t.detailcatenum=#{detailcateNum}
-	and rowNUM  <![CDATA[<]]>7
+	ORDER BY t.tournum DESC
+	OFFSET #{offset} ROWS FETCH FIRST #{items} ROWS ONLY
 	</select>
+	
+	
+
 
 
 

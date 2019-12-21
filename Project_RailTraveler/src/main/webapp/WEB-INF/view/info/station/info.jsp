@@ -203,16 +203,16 @@ $(document).ready(function(){
 				<c:out value="</div></div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
 			<input type="hidden" name="staNum" value="${vo.staNum}">
-			<div>
+			
 			<figure class="snip1104 ${status.index%3==0?'red':(status.index%3==1?'blue':'')}" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/${vo.imageFilename}" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> ${vo.staName}</span></h4>
-				  </figcaption>
+			</figcaption>
 				  <a class="staModal" data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}" onclick="aaa(this);"></a>
 				 <!--  <a class="staModal" onclick=""></a> -->
 			</figure>
-			</div>
+			
 
 		</c:forEach>	
 		

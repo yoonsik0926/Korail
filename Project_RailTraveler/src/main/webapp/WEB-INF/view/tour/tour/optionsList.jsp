@@ -5,6 +5,9 @@
 <%
 	String cp=request.getContextPath();
 %>
+
+
+
 <c:forEach var="dto" items="${list}">
 	<div class="col-sm-6 col-md-4" style="max-width: 33%; min-height: 200px; ">
 		<div class="thumbnail">
@@ -34,3 +37,10 @@
 		</div>
 	</div>
 	</c:forEach>
+	
+	<table id="pagingTable" style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+		<tr height="35">
+			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging} 
+			</td>
+		</tr>
+	</table>
