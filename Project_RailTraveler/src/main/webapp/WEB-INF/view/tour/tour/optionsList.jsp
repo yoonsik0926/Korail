@@ -24,7 +24,7 @@
 				
 				<div style="margin-top: 5px">
 				<span >
-					<button class="img-button" style="">
+					<button class="img-button" value="${dto.tourNum}" >
 						<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
 					</button>
 				</span>	
@@ -40,7 +40,7 @@
 	
 	<table id="pagingTable" style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">
-			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging} 
+			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.": paging} 
 			</td>
 		</tr>
 	</table>

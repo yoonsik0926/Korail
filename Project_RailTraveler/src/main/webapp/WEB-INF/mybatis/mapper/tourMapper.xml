@@ -39,7 +39,7 @@
 			
 			<choose>
 
-				<when test = "name == totalData">
+				<when test = "name == 0">
 
 					loc.locNum = #{locNum}
 					<if test="cateNum !=0">
@@ -79,7 +79,37 @@
 	OFFSET #{offset} ROWS FETCH FIRST #{items} ROWS ONLY
 	</select>
 	
+	<insert id="likeTour" parameterType="map">
+		insert into tourbookmark(tournum,userId) values (#{tourNum},#{userId})
+	</insert>
 	
+	<delete id="cancelLikeTour" parameterType="map">
+		delete from tourbookmark where tournum = #{tourNum} and userId =#{userId}
+	</delete>
+	
+	<select id="checkLike" parameterType="map" resultType="Integer">
+		select nvl(count(*),0)  from tourbookmark where tournum =#{tourNum} and userId =#{userId}
+	</select>
+	
+	<select id="initLikeMark" parameterType="map" resultType="Integer">
+		select tournum from tourbookmark where userId =#{userId}
+	</select>
+
+	<select id="hitContentList" parameterType="map" resultType="com.railer.rt.tour.Tour">
+			select tb.tournum tournum, likecount , ttf.imagefilename imagefilename from
+			(select  tf.tournum tournum, nvl(count(*),0) likeCount from tour t
+			join tourfile tf on t.tournum = tf.tournum
+			join tourbookmark tbm on tbm.tournum =t.tournum
+			join station s  on s.stanum =t.stanum
+			join location loc on s.locnum = loc.locnum
+			where s.locnum =#{locNum}
+			group by tf.tournum
+			order by likeCount desc) tb join tourfile ttf
+			on tb.tournum = ttf.tournum 
+			where rownum <![CDATA[<]]>10
+	</select>
+
+
 
 
 

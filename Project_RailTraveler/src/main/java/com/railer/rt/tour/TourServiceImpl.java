@@ -79,18 +79,79 @@ public class TourServiceImpl implements TourService {
 
 	@Override
 	public List<Tour> detailTourList(Map<String, Object> map) {
-		
+
 		List<Tour> list = null;
-		
+
 		try {
-			list =dao.selectList("tour.detailTourList", map);
+			list = dao.selectList("tour.detailTourList", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-			return list;
-		
-		
+		return list;
+
+	}
+
+	@Override
+	public void likeTour(Map<String, Object> map) {
+
+		try {
+			dao.updateData("tour.likeTour", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void disLikeTour(Map<String, Object> map) {
+
+		try {
+			dao.updateData("tour.cancelLikeTour", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public int likeCheck(Map<String, Object> map) {
+		int result = -1;
+
+		try {
+			result = dao.selectOne("tour.checkLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Tour> initLikeMark(Map<String, Object> map) {
+		List<Tour> list = null;
+
+		try {
+			list = dao.selectList("tour.initLikeMark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+
+	@Override
+	public List<Tour> hitContentList(Map<String, Object> map) {
+		List<Tour> list = null;
+
+		try {
+			list = dao.selectList("tour.hitContentList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+
 	}
 
 }

@@ -16,23 +16,65 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	
 <script type="text/javascript">
-var cnt =1;
 
+//물러놨던 하트 표시하는 스크립트
+$(function(){
+	  var userId = "${sessionScope.member.userId}";
+
+	  if ( userId != "") {
+		  
+		  var url = "<%=cp%>/tour/initMarkHeart";
+			var query = "";
+			var fn = function(data){
+
+				for(var i=0; i<data.likeList.length ; i++){
+					
+
+				}
+				console.log(data.likeList[0]);
+			}; 
+				
+			ajaxJSON(url, "post", query, fn);
+	  }
+	
+	
+	
+});
+
+//좋아요 관리하는 에이작스
 function test(ob){
 	
-	alert(this.closest("button"));
-  if(cnt%2==1){
-	  ob.className = "fas fa-heart"; 
-  }else{
-	  ob.className = "far fa-heart";
-  }
+	var userId = "${sessionScope.member.userId}";
 
-	cnt++;	
+	  if ( userId == "") {
+		  $("#likealarm").modal();
+		return;
+	  }
+	
+	var tourNum = $(ob).closest("button").val();
+	  
+	var url = "<%=cp%>/tour/likeTour";
+	var query = "tourNum="+tourNum;
+	var fn = function(data){
+			if(data.likecheck==0){
+				ob.className = "fas fa-heart"; 
+			}
+			else if (data.likecheck==1){
+				ob.className = "far fa-heart";
+			}
 
-}
+	}; 
+		
+	ajaxJSON(url, "get", query, fn);
+	
+};
 
-
+//메뉴 엑티브를 관리하는 스크립트
 $(function(){
+	//검색창은 일단 안띄울거야!!
+	$("#searchengine").hide();	
+	
+	
 	$("#tab-${cateNum}").addClass("active");
 	
 	$("ul.tabs li").click(function(){
@@ -44,20 +86,22 @@ $(function(){
 		
 		$("#tab-"+tab).addClass("active");
 		
-		var url = "<%=cp%>/tour/${subTitle}?cateNum="+tab;
-		location.href=url;
+		if(tab !=4){
+			var url = "<%=cp%>/tour/${subTitle}?cateNum="+tab;
+			location.href=url;	
+		}
+
+		if(tab ==4){
+			$("#searchengine").show();
+		}
 	});
+	
+	
 });
 
 </script>
 
 <script type="text/javascript">
-
-/* function checkStaion() {
-	if(! $("#stationSelect option").value){
-		$("#selectStationModal").modal();			
-	}
-}; */
 
 function ajaxJSON(url, type, query, fn) {
 	$.ajax({
@@ -66,7 +110,7 @@ function ajaxJSON(url, type, query, fn) {
 		,data:query
 		,dataType:"json"
 		,success:function(data){
-			console.log(data);
+
 			fn(data);
 		}
 	,beforeSend:function(jqXHR){
@@ -105,9 +149,9 @@ function ajaxHTML(url, type, query, selector) {
 }
 
 
-
+//소메뉴를 조절하는 에이작스
 $(function(){
-		
+
 	
 	$("select[name=1stSelect]").change(function(){
 				
@@ -134,7 +178,7 @@ $(function(){
 });
 
 
-
+//페이징 처리 및 조건별 리스트 불러오는 에이작스
 function listPage(page) {
 	//셀렉트 박스 다 되어있는지 검사하고..
 	var staion = document.getElementById("stationSelect");
@@ -148,12 +192,14 @@ function listPage(page) {
 	var url = "<%=cp%>/tour/detailTourList";
 	var query = "pageNo="+page+"&staNum="+staNum+"&detailcateNum="+detailcateNum+"&subTitle=${subTitle}";
 	var selector = "#please";
+	
 
 	ajaxHTML(url, "get", query, selector);
 }
 
-
+//검색하기를 눌렀을 때 
 function optionslist() {	
+
 	listPage(1);	
  }
 
@@ -237,64 +283,33 @@ a {
 }
 </style>
 
-<script type="text/javascript">
-function aaa(ob) {
 
-
-	var a =$(ob).closest("div").find("input").val();
-	
-	
-	alert(a);
-}
-
-</script>
 
 
 <div class="body-content-container">
 
-   <!-- 역 리스트 출력 -->
-    <div class='displaySta'>
-      <div class='displaySta2'>
-      	<input type="hidden" name="staNum" value="0">
-  
-         <figure class="snip1104 red" style="height:100%;">
-              <img src="/Project_RailTraveler/resource/images/station/gapyeong.jpg" style="width: 100%; height:100%;"/>
-              <figcaption>
-                <h4><span> 가평</span></h4>
-              </figcaption>
-              <a onclick="aaa(this);" class="staModal" data-target="#layerpop0" data-toggle="modal" data-test="0">가평</a>
-         	</figure>   
-
-      </div>
-      
-      <div class='displaySta2'><input type="hidden" name="staNum" value="26">
-         <figure class="snip1104 blue" style="height:100%;">
-              <img src="/Project_RailTraveler/resource/images/station/gangleung.jpg" style="width: 100%; height:100%;"/>
-              <figcaption>
-                <h4><span> 강릉</span></h4>
-              </figcaption>
-              <a onclick="aaa(this);" class="staModal" data-target="#layerpop1" data-toggle="modal" data-test="26">강릉</a>
-         </figure>   
-
-      </div>
-      
-      <div class='displaySta2'><input type="hidden" name="staNum" value="45">
-         <figure class="snip1104 " style="height:100%;">
-              <img src="/Project_RailTraveler/resource/images/station/geongju.jpg" style="width: 100%; height:100%;"/>
-              <figcaption>
-                <h4><span> 경주</span></h4>
-              </figcaption>
-              <a  onclick="aaa(this);" class="staModal" data-target="#layerpop2" data-toggle="modal" data-test="45">경주</a>
-         		</figure>   
-
-      </div>
-      
-     </div>
-
 	<div class="body-title" style="margin-top: 3%; margin-bottom: 35px">
-		<h3 style="font-weight: 700">${title} 추천 장소</h3>
+		<h3 style="font-weight: 700">${title}의 추천!</h3>
 	</div>
+	
+		<div class="recommend" style="width: 100%; height: 50% !important;">
+		<div class="carousel" data-flickity='{"groupCells": true }'
+			style="height: 350px;">
+			
+			<c:if test="${empty hitContentList}">
+			<div class="carousel-cell sample_image">
+				<img class="fPlan" src="<%=cp%>/resource/img/notheart.png" />
+			</div>
+			</c:if>
+			
+			<c:forEach var="hit" items="${hitContentList}">
+			<div class="carousel-cell sample_image">
+				<img class="fPlan" src="${hit.imagefilename}" />
+			</div>		
+			</c:forEach>
 
+		</div>
+	
 
 	<div class="container">
 		<div class="row" style="width: 100%; cursor: pointer;" >
@@ -305,7 +320,7 @@ function aaa(ob) {
 					<li class="nav-item" id="tab-${vo.cateNum}" data-tab="${vo.cateNum}">
 					<a class="nav-link" >${vo.cateName}</a></li>
 				</c:forEach>
-	
+					<li id="tab-4" class="nav-item" data-tab="4"><a class="nav-link" >검색</a></li>
 
 				</ul>
 			</div>
@@ -313,31 +328,7 @@ function aaa(ob) {
 	</div>
 	
 	
-	<div class="recommend" style="width: 100%; height: 50% !important;">
-		<div class="carousel" data-flickity='{"groupCells": true }'
-			style="height: 350px;">
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-			<div class="carousel-cell sample_image">
-				<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-			</div>
-		</div>
+
 
 
 
@@ -345,8 +336,7 @@ function aaa(ob) {
 
 
 
-	<div
-		style="border: 1px solid black; border-radius: 20px; height: 80px; width: 90%; margin-left: 5%; margin-bottom: 2%">
+	<div id="searchengine" style="border: 1px solid black; border-radius: 20px; height: 80px; width: 90%; margin-left: 5%; margin-bottom: 2%; margin-top: 15px;">
 
 		<div class="form-group"
 			style="width: 20%; margin-top: 20px; float: left; margin-left: 10%; margin-right: 15%">
@@ -399,7 +389,7 @@ function aaa(ob) {
 				
 				<div style="margin-top: 5px">
 				<span >
-					<button class="img-button" value="${dto.tourNum}" >
+					<button id="btn-${dto.tourNum}" class="img-button" value="${dto.tourNum}" >
 						<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
 					</button>
 				</span>	
@@ -428,7 +418,7 @@ function aaa(ob) {
 
 
 <!--Modal: modalPush-->
-<div class="modal fade  bd-example-modal-sm" id="selectStationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade  bd-example-modal-sm" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
     <!--Content-->
@@ -449,6 +439,36 @@ function aaa(ob) {
       <!--Footer-->
       <div class="modal-footer flex-center" style="margin-top: 5px;">
         <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: modalPush-->
+
+
+<!--Modal: modalPush-->
+<div class="modal fade  bd-example-modal-sm" id="likealarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px;">
+        <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
+
+        <p id="modaltext" style="font-size: 17px; font-weight:500; margin-top: 10px;">회원에게만 제공되는 서비스입니다. <br>회원가입을 해보세요!</p>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+        <a href="<%=cp%>/member/member" type="button" class="btn  btn-info waves-effect" >회원가입</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
       </div>
     </div>
   </div>

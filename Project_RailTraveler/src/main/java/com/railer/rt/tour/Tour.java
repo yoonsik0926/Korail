@@ -2,6 +2,10 @@ package com.railer.rt.tour;
 
 public class Tour {
 
+	private int userId;
+	private int likeCheck;
+	private int likeCount;
+	
 	private int listNum;
 	
 	private int tourNum;
@@ -31,6 +35,19 @@ public class Tour {
 	
 	
 	
+	
+	public int getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+	public int getLikeCheck() {
+		return likeCheck;
+	}
+	public void setLikeCheck(int likeCheck) {
+		this.likeCheck = likeCheck;
+	}
 	public int getListNum() {
 		return listNum;
 	}
@@ -140,6 +157,13 @@ public class Tour {
 	public void setHitCount(int hitCount) {
 		this.hitCount = hitCount;
 	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	
 	
  
