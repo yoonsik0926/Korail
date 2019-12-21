@@ -96,69 +96,43 @@ function login() {
 	location.href="<%=cp%>/member/login";
 }
 
-/* $("#layerpop").on('show.bs.modal',function(event){
-	var button = $(event.relatedTarget); // Button that triggered the modal
-	  var recipient = button.data('test'); // Extract info from data-* attributes
-	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-	  var modal = $(this);
-	  modal.find('.modal-title').html('New message to ' + recipient);
 	
-}); */
-
-<%-- $(function(){
-	$(".staModal").click(function(){
-		var url = "<%=cp%>/station/modal";
-		var staNum = "${vo.staNum}";
-		var query = {staNum:staNum};
-		
-		var fn = function(data){
-			var staName = data.staName;
-			$("#modal-staName").text(staName);
-		};
-		
-		ajaxJSON(url, "post", query, fn);
-		
-	});
-}); --%>
-/* 
-$(document).ready(function(){
-
-
-	//보기 버튼을 클릭했을 때
-	$('.staModal').click(function(){
-
-	var a = $(this).closest("figure");
-	var sta2 = $(a).closest("div");
-	var staNum = $(sta2).children("input").val();
-	$('#layerpop').modal("show");
-	alert(staNum);
-	 $.ajax({
-	//select.php 로 가서
-	url:"select.php",
-	method:"post",
-	//위에서 클릭한 employee_id 데이터를 url로 넘겨주고
-	data:{employee_id:employee_id},
-	success:function(data){
-	//성공하면 select.php에서 뿌린 데이터를 data 변수에 담아 가지고 오너라
-	$('#employee_detail').html(data);
-	$('#dataModal').modal("show");
-	}
-
-	});
-
-	});
-
-	}); */
+function showModal(ob) {
+	var staNum =$(ob).closest("div").find("input").val();  
 	
-	function aaa(ob) {
-
-
-		   var a =$(ob).closest("div").find("input").val();
-		   
-		   
-		   alert(a);
+	var url = "<%=cp%>/station/modal";
+	var query = "staNum="+staNum;
+	
+	$.ajax({
+		type:"get"
+		,url:url
+		,data:query
+		,success:function(data) {
+			var dto = data.dto;
+			$(".modal-title").text(dto.staName+"역");
+			$(".address").text(dto.staAddress);
+			$(".tel").text(dto.staTel);
+			var imgAddress = "<img src='<%=cp%>/resource/images/station/"+dto.imageFilename+"' style='width: 90%; margin-bottom: 20px;'/>";
+			$(".staImage").html(imgAddress);
+			
+			
+			$("#layerpop").modal();
 		}
+	    ,beforeSend :function(jqXHR) {
+	    	jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		location.href="<%=cp%>/member/login";
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+	
+	
+	
+}
 </script>
 
 <div class="body-content-container">
@@ -209,8 +183,8 @@ $(document).ready(function(){
 				  <figcaption>
 				    <h4><span> ${vo.staName}</span></h4>
 			</figcaption>
-				  <a class="staModal" data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}" onclick="aaa(this);"></a>
-				 <!--  <a class="staModal" onclick=""></a> -->
+				  <a class="staModal" onclick="showModal(this);"></a>
+				 <!--  <a class="staModal"  data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}"></a> -->
 			</figure>
 			
 
@@ -246,22 +220,25 @@ $(document).ready(function(){
 		        <!-- 닫기(x) 버튼 -->
 		        <button type="button" class="close" data-dismiss="modal">×</button>
 		        <!-- header title -->
-		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">역이름 : </h4>
+		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;"></h4>
 		      </div>
 		      <!-- body -->
 		      <div class="modal-body" style="text-align: center;">
-		      	<img src="<%=cp%>/resource/img/sudo.jpg" style="width: 90%; margin-bottom: 20px;">
+		      	<div class="staImage">
+		      		<%-- <img src="<%=cp%>/resource/images/station/${dto.imageFilename}" style="width: 90%; margin-bottom: 20px;"> --%>
+		      	</div>
+		      	
 		      	<div style="width: 90%; margin: 0 auto; line-height: 2.5;">
 					<div style="text-align: left;">
 						<span style="font-size: 18px; font-weight: 800;">
 							<i class="fas fa-map-marker-alt" style="color:#e82b2b; font-size: 23px;"></i>&nbsp;&nbsp;위치&nbsp;&nbsp;</span>
-						<span style="font-size: 15px; color: #636363;">서울시 용산구 한강대로 405 KTX서울역 2층 여행상담센터</span>
+						<span class="address" style="font-size: 15px; color: #636363;"></span>
 					</div>
 				
 					<div style="text-align: left;">
 						<span style="font-size: 18px; font-weight: 800;">
 							<i class="fas fa-phone-volume" style="color: #368416; font-size: 23px;"></i>&nbsp;&nbsp;전화번호&nbsp;&nbsp;</span>
-						<span style="font-size: 15px; color: #636363;">02-3149-3333</span>
+						<span class="tel" style="font-size: 15px; color: #636363;"></span>
 					</div>
 					
 					<div style="text-align: left;">
@@ -275,17 +252,14 @@ $(document).ready(function(){
 									<td width="100">시작 날짜</td>
 									<td width="100">종료 날짜</td>
 								</tr>
-								<tr style="border-bottom: 1px solid #d4cbcb;">
-									<td>숙소</td>
+							 	<tr style="border-bottom: 1px solid #d4cbcb;" class="benefit">								
+									<td class="tourCate"></td>
 									<td>서울 펜션 10% 할인</td>
 									<td>2019-03-02</td>
 									<td>2019-12-31</td>
 								</tr>
-								<tr style="border-bottom: 1px solid #d4cbcb;">
-									<td>맛집</td>
-									<td>닭갈비 10% 할인</td>
-									<td>2019-03-02</td>
-									<td>2019-12-31</td>
+								<tr style="border-bottom: 1px solid #d4cbcb;" class="benefit">								
+
 								</tr>
 							</table>
 						</div>

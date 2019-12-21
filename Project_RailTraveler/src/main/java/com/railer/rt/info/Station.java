@@ -95,6 +95,7 @@ public class Station {
 	public void seteDate(String eDate) {
 		this.eDate = eDate;
 	}
+
 	
 	
 }

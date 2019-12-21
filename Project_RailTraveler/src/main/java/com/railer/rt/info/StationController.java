@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.MyUtil;
-import com.railer.rt.member.Member;
 
 @Controller("info.stationController")
 public class StationController {
@@ -77,24 +77,17 @@ public class StationController {
 		return ".four.info.station.info";
 	}
 	
-	@RequestMapping(value="station/modal", method=RequestMethod.POST)
+	@RequestMapping(value="station/modal", method=RequestMethod.GET)
+	@ResponseBody
 	public Map<String, Object> readStation(
-			@RequestParam int staNum,
-			@RequestParam(value="page", defaultValue = "1") int current_page,
-			@RequestParam(defaultValue="0") int locNum){
+			@RequestParam int staNum){
 		
-		Station dto = null;
-		try {
-			dto = service.readStation(staNum);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Station dto = service.readStation(staNum);
 		
 		Map<String, Object> model = new HashMap<>();
 		model.put("dto", dto);
-		model.put("page", current_page);
-		model.put("locNum", locNum);
-		
+
+
 		return model;
 	}
 	
