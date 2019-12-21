@@ -43,6 +43,26 @@
 		</where>
 		and ROWNUM <![CDATA[ < ]]>  1000
 	</select>
+	
+	<select id="localStation" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
+		select staName, staNum from station where locnum = #{locNum}
+	</select>
+	
+	<select id="detailTourCategory" parameterType="map" resultType="com.railer.rt.tour.Tour">
+	 select detailcateNum, detailcateName from detailtourcategory where catenum =#{cateNum}
+	</select>
+	
+	<select id="detailTourList" parameterType ="map" resultType="com.railer.rt.tour.Tour">
+	select t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum 
+	from tour t 
+	join tourfile tf on tf.tournum =t.tournum
+	join station s on t.stanum = s.stanum 
+	join detailtourcategory d on t.detailcatenum = d.detailcatenum 
+	join tourcategory tc on d.catenum = tc.catenum 
+	where t.stanum =#{staNum} and t.detailcatenum=#{detailcateNum}
+	and rowNUM  <![CDATA[<]]>7
+	</select>
+
 
 
 	

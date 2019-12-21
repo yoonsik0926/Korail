@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.MyUtil;
 
@@ -47,8 +49,6 @@ public class TourController {
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println(dataCount);
 		
 		if (dataCount != 0)
 			total_page = myUtil.pageCount(items, dataCount);
@@ -63,8 +63,13 @@ public class TourController {
 		map.put("offset", offset);
 		map.put("items", items);
 
-		// tourcategoryNum를 갖고 서비스로 간다리~
+		
+		//지역별 이미지를 가져옴
 		List<Tour> list = service.listBoard(map);
+		
+		//지역별 기차역을 가져옴
+		List<Tour> localStation = service.localStation(locNum);
+
 		
 		int listNum, n = 0;
 		for(Tour dto : list) {
@@ -91,6 +96,7 @@ public class TourController {
 		// 큰 카테고리의 정보를 가져온다.
 		List<Tour> tourCategoryList = service.tourCategoryList();
 
+		model.addAttribute("localStation", localStation);
 		model.addAttribute("cateNum", cateNum);
 		model.addAttribute("tourCategoryList", tourCategoryList);
 		model.addAttribute("list", list);
@@ -241,5 +247,86 @@ public class TourController {
 
 		return ".four.tour.tour.detailReply";
 	}
+	
+	@RequestMapping(value = "/tour/detailTourCategory", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> detailTourCategory(@RequestParam int cateNum) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cateNum", cateNum);
+
+		List<Tour> detailTourCategoy = service.detailTourCategory(map);
+
+		Map<String, Object> model = new HashMap<>();
+		model.put("detailTourCategoy", detailTourCategoy);
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/tour/detailTourList", method = RequestMethod.POST)
+	public String detailTourList(Model model,
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam int staNum,
+			@RequestParam int detailcateNum,
+			@RequestParam String subTitle,
+			HttpServletRequest req) {
+		
+		String cp = req.getContextPath();
+		
+		int items = 12;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("staNum", staNum);
+		map.put("detailcateNum", detailcateNum);
+		
+		//cateNum과 locNum을 이용해서 카운터 세기
+		dataCount = service.dataCount(map);
+		
+		
+		if (dataCount != 0)
+			total_page = myUtil.pageCount(items, dataCount);
+
+		if (total_page < current_page)
+			current_page = total_page;
+		
+		int offset = (current_page - 1) * items;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("items", items);
+
+		
+		List<Tour> detailTourList = service.detailTourList(map);
+		
+		//String query = "";
+		//String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
+	
+		
+		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
+		
+
+        
+        if(query.length()!=0) {
+        	listUrl = cp+"/sbbs/list?" + query;
+        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
+        	listUrl +="&"+query;
+        	articleUrl+= "&"+query;
+        }
+        */
+        //String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", detailTourList);
+
+		return "tour/tour/optionsList";
+	}
+	
+	
+	
+	
 
 }

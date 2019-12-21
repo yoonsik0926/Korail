@@ -13,8 +13,8 @@ public class Tour {
 	private int locNum; //지역번호
 	private String locName; //지역이름
 	
-	private int detailtourcateNum; 
-	private String detailtourcateName; 
+	private int detailcateNum; //숙박 -> 호텔,모텔 이런거
+	private String detailcateName;
 	
 	private int staNum; //역번호
 	private String staName; 
@@ -73,17 +73,18 @@ public class Tour {
 	public void setLocName(String locName) {
 		this.locName = locName;
 	}
-	public int getDetailtourcateNum() {
-		return detailtourcateNum;
+	
+	public int getDetailcateNum() {
+		return detailcateNum;
 	}
-	public void setDetailtourcateNum(int detailtourcateNum) {
-		this.detailtourcateNum = detailtourcateNum;
+	public void setDetailcateNum(int detailcateNum) {
+		this.detailcateNum = detailcateNum;
 	}
-	public String getDetailtourcateName() {
-		return detailtourcateName;
+	public String getDetailcateName() {
+		return detailcateName;
 	}
-	public void setDetailtourcateName(String detailtourcateName) {
-		this.detailtourcateName = detailtourcateName;
+	public void setDetailcateName(String detailcateName) {
+		this.detailcateName = detailcateName;
 	}
 	public int getStaNum() {
 		return staNum;
