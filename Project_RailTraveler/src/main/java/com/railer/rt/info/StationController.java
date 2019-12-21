@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.railer.rt.common.MyUtil;
+import com.railer.rt.member.Member;
 
 @Controller("info.stationController")
 public class StationController {
@@ -74,6 +75,27 @@ public class StationController {
 		model.addAttribute("subMenu", "1");
 		
 		return ".four.info.station.info";
+	}
+	
+	@RequestMapping(value="station/modal", method=RequestMethod.POST)
+	public Map<String, Object> readStation(
+			@RequestParam int staNum,
+			@RequestParam(value="page", defaultValue = "1") int current_page,
+			@RequestParam(defaultValue="0") int locNum){
+		
+		Station dto = null;
+		try {
+			dto = service.readStation(staNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("dto", dto);
+		model.put("page", current_page);
+		model.put("locNum", locNum);
+		
+		return model;
 	}
 	
 

@@ -48,6 +48,77 @@ $(function(){
 	});
 });
 
+
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function login() {
+	location.href="<%=cp%>/member/login";
+}
+
+/* $("#layerpop").on('show.bs.modal',function(e){
+	var data = $(e.relatedTarget).data('test');
+}); */
+
+<%-- $(function(){
+	$(".staModal").click(function(){
+		var url = "<%=cp%>/station/modal";
+		var staNum = "${vo.staNum}";
+		var query = {staNum:staNum};
+		
+		var fn = function(data){
+			var staName = data.staName;
+			$("#modal-staName").text(staName);
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+		
+	});
+}); --%>
+
+
+
+	
 </script>
 
 <div class="body-content-container">
@@ -91,13 +162,15 @@ $(function(){
 			<c:if test="${status.index!=0 && status.index%3==0}">
 				<c:out value="</div></div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
+			<input type="hidden" name="staNum" value="${vo.staNum}">
 			<figure class="snip1104 ${status.index%3==0?'red':(status.index%3==1?'blue':'')}" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/${vo.imageFilename}" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> ${vo.staName}</span></h4>
 				  </figcaption>
-				  <a data-target="#layerpop" data-toggle="modal"></a>
+				  <a class="staModal" data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}"></a>
 			</figure>	
+
 		</c:forEach>	
 		
 	</div>
@@ -115,14 +188,6 @@ $(function(){
 		<div style="width: 89%;">
 				<nav style="text-align: center;">
 					<ul class="pagination">
-						<!-- <li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-						</span></li>
-						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-						</li>
-						<li><span>2</span></li>
-						<li><span>3</span></li>
-						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-						</span></li> -->
 						<li>${dataCount==0?"등록된 게시물이 없습니다.":paging}</li>
 					</ul>
 				</nav>
@@ -138,7 +203,7 @@ $(function(){
 		        <!-- 닫기(x) 버튼 -->
 		        <button type="button" class="close" data-dismiss="modal">×</button>
 		        <!-- header title -->
-		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">서울역</h4>
+		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;"></h4>
 		      </div>
 		      <!-- body -->
 		      <div class="modal-body" style="text-align: center;">
@@ -213,6 +278,5 @@ $(function(){
 		
 
      </div>
-     
-</div>
+
 
