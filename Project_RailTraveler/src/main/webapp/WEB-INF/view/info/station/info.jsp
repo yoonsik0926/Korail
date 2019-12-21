@@ -96,8 +96,14 @@ function login() {
 	location.href="<%=cp%>/member/login";
 }
 
-/* $("#layerpop").on('show.bs.modal',function(e){
-	var data = $(e.relatedTarget).data('test');
+/* $("#layerpop").on('show.bs.modal',function(event){
+	var button = $(event.relatedTarget); // Button that triggered the modal
+	  var recipient = button.data('test'); // Extract info from data-* attributes
+	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+	  var modal = $(this);
+	  modal.find('.modal-title').html('New message to ' + recipient);
+	
 }); */
 
 <%-- $(function(){
@@ -115,10 +121,44 @@ function login() {
 		
 	});
 }); --%>
+/* 
+$(document).ready(function(){
 
 
+	//보기 버튼을 클릭했을 때
+	$('.staModal').click(function(){
 
+	var a = $(this).closest("figure");
+	var sta2 = $(a).closest("div");
+	var staNum = $(sta2).children("input").val();
+	$('#layerpop').modal("show");
+	alert(staNum);
+	 $.ajax({
+	//select.php 로 가서
+	url:"select.php",
+	method:"post",
+	//위에서 클릭한 employee_id 데이터를 url로 넘겨주고
+	data:{employee_id:employee_id},
+	success:function(data){
+	//성공하면 select.php에서 뿌린 데이터를 data 변수에 담아 가지고 오너라
+	$('#employee_detail').html(data);
+	$('#dataModal').modal("show");
+	}
+
+	});
+
+	});
+
+	}); */
 	
+	function aaa(ob) {
+
+
+		   var a =$(ob).closest("div").find("input").val();
+		   
+		   
+		   alert(a);
+		}
 </script>
 
 <div class="body-content-container">
@@ -163,13 +203,16 @@ function login() {
 				<c:out value="</div></div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
 			<input type="hidden" name="staNum" value="${vo.staNum}">
+			<div>
 			<figure class="snip1104 ${status.index%3==0?'red':(status.index%3==1?'blue':'')}" style="height:100%;">
 				  <img src="<%=cp%>/resource/images/station/${vo.imageFilename}" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> ${vo.staName}</span></h4>
 				  </figcaption>
-				  <a class="staModal" data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}"></a>
-			</figure>	
+				  <a class="staModal" data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}" onclick="aaa(this);"></a>
+				 <!--  <a class="staModal" onclick=""></a> -->
+			</figure>
+			</div>
 
 		</c:forEach>	
 		
@@ -195,7 +238,7 @@ function login() {
 			
 
 		<!-- 모달 -->
-		<div class="modal fade" id="layerpop">
+		<div class="modal fade" id="layerpop" tabindex="-1" role="dialog" aria-labelledby="layerpopLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <!-- header -->
@@ -203,7 +246,7 @@ function login() {
 		        <!-- 닫기(x) 버튼 -->
 		        <button type="button" class="close" data-dismiss="modal">×</button>
 		        <!-- header title -->
-		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;"></h4>
+		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">역이름 : </h4>
 		      </div>
 		      <!-- body -->
 		      <div class="modal-body" style="text-align: center;">
