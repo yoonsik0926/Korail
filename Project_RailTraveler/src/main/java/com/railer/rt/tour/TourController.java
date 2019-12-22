@@ -516,7 +516,7 @@ String cp = req.getContextPath();
 				
 		model.addAttribute("list", detailTourList);
 		model.addAttribute("paging", paging);
-
+		model.addAttribute("dataCount",dataCount);
 		return "tour/tour/optionsList";
 	}
 	

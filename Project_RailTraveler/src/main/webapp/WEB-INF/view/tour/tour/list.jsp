@@ -187,10 +187,26 @@ function listPage(page) {
 	
 	
 	var staNum =staion.options[staion.selectedIndex].value;
-	var categoryNum = category.options[staion.selectedIndex].value;
+	var categoryNum = category.options[category.selectedIndex].value;
 	var detailcateNum =detailcategory.options[detailcategory.selectedIndex].value;
 	
-	if(staNum ==""){alert("꾸엑")};
+	if(staNum ==""){
+		$("#modaltext").text("검색을 위한 역을 선택해주세요");
+		$("#modalPush").modal();
+		return;
+	};
+	
+	if(categoryNum ==""){
+		$("#modaltext").text("카테고리를 선택해주세요");
+		$("#modalPush").modal();
+		return;
+	};
+	
+	if(detailcateNum ==""){
+		$("#modaltext").text("세부 카테고리를 선택해주세요");
+		$("#modalPush").modal();
+		return;
+	};
 	
 	
 				
@@ -355,8 +371,8 @@ a {
 
 		<div class="form-group"
 			style="width: 15%; margin-top: 20px; float: left; margin-right: 15px">
-			<select  id="1stSelect" class="form-control">
-				<option class="boxTF" value="-1">:: 대분류::</option>
+			<select  id="1stSelect" name="1stSelect" class="form-control">
+				<option class="boxTF" value="">:: 대분류::</option>
 			<c:forEach var="mid" items="${tourCategoryList}">
 					<option class="boxTF" value="${mid.cateNum}" <%-- ${vo.categoryNum==dto.groupCategoryNum? "selected='selected'":""} --%>>${mid.cateName}</option>
 			</c:forEach>				
@@ -366,7 +382,7 @@ a {
 		<div class="form-group"
 			style="width: 15%; margin-top: 20px; float: left;">
 			<select name="2stSelect" id="2stSelect" class="form-control">
-				<option class="boxTF" value="-1">:: 소분류::</option>
+				<option class="boxTF" value="">:: 소분류::</option>
 			</select>
 		</div>
 
