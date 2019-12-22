@@ -182,11 +182,16 @@ $(function(){
 function listPage(page) {
 	//셀렉트 박스 다 되어있는지 검사하고..
 	var staion = document.getElementById("stationSelect");
+	var category = document.getElementById("1stSelect");
 	var detailcategory = document.getElementById("2stSelect");
 	
 	
 	var staNum =staion.options[staion.selectedIndex].value;
+	var categoryNum = category.options[staion.selectedIndex].value;
 	var detailcateNum =detailcategory.options[detailcategory.selectedIndex].value;
+	
+	if(staNum ==""){alert("꾸엑")};
+	
 	
 				
 	var url = "<%=cp%>/tour/detailTourList";
@@ -350,8 +355,8 @@ a {
 
 		<div class="form-group"
 			style="width: 15%; margin-top: 20px; float: left; margin-right: 15px">
-			<select  name="1stSelect" class="form-control">
-				<option class="boxTF" value="">:: 대분류::</option>
+			<select  id="1stSelect" class="form-control">
+				<option class="boxTF" value="-1">:: 대분류::</option>
 			<c:forEach var="mid" items="${tourCategoryList}">
 					<option class="boxTF" value="${mid.cateNum}" <%-- ${vo.categoryNum==dto.groupCategoryNum? "selected='selected'":""} --%>>${mid.cateName}</option>
 			</c:forEach>				
@@ -361,7 +366,7 @@ a {
 		<div class="form-group"
 			style="width: 15%; margin-top: 20px; float: left;">
 			<select name="2stSelect" id="2stSelect" class="form-control">
-				<option class="boxTF" value="">:: 소분류::</option>
+				<option class="boxTF" value="-1">:: 소분류::</option>
 			</select>
 		</div>
 

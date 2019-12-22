@@ -78,28 +78,28 @@ public class StationController {
 		return ".four.info.station.info";
 	}
 	
-	@RequestMapping(value="station/modal", method=RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> readStation(
-			@RequestParam int staNum){
+	@RequestMapping(value="station/modal")
+	public String readStation(
+			@RequestParam int staNum,
+			Model model){
 		
 		Station dto = service.readStation(staNum);
 		
-		Map<String, Object> model = new HashMap<>();
-		model.put("dto", dto);
-		
-		
+			
 		int count = service.countBenefit(staNum);
+		
 		if(count==0) {
 			List<Station> beneList = new ArrayList<>();
-			model.put("beneList", beneList);
+			model.addAttribute("beneList", beneList);
 		} else {
 			List<Station> beneList = service.listBenefit(staNum);
-			model.put("beneList", beneList);
+			model.addAttribute("beneList", beneList);
 		}	
 		
+		model.addAttribute("dto", dto);
+		model.addAttribute("count", count);
 		
-		return model;
+		return "info/station/modal";
 	}
 
 	
