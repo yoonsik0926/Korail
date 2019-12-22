@@ -9,4 +9,5 @@ public interface StationService {
 	public Station readStation(int staNum);
 	public List<Station> listBenefit(int staNum);
 	public int dataCount(Map<String, Object> map);
+	public int countBenefit(int staNum);
 }

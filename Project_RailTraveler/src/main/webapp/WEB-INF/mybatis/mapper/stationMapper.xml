@@ -46,6 +46,14 @@
 		join station s on s.staNum = b.staNum
 		where s.staNum = #{staNum}
 	</select>
+	
+	<select id="countBenefit" parameterType="Integer" resultType="Integer" >
+		select nvl(count(*),0)
+		from benefit b
+        join tourCategory t on b.cateNum = t.cateNum
+		join station s on s.staNum = b.staNum
+		where s.staNum = #{staNum}
+	</select>
 
 
 </mapper>

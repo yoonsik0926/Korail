@@ -71,4 +71,16 @@ public class StationServiceImpl implements StationService{
 		return dataCount;
 	}
 
+	@Override
+	public int countBenefit(int staNum) {
+		int result = 0;
+		try {
+			result = dao.selectOne("station.countBenefit",staNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 }

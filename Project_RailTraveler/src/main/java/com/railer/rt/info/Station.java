@@ -12,6 +12,8 @@ public class Station {
 	private String imageFilename;
 	
 	private int beneNum;
+	private int cateNum;
+	private String cateName;
 	private String subject;
 	private String content;
 	private String sDate;
@@ -95,7 +97,19 @@ public class Station {
 	public void seteDate(String eDate) {
 		this.eDate = eDate;
 	}
-
+	public int getCateNum() {
+		return cateNum;
+	}
+	public void setCateNum(int cateNum) {
+		this.cateNum = cateNum;
+	}
+	public String getCateName() {
+		return cateName;
+	}
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
+	}
+	
 	
 	
 }

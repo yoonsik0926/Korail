@@ -95,7 +95,6 @@ function ajaxHTML(url, type, query, selector) {
 function login() {
 	location.href="<%=cp%>/member/login";
 }
-
 	
 function showModal(ob) {
 	var staNum =$(ob).closest("div").find("input").val();  
@@ -114,6 +113,14 @@ function showModal(ob) {
 			$(".tel").text(dto.staTel);
 			var imgAddress = "<img src='<%=cp%>/resource/images/station/"+dto.imageFilename+"' style='width: 90%; margin-bottom: 20px;'/>";
 			$(".staImage").html(imgAddress);
+			
+			var beneList = data.beneList;
+			
+			for(var i =0 ;i <data.beneList.length ;i++){
+				
+			}
+			
+			$(".benefit").html(q);
 			
 			
 			$("#layerpop").modal();
@@ -202,7 +209,7 @@ function showModal(ob) {
 	</c:if>
 
 
-		<div style="width: 89%;">
+		<div style="width: 89%; margin-bottom: 40px;">
 				<nav style="text-align: center;">
 					<ul class="pagination">
 						<li>${dataCount==0?"등록된 게시물이 없습니다.":paging}</li>
@@ -252,8 +259,8 @@ function showModal(ob) {
 									<td width="100">시작 날짜</td>
 									<td width="100">종료 날짜</td>
 								</tr>
-							 	<tr style="border-bottom: 1px solid #d4cbcb;" class="benefit">								
-									<td class="tourCate"></td>
+							 	<tr style="border-bottom: 1px solid #d4cbcb;">								
+									<td></td>
 									<td>서울 펜션 10% 할인</td>
 									<td>2019-03-02</td>
 									<td>2019-12-31</td>
@@ -262,6 +269,7 @@ function showModal(ob) {
 
 								</tr>
 							</table>
+							<div class="benefit"></div>
 						</div>
 					</div>
 		        </div>

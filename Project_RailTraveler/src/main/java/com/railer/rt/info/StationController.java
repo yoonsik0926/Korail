@@ -1,5 +1,6 @@
 package com.railer.rt.info;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,10 +87,21 @@ public class StationController {
 		
 		Map<String, Object> model = new HashMap<>();
 		model.put("dto", dto);
-
-
+		
+		
+		int count = service.countBenefit(staNum);
+		if(count==0) {
+			List<Station> beneList = new ArrayList<>();
+			model.put("beneList", beneList);
+		} else {
+			List<Station> beneList = service.listBenefit(staNum);
+			model.put("beneList", beneList);
+		}	
+		
+		
 		return model;
 	}
+
 	
 
 	@RequestMapping(value="/station/created", method=RequestMethod.GET)
