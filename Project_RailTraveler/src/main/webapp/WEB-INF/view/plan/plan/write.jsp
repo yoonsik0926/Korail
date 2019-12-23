@@ -8,36 +8,24 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<link rel="apple-touch-icon" sizes="76x76"
-	href="<%=cp%>/resource/img/apple-icon.png">
-<link rel="icon" type="image/png"
-	href="<%=cp%>/resource/img/favicon.png">
+<link rel="apple-touch-icon" sizes="76x76" href="<%=cp%>/resource/img/apple-icon.png">
+<link rel="icon" type="image/png" href="<%=cp%>/resource/img/favicon.png">
 
 <title>나의 계획 짜기</title>
 
-<link href="<%=cp%>/resource/bootstrap3/css/bootstrap.css"
-	rel="stylesheet" />
+<link href="<%=cp%>/resource/bootstrap3/css/bootstrap.css" rel="stylesheet" />
 <link href="<%=cp%>/resource/css/demo.css" rel="stylesheet" />
-<link rel="stylesheet"
-	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
-	type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css" type="text/css">
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!--     Font Awesome     -->
-<link
-	href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
-	rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Grand+Hotel'
-	rel='stylesheet' type='text/css'>
-<script src="https://kit.fontawesome.com/9a196cb2bb.js"
-	crossorigin="anonymous"></script>
-
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
+<script src="https://kit.fontawesome.com/9a196cb2bb.js" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="<%=cp%>/resource/js/util.js"></script>
-<script type="text/javascript"
-	src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript"
-	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
-<script type="text/javascript"
-	src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
 
 <style type="text/css">
 * {
@@ -119,7 +107,8 @@ body::-webkit-scrollbar {
 	height: 450px;
 	border: 1px solid black;
 	display: none;
-	cursor: pointer;
+	margin-bottom: 0;
+	list-style: none;
 }
 
 .planListDetail:hover {
@@ -263,29 +252,31 @@ body::-webkit-scrollbar {
 .pickedStation {
 	margin: auto;
 	width: 100%;
+	line-height: normal;
 	height: 90px;
 	border: 1px solid black;
 	display: block;
+/* 	position: absolute; */
 	cursor: pointer;
 }
 
 .pickedStationCancel {
-	margin: auto;
+	margin: 14px;
 	width: 20%;
-	height: 100%;
-	border: 1px solid black;
+/* 	height: 100%; */
+/* 	border-right: 1px solid black; */
 	text-align: center;
-	font-size: 20px;
+	font-size: 60px;
 	display: block;
 	float: left;
 	cursor: pointer;
 }
 
 .pickedStationDetail {
-	margin: auto;
+	margin: 14px;
 	width: 20%;
-	height: 100%;
-	border: 1px solid black;
+/* 	height: 100%; */
+/* 	border-left: 1px solid black; */
 	text-align: center;
 	font-size: 60px;
 	display: block;
@@ -296,29 +287,38 @@ body::-webkit-scrollbar {
 .redThing {
 	background: red;
 }
-/* .carousel-cell {
-	counter-increment: carousel-cell;
-}
 
-.carousel-cell.is-selected {
-	background: #ED2;
-}
-
-.carousel-cell:before {
-	display: block;
-	text-align: center;
-	line-height: 300px;
-	font-size: 80px;
-	color: white;
-}
-
-.fPlan {
+.movingEnd {
 	width: 100%;
-	height: 300px;
-	margin-right: 10px;
-	margin-bottom: 22.5px;
-	border-radius: 5px;
-} */
+	height: 90px;
+	background: #9af6b6;
+}
+
+#detailPlanPlus {
+	width: 75%;
+	height: 100%;
+	border: 1px solid black;
+	background: black;
+	float: right;
+	transition: All 0.2s ease;
+		-webkit-transition: All 0.2s ease;
+		-moz-transition: All 0.2s ease;
+		-o-transition: All 0.2s ease;
+	position: fixed;
+}
+
+#detailPlanPlus .open {
+	right: 0px;
+}
+
+
+.timeSelect {
+	width: 25%;
+	height: 100%;
+	background: blue;
+	float: left;
+}
+
 </style>
 <script type="text/javascript">
 
@@ -415,7 +415,7 @@ function getNumber(day) {
 								+	"<div class='selectedStation'></div>"
 								+	"<button class='detailPlanning'>계획짜기</button>"
 								+"</div>"
-								+"<div class='planListDetail"+i+" leftThing'></div>"
+								+"<ul class='planListDetail"+i+" leftThing' data-day='"+i+"'></ul>"
 								);
 	}
 	console.log(days);
@@ -426,6 +426,7 @@ function getNumber(day) {
 $(document).ready(function(){
 	$('.plusStation').parent().hide();
 });
+    
 
 </script>
 </head>
@@ -517,16 +518,19 @@ $(document).ready(function(){
 	                    	latlng: new kakao.maps.LatLng(36.656960, 128.134321) // 마커가 표시될 위치입니다
 	                    	,staContent:'하위하위1'
 	                    	,staName:'문경역'
+	                    	,staNum:1
 	                   },
 	                   {   
 	                      	latlng: new kakao.maps.LatLng(35.821812, 128.564345) // 마커가 표시될 위치입니다
 	                   	  	,staContent:'하위하위2'
 	                   	  	,staName:'전주역'
+	                   	  	,staNum:2
 	                   },
 	                   {
 	                      	latlng: new kakao.maps.LatLng(35.839614, 127.1151431) // 마커가 표시될 위치입니다
 	                   	  	,staContent:'하위하위3'
 	                   	  	,staName:'예비역'
+	                   	  	,staNum:3
 	                   }
 	                ];
 	             
@@ -561,9 +565,11 @@ $(document).ready(function(){
 	            $staContent.append(pos.staContent);
 	            $plusStation.append($staName);
 	            $($staName).append(pos.staName);
+	            $($staName).attr("data-staNum",pos.staNum);
 				$plusStation.append($insertStaPlan);
 				
 	            $close.append($span);
+	            
 	            
 	            var content=$plusStation[0];
 	            
@@ -585,19 +591,24 @@ $(document).ready(function(){
 
 				<div id="planModal" class="modal2">
 					<div class="modal-planning">
-						<button type="button" class="close" aria-label="Close"
-							onclick="close_planning();"
-							style="display: block; font-size: 40px; margin: 10px;">
+						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
+								style="display: block; font-size: 40px; margin: 10px;">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 				</div>
 
+				<div id="detailPlanPlus" class="modal2">
+					<div class="modal-detailPlanning">
+						<div class="timeSelect">
+							
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">
-
+<script type="text/javascript">
 
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
@@ -608,7 +619,7 @@ $(function() {
 			return;
 		}
 		
-    	if($(this).parent().next().css("display")=="none"){
+    	if($(this).parent().next().css("display")=="none") {
     		$(this).parent().next().slideDown();
     		$(this).parent().addClass('activeGreen');
     		$(this).prev().prev().find("input[name=selectedDay]").attr("class", "activeGreen");
@@ -658,30 +669,84 @@ $(function() {
 $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
 // 		console.log($(this).prev().text());
-		console.log($("#planListForm").children().hasClass("activeGreen"));
+// 		console.log($("#planListForm").children().hasClass("activeGreen"));
 		
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
 	var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
 	
 		if($("#planListForm").children().hasClass("activeGreen")) {
-			days[ilcha-1].push($(this).prev().text());
-			$(ilchaFullname).append("<div class='pickedStation'></div>");
+			if(days[ilcha-1].length>4) {
+				alert("최대로 추가 할 수 있는 역의 개수는 5개 입니다.");
+				return;
+			}
+			var staNum=$(this).prev().attr("data-staNum");
+			
+			for(var n=0; n<days[ilcha-1].length; n++ ){
+				if(days[ilcha-1][n]==staNum) {
+					return false;
+				}
+			}
+			days[ilcha-1].push(staNum);
+			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"'>"
+								   +$(this).prev().text()
+								   +	"<div class='pickedStationDetail'><i class='fas fa-plus-circle'></i></div>"
+								   +"</li>"
+								   );
+			
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
 			return;
 		}
-	console.log(days);
+// 	console.log(days);
 	});
 });
 
 $(function() {
-	$("body").on('click', ".pickedStationCancel", function() {
-		if(! confirm("추가한 역을 삭제하시겠습니까?")) {
-			return;
-		}
-		$(this).remove();
+	$("body").on('click',".insertStaPlan", function() {
+		$("#planListForm ul").sortable({
+			items:$(".pickedStation"),
+			placeholder:"movingEnd",
+		    stop: function( event, ui ) {
+		    	var day = ui.item.parent().attr("data-day");
+		    	ui.item.parent().find("li").each(function(index){
+		    		days[day-1][index] = $(this).attr("data-staNum");
+		    	});
+		    	
+			// ajax로 db작업(업데이트)
+		    	
+		    }
+		});	
+		
+
+		$("#planListForm ul").droppable({
+	        out: function (event, ui) {
+	        	var $p=ui.helper.parent();
+	        	var day = ui.helper.parent().attr("data-day");
+	        	ui.helper.remove();
+ 		    	days[day-1].length=0;
+
+ 		    	var n=0;
+ 		    	$p.find("li").each(function(index){
+		    		if($(this).attr("data-staNum")) {		    				 
+				    	days[day-1][n++] = $(this).attr("data-staNum");
+		    		}		
+				});
+// 	        	console.log(days[day-1]);
+// 	        	console.log(days);
+	        }
+		    
+		});
+	});	
+});
+
+$(function() {
+	$("body").on('click', ".pickedStationDetail", function() {
+		$("#detailPlanPlus").addClass("open");
+		$("#detailPlanPlus").show();
 	});
 });
+// $(".planListDetail1 leftThing sortable").disableSelection();
+
 
 </script>
 </body>
