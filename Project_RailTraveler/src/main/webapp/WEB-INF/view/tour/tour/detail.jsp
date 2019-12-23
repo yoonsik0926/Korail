@@ -109,7 +109,7 @@ function listPage(page) {
 				<h3 align="center">${vo.name}</h3>
 				<h6 align="center">${vo.detailcateName}</h6>
 
-				<div class="row" style="width: 33%; margin: 10px auto;">
+				<div class="row" style="width: 340px; margin: 10px auto;">
 					<div class="col" style="font-size: 18px; font-weight: 600;">
 						<ul class="nav nav-tabs">
 							<li class="nav-item "><a class="nav-link active"
@@ -203,7 +203,35 @@ function listPage(page) {
 				<p style="font-size: 25px; font-weight: 700">후기/리뷰</p>
 			</div>
 			<div style="margin-bottom: 50px;">
-				네이버 블로그 형태로 집어넣을 것
+				
+				
+			<c:forEach var="list" items="${bloglist}">
+			<div class="box1" style="margin-top: 20px;">
+			<div class="box1" style="width: 93%; padding:10px 10px;
+			border: 1px solid #eeeeee; align-content: center">
+
+				<div class="col"
+					style="font-size: 18px; font-weight: 600; margin-top: 10px; margin-left: 10px">
+					
+						<span style="text-align: left; font-size: 20px ">${list.blogSubject}</span>
+						&nbsp;
+						<span style="text-align: right; font-size: 14px" >${list.created}</span>
+					
+					<h6 style="font-weight: 500">
+						${list.blogContent}
+					</h6>
+					
+					<span style="font-size: 17px;font-weight: 700">${list.blogName} </span>
+					<span style="font-size: 14px">/ <a href="${list.blogUrl}">블로그로 가기</a></span> 
+					
+				</div>
+			</div>
+
+			</div>
+			</c:forEach>
+			
+				
+				
 			</div>
 		</div>
 

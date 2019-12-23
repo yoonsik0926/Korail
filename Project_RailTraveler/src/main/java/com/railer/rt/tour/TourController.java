@@ -1,5 +1,6 @@
 package com.railer.rt.tour;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -593,7 +596,37 @@ String cp = req.getContextPath();
 		Tour vo = service.readDetailTour(tourNum);
 
 		
-		
+        //크롤링할 url지정
+        String url = "https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+vo.getName();   
+        Document doc = null; 
+        System.out.println(url);
+        try {
+        	doc = Jsoup.connect(url).get();
+        	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+        List<BlogCrwaling> bloglist = new ArrayList<BlogCrwaling>();
+        
+    
+        Elements element = doc.select("dl"); 
+       
+
+        for(int i=2; i<element.size(); i++){
+        	BlogCrwaling dto = new BlogCrwaling();
+        	dto.setBlogContent(element.eq(i).select("dd.sh_blog_passage").text());
+        	dto.setBlogName(element.eq(i).select("a.txt84").text());
+        	dto.setCreated(element.eq(i).select("dd.txt_inline").text());
+        	dto.setBlogSubject(element.eq(i).select("a.sh_blog_title._sp_each_url._sp_each_title").text());
+        	dto.setBlogUrl(element.eq(i).select("a.url").attr("href"));
+        		  
+        	bloglist.add(dto);
+        }
+        
+        
+        
+        model.addAttribute("bloglist", bloglist);
 		model.addAttribute("vo",vo);
 		return ".four.tour.tour.detail";
 	}
