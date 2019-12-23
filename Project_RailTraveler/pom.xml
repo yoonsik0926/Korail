@@ -68,6 +68,11 @@
   		    <id>geotools</id>
   		    <url>http://download.osgeo.org/webdav/geotools/</url>
   	    </repository>
+  	    
+        <repository>
+            <id>localRepository</id>  
+            <url>file://C:/spring/libs</url>
+        </repository>  	    
     </repositories>
 	
 	<dependencies>
@@ -401,5 +406,11 @@
 		    <version>1.13</version>
 		</dependency>
 		
+        <dependency>
+            <groupId>com-jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.12.1</version>
+        </dependency>
+        		
 	</dependencies>	
 </project>
