@@ -154,4 +154,15 @@ public class TourServiceImpl implements TourService {
 
 	}
 
+	@Override
+	public Tour readDetailTour(int tourNum) {
+		Tour dto = null;
+		try {
+			dto = dao.selectOne("tour.readDetailTour", tourNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
 }

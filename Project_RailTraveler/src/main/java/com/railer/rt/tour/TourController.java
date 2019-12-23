@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,9 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.MyUtil;
 import com.railer.rt.member.SessionInfo;
-
-
-
 
 @Controller("tour.tourController")
 public class TourController {
@@ -40,11 +36,12 @@ public class TourController {
 		
 		String cp = req.getContextPath();
 		
-		int items = 9;
+		int items = 12;
 		int total_page = 0;
 		int dataCount = 0;
 		
-		
+
+					
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("cateNum", cateNum);
@@ -78,6 +75,8 @@ public class TourController {
 		//추천해줄 곳을 가져옴
 		List<Tour> hitContentList = service.hitContentList(map);
 		
+		
+
 		int listNum, n = 0;
 		for(Tour dto : list) {
 			listNum = dataCount - (offset+n);
@@ -85,23 +84,27 @@ public class TourController {
 			n++;
 		}
 		
-		String query = "";
+	
 		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
+		
+		
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=sudo";
 		
 
         
-        if(query.length()!=0) {
+/*        if(query.length()!=0) {
         	listUrl = cp+"/sbbs/list?" + query;
         	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
         	listUrl +="&"+query;
         	articleUrl+= "&"+query;
-        }
-        */
+        }*/
+      
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
+        
 		List<Tour> tourCategoryList = service.tourCategoryList();
+		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("hitContentList", hitContentList);
 		model.addAttribute("localStation", localStation);
 		model.addAttribute("cateNum", cateNum);
@@ -167,13 +170,12 @@ public class TourController {
 			n++;
 		}
 		
-		String query = "";
-		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
 		
-
+		String listUrl = cp +"/tour/chungcheong?cateNum="+cateNum;
+	
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=chungcheong";
         
-        if(query.length()!=0) {
+     /*   if(query.length()!=0) {
         	listUrl = cp+"/sbbs/list?" + query;
         	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
         	listUrl +="&"+query;
@@ -183,6 +185,7 @@ public class TourController {
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
+        model.addAttribute("articleUrl", articleUrl);
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("hitContentList", hitContentList);
 		model.addAttribute("localStation", localStation);
@@ -204,7 +207,7 @@ public class TourController {
 		
 String cp = req.getContextPath();
 		
-		int items = 9;
+		int items = 12;
 		int total_page = 0;
 		int dataCount = 0;
 		
@@ -249,12 +252,13 @@ String cp = req.getContextPath();
 			n++;
 		}
 		
-		String query = "";
-		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
 		
-
-        
+		String listUrl = cp +"/tour/gangwon?cateNum="+cateNum;
+		
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=gangwon";
+		
+		/*
+ 
         if(query.length()!=0) {
         	listUrl = cp+"/sbbs/list?" + query;
         	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
@@ -265,6 +269,7 @@ String cp = req.getContextPath();
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
+        model.addAttribute("articleUrl", articleUrl);
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("hitContentList", hitContentList);
 		model.addAttribute("localStation", localStation);
@@ -288,7 +293,7 @@ String cp = req.getContextPath();
 		
 String cp = req.getContextPath();
 		
-		int items = 9;
+		int items = 12;
 		int total_page = 0;
 		int dataCount = 0;
 		
@@ -333,12 +338,11 @@ String cp = req.getContextPath();
 			n++;
 		}
 		
-		String query = "";
-		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
-		
 
-        
+		String listUrl = cp +"/tour/jeonla?cateNum="+cateNum;
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=jeonla";
+		
+		/*
         if(query.length()!=0) {
         	listUrl = cp+"/sbbs/list?" + query;
         	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
@@ -349,6 +353,7 @@ String cp = req.getContextPath();
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
+        model.addAttribute("articleUrl", articleUrl);
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("hitContentList", hitContentList);
 		model.addAttribute("localStation", localStation);
@@ -371,7 +376,7 @@ String cp = req.getContextPath();
 		
 String cp = req.getContextPath();
 		
-		int items = 9;
+		int items = 12;
 		int total_page = 0;
 		int dataCount = 0;
 		
@@ -416,12 +421,12 @@ String cp = req.getContextPath();
 			n++;
 		}
 		
-		String query = "";
-		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		/*String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page;
-		
 
-        
+		String listUrl = cp +"/tour/gyeongsang?cateNum="+cateNum;
+		
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=gyeongsang";
+		
+		/*
         if(query.length()!=0) {
         	listUrl = cp+"/sbbs/list?" + query;
         	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
@@ -432,6 +437,7 @@ String cp = req.getContextPath();
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
+        model.addAttribute("articleUrl", articleUrl);
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("hitContentList", hitContentList);
 		model.addAttribute("localStation", localStation);
@@ -445,14 +451,7 @@ String cp = req.getContextPath();
 		return ".four.tour.tour.list";
 	}
 
-	@RequestMapping(value = "/tour/detail")
-	public String detail(Model model) throws Exception {
 
-		return ".four.tour.tour.detail";
-	}
-
-	
-	
 	@RequestMapping(value = "/tour/detailTourCategory", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> detailTourCategory(@RequestParam int cateNum) throws Exception {
@@ -474,9 +473,14 @@ String cp = req.getContextPath();
 			@RequestParam int staNum,
 			@RequestParam int detailcateNum,
 			@RequestParam String subTitle,
+			@RequestParam String cateNum,
 			HttpServletRequest req) {
-				
-		int items = 9;
+		
+			System.out.println(cateNum);
+
+		String cp = req.getContextPath();
+		
+		int items = 12;
 		int total_page = 0;
 		int dataCount = 0;
 		
@@ -513,10 +517,12 @@ String cp = req.getContextPath();
 		// AJAX 용 페이징
 		String paging=myUtil.pagingMethod(current_page, total_page, "listPage");
 		
+		String articleUrl = cp+"/tour/detail?page="+current_page+"&subTitle="+subTitle+"&cateNum="+cateNum;
 				
 		model.addAttribute("list", detailTourList);
 		model.addAttribute("paging", paging);
 		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("articleUrl", articleUrl);
 		return "tour/tour/optionsList";
 	}
 	
@@ -572,6 +578,23 @@ String cp = req.getContextPath();
 	
 
 		return model;
+	}
+	
+	@RequestMapping(value="/tour/detail")
+	public String article(
+			@RequestParam int cateNum,
+			@RequestParam String page,
+			@RequestParam String subTitle,
+			@RequestParam int tourNum,
+			Model model
+			) throws Exception {
+		
+		Tour vo = service.readDetailTour(tourNum);
+
+		
+		
+		model.addAttribute("vo",vo);
+		return ".four.tour.tour.detail";
 	}
 	
 

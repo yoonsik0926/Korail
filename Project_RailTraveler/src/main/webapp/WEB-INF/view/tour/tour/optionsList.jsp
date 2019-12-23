@@ -9,10 +9,10 @@
 
 
 <c:forEach var="dto" items="${list}">
-	<div class="col-sm-6 col-md-4" style="max-width: 33%; min-height: 200px; ">
+	<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px; ">
 		<div class="thumbnail">
 
-			<img style="height: 200px; width: 300px" src="${dto.imagefilename}">
+			<img style="height: 200px; width: 360px" src="${dto.imagefilename}">
 			<div class="caption" style="width: 100%">
 				<div class="nonscroll" style="overflow-y: scroll;  width:100%; height: 30px">
 					<span style="font-size: 20px; ">${dto.name}</span>
@@ -29,7 +29,7 @@
 					</button>
 				</span>	
 				<span style="float: right">	
-					<button class="btn btn-info" onclick="javascript:location.href='<%=cp%>/tour/detail';">알아보기</button>
+					<button class="btn btn-info" onclick="javascript:location.href='${articleUrl}&tourNum=${dto.tourNum}';">알아보기</button>
 				</span>
 				</div>	
 

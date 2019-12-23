@@ -26,12 +26,15 @@ $(function(){
 		  var url = "<%=cp%>/tour/initMarkHeart";
 			var query = "";
 			var fn = function(data){
-
+					
+				
+				
 				for(var i=0; i<data.likeList.length ; i++){
 					
+					console.log(data.likeList[i]);					
 
 				}
-				console.log(data.likeList[0]);
+
 			}; 
 				
 			ajaxJSON(url, "post", query, fn);
@@ -211,7 +214,7 @@ function listPage(page) {
 	
 				
 	var url = "<%=cp%>/tour/detailTourList";
-	var query = "pageNo="+page+"&staNum="+staNum+"&detailcateNum="+detailcateNum+"&subTitle=${subTitle}";
+	var query = "pageNo="+page+"&staNum="+staNum+"&detailcateNum="+detailcateNum+"&subTitle=${subTitle}&cateNum=4";
 	var selector = "#please";
 	
 
@@ -333,7 +336,7 @@ a {
 	
 
 	<div class="container">
-		<div class="row" style="width: 100%; cursor: pointer;" >
+		<div class="row" style="width: 100%; cursor: pointer; margin-bottom: 10px;" >
 			<div class="col" style="font-size: 18px; font-weight: 600; width: 100%">
 				<ul class="nav nav-tabs tabs">
 					<li id="tab-0" class="nav-item" data-tab="0"><a class="nav-link" >전체</a></li>				
@@ -395,10 +398,10 @@ a {
 
 	<div id="please">
 	<c:forEach var="dto" items="${list}">
-	<div class="col-sm-6 col-md-4" style="max-width: 33%; min-height: 200px; ">
+	<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px; ">
 		<div class="thumbnail">
 
-			<img style="height: 200px; width: 300px" src="${dto.imagefilename}">
+			<img style="height: 200px; width: 100%" src="${dto.imagefilename}">
 			<div class="caption" style="width: 100%">
 				<div class="nonscroll" style="overflow-y: scroll;  width:100%; height: 30px">
 					<span style="font-size: 20px; ">${dto.name}</span>
@@ -410,12 +413,20 @@ a {
 				
 				<div style="margin-top: 5px">
 				<span >
-					<button id="btn-${dto.tourNum}" class="img-button" value="${dto.tourNum}" >
+					<button id="btn-${dto.tourNum}" class="img-button find" value="${dto.tourNum}" >
+					
+					   <c:choose>
+       						<c:when test="${dto.likeuserId==sessionScope.member.userId && dto.liketourNum== dto.tourNum}">
+						<i class="fas fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
+							</c:when>						
+							<c:otherwise>
 						<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
+							</c:otherwise>
+						</c:choose>
 					</button>
 				</span>	
 				<span style="float: right">	
-					<button class="btn btn-info" onclick="javascript:location.href='<%=cp%>/tour/detail';">알아보기</button>
+					<button class="btn btn-info" onclick="javascript:location.href='${articleUrl}&tourNum=${dto.tourNum}';">알아보기</button>
 				</span>
 				</div>	
 

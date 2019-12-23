@@ -4,13 +4,13 @@
 <mapper namespace="tour">
 
 	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
-		select t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
+		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
         join station st on st.stanum = t.stanum
         join location loc on loc.locnum =st.locnum
-
+		left join tourbookmark tbm on tbm.tourNum = t.tournum
 		<where>
 			 loc.locNum = #{locNum}
 			<if test="cateNum !=0">
@@ -107,6 +107,14 @@
 			order by likeCount desc) tb join tourfile ttf
 			on tb.tournum = ttf.tournum 
 			where rownum <![CDATA[<]]>10
+	</select>
+	
+	<select id="readDetailTour" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
+        select tf.imagefilename, t.stanum,t.detailcateNum,name,tel,address,content,longitude,latitude,hitCount,detailcatename 
+        from tour t 
+        join detailtourcategory dtc on dtc.detailcatenum =t.detailcatenum 
+        join tourfile tf on t.tournum = tf.tournum    
+		 where t.tourNum = #{tourNum}		
 	</select>
 
 

@@ -93,24 +93,21 @@ function listPage(page) {
 
 
 <div class="body-content-container">
-
-	<!--이미지 슬라이드-->
-	<div>
-		<ul class="bxslider">
-
-			<li><img src="<%=cp%>/resource/img/friendPlan.PNG" /></li>
-			<li><img src="<%=cp%>/resource/img/friendPlan.PNG" /></li>
-		</ul>
+	<div style="width:600px; margin: 10px auto;">
+		<img  style="height: 300px; width: 600px; border: 5px solid #c4c4c4" src="${vo.imagefilename}"/>
 	</div>
 
+
 	<div class="box1" style="width: 90%; border: 2px solid #eeeeee">
+			
 		<!--상단 메뉴-->
+				
 		<div class="box1" style="margin-top: 20px">
+
 			<div class="box1"
 				style="width: 93%; border: 1px solid #eeeeee; margin-top:10px; " >
-				<h3 align="center">강릉 라테라스리조트</h3>
-				<h6 align="center">펜션</h6>
-
+				<h3 align="center">${vo.name}</h3>
+				<h6 align="center">${vo.detailcateName}</h6>
 
 				<div class="row" style="width: 33%; margin: 10px auto;">
 					<div class="col" style="font-size: 18px; font-weight: 600;">
@@ -146,13 +143,13 @@ function listPage(page) {
 				<div class="col"
 					style="font-size: 18px; font-weight: 600; margin-top: 10px; margin-left: 10px">
 					<p>
-						<i class="fas fa-phone"></i> 070-4320-7476
+						<i class="fas fa-phone"></i> ${vo.tel}
 					</p>
 					<p>
-						<i class="fas fa-map-marker-alt"></i> 전남 여수시 돌산읍 진모1길 29-12
+						<i class="fas fa-map-marker-alt"></i>  ${vo.address}
 					</p>
 					<p>
-						<i class="fas fa-home"></i> 바닷가, 신축펜션
+						<i class="fas fa-home"></i> ${vo.content}
 					</p>
 				</div>
 			</div>
@@ -194,7 +191,7 @@ function listPage(page) {
 
 
 			<div class="row" style="width: 100%; ">
-				<p style="font-size: 25px; font-weight: 700">강릉 라테라스리조트 교통정보</p>
+				<p style="font-size: 25px; font-weight: 700">"${vo.name}" 교통정보</p>
 			</div>
 			<div id="map" style="width:100%;height:350px;margin-bottom: 50px;"></div>
 		</div>
@@ -265,7 +262,7 @@ function listPage(page) {
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
-        center: new kakao.maps.LatLng(34.708763, 127.756664), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(${vo.longitude}, ${vo.latitude}), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
@@ -279,8 +276,8 @@ var marker = new kakao.maps.Marker({
 // 지도에 마커를 표시합니다
 marker.setMap(map);
 
-var iwContent = '<div><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue; text-align:right; target="_blank">큰지도보기</a> </div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-iwPosition = new kakao.maps.LatLng(33.450701, 126.570667); //인포윈도우 표시 위치입니다
+var iwContent = '<div><a href="https://map.kakao.com/link/map/${vo.name},${vo.longitude},${vo.latitude}" style="color:blue; text-align:right; target="_blank">큰지도보기</a> </div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+iwPosition = new kakao.maps.LatLng(${vo.longitude}, ${vo.latitude}); //인포윈도우 표시 위치입니다
 
 //인포윈도우를 생성합니다
 var infowindow = new kakao.maps.InfoWindow({
