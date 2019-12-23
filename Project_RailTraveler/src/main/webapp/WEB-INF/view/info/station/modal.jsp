@@ -9,6 +9,24 @@
 $(function(){
 	$("#aaaa").modal();
 });
+
+function deleteStation(){
+	var q = "staNum=${dto.staNum}&locNum=${dto.locNum}&page=${page}";
+	var url = "<%=cp%>/station/delete?" + q;
+
+	if(confirm("위 자료를 삭제 하시 겠습니까 ? ")) {
+		location.href=url;
+	}
+	
+}
+
+function updateStation(){
+	var q = "staNum=${dto.staNum}&locNum=${dto.locNum}&page=${page}"
+	var url = "<%=cp%>/station/update?"+ q;
+	
+	location.href = url;
+}
+
 </script>
 
 		<!-- 모달 -->
@@ -92,8 +110,8 @@ $(function(){
 						<table style="width: 100%;border-spacing: 0px;">
 							<tr height="45">
 								<td width="300" style="text-align: center; height: 80px;">    
-					        		<button type="button" class="btn btn-default" onclick="javascript:location.href='<%=cp%>/station/update'">수정</button>    
-					        		<button type="button" class="btn btn-danger" onclick="deleteBoard();">삭제</button>
+					        		<button type="button" class="btn btn-default" onclick="updateStation();">수정</button>    
+					        		<button type="button" class="btn btn-danger" onclick="deleteStation();">삭제</button>
 					    		</td>
 							</tr>
 						</table>

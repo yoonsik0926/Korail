@@ -1,11 +1,13 @@
 package com.railer.rt.info;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.railer.rt.common.FileManager;
 import com.railer.rt.common.MyUtil;
 
 @Controller("info.stationController")
@@ -24,6 +26,9 @@ public class StationController {
 	
 	@Autowired
 	private MyUtil myUtil;
+	
+	@Autowired
+	private FileManager fileManager;
 	
 	@RequestMapping(value="/station/info")
 	public String info(
@@ -81,11 +86,12 @@ public class StationController {
 	@RequestMapping(value="station/modal")
 	public String readStation(
 			@RequestParam int staNum,
+			@RequestParam String page,
+			@RequestParam int locNum,
 			Model model){
 		
 		Station dto = service.readStation(staNum);
-		
-			
+
 		int count = service.countBenefit(staNum);
 		
 		if(count==0) {
@@ -98,6 +104,8 @@ public class StationController {
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("count", count);
+		model.addAttribute("page",page);
+		model.addAttribute("locNum",locNum);
 		
 		return "info/station/modal";
 	}
@@ -108,26 +116,128 @@ public class StationController {
 	public String createdForm(
 			Model model) throws Exception {
 		
+		List<Station> locList = service.listLocation();
+		
+		model.addAttribute("locList",locList);
+		
 		model.addAttribute("subMenu", "1");
 		model.addAttribute("mode","created");
-		
 		
 		return ".four.info.station.created";
 	}
 	
-	public String createdSubmit() {
+	@RequestMapping(value="/station/created", method=RequestMethod.POST)
+	public String createdSubmit(
+			Station dto,
+			HttpSession session) {
+
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"resource"+File.separator+"images"+File.separator+"station";
+		
+		try {
+			service.insertStation(dto, pathname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return "redirect:/station/info";
 	}
 	
 	@RequestMapping(value="/station/update", method=RequestMethod.GET)
 	public String updateForm(
+			@RequestParam int staNum,
+			@RequestParam String page,
+			@RequestParam int locNum,
+			HttpSession session,
 			Model model) throws Exception {
+
+		Station dto = service.readStation(staNum);
+		if(dto == null) {
+			return "redirect:/station/info?page="+page;
+		}
+		
+		//지역 선택
+		List<Station> locList = service.listLocation();
+		model.addAttribute("locList",locList);
+		
+		model.addAttribute("dto",dto);
+		model.addAttribute("page",page);
+		model.addAttribute("mode","update");		
 		
 		model.addAttribute("subMenu", "1");
-		model.addAttribute("mode", "update");
-
 		
 		return ".four.info.station.created";
+	}
+	
+	@RequestMapping(value="/station/update", method=RequestMethod.POST)
+	public String updateSubmit(
+			Station dto,
+			@RequestParam String page,
+			@RequestParam int locNum,
+			HttpSession session) {
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"resource"+File.separator+"images"+File.separator+"station";
+		
+		try {
+			service.updateStation(dto, pathname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/station/info?page="+page+"&locNum="+locNum;
+	}
+	
+	@RequestMapping(value="/station/delete")
+	public String deleteStation(
+			@RequestParam int staNum,
+			@RequestParam int locNum,
+			@RequestParam String page,
+			HttpSession session) throws Exception{
+		
+		String query = "page="+page+"&locNum="+locNum;
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"station";
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("remove", "station");
+		map.put("staNum", staNum);
+		
+		service.deleteBenefit(map);
+		
+		service.deleteStation(staNum, pathname);
+		
+		return "redirect:/station/info?"+query;
+	}
+	
+	@RequestMapping(value="station/deleteFile")
+	public String deleteFile(
+			@RequestParam int staNum,
+			@RequestParam int locNum,
+			@RequestParam String page,
+			HttpSession session) throws Exception{
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"station";
+		String query = "staNum="+staNum+"&locNum="+locNum+"&page="+page;
+		
+		Station dto = service.readStation(staNum);
+		if(dto == null) {
+			return "redirect:/station/info?page="+page+"&locNum="+locNum;
+		}
+		
+		try {
+			if(dto.getImageFilename()!=null) {
+				fileManager.doFileDelete(dto.getImageFilename(),pathname);
+				dto.setImageFilename("");
+				service.updateStation(dto, pathname);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/station/update?"+query;
 	}
 }

@@ -100,7 +100,7 @@ function showModal(ob) {
 	var staNum =$(ob).closest("div").find("input").val();  
 	
 	var url = "<%=cp%>/station/modal";
-	var query = "staNum="+staNum;
+	var query = "staNum="+staNum+"&page="+${page}+"&locNum="+${locNum};
 	
 	$.ajax({
 		type:"get"

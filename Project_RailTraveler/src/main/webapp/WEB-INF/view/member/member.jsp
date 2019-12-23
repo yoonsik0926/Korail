@@ -185,12 +185,16 @@ $(function() {
         todayHighlight: true,
         autoclose: true */
     	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
-    	todayHighlight: true
+    	todayHighlight: true,
+    	showMonthAfterYear: true,
+    	changeYear: true //콤보박스에서 년 선택 가능
+    	,changeMonth: true //콤보박스에서 월 선택 가능      
+    	
         
     });                    
     
     //초기값을 오늘 날짜로 설정
-    $('[data-toggle="datepicker"]').datepicker('setDate', 'today');           
+    $('[data-toggle="datepicker"]').datepicker('setDate', '-19Y');           
 });
 
 </script>
@@ -251,6 +255,8 @@ input, select, .btnSearch {
 .form-group {
 	width: 60%;
 }
+
+
 </style>
 
 <div class="mem-member">
@@ -272,7 +278,7 @@ input, select, .btnSearch {
 									placeholder="&nbsp;UserId">
 				    </div>
 				  </div>
-				  
+
 				   <div class="form-group" style="margin:15px 0; ">
 				    <label class="sr-only" for="password">password</label>
 				    <p style="text-align: left; font-weight:600; margin-bottom: 5px; color:#334393;">Password</p>

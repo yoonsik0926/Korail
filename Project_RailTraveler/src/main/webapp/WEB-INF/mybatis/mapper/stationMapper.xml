@@ -55,5 +55,39 @@
 		where s.staNum = #{staNum}
 	</select>
 
+	<select id="listTourCate" resultType="com.railer.rt.info.Station" >
+		select cateNum, cateName
+		from tourCategory
+	</select>
+	
+	<insert id="insertStation" parameterType="com.railer.rt.info.Station">
+		insert into station(staNum,staName,staTel,staAddress,imageFilename,locNum)
+		values (station_seq.nextval,#{staName},#{staTel},#{staAddress},#{imageFilename},#{locNum})
+	</insert>
+	
+	<update id="updateStation" parameterType="com.railer.rt.info.Station">
+		update station set staName = #{staName}, staTel=#{staTel}, staAddress=#{staAddress},
+			imageFilename=#{imageFilename}, locNum=#{locNum}
+		where staNum = #{staNum}
+	</update>
+	
+	<delete id="deleteStation" parameterType="Integer">
+		delete from station
+		where staNum = #{staNum}
+	</delete>
+	
+	<delete id="deleteBenefit" parameterType="map">
+		delete from benefit
+		where
+		<choose>
+			<when test="remove == 'station'">
+				staNum = #{staNum}
+			</when>
+			<otherwise>
+				beneNum = #{beneNum}
+			</otherwise>
+		</choose>
+	</delete>
 
+	
 </mapper>

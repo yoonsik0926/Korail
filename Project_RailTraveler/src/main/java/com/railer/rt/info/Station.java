@@ -1,5 +1,7 @@
 package com.railer.rt.info;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Station {
 	private int listNum;
 	private int locNum;
@@ -10,6 +12,7 @@ public class Station {
 	private String staTel;
 	private String staAddress;
 	private String imageFilename;
+	private MultipartFile upload;
 	
 	private int beneNum;
 	private int cateNum;
@@ -108,6 +111,12 @@ public class Station {
 	}
 	public void setCateName(String cateName) {
 		this.cateName = cateName;
+	}
+	public MultipartFile getUpload() {
+		return upload;
+	}
+	public void setUpload(MultipartFile upload) {
+		this.upload = upload;
 	}
 	
 	

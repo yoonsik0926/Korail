@@ -5,8 +5,11 @@
 <%
 	String cp = request.getContextPath();
 %>
-<script type="text/javascript"
-	src="<%=cp%>/resource/se/js/HuskyEZCreator.js" charset="utf-8"></script>
+<link rel="stylesheet" href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css" type="text/css">
+<script type="text/javascript" src="<%=cp%>/resource/se/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+	
 <script type="text/javascript">
 function sendOk() {
     var f = document.sbbsForm;
@@ -43,7 +46,34 @@ function sendOk() {
 
     f.submit();
 }
+ 
+
+$(function() {
+    //input을 datepicker로 선언
+    $('form input[name=sDate]').datepicker({
+    	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+    	todayHighlight: true,
+    	showMonthAfterYear: true,
+    	changeYear: true, 
+    	changeMonth: true       
+        
+    }); 
     
+    $('form input[name=eDate]').datepicker({
+    	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+    	todayHighlight: true,
+    	showMonthAfterYear: true,
+    	changeYear: true, 
+    	changeMonth: true       
+        
+    }); 
+    
+    //초기값을 오늘 날짜로 설정
+    $('[data-toggle="datepicker"]').datepicker('setDate', 'today');           
+});
+
+
+
 </script>
 <style type="text/css">
 .tb-row {
@@ -87,7 +117,7 @@ input[type=text], input[type=file] {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<form name="boardForm" method="post" enctype="multipart/form-data"
+		<form name="stationForm" method="post" enctype="multipart/form-data"
 			onsubmit="return submitContents(this);">
 			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
 				<tr>
@@ -106,12 +136,11 @@ input[type=text], input[type=file] {
 				<tr class="tb-row">
 					<td width="100" class="tb-title">지역&nbsp;&nbsp;이름</td>
 					<td class="tb-content">
-						<select name="majorLocationNum">
+						<select name="locNum">
 						<option class="boxTF" value="">:: 지역 선택 ::</option>
-						<c:forEach var="vo" items="${groupCategory}">
-							<option class="boxTF" value="${vo.categoryNum}" ${vo.categoryNum==dto.groupCategoryNum? "selected='selected'":""}>${vo.category}</option>
+						<c:forEach var="vo" items="${locList}">
+							<option class="boxTF" value="${vo.locNum}" ${vo.locNum==dto.locNum? "selected='selected'":""}>${vo.locName}</option>
 						</c:forEach>
-						<option class="boxTF" value="${vo.categoryNum}" ${vo.categoryNum==dto.groupCategoryNum? "selected='selected'":""}>수도권</option>
 						</select>
 					</td>
 				</tr>
@@ -125,32 +154,24 @@ input[type=text], input[type=file] {
 					<td width="100" class="tb-title">주&nbsp;&nbsp;&nbsp;&nbsp;소</td>
 					<td class="tb-content"><input type="text" name="staAddress"
 						maxlength="100" class="boxTF" style="padding: 5px 5px;"
-						value="${dto.staTel}"></td>
-				</tr>
-				<tr class="tb-row">
-					<td width="100" class="tb-title" style="padding-top: 5px;"
-						valign="top">혜&nbsp;&nbsp;&nbsp;&nbsp;택</td>
-					<td valign="top" style="padding: 5px 1% 5px 10px;">
-						<textarea name="content" rows="12" class="boxTA" style="width:100%;">${dto.content}</textarea>
-					</td>
+						value="${dto.staAddress}"></td>
 				</tr>
 				<tr class="tb-row">
 					<td width="100" class="tb-title">역사진&nbsp;&nbsp;첨부</td>
 					<td class="tb-content"><input type="file" name="upload"
-						class="boxTF" size="53"></td>
+						class="boxTF" size="53" accept="image/*" value="${dto.imageFilename}"></td>
 				</tr>
 
-				<c:if test="${mode=='update' }">
+				<c:if test="${mode=='update'}">
 					<tr class="tb-row">
 						<td width="100" class="tb-title">첨부된파일</td>
 						<td class="tb-content"><c:if
-								test="${not empty dto.saveFilename}">
-								<a href="<%=cp%>/bbs/deleteFile?num=${dto.num}&page=${page}"><i
+								test="${not empty dto.imageFilename}">
+								<a href="<%=cp%>/station/deleteFile?staNum=${dto.staNum}&page=${page}&locNum=${dto.locNum}"><i
 									class="far fa-trash-alt"></i></a>
-							</c:if> ${dto.originalFilename}</td>
+							</c:if> ${dto.imageFilename}</td>
 					</tr>
 				</c:if>	
-			
 
 			</table>
 			
@@ -163,7 +184,7 @@ input[type=text], input[type=file] {
 						<button type="submit" class="btn btn-danger" style="margin-left: 5px;"><img alt="" src="<%=cp%>/resource/images/check-mark.png" style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}</button>
 						
 						<c:if test="${mode =='update'}">
-							<input type="hidden" name="num" value="${dto.num}">
+							<input type="hidden" name="staNum" value="${dto.staNum}">
 							<input type="hidden" name="page" value="${page}">
 						</c:if>
 					</td>
