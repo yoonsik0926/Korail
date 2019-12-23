@@ -185,7 +185,7 @@ font-weight: bold;
 
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">\
+  <div class="modal-dialog modal-sm">
     <div class="modal-content" style="padding: 15px;
     background: #fffff5;
     border: 3px navy dotted;">

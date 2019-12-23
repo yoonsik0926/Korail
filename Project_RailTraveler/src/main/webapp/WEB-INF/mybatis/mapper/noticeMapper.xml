@@ -45,7 +45,7 @@
 			</otherwise>
 		</choose>
 	</sql>
-	
+   
 	<!--공지사항 게시물 수를 반환
 	parameter Type : map
 	return type : 정수형-->

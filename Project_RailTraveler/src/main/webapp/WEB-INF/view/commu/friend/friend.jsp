@@ -38,13 +38,13 @@ optgroup {
 						style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 						<span id="searchCount"
 						style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-							<span style="color: #ca4a0d;">3569건 </span> <img alt=""
+							<span style="color: #ca4a0d;">>${dataCount}건 </span> <img alt=""
 							src="/Project_RailTraveler/resource/images/close_icon.png"
 							onclick="reset()"
 							style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
 					</span>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/qna/created';"
+							onclick="javascript:location.href='<%=cp%>/friend/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> 글쓰기
@@ -80,8 +80,9 @@ optgroup {
 				</tr>
 			</thead>
 			<tbody style="border-bottom: 2px solid black;">
+			<c:forEach var="dto" items="${noticeList}">
 				<tr class="lbo_li lbo_notice li_bg0 lbo_like"
-					style="font-weight: 600;">
+					style="font-weight: 600;"  onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
 					<td>
 						<div class="noticeBox">
 							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
@@ -90,40 +91,38 @@ optgroup {
 						</div>
 					</td>
 					<td colspan="2" style="text-align: left; padding-left: 20px;">※
-						묻고 답하기의 공지입니다 ※</td>
-					<td colspan="2" style="text-align: right; padding-right: 20px;"><i>2018-10-23</i></td>
+						${dto.subject} ※</td>
+					<td colspan="2" style="text-align: right; padding-right: 20px;"><i>${dto.created}</i></td>
 				</tr>
-				<%
-					for (int i = 10; i >= 1; i--) {
-				%>
-				<tr onclick="javascript:location.href='<%=cp%>/friend/article'">
-					<td><%=i%></td>
-					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
+				</c:forEach>
+				<c:forEach var="dto" items="${list}">
+				<tr onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
+					<td>${dto.listNum}</td>
+					<td style="text-align: left; padding-left: 20px;">${dto.subject} <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>3 <i class="far fa-comments" style="margin-right: 2px;
-    color: #969696;"></i>5</span></td>
-					<td>겨레리</td>
-					<td>2018-10-23</td>
-					<td>1</td>
+    color: #969696;"></i>3  <i class="far fa-comment-alt" style="margin-right: 2px;
+    color: #969696;"></i>5</span><br> <span style="color: #aaa;">기간 : ${dto.sDate} ~ ${dto.eDate}</span></td>
+					<td>${dto.userName}</td>
+					<td>${dto.created}</td>
+					<td>${dto.hitCount}</td>
 				</tr>
-				<%
-					}
-				%>
+				</c:forEach>
 
 			</tbody>
 		</table>
 
 		<nav style="text-align: center;">
-			<ul class="pagination">
-				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-				</span></li>
-				<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-				</li>
-				<li><span>2</span></li>
-				<li><span>3</span></li>
-				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-				</span></li>
-			</ul>
+		${dataCount==0? "등록된 자료가 없습니다":paging}
+<!-- 			<ul class="pagination"> -->
+<!-- 				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span> -->
+<!-- 				</span></li> -->
+<!-- 				<li class="active"><span>1 <span class="sr-only">(current)</span></span> -->
+<!-- 				</li> -->
+<!-- 				<li><span>2</span></li> -->
+<!-- 				<li><span>3</span></li> -->
+<!-- 				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span> -->
+<!-- 				</span></li> -->
+<!-- 			</ul> -->
 		</nav>
 
 

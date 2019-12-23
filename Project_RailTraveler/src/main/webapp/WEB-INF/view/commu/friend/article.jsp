@@ -9,75 +9,25 @@
 <script src="<%=cp%>/resource/js/commu.js"></script>
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
-	/* function sendLinkFacebook() {
-		var facebook_share_url = "https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}";
-		window.open(facebook_share_url, 'Share on Facebook',
-				'scrollbars=no, width=500, height=500');
-	}
-	function sendLinkTwitter() {
-		var twitter_share_text = "{{ post.title }}";
-		var twitter_share_url = "{{ request.build_absolute_uri }}";
-		window.open("https://twitter.com/share?text=" + twitter_share_text
-				+ "&url=" + twitter_share_url, 'Share on Twitter',
-				'scrollbars=no, width=500, height=500');
-	}
-	function sendLinkNaver() {
-		var raw_url = "{{ request.build_absolute_uri }}";
-		var raw_title = "{{ post.title }}"
-		var naver_root_url = "http://share.naver.com/web/shareView.nhn?url="
-		var naver_share_url = naver_root_url + encodeURI(raw_url) + "&title="
-				+ encodeURI(raw_title);
-		window.open(naver_share_url, 'Share on Naver',
-				'scrollbars=no, width=500, height=500');
-	}
-	$(function() {
-		$(window).scroll(function() {
-			if ($(this).scrollTop() > 500) {
-				$('#MOVE_TOP_BTN').fadeIn();
-			} else {
-				$('#MOVE_TOP_BTN').fadeOut();
-			}
-		});
-
-		$("#MOVE_TOP_BTN").click(function() {
-			$('html, body').animate({
-				scrollTop : 0
-			}, 400);
-			return false;
-		});
-	}); */
 	function modalOn() {
 		$('#myModal').modal('toggle');
 	}
-	function clickLikeBtn() {
-		var cs = document.getElementById("boardLikeIcon");
-		if (cs.className == 'far fa-heart') {
-			cs.className = 'fas fa-heart';
-		} else {
-			cs.className = 'far fa-heart';
+	function deleteNotice() {
+		var q="friendNum=${dto.friendNum}&${query}";
+		var url="<%=cp%>/friend/delete?"+q;
+		
+		if(confirm("게시물을 삭제 하시겠습니까 ?")) {
+	<%-- 		var url="<%=cp%>/notice/delete?num="+num+"&${query}"; --%>
+			location.href=url;
 		}
 	}
-	function clickReLikeBtn() {
-		var cs = document.getElementById("boardReLikeIcon");
-		if (cs.className == 'far fa-heart') {
-			cs.className = 'fas fa-heart';
-		} else {
-			cs.className = 'far fa-heart';
-		}
+	function updateNotice() {
+		var q="friendNum=${dto.friendNum}&${query}";
+		var url="<%=cp%>/friend/update?"+q;
+		
+		location.href=url;
 	}
 
-	/* function snsShare() {
-		$('#snsModal').modal('show');
-		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
-		$(".modal-backdrop").remove();
-	}
-	function declare() {
-		$('#declarationModal').modal('show');
-		$("body").css({"padding-right": "0px"}).removeClass("modal-open");
-		$(".modal-backdrop").remove();
-	} */
-
-	// http://www.libertypage.net/myblog/post/18/
 </script>
 <style type="text/css">
 tfoot td {
@@ -165,99 +115,6 @@ a#MOVE_TOP_BTN {
 	box-shadow: 0 5px #666;
 	transform: translateY(4px);
 }
-/* SNS 공유하기 모달 */
-/* 
-.modal_post_social .modal-content {
-	padding: 8px 0;
-}
-
-.text-basic, .text-basic a {
-	color: #212121;
-}
-
-.modal_post_social .social-btn {
-	overflow: hidden;
-}
-
-.social-btn ul {
-	list-style: outside none none;
-	padding: 0;
-}
-
-.modal_post_social li:first-child, .modal_post_social li:nth-child(5) {
-	margin-left: 5px;
-}
-
-.modal_post_social li {
-	float: left;
-	width: 68px;
-	margin-top: 10px;
-}
-
-.modal_post_social li a {
-	text-align: center;
-	padding: 0;
-	font-size: 12px;
-	line-height: 1;
-	display: block;
-	width: 68px;
-	height: 80px;
-	background:
-		url(//vendor-cdn.imweb.me/images/site/social_icon3.png?487487)
-		no-repeat;
-	background-size: 56px;
-	padding-top: 63px;
-}
-
-.modal_post_social li.kakao a {
-	background-position: 7px 0;
-}
-
-.modal_post_social li.story a {
-	background-position: 7px -325px;
-	letter-spacing: -1px;
-}
-
-.modal_post_social li.line a {
-	background-position: 7px -81px;
-}
-
-.modal_post_social li.band a {
-	background-position: 7px -406px;
-}
-
-.modal_post_social li.naver a {
-	background-position: 7px -648px;
-}
-
-.modal_post_social li.face a {
-	background-position: 7px -163px;
-}
-
-.modal_post_social li.twitter a {
-	background-position: 7px -244px;
-}
-
-.modal_post_social li.googleplus a {
-	background-position: 7px -568px;
-}
-
-.modal_post_social .url-copy {
-	clear: both;
-	padding: 0 8px;
-	margin-top: 20px;
-}
-
-.holder {
-	position: relative;
-}
-
-.modal_post_social .url-copy .form-control {
-	border: 1px solid rgba(155, 155, 155, 0.4);
-	box-shadow: none;
-	color: #212121;
-}
-*/
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
 	{
 	background-color: #eee;
@@ -369,75 +226,9 @@ a#MOVE_TOP_BTN {
 		</div>
 	</div>
 </div>
-<!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
-	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content"
-			style="padding: 15px; background: #fffff5; border: 3px navy dotted;">
-			<h3 style="font-weight: 900; border-bottom: 1px solid;">다운로드</h3>
-			<ul>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-			</ul>
-		</div>
-	</div>
-</div>
 
-<div class="body-content-container">
-	<div class="page-three-title mt40">
-		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 묻고 답하기</span>
-		</h3>
-	</div>
 
-	<div id="sir_lbo" class="sir_lbo"
-		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<div style="padding-bottom: 10px;"></div>
-		<table style="width: 100%; border-spacing: 0px;">
-			<tr height="45">
-				<td width="300" align="left">
-					<button type="button" class="btn btn-default"
-						onclick="javascript:location.href='<%=cp%>/bbs/list?${query}';">
-						목록</button>
-				</td>
-
-				<td align="right"><c:if
-						test="${sessionScope.member.userId==dto.userId}">
-						<button type="button" class="btn btn-default"
-							onclick="updateBoard();">수정</button>
-					</c:if> <c:if
-						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
-						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();">삭제</button>
-					</c:if>
-					<button type="button" class="btn btn-danger"
-						onclick="declare();">
-						<i class="far fa-bell" style="color: white"></i>신고
-					</button>
-					<div id="declarationModal" role="dialog" tabindex="-1"
+<div id="declarationModal" role="dialog" tabindex="-1"
 	aria-labelledby="mySmallModalLabel" aria-hidden="true"
 	data-backdrop="true" data-keyboard="true" class="modal1 modal_post_social" style="display: none;">
 	<div class="modal-dialog" style="    width: 35%;
@@ -473,6 +264,57 @@ a#MOVE_TOP_BTN {
 		</div>
 	</div>
 </div>
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="padding: 15px;
+    background: #fffff5;
+    border: 3px navy dotted;">
+   <h3 style="    font-weight: 900;
+    border-bottom: 1px solid;">다운로드</h3>
+      <ul>
+      <c:forEach var="file" items="${files}">
+      	<li style=" padding: 5px;"><a href="#"><span><i class="far fa-arrow-alt-circle-down"></i> ${file.originalFilename}</span></a>(<fmt:formatNumber value="${file.fileSize/1024}" pattern="0.00" />KByte)</li>
+      	</c:forEach>
+      	
+      	<li> <a href="<%=cp%>/friend/zipDownload?friendNum=${dto.friendNum}">zip 파일로 받기</a> </li>
+      	</ul>
+    </div>
+  </div>
+</div>
+
+<div class="body-content-container">
+	<div class="page-three-title mt40">
+		<h3 class="fs26">
+			<span style="padding: 10px 0px; display: block;"> 동행 구하기</span>
+		</h3>
+	</div>
+
+	<div id="sir_lbo" class="sir_lbo"
+		style="padding: 0; margin: 0; font-size: 1.025em;">
+		<div style="padding-bottom: 10px;"></div>
+		<table style="width: 100%; border-spacing: 0px;">
+			<tr height="45">
+				<td width="300" align="left">
+					<button type="button" class="btn btn-default"
+						onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+						목록</button>
+				</td>
+
+				<td align="right"><c:if
+						test="${sessionScope.member.userId==dto.userId}">
+						<button type="button" class="btn btn-default"
+							onclick="updateBoard();">수정</button>
+					</c:if> <c:if
+						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+						<button type="button" class="btn btn-default"
+							onclick="deleteBoard();">삭제</button>
+					</c:if>
+					<button type="button" class="btn btn-danger"
+						onclick="declare();">
+						<i class="far fa-bell" style="color: white"></i>신고
+					</button>
 					</td>
 			</tr>
 		</table>
@@ -482,8 +324,7 @@ a#MOVE_TOP_BTN {
 				<tr>
 					<td colspan="3" style="padding-top: 15px;">
 						<h3 style="margin: 10px 0 2px; font-size: 25px;">
-							동행구하기 게시물입니당 <span style="float: right;"> <i
-								class="fa fa-heart" style="width: 22px;"></i>&nbsp;5 <i
+							${dto.subject} <span style="float: right;"> <i
 								class="fas fa-comments"></i> 5
 
 							</span>
@@ -493,29 +334,19 @@ a#MOVE_TOP_BTN {
 
 				<tr class="tb-row" style="height: 30px;">
 					<td colspan="3" align="left"
-						style="padding-left: 5px; font-size: 13px;"><span>이겨레</span><span>|</span><span>2019.
-							12. 15. 20:47:43</span><span>|</span><span>조회 101회</span><span>|</span><span>댓글
-							4</span></td>
+						style="padding-left: 5px; font-size: 13px;"><span>${dto.userName}</span><span>|</span><span>${dto.created}</span><span>|</span><span>조회 101회</span><span>|</span><span>댓글
+							4</span><span style="float: right;"><span>기간 </span><span>|</span><span>
+							${dto.sDate} ~ ${dto.eDate}</span></span></td>
 				</tr>
 				<tr>
 					<td colspan="3" style="padding: 20px 5px;" valign="top"
-						height="200">그 머냐 그 12월 29일에 서울 가시는분/?!!? 당일치기로 청계천+홍대
-						돌아다니려구요~ 여자분 환영
-
-						<h3>밑에 제 여행 계획표 첨부합니다~</h3>
+						height="200">
+						${dto.content}
 					</td>
 				</tr>
 
 				<tr class="tb-row" style="border-bottom: 0;">
 					<td colspan="3" height="40" align="center">
-						<button type="button" class="btn btnSendBoardLike btn-default"
-							title="좋아요"
-							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
-							onclick="clickLikeBtn();">
-							<i id="boardLikeIcon" class="far fa-heart"
-								style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
-								id="boardLikeCount">${dto.boardLikeCount}3</span>
-						</button>
 						<button type="button" class="btn btnSendBoardLike btn-default"
 							title="공유하기"
 							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
@@ -527,10 +358,12 @@ a#MOVE_TOP_BTN {
 					</td>
 				</tr>
 				<tr class="tb-row">
-					<td colspan="3" align="left"
-						style="padding-left: 5px; color: blue;"><a
-						onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (0)</a></td>
-				</tr>
+			    <td colspan="3" align="left" style="padding-left: 5px; color:blue;">
+			    <c:if test="${not empty files}">
+			     <a onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (${dto.fileCount})</a>
+			     </c:if>
+			    </td>
+			</tr>
 			</thead>
 			<tbody class="reTbody">
 				<tr height='30'>
@@ -651,7 +484,42 @@ a#MOVE_TOP_BTN {
 				</tr>
 
 
-
+<tr class="tb-row" style="border-top: 1px solid #cccccc;">
+			    <td align="left" style="padding-left: 5px;" width="100">
+			       이전글<i class="fas fa-caret-up" style="    margin: 5px;"></i> : 
+			    </td>
+			    <c:if test="${empty preReadDto}">
+			    <td colspan="2">
+						<span style="color: #bbb;">이전글이 존재하지 않습니다.</span>
+						</td>
+					</c:if>
+			     <c:if test="${not empty preReadDto}">
+			    <td>
+			    <a href="<%=cp%>/friend/article?${query}&friendNum=${preReadDto.friendNum}" style="color:#737373;">${preReadDto.subject}</a>
+			    </td>
+			    <td  width="90">
+			   ${preReadDto.created}
+			    </td>
+			    </c:if>
+			</tr>
+			<tr class="tb-row">
+			   <td align="left" style="padding-left: 5px;" width="100">
+			       다음글<i class="fas fa-caret-up" style="    margin: 5px;"></i> : 
+			    </td>
+			    <c:if test="${empty nextReadDto}">
+			    <td colspan="2">
+						<span style="color: #bbb;">다음글이 존재하지 않습니다.</span>
+						</td>
+					</c:if>
+			     <c:if test="${not empty nextReadDto}">
+			    <td>
+			    <a href="<%=cp%>/friend/article?${query}&friendNum=${nextReadDto.friendNum}" style="color:#737373;">${nextReadDto.subject}</a>
+			    </td>
+			    <td  width="90">
+			   ${nextReadDto.created}
+			    </td>
+			    </c:if>
+			</tr>
 
 
 			</tfoot>

@@ -70,7 +70,8 @@
     
         <div class="body-right">
             <tiles:insertAttribute name="body"/>
-       </div> </div>
+       </div> 
+      </div>
     </div>        
 </div>
 

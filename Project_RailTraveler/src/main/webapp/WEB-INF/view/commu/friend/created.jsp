@@ -6,10 +6,39 @@
 	String cp = request.getContextPath();
 %>
 <script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+<script type="text/javascript"
 	src="<%=cp%>/resource/se/js/HuskyEZCreator.js" charset="utf-8"></script>
+<link rel="stylesheet"
+	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
+	type="text/css">
+
 <script type="text/javascript">
+$(function () {
+	$("form input[name=upload]").change(function () {
+		//빈 부분이 있을 때 막는 것
+		if(! $(this).val()) return;
+		
+		var b = false;
+		$("form input[name=upload]").each(function () {
+			if(! $(this).val()){
+				b=true;
+				return;
+			}
+		});
+		
+		if(b) return false;
+		
+		//파일 첨부에 변화가 생겻을 경우, 추가해주는 부분
+		var $tr = $(this).closest("tr.tb-row").clone(true);
+		 $tr.find("input").val("");
+		 $("#friendtb").append($tr);
+	})
+});
     function sendOk() {
-        var f = document.boardForm;
+        var f = document.friendForm;
 
     	var str = f.subject.value;
         if(!str) {
@@ -25,24 +54,60 @@
             return;
         }
 
-    	f.action="<%=cp%>/notice/${mode}";
+    	f.action="<%=cp%>/friend/${mode}";
 
         f.submit();
     }
     function check() {
-        var f = document.boardForm;
+        var f = document.friendForm;
     	str = f.content.value;
         if(!str || str=="<p>&nbsp;</p>") {
             alert("내용을 입력하세요. ");
             f.content.focus();
             return false;
         }
-
-   		f.action="<%=cp%>/주소";
+	f.datepicker1.name='sDate';
+	f.datepicker2.name='eDate';
+   		f.action="<%=cp%>/friend/created";
 
         return true;
+//         return false;
     }
     
+    $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
+		$("#datepicker1").datepicker({
+			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+			altField:"#sDate",
+			showAnim: "slide" ,changeYear: true //콤보박스에서 년 선택 가능
+            ,changeMonth: true //콤보박스에서 월 선택 가능    
+            ,minDate: "0M"
+		});
+		$("#datepicker2").datepicker({
+			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
+			altField:"#eDate",
+			showAnim: "slide"
+				,minDate: "0M",changeYear: true //콤보박스에서 년 선택 가능
+	            ,changeMonth: true //콤보박스에서 월 선택 가능    
+		});
+		
+		 $('#datepicker1').datepicker();
+		    $('#datepicker1').datepicker("option", "maxDate", $("#datepicker2").val());
+		    $('#datepicker1').datepicker("option", "onClose", function ( selectedDate ) {
+		        $("#datepicker2").datepicker( "option", "minDate", selectedDate );
+		    });
+		 $('#datepicker2').datepicker();
+		    $('#datepicker2').datepicker("option", "minDate", $("#datepicker1").val());
+		    $('#datepicker2').datepicker("option", "onClose", function ( selectedDate ) {
+		        $("#datepicker1").datepicker( "option", "maxDate", selectedDate );
+		    });
+    });
+
+    function resetDate() {
+    	$('#sDate').val('');
+    	 $('#eDate').val('');
+    	 $('#datepicker1').val('');
+    	 $('#datepicker2').val('');
+	}
 </script>
 <style type="text/css">
 .tb-row {
@@ -72,11 +137,13 @@
 }
 
 input[type=text], input[type=file] {
-	width: 100%; border : 1px solid #ccc;
+	width: 100%;
+	border: 1px solid #ccc;
 	border-radius: 2px;
 	border: 1px solid #ccc;
 }
 </style>
+
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
@@ -86,69 +153,103 @@ input[type=text], input[type=file] {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<form name="boardForm" method="post" enctype="multipart/form-data"
+		<form name="friendForm" method="post" enctype="multipart/form-data"
 			onsubmit="return submitContents(this);">
-			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px; ">
+			<table
+				style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
 				<tr>
-					<td style="    text-align: right;"><button type="reset" class="btn btn-default"  style="
-    padding: 6px 6px;
-    border-radius: 5px;" onclick="resetContent(this);"><img alt="" src="<%=cp%>/resource/images/resetIcon1.png" style="width: 20px;"> </button>
-					</td></tr></table>
-			<table class="tb-created">
-				<tr class="tb-row">
-					<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
-					<td class="tb-content"><input type="text" name="subject"
-						maxlength="100" class="boxTF" style="padding: 5px 5px;"
-						value="${dto.subject}"></td>
+					<td style="text-align: right;"><button type="reset"
+							class="btn btn-default"
+							style="padding: 6px 6px; border-radius: 5px;"
+							onclick="resetContent(this);">
+							<img alt="" src="<%=cp%>/resource/images/resetIcon1.png"
+								style="width: 20px;">
+						</button></td>
 				</tr>
-<%--  <c:if test="${sessionScope.member.userId=='admin'}">	 --%>
-				<tr class="tb-row">
-					<td width="100" class="tb-title">공지여부</td>
-					<td class="tb-content"><input type="checkbox" name="notice" id="notice">
-   </td>
-				</tr>
-				<%-- 				</c:if> --%>
-				<tr class="tb-row">
-					<td width="100" class="tb-title">작성자</td>
-					<td class="tb-content">${sessionScope.member.userName}</td>
-				</tr>
-
-				<tr class="tb-row">
-					<td width="100" class="tb-title" style="padding-top: 5px;"
-						valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
-					<td valign="top" style="padding: 5px 1% 5px 10px;"><textarea
-							name="content" rows="12" id="content" class="boxTA"
-							style="width: 100%; height: 270px;">${dto.content}</textarea></td>
-				</tr>
-
-				<tr class="tb-row">
-					<td width="100" class="tb-title">첨&nbsp;&nbsp;&nbsp;&nbsp;부</td>
-					<td class="tb-content"><input type="file" name="upload"
-						class="boxTF" size="53"></td>
-				</tr>
-
-				<c:if test="${mode=='update' }">
-					<tr class="tb-row">
-						<td width="100" class="tb-title">첨부된파일</td>
-						<td class="tb-content"><c:if
-								test="${not empty dto.saveFilename}">
-								<a href="<%=cp%>/bbs/deleteFile?num=${dto.num}&page=${page}"><i
-									class="far fa-trash-alt"></i></a>
-							</c:if> ${dto.originalFilename}</td>
-					</tr>
-				</c:if>
-
 			</table>
-			<table class="tb-board" style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+			<table class="tb-created">
+				<tbody id="friendtb">
+					<tr class="tb-row">
+						<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
+						<td class="tb-content"><input type="text" name="subject"
+							maxlength="100" class="boxTF" style="padding: 5px 5px;"
+							value="${dto.subject}"></td>
+					</tr>
+					<%--  <c:if test="${sessionScope.member.userId=='admin'}">	 --%>
+					<tr class="tb-row">
+						<td width="100" class="tb-title">기간</td>
+						<td class="tb-content">
+							<div
+								style="background-color: white; width: 20%; border: 1px solid #bbb; border-radius: 3px; float: left; height: 30px; padding: 5px 5px 10px;">
+								<i class="far fa-calendar-alt" style="font-size: 14px;"></i> <input
+									type="text" id="datepicker1" placeholder="출발 날짜"
+									style="border: none; width: 80%; font-size: 14px;">
+							</div>
+							<div
+								style="background-color: white; width: 20%; float: left; border-radius: 3px; border: 1px solid #bbb; margin-left: 10px; height: 30px; padding: 5px 5px 10px;">
+								<i class="far fa-calendar-alt" style="font-size: 14px;"></i> <input
+									type="text" id="datepicker2" placeholder="종료날짜"
+									style="border: none; width: 80%; font-size: 14px;">
+							</div>
+							<div style="float: left;">
+								<button type="button" class="btn btn-default"
+									onclick="resetDate();"
+									style="height: 30px; padding: 0px 10px; margin-left: 10px;">초기화</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="tb-row">
+						<td width="100" class="tb-title">공지여부</td>
+						<td class="tb-content"><input type="checkbox" name="notice"  value="1" 
+							id="notice"></td>
+					</tr>
+					<%-- 				</c:if> --%>
+					<tr class="tb-row">
+						<td width="100" class="tb-title">작성자</td>
+						<td class="tb-content">${sessionScope.member.userName}</td>
+					</tr>
+
+					<tr class="tb-row">
+						<td width="100" class="tb-title" style="padding-top: 5px;"
+							valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
+						<td valign="top" style="padding: 5px 1% 5px 10px;"><textarea
+								name="content" rows="12" id="content" class="boxTA"
+								style="width: 100%; height: 270px;">${dto.content}</textarea></td>
+					</tr>
+
+					<tr class="tb-row">
+						<td width="100" class="tb-title">첨&nbsp;&nbsp;&nbsp;&nbsp;부</td>
+						<td class="tb-content"><input type="file" name="upload"
+							class="boxTF" size="53"></td>
+					</tr>
+
+					<c:if test="${mode=='update' }">
+						<tr class="tb-row">
+							<td width="100" class="tb-title">첨부된파일</td>
+							<td class="tb-content"><c:if
+									test="${not empty dto.saveFilename}">
+									<a
+										href="<%=cp%>/friend/deleteFile?friendNum=${dto.friendNum}&page=${page}"><i
+										class="far fa-trash-alt"></i></a>
+								</c:if> ${dto.originalFilename}</td>
+						</tr>
+					</c:if>
+				</tbody>
+			</table>
+			<table class="tb-board"
+				style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 				<tr>
 					<td>
-					<button type="button" class="btn btn-default" style="padding: 6px 20px;"
-							onclick="javascript:location.href='<%=cp%>/bbs/list';">${mode=='update'?'수정취소':'등록취소'}</button>
-						
-						<button type="submit" class="btn btn-danger" style="margin-left: 5px;"><img alt="" src="<%=cp%>/resource/images/check-mark.png" style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}</button>
-						
-						<c:if test="${mode=='update'}">
-							<input type="hidden" name="num" value="${dto.num}">
+						<button type="button" class="btn btn-default"
+							style="padding: 6px 20px;"
+							onclick="javascript:location.href='<%=cp%>/friend/friend';">${mode=='update'?'수정취소':'등록취소'}</button>
+
+						<button type="submit" class="btn btn-danger"
+							style="margin-left: 5px;">
+							<img alt="" src="<%=cp%>/resource/images/check-mark.png"
+								style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}
+						</button> <c:if test="${mode=='update'}">
+							<input type="hidden" name="friendNum" value="${dto.friendNum}">
 							<input type="hidden" name="saveFilename"
 								value="${dto.saveFilename}">
 							<input type="hidden" name="originalFilename"
@@ -192,9 +293,9 @@ nhn.husky.EZCreator.createInIFrame({
 		alert(sHTML);
 	}
 	function resetContent(elClickedObj) {
-		 oEditors.getById["content"].exec("SET_IR", [""]);
+		oEditors.getById["content"].exec("SET_IR", [ "" ]);
 	}
-	
+
 	function submitContents(elClickedObj) {
 		oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []); // 에디터의 내용이 textarea에 적용됩니다.
 
