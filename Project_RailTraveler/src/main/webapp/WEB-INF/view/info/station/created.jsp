@@ -23,25 +23,33 @@ function sendOk() {
     
 	var str = f.majorLocationNum.value;
     if(!str) {
-        alert("지역을 선택하세요. ");
-        f.subject.focus();
+        alert("지역을 선택하세요.");
+        f.majorLocationNum.focus();
         return;
     }
 
 	str = f.staTel.value;
     if(!str) {
         alert("전화번호를 입력하세요.");
-        f.content.focus();
+        f.staTel.focus();
         return;
     }
     
     str = f.staAddress.value;
     if(!str) {
         alert("주소를 입력하세요.");
-        f.content.focus();
+        f.staAddress.focus();
         return;
     }
-
+    
+    str = f.upload.value;
+    if(!str) {
+        alert("해당 역 사진을 첨부해주세요.");
+        f.upload.focus();
+        return;
+    }
+    
+    
 	f.action="<%=cp%>/station/${mode}";
 
     f.submit();

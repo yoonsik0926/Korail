@@ -181,10 +181,10 @@ function showModal(ob) {
 				  <a class="staModal" onclick="showModal(this);"></a>
 				 <!--  <a class="staModal"  data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}"></a> -->
 			</figure>
-			
-
-		</c:forEach>	
+		</c:forEach>
 		
+		</div>	
+
 	</div>
 	
 	<c:set var="n" value="${staList.size()}"/>
@@ -195,19 +195,21 @@ function showModal(ob) {
 			</div>
 		</c:forEach>
 	</c:if>
+	
+	<div style="width: 89%; margin-bottom: 40px;">
+		<nav style="text-align: center;">
+			<ul class="pagination">
+				<li>${dataCount==0?"등록된 게시물이 없습니다.":paging}</li>
+			</ul>
+		</nav>
+	</div>
+	
+	
 
+ <c:out value="</div>"escapeXml="false"/>
 
-		<div style="width: 89%; margin-bottom: 40px;">
-				<nav style="text-align: center;">
-					<ul class="pagination">
-						<li>${dataCount==0?"등록된 게시물이 없습니다.":paging}</li>
-					</ul>
-				</nav>
-			</div>
-			
-     </div>
-
-<div id="please">
-		
+<!-- modal -->
+<div id="please">		
 		
 </div>
+
