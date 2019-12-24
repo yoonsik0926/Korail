@@ -5,7 +5,7 @@
 <%
    String cp = request.getContextPath();
 %>
-
+ 
 <style type="text/css">
 
 .tit-heading {position:relative; height:51px; margin-top:30px; border-bottom:3px solid #241d1e;}
@@ -33,21 +33,21 @@ ul{
    list-style:none;
    }
    
-.type-section .type-list-pc:after { content:''; display:block; clear:both; }
-.type-section .type-list-pc .type-list { float:left; position:relative; width:100%; } 
-.type-section .type-list-pc .type-list:after{clear:both; display:block; content:""}
-.type-section .type-list-pc .type-list div:last-child:after { display:none; }
+.type-section .type-list-event:after { content:''; display:block; clear:both; }
+.type-section .type-list-event .type-list { float:left; position:relative; width:100%; } 
+.type-section .type-list-event .type-list:after{clear:both; display:block; content:""}
+.type-section .type-list-event .type-list div:last-child:after { display:none; }
 
 
-.type-section .type-list-pc .type-list div{ float:left; position:relative; width:163px; text-align:center;}
-.type-section .type-list-pc .type-list .list:after { display:block; position:absolute; top:14px; right:0; content:''; width:1px; height:22px; background:#ddd; }
-.type-section .type-list-pc .type-list div a{display:block; height:49px; line-height:49px; color:#777; font-size:16px;}
-.type-section .type-list-pc .type-list div.active a span, .type-section .type-list-pc .type-list div a:hover span{ display:block; position:relative; padding-bottom:0; color: #1429a0; }
-.type-section .type-list-pc .type-list div.active a span:after, .type-section .type-list-pc .type-list div a:hover span:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
+.type-section .type-list-event .type-list div{ float:left; position:relative; width:163px; text-align:center;}
+.type-section .type-list-event .type-list .list:after { display:block; position:absolute; top:14px; right:0; content:''; width:1px; height:22px; background:#ddd; }
+.type-section .type-list-event .type-list div a{display:block; height:49px; line-height:49px; color:#777; font-size:16px;}
+.type-section .type-list-event .type-list div.active a span, .type-section .type-list-event .type-list div a:hover span{ display:block; position:relative; padding-bottom:0; color: #1429a0; }
+.type-section .type-list-event .type-list div.active a span:after, .type-section .type-list-event .type-list div a:hover span:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
 
-.type-section .type-list-pc .type-list div a h3 {font-size:16px; font-weight:normal}
-.type-section .type-list-pc .type-list div.active a h3, .type-section .type-list-pc .type-list div a:hover h3{ display:block; position:relative; padding-bottom:17px; color: #1429a0; }
-.type-section .type-list-pc .type-list div.active a h3:after, .type-section .type-list-pc .type-list div a:hover h3:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
+.type-section .type-list-event .type-list div a h3 {font-size:16px; font-weight:normal}
+.type-section .type-list-event .type-list div.active a h3, .type-section .type-list-event .type-list div a:hover h3{ display:block; position:relative; padding-bottom:17px; color: #1429a0; }
+.type-section .type-list-event .type-list div.active a h3:after, .type-section .type-list-event .type-list div a:hover h3:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
 
 
 .search-section{ width: calc(25% - 12px); max-width: 348px;}
@@ -56,6 +56,24 @@ ul{
 .search-section .input-area input{width:100%; height:51px; line-height:51px; padding-left:20px; border:0 none; background:transparent; font-size:14px; -webkit-box-sizing:border-box; box-sizing:border-box; }
 .search-section .input-area .btn-event-search{position:absolute; right:15px; top:50%; width:23px; height:22px; margin-top:-11px; background-image:url(/Project_RailTraveler/resource/img/search.jpg); background-repeat:no-repeat;}
 
+.modal {
+          text-align: center;
+        }
+        @@media screen and (min-width: 768px) {
+          .modal:before {
+            display: inline-block;
+            vertical-align: middle;
+            content: " ";
+            height: 100%;
+          }
+        }
+        .modal-dialog {
+          display: inline-block;
+          text-align: left;
+          vertical-align: middle;
+          width: 55%; 
+		  height: 55%; 
+        } 
 
 </style>
 
@@ -78,6 +96,36 @@ ul{
       });
     });
     
+    function deleteEvent(eventNum) {
+    	if(confirm("위 이벤트를 삭제 하시겠습니까 ?")) {
+    		var url="<%=cp%>/event/delete?eventNum="+eventNum+"&${query}";
+    		location.href=url;
+    	}
+    }
+    
+    $(function(){
+    	var order="${order}";
+    	$(".type-list .list").each(function(){
+    		var o = $(this).attr("data-order");
+    		if(o==order) {
+    			$(this).addClass("active");
+    			return true;
+    		}
+    	});
+    });
+    
+    $(function(){
+    	$(".type-list .list").click(function(){
+    		if($(this).hasClass("active")) {
+    			return false;
+    		}
+    		
+    		var o = $(this).attr("data-order");
+    		var url = "<%=cp%>/event/current?order="+o;
+    		location.href=url;
+    	});
+    });
+    
 </script>
 
 
@@ -85,32 +133,28 @@ ul{
      <!-- 여기서부터 body -->
      
       <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
-    	<h3> 이번달의 이벤트 </h3>
+    	<h3> 베스트 이벤트 </h3>
 	 </div>    
      
-     <div style="margin-left: 200px;">
+     <div style="margin-left: 180px;">
      	<ul class="bxslider">
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/aaa.jpg"></a></li>
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/aaa.jpg"></a></li>
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/aaa.jpg"></a></li>
+     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event1.jpg"></a></li>
+     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event2.png"></a></li>
+     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event3.png"></a></li>
      	</ul>
      </div>	
           
      <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
     	<h3> 이벤트 모음 </h3>
 	 </div>
-	 
-	 
-	 	 	  
+	 	 	 	  
 	 <div class="type-section">
-                        <div class="type-list-pc" style="float: left; border: 1px solid grey; height: 55px;">
+                        <div class="type-list-event" style="float: left; border: 1px solid grey; height: 55px;">
                             <div class="type-list">
-                            	
-                               <div class="active list"><a href="#" onclick="#"><h3>전체 이벤트</h3></a></div>
-                               	
-								<div class="list"><a href="#" onclick="#"><h3>최신순</h3></a></div>
+                            	              
+                               	<div class="list" data-order="0"><a><h3>등록순</h3></a></div>
 								
-								<div class="list"><a href="#" onclick="#"><h3>마감순</h3></a></div>
+								<div class="list" data-order="1"><a><h3>마감순</h3></a></div>
 															
                             </div>
                         </div>
@@ -131,8 +175,10 @@ ul{
 		    		    
 		    <div style="width: 1200px; margin: 0 auto; ">
     	    	
-    			<ul>
-    	         <li>
+    	    	<ul>
+
+    	         <c:forEach var="dto" items="${list}">
+    	         	<li>
                     <div class="box-image">
                         
                             <span class="thumb-image">
@@ -143,171 +189,38 @@ ul{
                     </div>
                     <div class="box-contents">
                         <a data-target="#layerpop" data-toggle="modal">
-                            <em class="txt-lightblue">이벤트1</em>
-                            <p>이벤트 설명1</p>
+                            <em class="txt-lightblue">${dto.name}</em>
+                            <p>${dto.content}</p>
                         </a>   
                         <p class="date">
-                            <span>기간: </span>2019.11.19 ~ 2019.12.15
+                            <span>기간: </span>${dto.sdate} ~ ${dto.edate}
                         </p>
+                     <c:if test="${sessionScope.member.userId=='admin'}">
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
                      	<tr height="45">
 						    <td width="300" align="left" >
 						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
+						        <button type="button" class="btn" onclick="deleteEvent('${dto.eventNum}');">삭제</button>
 						    </td>
 						
 						</tr>
 						</table>
-                     
-                        
-                    </div>
-                </li>
-            
-                <li>
-                    <div class="box-image">
-                        <a href="#">
-                            <span class="thumb-image">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="box-contents">
-                        <a href="#">
-                            <em class="txt-lightblue">이벤트2</em>
-                            <p>이벤트 설명2</p>
-                        </a>
-                        <p class="date">
-                            <span>기간: </span>2019.11.20 ~ 2019.12.31
-                        </p>
-                    <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
-						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
-						    </td>
-						
-						</tr>
-					</table>
-                        
-                    </div>
-                </li>
-            
-                <li>
-                    <div class="box-image">
-                        <a href="#">
-                            <span class="thumb-image">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="box-contents">
-                        <a href="#">
-                            <em class="txt-lightblue">이벤트3</em>
-                            <p>이벤트 설명3</p>
-                        </a>
-                        <p class="date">
-                            <span>기간: </span>2019.11.14 ~ 2019.12.20
-                        </p>
-                       <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
-						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
-						    </td>
-						
-						</tr>
-						</table> 
-                        
-                    </div>
-                </li>
-                <li>
-                    <div class="box-image">
-                        <a href="#">
-                            <span class="thumb-image">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="box-contents">
-                        <a href="#">
-                            <em class="txt-lightblue">이벤트4</em>
-                            <p>이벤트 설명4</p>
-                        </a>
-                        <p class="date">
-                            <span>기간: </span>2019.11.14 ~ 2019.12.21
-                        </p>
-                     <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
-						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
-						    </td>
-						
-						</tr>
-						</table>
-                        
-                    </div>
-                </li>
-                   
-                <li>
-                    <div class="box-image">
-                        <a href="#">
-                            <span class="thumb-image">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="box-contents">
-                        <a href="#">
-                            <em class="txt-lightblue">이벤트5</em>
-                            <p>이벤트 설명5</p>
-                        </a>
-                        <p class="date">
-                            <span>기간: </span>2019.11.14 ~ 2019.12.20
-                        </p>
-                        <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
-						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
-						    </td>
-						
-						</tr>
-						</table>
-                    </div>
-                </li>
-                 <li>
-                    <div class="box-image">
-                        <a href="#">
-                            <span class="thumb-image">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="box-contents">
-                        <a href="#">
-                            <em class="txt-lightblue">이벤트6</em>
-                            <p>이벤트 설명6</p>
-                        </a>
-                        <p class="date">
-                            <span>기간: </span>2019.11.14 ~ 2019.12.20
-                        </p>
-                     	<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-						<tr height="45">
-						    <td width="300" align="left">
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
-						    </td>
-						
-						</tr>
-						</table>   
-                    </div>
-                </li>
-                                    
-    		</ul>
-    	    		
+					 </c:if>	
+						</div>
+					</li>
+                 </c:forEach> 
+             			
+    	    </ul>	
     	</div>
     </div>
+    
+    <table style="width: 100%; margin-bottom: 30px; border-spacing: 0px;">
+		   <tr height="35">
+			<td align="center">
+			        ${dataCount==0?"등록된 게시물이 없습니다.":paging}
+			</td>
+		   </tr>
+	</table>
        
     <table style="width: 100%; margin: 10px auto; border-spacing: 0px;">
 		   <tr height="40">
@@ -318,20 +231,7 @@ ul{
 		      </td>
 		   </tr>
 		</table>
-     
-	<nav style="text-align: center;">
-			<ul class="pagination">
-				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-				</span></li>
-				<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-				</li>
-				<li><span>2</span></li>
-				<li><span>3</span></li>
-				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-				</span></li>
-			</ul>
-	</nav>
-	
+    	
 	<div class="modal fade" id="layerpop">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -353,12 +253,11 @@ ul{
 					</div>
 									
 					</div>
-		        </div>
+		       	  </div>
 
+		        </div>
 		      </div>
-		      
-		      </div>
-		      		      
+		            
 		      <!-- Footer -->
 		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
 		      	<c:if test="${sessionScope.member.userId!='admin'}">

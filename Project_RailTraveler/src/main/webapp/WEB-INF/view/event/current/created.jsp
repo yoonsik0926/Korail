@@ -38,7 +38,7 @@ jQuery(document).ready(function() {
         , changeMonth : true
         // , changeYear : true
         // , autoSize : true
-
+   
         , beforeShow:function(input) {
             var position = jQuery(input).position();
             setTimeout(function() {
@@ -81,6 +81,14 @@ jQuery(document).ready(function() {
     var dateArray = obj.split("-");
     return dateArray[0] + dateArray[1] + dateArray[2];
 }
+	
+	function sendBoard() {
+        var f = document.boardForm;
+    	
+        f.action = "<%=cp%>/event/${mode}";
+
+        f.submit();
+  }	
     
 </script>
 <style type="text/css">
@@ -131,8 +139,9 @@ input[type=text], input[type=file] {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<form name="boardForm" method="post" enctype="multipart/form-data"
-			onsubmit="return submitContents(this);">
+		
+		<form name="boardForm" method="post">
+			
 			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
 				<tr>
 					<td style="text-align: right;">
@@ -147,21 +156,21 @@ input[type=text], input[type=file] {
 			<table class="tb-created">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">제&nbsp;&nbsp;목</td>
-					<td class="tb-content"><input type="text" name="staName"
+					<td class="tb-content"><input type="text" name="name"
 						maxlength="100" class="boxTF" style="padding: 5px 5px;"
 						value="${dto.name}"></td>
 				</tr>
 				<tr class="tb-row">
 					<td width="100" class="tb-title">시작일</td>
 					<td class="tb-content">
-						 <input type="text" class="datePicker" id="startDate" onChange="inputDateComparison(this);" value=""/>
+						 <input type="text" class="datePicker" id="startDate" name="sdate" onChange="inputDateComparison(this);" value=""/>
     				</td>
 				</tr>
 				
 				<tr class="tb-row">
 					<td width="100" class="tb-title">종료일</td>
 					<td class="tb-content">
-						 <input type="text" class="datePicker" id="endDate" onChange="inputDateComparison(this);" value=""/>
+						 <input type="text" class="datePicker" id="endDate" name="edate" onChange="inputDateComparison(this);" value=""/>
 					</td>
 				</tr>
 				
@@ -172,37 +181,19 @@ input[type=text], input[type=file] {
 						<textarea name="content" rows="12" class="boxTA" style="width:100%;">${dto.content}</textarea>
 					</td>
 				</tr>
-				<tr class="tb-row">
-					<td width="100" class="tb-title">포스터&nbsp;&nbsp;첨부</td>
-					<td class="tb-content"><input type="file" name="upload"
-						class="boxTF" size="53"></td>
-				</tr>
-
-				<c:if test="${mode=='update'}">
-					<tr class="tb-row">
-						<td width="100" class="tb-title">첨부된파일</td>
-						<td class="tb-content"><c:if
-								test="${not empty dto.saveFilename}">
-								<a href="<%=cp%>/bbs/deleteFile?num=${dto.num}&page=${page}"><i
-									class="far fa-trash-alt"></i></a>
-							</c:if> ${dto.originalFilename}</td>
-					</tr>
-				</c:if>	
-			
-
+				
 			</table>
 			
-			<table style="width: 100%; margin: 0px auto; border-spacing: 0px;    text-align: center;">
+			<table style="width: 100%; margin: 0px auto; border-spacing: 0px; text-align: center;">
 				<tr>
 					<td>
 					<button type="button" class="btn btn-default" style="padding: 6px 20px;"
 							onclick="javascript:location.href='<%=cp%>/event/current';">${mode=='update'?'수정취소':'등록취소'}</button>
 						
-						<button type="submit" class="btn btn-danger" style="margin-left: 5px;"><img alt="" src="<%=cp%>/resource/images/check-mark.png" style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}</button>
+						<button type="submit" class="btn btn-danger" onclick="sendBoard();" style="margin-left: 5px;"><img alt="" src="<%=cp%>/resource/images/check-mark.png" style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}</button>
 						
 						<c:if test="${mode =='update'}">
 							<input type="hidden" name="num" value="${dto.num}">
-							<input type="hidden" name="page" value="${page}">
 						</c:if>
 					</td>
 				</tr>
