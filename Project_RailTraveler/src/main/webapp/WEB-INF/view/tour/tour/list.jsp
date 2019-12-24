@@ -17,34 +17,6 @@
 	
 <script type="text/javascript">
 
-//물러놨던 하트 표시하는 스크립트
-$(function(){
-	  var userId = "${sessionScope.member.userId}";
-
-	  if ( userId != "") {
-		  
-		  	var url = "<%=cp%>/tour/initMarkHeart";
-			var query = "";
-			var fn = function(data){
-					
-				console.log(data);					
-
-				
-				/* for(var i=0; i<data.likeList.length ; i++){
-					
-					console.log(data);					
-
-				} */
-
-			}; 
-				
-			ajaxJSON(url, "post", query, fn);
-	  }
-	
-	
-	
-});
-
 //좋아요 관리하는 에이작스
 function test(ob){
 	
@@ -417,7 +389,7 @@ a {
 					<button id="btn-${dto.tourNum}" class="img-button find" value="${dto.tourNum}" >
 					
 					   <c:choose>
-       						<c:when test="${dto.likeuserId==sessionScope.member.userId && dto.liketourNum== dto.tourNum}">
+       						<c:when test="${dto.likeuserId==sessionScope.member.userId && dto.liketourName== dto.name}">
 						<i class="fas fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
 							</c:when>						
 							<c:otherwise>
@@ -507,3 +479,8 @@ a {
   </div>
 </div>
 <!--Modal: modalPush-->
+
+
+
+
+

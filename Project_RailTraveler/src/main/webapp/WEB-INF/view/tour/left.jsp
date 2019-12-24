@@ -48,3 +48,6 @@ function show() {
     <a href="<%=cp%>/tour/jeonla" class="list-group-item">전라권</a>
     <a href="<%=cp%>/tour/gyeongsang" class="list-group-item">경상권</a>
 </div> 
+
+
+

@@ -70,7 +70,7 @@ public class TourController {
 		map.put("items", items);
 
 		
-		//지역별 이미지를 가져옴
+		//지역별 정보를 가져옴
 		List<Tour> list = service.listBoard(map);
 		
 		//지역별 기차역을 가져옴
@@ -539,10 +539,7 @@ String cp = req.getContextPath();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		
 		 
-		//staNum 가져오기 
-		int staNum = 0;
-		
-		
+	
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("tourNum", tourNum);
 		map.put("userId", info.getUserId());
@@ -564,30 +561,9 @@ String cp = req.getContextPath();
 		return model;
 	}
 	
-	@RequestMapping(value ="/tour/initMarkHeart")
-	@ResponseBody
-	public Map<String, Object> 	initMarkHeart(
-			HttpSession session) throws Exception {
-		
-		
 
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("userId", info.getUserId());
-		
-
-		//이미 좋아요 했던 것의 게시물 번호들을 가져온다~
-		List<Tour> list = service.initLikeMark(map);
-				
-		
-		
-		Map<String, Object> model = new HashMap<>();
-		model.put("likeList", list);
 	
-
-		return model;
-	}
+	
 	
 	@RequestMapping(value="/tour/detail")
 	public String article(
@@ -595,11 +571,20 @@ String cp = req.getContextPath();
 			@RequestParam String page,
 			@RequestParam String subTitle,
 			@RequestParam int tourNum,
-			Model model
+			Model model,
+			HttpServletRequest req
 			) throws Exception {
 		
 		Tour vo = service.readDetailTour(tourNum);
+		
+		
+		//쿠키를 이용하여 중복되지 않게 카운트 추가
 
+		
+		
+		
+		
+		
 		
         //크롤링할 url지정
         String url = "https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+vo.getName();          
@@ -634,7 +619,7 @@ String cp = req.getContextPath();
         
 
         
-        for(int j =0; j<10;j++) {
+        for(int j =0; j<12;j++) {
         	ImageCrwaling dto = new ImageCrwaling();
         	 dto.setImgUrl(element2.eq(j).select("img._img").attr("data-source")); 
         	 dto.setImgAlt(element2.eq(j).select("img._img").attr("alt")); 
@@ -643,7 +628,7 @@ String cp = req.getContextPath();
 
         
 
-        for(int i=2; i<7/*element.size()*/; i++){
+        for(int i=3; i<8/*element.size()*/; i++){
         	BlogCrwaling dto = new BlogCrwaling();
         	dto.setBlogContent(element.eq(i).select("dd.sh_blog_passage").text());
         	dto.setBlogName(element.eq(i).select("a.txt84").text());

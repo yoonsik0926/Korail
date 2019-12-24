@@ -5,7 +5,7 @@ public class Tour {
 	
 	private String likeuserId;
 	private int liketourNum;
-	private int liketourStaNum;
+	private String liketourName;
 	
 	private int userId;
 	private int likeCheck;
@@ -40,12 +40,12 @@ public class Tour {
 	
 	
 	
-	
-	public int getLiketourStaNum() {
-		return liketourStaNum;
+
+	public String getLiketourName() {
+		return liketourName;
 	}
-	public void setLiketourStaNum(int liketourStaNum) {
-		this.liketourStaNum = liketourStaNum;
+	public void setLiketourName(String liketourName) {
+		this.liketourName = liketourName;
 	}
 	public String getLikeuserId() {
 		return likeuserId;

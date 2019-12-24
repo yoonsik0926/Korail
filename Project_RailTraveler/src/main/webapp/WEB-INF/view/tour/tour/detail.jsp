@@ -103,6 +103,12 @@ function listPage(page) {
 }
 .img {width:325px; height:280px; overflow:hidden }  
 
+.nonscroll::-webkit-scrollbar { 
+
+    display: none; 
+
+}
+
 </style>
 
 
@@ -286,7 +292,7 @@ function listPage(page) {
 			</div>
 			
 	
-			<div class="box1 img" style="width: 96%; height:400px; padding:10px 10px;border: 1px solid #eeeeee; align-content: center">
+			<div class="box1 img nonscroll" style="width: 96%; height:400px; overflow-y: scroll; padding:10px 10px;border: 1px solid #eeeeee; align-content: center">
 			<c:forEach var="ivo" items="${imagelist}" >
 				<div class="scale" style="float:left;  width: 160px; height: 160px;" >
 				<a href="${ivo.imgUrl}"><img class="img" style="border-radius:25px; width: 160px; height: 160px; padding: 10px 10px;" alt="" src="${ivo.imgUrl}"></a>			

@@ -4,13 +4,14 @@
 <mapper namespace="tour">
 
 	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
-		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
+		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum, t2.name liketourName, t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
         join station st on st.stanum = t.stanum
         join location loc on loc.locnum =st.locnum
 		left join tourbookmark tbm on tbm.tourNum = t.tournum
+        left join tour t2 on t2.tourNum = tbm.tournum
 		<where>
 			 loc.locNum = #{locNum}
 			<if test="cateNum !=0">
@@ -117,6 +118,7 @@
         join tourfile tf on t.tournum = tf.tournum    
 		 where t.tourNum = #{tourNum}		
 	</select>
+
 
 
 
