@@ -73,12 +73,13 @@
 		</choose>
 	</delete>
 	
-	<select id="listBenefit" parameterType="Integer" resultType="com.railer.rt.info.Station">
+	<select id="listBenefit" parameterType="map" resultType="com.railer.rt.info.Station">
 	    select s.staNum, beneNum, b.cateNum, cateName, subject, content, sDate, eDate
 		from benefit b
         join tourCategory t on b.cateNum = t.cateNum
 		join station s on s.staNum = b.staNum
 		where s.staNum = #{staNum}
+		order by cateNum
 	</select>
 	
 	<select id="readBenefit" parameterType="Integer" resultType="com.railer.rt.info.Station">

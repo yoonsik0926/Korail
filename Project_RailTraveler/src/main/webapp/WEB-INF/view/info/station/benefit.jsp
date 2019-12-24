@@ -52,7 +52,7 @@ function sendOk() {
         return;
     }
     
-    var query = "staNum=${dto.staNum}&locNum=${locNum}&page=${page}&cateNum="+cateNum;
+    var query = "staNum=${staNum}&locNum=${locNum}&page=${page}&cateNum="+cateNum;
     
 	f.action="<%=cp%>/station/benefit/${mode}?"+query;
 
@@ -192,7 +192,9 @@ input[type=text], input[type=file] {
 						
 						<input type="hidden" name="staNum" value="${staNum}">
 						<input type="hidden" name="locNum" value="${locNum}">
-						<input type="hidden" name="beneNum" value="${dto.beneNum}">
+						<c:if test="${mode=='update'}">
+							<input type="hidden" name="beneNum" value="${dto.beneNum}">
+						</c:if>
 						
 					</td>
 				</tr>

@@ -106,8 +106,9 @@ public class StationController {
 		model.addAttribute("count", count);
 		model.addAttribute("page",page);
 		model.addAttribute("locNum",locNum);
+		model.addAttribute("staNum",staNum);
 		
-		return "info/station/modal";
+		return ".four.info.station.modal";
 	}
 
 	
@@ -246,6 +247,7 @@ public class StationController {
 	public String createdBenefitForm(
 			@RequestParam int staNum,
 			@RequestParam int locNum,
+			@RequestParam String page,
 			Model model) throws Exception {
 		
 		List<Station> tourCategory = service.listTourCate();
@@ -256,6 +258,7 @@ public class StationController {
 		model.addAttribute("mode","created");
 		model.addAttribute("staNum",staNum);
 		model.addAttribute("locNum",locNum);
+		model.addAttribute("page",page);
 		
 		return ".four.info.station.benefit";
 	}
