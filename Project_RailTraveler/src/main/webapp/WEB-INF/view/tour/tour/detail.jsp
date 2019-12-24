@@ -6,7 +6,7 @@
 	String cp = request.getContextPath();
 %>
 <link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<script src="<%=cp%>/resource/js/flickity.pkgd.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -32,24 +32,20 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=134ec7b5b1389d0316b7c1bed3033f48"></script>
 
 
-<!--이미지 슬라이드 스크립트-->
+
+
+<!--스크롤 슬라이드 스크립트-->
 <script>
-	$(document).ready(function() {
-		$('.bxslider').bxSlider({
-			mode : 'horizontal',// 가로 방향 수평 슬라이드
-			speed : 500, // 이동 속도를 설정
-			pager : false, // 현재 위치 페이징 표시 여부 설정
-			moveSlides : 1, // 슬라이드 이동시 개수
-			slideWidth : 1000, // 슬라이드 너비
-			minSlides : 4, // 최소 노출 개수
-			maxSlides : 4, // 최대 노출 개수
-			slideMargin : 5, // 슬라이드간의 간격
-			auto : true, // 자동 실행 여부
-			autoHover : true, // 마우스 호버시 정지 여부
-			controls : false
-		// 이전 다음 버튼 노출 여부
-		});
-	});
+
+function fnMove(seq){
+    var offset = $("#div" + seq).offset();
+    offset.top = offset.top -100;
+    console.log(offset);
+    
+    $('html, body').animate({scrollTop : offset.top}, 400);
+}
+
+
 </script>
 
 <script type="text/javascript">
@@ -89,6 +85,24 @@ function listPage(page) {
 .box1 {
 	margin: 0 auto
 }
+
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+}
+.img {width:325px; height:280px; overflow:hidden }  
+
 </style>
 
 
@@ -108,16 +122,16 @@ function listPage(page) {
 				style="width: 93%; border: 1px solid #eeeeee; margin-top:10px; " >
 				<h3 align="center">${vo.name}</h3>
 				<h6 align="center">${vo.detailcateName}</h6>
-
+						
 				<div class="row" style="width: 340px; margin: 10px auto;">
 					<div class="col" style="font-size: 18px; font-weight: 600;">
 						<ul class="nav nav-tabs">
 							<li class="nav-item "><a class="nav-link active"
-								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+								href="https://map.kakao.com/?eName=${vo.name}"><i class="fas fa-map-marker-alt"></i>
 									길찾기</a></li>
 
 							<li class="nav-item "><a class="nav-link active"
-								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+								onclick="kakaoroadmap();" style="cursor: pointer;"><i class="fas fa-map-marker-alt"></i>
 									로드뷰</a></li>
 
 							<li class="nav-item "><a class="nav-link active"
@@ -164,19 +178,19 @@ function listPage(page) {
 					<ul class="nav nav-tabs">
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
-							href="<%=cp%>/main">주요 정보</a></li>
+							id="1st" onclick="fnMove('1');" >주요 정보</a></li>
 
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
-							href="<%=cp%>/main">후기/리뷰</a></li>
+							id="2st" onclick="fnMove('2');">후기/리뷰</a></li>
 
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
-							href="<%=cp%>/main">자유게시판</a></li>
+							id="3st" onclick="fnMove('3');">자유게시판</a></li>
 
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
-							href="<%=cp%>/main">사진 요약</a></li>
+							id="4st" onclick="fnMove('4');">사진 요약</a></li>
 					</ul>
 				</div>
 			</div>
@@ -186,18 +200,17 @@ function listPage(page) {
 		
 
 		<!--찾아가는 길 설명-->
-		<div class="container"
-			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
+		<div id="div1" class="container" style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
 
 
-			<div class="row" style="width: 100%; ">
+			<div  class="row" style="width: 100%; ">
 				<p style="font-size: 25px; font-weight: 700">"${vo.name}" 교통정보</p>
 			</div>
 			<div id="map" style="width:100%;height:350px;margin-bottom: 50px;"></div>
 		</div>
 
 		<!--후기 리뷰창 설명-->
-		<div class="container"
+		<div id="div2" class="container"
 			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
 			<div class="row" style="width: 100%; margin-bottom: 5px; ">
 				<p style="font-size: 25px; font-weight: 700">후기/리뷰</p>
@@ -206,8 +219,8 @@ function listPage(page) {
 				
 				
 			<c:forEach var="list" items="${bloglist}">
-			<div class="box1" style="margin-top: 20px;">
-			<div class="box1" style="width: 93%; padding:10px 10px;
+
+			<div class="box1" style="width: 100%; padding:10px 10px; margin-bottom:20px;
 			border: 1px solid #eeeeee; align-content: center">
 
 				<div class="col"
@@ -227,7 +240,6 @@ function listPage(page) {
 				</div>
 			</div>
 
-			</div>
 			</c:forEach>
 			
 				
@@ -239,7 +251,7 @@ function listPage(page) {
 
 
 
-		<div class="container" style="margin-top: 10px; border-bottom: 2px solid #eeeeee; width: 93%">
+		<div id="div3" class="container" style="margin-top: 10px; border-bottom: 2px solid #eeeeee; width: 93%">
 		
 			<div class="row" style="width: 100%;  margin-bottom: 5px;">
 				<p style="font-size: 25px; font-weight: 700">자유게시판</p>
@@ -268,23 +280,47 @@ function listPage(page) {
 		</div>
 		
 				<!--후기 리뷰창 설명-->
-		<div class="container" style="margin-top: 50px;  width: 93%">
-			<div class="row" style="width: 100%; margin-top: 5px;">
+		<div id="div4" class="container" style="margin-top: 50px; margin-bottom:50px;  width: 93%">
+			<div class="row" style="width: 100%; margin-top: 5px; ">
 				<p style="font-size: 25px; font-weight: 700">사진 요약</p>
 			</div>
-			<div style="margin-bottom: 50px;">
-				네이버 블로그 형태로 집어넣을 것
-
+			
+	
+			<div class="box1 img" style="width: 96%; height:400px; padding:10px 10px;border: 1px solid #eeeeee; align-content: center">
+			<c:forEach var="ivo" items="${imagelist}" >
+				<div class="scale" style="float:left;  width: 160px; height: 160px;" >
+				<a href="${ivo.imgUrl}"><img class="img" style="border-radius:25px; width: 160px; height: 160px; padding: 10px 10px;" alt="" src="${ivo.imgUrl}"></a>			
+				</div>
+			</c:forEach>		
 			</div>
+
 		</div>
-
-
-
-
-
 
 	</div>
 </div>
+
+<!--Modal: modalPush-->
+<div class="modal fade  bd-example-modal-sm" id="roadMapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 600px; height: 350px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+
+      <!--Body-->
+      <div class="modal-body"  id="roadview" style="width:100%;height:300px;padding: 5px 5px; ">
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+       
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: modalPush-->
+
 
 <!--지도 API 스크립트!!!-->
 <script>
@@ -319,3 +355,26 @@ infowindow.open(map, marker);
 map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);  
 
 </script>
+<script type="text/javascript">
+function kakaoroadmap() {
+	var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
+	var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+	var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+	var position = new kakao.maps.LatLng(${vo.longitude}, ${vo.latitude});
+
+	// 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+	roadviewClient.getNearestPanoId(position, 50, function(panoId) {
+	    roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+	   
+	    //특정 css를 지우면 화면 전체로 만들 수 있어서 수정해 주었습니다.
+	  var element = document.getElementById("daum:roadview:1");	    
+	  element.style.removeProperty("position");
+	  
+	  //모달창 띄우기
+	    $("#roadMapModal").modal();
+	});
+}
+
+</script>
+

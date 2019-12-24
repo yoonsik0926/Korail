@@ -538,6 +538,11 @@ String cp = req.getContextPath();
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		
+		
+		//staNum 가져오기 
+		int staNum = 0;
+		
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("tourNum", tourNum);
 		map.put("userId", info.getUserId());
@@ -597,8 +602,10 @@ String cp = req.getContextPath();
 
 		
         //크롤링할 url지정
-        String url = "https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+vo.getName();   
+        String url = "https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+vo.getName();          
         Document doc = null; 
+      
+        
         System.out.println(url);
         try {
         	doc = Jsoup.connect(url).get();
@@ -607,16 +614,36 @@ String cp = req.getContextPath();
 			e.printStackTrace();
 		}  
         
-        List<BlogCrwaling> bloglist = new ArrayList<BlogCrwaling>();
         
+        String url2 = "https://search.naver.com/search.naver?where=image&sm=tab_jum&query="+vo.getName();  
+        Document doc2 = null;
+        
+        try {
+        	doc2 = Jsoup.connect(url2).get();
+        	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}  
+        
+        List<BlogCrwaling> bloglist = new ArrayList<BlogCrwaling>();
+        List<ImageCrwaling> imagelist = new ArrayList<ImageCrwaling>();
     
         Elements element = doc.select("dl"); 
-
+        Elements element2 = doc2.select("div.img_area._item"); 
 
         
-       
 
-        for(int i=2; i<element.size(); i++){
+        
+        for(int j =0; j<10;j++) {
+        	ImageCrwaling dto = new ImageCrwaling();
+        	 dto.setImgUrl(element2.eq(j).select("img._img").attr("data-source")); 
+        	 dto.setImgAlt(element2.eq(j).select("img._img").attr("alt")); 
+        	 imagelist.add(dto);
+        }
+
+        
+
+        for(int i=2; i<7/*element.size()*/; i++){
         	BlogCrwaling dto = new BlogCrwaling();
         	dto.setBlogContent(element.eq(i).select("dd.sh_blog_passage").text());
         	dto.setBlogName(element.eq(i).select("a.txt84").text());
@@ -628,7 +655,7 @@ String cp = req.getContextPath();
         }
         
         
-        
+        model.addAttribute("imagelist", imagelist);
         model.addAttribute("bloglist", bloglist);
 		model.addAttribute("vo",vo);
 		return ".four.tour.tour.detail";

@@ -91,8 +91,9 @@
 		select nvl(count(*),0)  from tourbookmark where tournum =#{tourNum} and userId =#{userId}
 	</select>
 	
-	<select id="initLikeMark" parameterType="map" resultType="Integer">
-		select tournum from tourbookmark where userId =#{userId}
+	<select id="initLikeMark" parameterType="map" resultType="com.railer.rt.tour.Tour">
+		select t.tournum , t.stanum  from tourbookmark tbm join tour t
+        on tbm.tournum = t.tournum where userId =#{userId}
 	</select>
 
 	<select id="hitContentList" parameterType="map" resultType="com.railer.rt.tour.Tour">
