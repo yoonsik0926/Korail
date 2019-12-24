@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+	
+	<insert id="insertevent" parameterType="com.railer.rt.event.Event">
+		INSERT INTO event (eventNum, name, content, sDate, eDate) 
+		
+		VALUES (event_seq.nextval, #{name}, #{content}, #{sdate}, #{edate})
+	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="condition == 'all' ">
+			   ( INSTR(subject, #{keyword}) &gt; 0
+		          OR DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 )
+			</when>
+			
+			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+			
+	<update id="updateevent" parameterType="com.railer.rt.event.Event">
+		UPDATE event SET name=#{name}, content=#{content},
+	 		sDate=#{sdate}, eDate=#{edate}
+		WHERE eventNum = #{eventNum}
+	</update> 
+	
+	<select id="listevent" parameterType="map" resultType="com.railer.rt.event.Event">
+	 SELECT eventNum, name, content, sDate, eDate 
+	 from event
+	 WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt; SYSDATE
+	 <choose>
+	 	<when test="order==0">
+	 		ORDER BY eventNum DESC	
+	 	</when>
+	 	<otherwise>
+	 		ORDER BY (TO_DATE(eDate, 'YYYY-MM-DD')-SYSDATE) 
+	 	</otherwise>
+	 </choose>
+	 
+	 OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	 	 	
+	 </select>
+		
+	<select id="dataCount" parameterType="map" resultType="Integer">
+	 SELECT NVL(COUNT(*), 0) FROM event
+	WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt; SYSDATE
+	</select>
+	
+	<delete id="deleteevent" parameterType="Integer">
+	 	DELETE FROM event WHERE eventNum = #{eventNum}
+	 </delete>
+	 	
+</mapper>
