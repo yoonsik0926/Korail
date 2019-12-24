@@ -56,6 +56,26 @@ $(function(){
 	});
 });
 
+function showTour(){
+	var locNum = ${dto.locNum};
+	var subtitle = "";
+	if(locNum ==1)
+		subTitle = "sudo";
+	else if(locNum ==2)
+		subTitle = "chungcheong";
+	else if(locNum ==3)
+		subTitle = "sudo";
+	else if(locNum ==4)
+		subTitle = "sudo";
+	else if(locNum ==5)
+		subTitle = "sudo";
+	
+	var query = "staNum="+${dto.staNum}+"&cateNum=4&detailcateNum=1";
+	var url = "<%=cp%>/tour/sudo?"+query;
+	
+	location.href=url;
+	
+}
 
 </script>
 
@@ -155,7 +175,7 @@ $(function(){
 		      <!-- Footer -->
 		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
 		      	<c:if test="${sessionScope.member.userId!='admin'}">
-		        	<button type="button" class="btnTour">관광정보 보러가기</button>
+		        	<button type="button" class="btnTour" onclick="showTour();">관광정보 보러가기</button>
 		        </c:if>
 		        
 		        <c:if test="${sessionScope.member.userId=='admin'}">

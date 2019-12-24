@@ -107,6 +107,7 @@ public class StationController {
 		model.addAttribute("page",page);
 		model.addAttribute("locNum",locNum);
 		model.addAttribute("staNum",staNum);
+		model.addAttribute("subMenu", "1");
 		
 		return ".four.info.station.modal";
 	}

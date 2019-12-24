@@ -512,7 +512,7 @@ figure.snip1132.hover img {
 						</div>
 						<div class="caption"><p>*</p></div>
 					</figcaption>
-					<a href="#"></a>
+					<a href="<%=cp%>/station/info?page=1&locNum=1"></a>
 				</figure>
 				</div>
 				<div class="st">
@@ -526,7 +526,7 @@ figure.snip1132.hover img {
 						</div>
 						<div class="caption"><p>*</p></div>
 					</figcaption>
-					<a href="#"></a>
+					<a href="<%=cp%>/station/info?page=1&locNum=3"></a>
 				</figure>
 				</div>
 				<div class="st">
@@ -540,7 +540,7 @@ figure.snip1132.hover img {
 						</div>
 						<div class="caption"><p>*</p></div>
 					</figcaption>
-					<a href="#"></a>
+					<a href="<%=cp%>/station/info?page=1&locNum=2"></a>
 				</figure>
 				</div>
 				<div class="st">
@@ -554,7 +554,7 @@ figure.snip1132.hover img {
 						</div>
 						<div class="caption"><p>*</p></div>
 					</figcaption>
-					<a href="#"></a>
+					<a href="<%=cp%>/station/info?page=1&locNum=4"></a>
 				</figure>
 				</div>
 				<div class="st">
@@ -568,7 +568,7 @@ figure.snip1132.hover img {
 						</div>
 						<div class="caption"><p>*</p></div>
 					</figcaption>
-					<a href="#"></a>
+					<a href="<%=cp%>/station/info?page=1&locNum=5"></a>
 				</figure>
 				</div>				
 			</div>
