@@ -166,10 +166,10 @@ function showModal(ob) {
 			    <c:out value="<div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
 			<c:if test="${status.index!=0 && status.index%3!=0}">
-			    <c:out value="</div><div class='displaySta2'>" escapeXml="false"/>
+			    <c:out value="<div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
 			<c:if test="${status.index!=0 && status.index%3==0}">
-				<c:out value="</div></div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
+				<c:out value="</div><div class='displaySta'><div class='displaySta2'>" escapeXml="false"/>
 			</c:if>
 			<input type="hidden" name="staNum" value="${vo.staNum}">
 			
@@ -177,15 +177,14 @@ function showModal(ob) {
 				  <img src="<%=cp%>/resource/images/station/${vo.imageFilename}" style="width: 100%; height:100%;"/>
 				  <figcaption>
 				    <h4><span> ${vo.staName}</span></h4>
-			</figcaption>
+				</figcaption>
 				  <a class="staModal" onclick="showModal(this);"></a>
-				 <!--  <a class="staModal"  data-target="#layerpop" data-toggle="modal" data-test="${vo.staNum}"></a> -->
 			</figure>
+			<c:out value="</div>" escapeXml="false"/>
 		</c:forEach>
 		
 		</div>	
 
-	</div>
 	
 	<c:set var="n" value="${staList.size()}"/>
 	<c:if test="${n>0&&n%3!=0}">
@@ -203,13 +202,9 @@ function showModal(ob) {
 			</ul>
 		</nav>
 	</div>
-	
-	
-
- <c:out value="</div>"escapeXml="false"/>
-
-<!-- modal -->
-<div id="please">		
-		
-</div>
+</div>	
+	<!-- modal -->
+	<div id="please">		
+			
+	</div>
 
