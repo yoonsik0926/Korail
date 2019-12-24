@@ -5,7 +5,7 @@
 	String cp = request.getContextPath();
 %>
 <link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<script src="<%=cp%>/resource/js/flickity.pkgd.min.js"></script>
 
 <style>
 * {
