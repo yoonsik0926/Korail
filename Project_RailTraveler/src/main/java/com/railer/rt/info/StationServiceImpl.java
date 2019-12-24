@@ -162,4 +162,38 @@ public class StationServiceImpl implements StationService {
 
 	}
 
+	@Override
+	public void insertBenefit(Station dto) throws Exception {
+		try {
+			dao.insertData("station.insertBenefit",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateBenefit(Station dto) throws Exception {
+		try {
+			dao.updateData("station.updateBenefit",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public Station readBenefit(int beneNum) {
+		Station dto = null;
+		try {
+			dto = dao.selectOne("station.readBenefit",beneNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
 }

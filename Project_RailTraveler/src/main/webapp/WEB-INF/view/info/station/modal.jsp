@@ -27,6 +27,36 @@ function updateStation(){
 	location.href = url;
 }
 
+$(function(){
+	$("#remove").click(function(){
+		var beneNum = $('input[name="choice"]:checked').val();
+		if(beneNum==null){
+			alert("삭제할 혜택을 먼저 선택해주세요.");
+			return;
+		}
+		
+		var query = "locNum=${dto.locNum}&page=${page}&beneNum="+beneNum;
+		var url = "<%=cp%>/station/benefit/delete?"+query;
+		
+		location.href=url;
+	});
+});
+
+$(function(){
+	$("#edit").click(function(){
+		var beneNum = $('input[name="choice"]:checked').val();
+		if(beneNum==null){
+			alert("수정할 혜택을 먼저 선택해주세요.");
+			return;
+		}
+		var query = "staNum=${dto.staNum}&locNum=${dto.locNum}&page=${page}&beneNum="+beneNum;
+		var url = "<%=cp%>/station/benefit/update?"+query;
+		
+		location.href=url;
+	});
+});
+
+
 </script>
 
 		<!-- 모달 -->
@@ -63,8 +93,28 @@ function updateStation(){
 						<span style="font-size: 18px; font-weight: 800;">
 							<i class="fas fa-gift" style="color: #1c549a; font-size: 23px;"></i>&nbsp;&nbsp;혜택&nbsp;&nbsp;</span>
 						<div style="font-size: 15px; color: #636363;">
-							<table style="margin-left:20px; text-align: center; font-size: 12px;">
+							<c:if test="${sessionScope.member.userId=='admin'}">
+								<table style="margin-left:400px;">
+									<tr>	
+										<td style="text-align: right;" width="40">
+											<a href="javascript:location.href='<%=cp%>/station/benefit/created?staNum=${dto.staNum}&locNum=${dto.locNum}&page=${page}';" id="plus"><i class="far fa-plus-square" style="color: green; font-size: 20px;"></i></a>
+										</td>
+										<td style="text-align: right;" width="40">
+											<a href="#" id="remove"><i class="far fa-minus-square" style="color: red; font-size: 20px;"></i></a>
+										</td>
+										<td style="text-align: right;" width="40">
+											<a href="#" id="edit"><i class="far fa-edit" style="color: blue; font-size: 20px;"></i></a>
+										</td>
+									</tr>
+								</table>
+							</c:if>
+							
+							<table style="margin-left:5px; text-align: center; font-size: 12px;">
+
 								<tr style="background: #283164; color: white;">
+									<c:if test="${sessionScope.member.userId=='admin'}">
+										<td width="60">선택</td>
+									</c:if>
 									<td width="60">분류</td>
 									<td width="200">이름</td>
 									<td width="250">내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용</td>
@@ -72,7 +122,10 @@ function updateStation(){
 									<td width="100">종료 날짜</td>
 								</tr>
 								<c:forEach var="vo" items="${beneList}">
-							 	<tr style="border-bottom: 1px solid #d4cbcb;">								
+							 	<tr style="border-bottom: 1px solid #d4cbcb;">
+							 		<c:if test="${sessionScope.member.userId=='admin'}">
+							 			<td><input type="radio" name="choice" value="${vo.beneNum}"></td>	
+							 		</c:if>						
 									<td>${vo.cateName}</td>
 									<td>${vo.subject}</td>
 									<td>${vo.content}</td>

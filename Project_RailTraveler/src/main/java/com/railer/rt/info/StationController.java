@@ -240,4 +240,113 @@ public class StationController {
 		
 		return "redirect:/station/update?"+query;
 	}
+	
+	//역별 혜택
+	@RequestMapping(value="/station/benefit/created", method=RequestMethod.GET)
+	public String createdBenefitForm(
+			@RequestParam int staNum,
+			@RequestParam int locNum,
+			Model model) throws Exception {
+		
+		List<Station> tourCategory = service.listTourCate();
+		
+		model.addAttribute("tourCategory",tourCategory);
+		
+		model.addAttribute("subMenu", "1");
+		model.addAttribute("mode","created");
+		model.addAttribute("staNum",staNum);
+		model.addAttribute("locNum",locNum);
+		
+		return ".four.info.station.benefit";
+	}
+	
+	@RequestMapping(value="/station/benefit/created", method=RequestMethod.POST)
+	public String createdBenefitSubmit(
+			Station dto,
+			@RequestParam int staNum,
+			@RequestParam int cateNum,
+			@RequestParam int locNum,
+			@RequestParam String page,
+			HttpSession session) {
+		
+		String query = "locNum="+locNum+"&page="+page;
+		try {
+			dto.setStaNum(staNum);
+			dto.setCateNum(cateNum);
+			service.insertBenefit(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/station/info?"+query;
+	}
+	
+	@RequestMapping(value="/station/benefit/delete")
+	public String deleteBenefit(
+			@RequestParam int beneNum,
+			@RequestParam int locNum,
+			@RequestParam String page,
+			HttpSession session) throws Exception{
+		
+		String query = "locNum="+locNum+"&page="+page;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("beneNum", beneNum);
+		
+		service.deleteBenefit(map);
+		
+		return "redirect:/station/info?"+query;
+	}
+	
+	@RequestMapping(value="/station/benefit/update", method=RequestMethod.GET)
+	public String updateBenefitForm(
+			@RequestParam int staNum,
+			@RequestParam int beneNum,
+			@RequestParam String page,
+			@RequestParam int locNum,
+			HttpSession session,
+			Model model) throws Exception {
+
+		Station dto = service.readBenefit(beneNum);
+		
+		if(dto == null) {
+			return "redirect:/station/info?locNum="+locNum+"&page="+page;
+		}
+		
+		List<Station> tourCategory = service.listTourCate();
+		model.addAttribute("tourCategory",tourCategory);
+		
+		model.addAttribute("dto",dto);
+		model.addAttribute("page",page);
+		model.addAttribute("mode","update");
+		model.addAttribute("beneNum",beneNum);
+		model.addAttribute("locNum",locNum);
+		model.addAttribute("staNum",staNum);
+			
+		model.addAttribute("subMenu", "1");
+		
+		return ".four.info.station.benefit";
+	}
+	
+	@RequestMapping(value="/station/benefit/update", method=RequestMethod.POST)
+	public String updateBenefitSubmit(
+			Station dto,
+			@RequestParam int staNum,
+			@RequestParam int beneNum,
+			@RequestParam int cateNum,
+			@RequestParam String page,
+			@RequestParam int locNum) {
+	
+		try {
+			dto.setStaNum(staNum);
+			dto.setCateNum(cateNum);
+			service.updateBenefit(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/station/info?page="+page+"&locNum="+locNum;
+	}
+	
+	
 }

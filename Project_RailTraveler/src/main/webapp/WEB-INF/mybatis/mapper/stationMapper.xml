@@ -38,22 +38,6 @@
 		join location l on l.locNum=s.locNum
 		where s.staNum = #{staNum}
 	</select>
-	
-	<select id="listBenefit" parameterType="Integer" resultType="com.railer.rt.info.Station">
-	    select s.staNum, beneNum, b.cateNum, cateName, subject, content, sDate, eDate
-		from benefit b
-        join tourCategory t on b.cateNum = t.cateNum
-		join station s on s.staNum = b.staNum
-		where s.staNum = #{staNum}
-	</select>
-	
-	<select id="countBenefit" parameterType="Integer" resultType="Integer" >
-		select nvl(count(*),0)
-		from benefit b
-        join tourCategory t on b.cateNum = t.cateNum
-		join station s on s.staNum = b.staNum
-		where s.staNum = #{staNum}
-	</select>
 
 	<select id="listTourCate" resultType="com.railer.rt.info.Station" >
 		select cateNum, cateName
@@ -88,6 +72,40 @@
 			</otherwise>
 		</choose>
 	</delete>
-
+	
+	<select id="listBenefit" parameterType="Integer" resultType="com.railer.rt.info.Station">
+	    select s.staNum, beneNum, b.cateNum, cateName, subject, content, sDate, eDate
+		from benefit b
+        join tourCategory t on b.cateNum = t.cateNum
+		join station s on s.staNum = b.staNum
+		where s.staNum = #{staNum}
+	</select>
+	
+	<select id="readBenefit" parameterType="Integer" resultType="com.railer.rt.info.Station">
+		select s.staNum, beneNum, b.cateNum, cateName, subject, content, sDate, eDate
+		from benefit b
+        join tourCategory t on b.cateNum = t.cateNum
+		join station s on s.staNum = b.staNum
+		where b.beneNum = #{beneNum}
+	</select>
+	
+	<select id="countBenefit" parameterType="Integer" resultType="Integer" >
+		select nvl(count(*),0)
+		from benefit b
+        join tourCategory t on b.cateNum = t.cateNum
+		join station s on s.staNum = b.staNum
+		where s.staNum = #{staNum}
+	</select>
+	
+	<insert id="insertBenefit" parameterType="com.railer.rt.info.Station">
+		insert into benefit(beneNum,staNum,subject,content,sDate,eDate,cateNum)
+		values(benefit_seq.nextval,#{staNum},#{subject},#{content},#{sDate},#{eDate},#{cateNum})
+	</insert>
+	
+	<update id="updateBenefit" parameterType="com.railer.rt.info.Station">
+		update benefit set subject = #{subject}, content=#{content},cateNum=#{cateNum},
+			sDate=#{sDate},eDate=#{eDate}
+		where beneNum = #{beneNum}
+	</update>
 	
 </mapper>

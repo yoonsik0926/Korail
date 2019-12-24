@@ -12,7 +12,7 @@
 	
 <script type="text/javascript">
 function sendOk() {
-    var f = document.sbbsForm;
+    var f = document.stationForm;
 	
     var str = f.staName.value;
     if(!str){
