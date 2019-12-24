@@ -538,7 +538,7 @@ String cp = req.getContextPath();
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		
-		
+		 
 		//staNum 가져오기 
 		int staNum = 0;
 		
