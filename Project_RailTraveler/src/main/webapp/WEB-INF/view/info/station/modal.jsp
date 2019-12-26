@@ -90,16 +90,16 @@ function showTour(){
 		subTitle = "jeonla";
 	else if(locNum ==5)
 		subTitle = "gyeongsang";
-<%-- 	
-	var query = "?staNum="+${dto.staNum}+"&cateNum=4&detailcateNum=1&subTitle="+subTitle;
+ 	
+	var query = "?q=staNum:"+${dto.staNum}+",cateNum:4,detailcateNum:1,subTitle:"+subTitle;
 	var url = "<%=cp%>/tour/"+subTitle+query;
 	
-	location.href=url; --%>
+	location.href=url;
 	
-	var url = "<%=cp%>/tour/detailTourList";
-	var query = "?pageNo=1&staNum="+${dto.staNum}+"&detailcateNum=1&cateNum=4&subTitle="+subTitle;
+	//var url = "<%=cp%>/tour/detailTourList";
+	//var query = "?pageNo=1&staNum="+${dto.staNum}+"&detailcateNum=1&cateNum=4&subTitle="+subTitle;
 	
-	location.href=url+query;
+	//location.href=url+query;
 }
 
 </script>
