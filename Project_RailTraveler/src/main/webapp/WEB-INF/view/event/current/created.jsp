@@ -156,8 +156,8 @@ input[type=text], input[type=file] {
 			<table class="tb-created">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">제&nbsp;&nbsp;목</td>
-					<td class="tb-content"><input type="text" name="name"
-						maxlength="100" class="boxTF" style="padding: 5px 5px;"
+					<td class="tb-content">
+					<input type="text" name="name" maxlength="100" class="boxTF" style="padding: 5px 5px;"
 						value="${dto.name}"></td>
 				</tr>
 				<tr class="tb-row">
@@ -181,7 +181,6 @@ input[type=text], input[type=file] {
 						<textarea name="content" rows="12" class="boxTA" style="width:100%;">${dto.content}</textarea>
 					</td>
 				</tr>
-				
 			</table>
 			
 			<table style="width: 100%; margin: 0px auto; border-spacing: 0px; text-align: center;">

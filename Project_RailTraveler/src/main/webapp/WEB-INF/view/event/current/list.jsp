@@ -87,7 +87,7 @@ ul{
     	 auto:true,
       	 speed:500,
       	 pause:5000,
-      	 slideWidth: 800,
+      	 slideWidth: 600,
       	 mode:'horizontal',
       	 autoControls:true,
       	 pager:true,
@@ -126,6 +126,11 @@ ul{
     	});
     });
     
+    function searchList() {
+    	var f = document.searchForm;
+    	f.submit();
+    }
+    
 </script>
 
 
@@ -136,7 +141,7 @@ ul{
     	<h3> 베스트 이벤트 </h3>
 	 </div>    
      
-     <div style="margin-left: 180px;">
+     <div style="margin-left: 300px;">
      	<ul class="bxslider">
      		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event1.jpg"></a></li>
      		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event2.png"></a></li>
@@ -162,12 +167,27 @@ ul{
                                        
                     <!-- type-section -->
                     <div class="search-section" style="float: right">
-                         <div class="input-area">
-                             <div class="keyword">
-                                 <input type="text" placeholder="검색" maxlength="100" id="search_word" title="검색하고 싶은 이벤트 키워드를 입력하세요.">
-                             </div>
-                             <button type="submit" title="검색" class="btn-event-search" onclick="#"><span class="blind"></span></button>
-                         </div>
+                    	<form name="searchForm" action="<%=cp%>/event/current" method="post"
+							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
+							<select name="condition" class="boxTF"
+								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
+								<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
+								<option value="name"
+									${condition=="name"?"selected='selected'":""}>제목</option>
+								<option value="content"
+									${condition=="content"?"selected='selected'":""}>내용</option>
+								<option value="sdate"
+									${condition=="sdate"?"selected='selected'":""}>시작일</option>
+								<option value="edate"
+									${condition=="edate"?"selected='selected'":""}>종료일</option>	
+							</select> <input type="text" name="keyword" value="${keyword}"
+								class="boxTF"
+								style="display: inline-block; height: 100%; width: 58%;">
+							<img
+								src="<%=cp%>/resource/images/magnifying-glass.png" class=""
+								onclick="searchList()"
+								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
+						</form>
                      </div>
                                 
 			 <div class="sect-eventlist highlight" style=" display: block; padding-top: 150px;
@@ -217,7 +237,7 @@ ul{
     <table style="width: 100%; margin-bottom: 30px; border-spacing: 0px;">
 		   <tr height="35">
 			<td align="center">
-			        ${dataCount==0?"등록된 게시물이 없습니다.":paging}
+			        ${dataCount==0?"등록된 이벤트가 없습니다.":paging}
 			</td>
 		   </tr>
 	</table>

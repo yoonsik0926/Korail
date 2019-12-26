@@ -83,7 +83,9 @@ public class EventController {
     	listUrl = cp+"/event/current?"+query;
         
         String paging = myUtil.paging(current_page, total_page, listUrl);
-
+        
+        if(keyword.length()!=0)
+			model.addAttribute("search", "search");
         model.addAttribute("list", list);
         model.addAttribute("page", current_page);
         model.addAttribute("total_page", total_page);
