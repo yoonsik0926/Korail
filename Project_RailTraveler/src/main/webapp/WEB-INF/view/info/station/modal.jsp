@@ -6,6 +6,27 @@
 	String cp=request.getContextPath();
 %>
 <script type="text/javascript">
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
 $(function(){
 	$("#aaaa").modal();
 });
@@ -64,17 +85,21 @@ function showTour(){
 	else if(locNum ==2)
 		subTitle = "chungcheong";
 	else if(locNum ==3)
-		subTitle = "sudo";
+		subTitle = "gangwon";
 	else if(locNum ==4)
-		subTitle = "sudo";
+		subTitle = "jeonla";
 	else if(locNum ==5)
-		subTitle = "sudo";
+		subTitle = "gyeongsang";
+<%-- 	
+	var query = "?staNum="+${dto.staNum}+"&cateNum=4&detailcateNum=1&subTitle="+subTitle;
+	var url = "<%=cp%>/tour/"+subTitle+query;
 	
-	var query = "staNum="+${dto.staNum}+"&cateNum=4&detailcateNum=1";
-	var url = "<%=cp%>/tour/sudo?"+query;
+	location.href=url; --%>
 	
-	location.href=url;
+	var url = "<%=cp%>/tour/detailTourList";
+	var query = "?pageNo=1&staNum="+${dto.staNum}+"&detailcateNum=1&cateNum=4&subTitle="+subTitle;
 	
+	location.href=url+query;
 }
 
 </script>
