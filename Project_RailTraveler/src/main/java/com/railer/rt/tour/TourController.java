@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,11 +32,13 @@ public class TourController {
 	@Autowired
 	private TourService service;
 
-	@RequestMapping(value = "/tour/sudo")
+	@RequestMapping(value = "/tour/{locName}")
 	public String tour1(Model model,
+			@PathVariable String locName,
 			@RequestParam(defaultValue = "0") int cateNum,
 			@RequestParam(defaultValue = "1") int locNum,
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "q", defaultValue = "" ) String q,
 			HttpServletRequest req) {
 		
 		String cp = req.getContextPath();
@@ -44,8 +47,27 @@ public class TourController {
 		int total_page = 0;
 		int dataCount = 0;
 		
+		String title = "수도권";
+		if(locName.equals("sudo")) {
+			locNum =1;
+		}
+		else if (locName.equals("chungcheong")) {
+			locNum =2;
+			title="충청권";			
+		}
+		else if (locName.equals("gangwon")) {
+			locNum =3;
+			title="강원권";	
+		}
+		else if (locName.equals("jeonla")) {
+			locNum =4;
+			title="전라권";	
+		}
+		else if (locName.equals("gyeongsang")) {
+			locNum =5;
+			title="경상권";	
+		}
 
-					
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("cateNum", cateNum);
@@ -103,6 +125,8 @@ public class TourController {
         	articleUrl+= "&"+query;
         }*/
       
+		
+		
         String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		// 큰 카테고리의 정보를 가져온다.
@@ -115,346 +139,14 @@ public class TourController {
 		model.addAttribute("tourCategoryList", tourCategoryList);
 		model.addAttribute("list", list);
 		model.addAttribute("paging", paging);
-		model.addAttribute("subMenu", "1");
-		model.addAttribute("title", "수도권");
-		model.addAttribute("subTitle", "sudo");
+		model.addAttribute("subMenu", locNum);
+		model.addAttribute("title", title);
+		model.addAttribute("subTitle", locName);
+		
+		model.addAttribute("q", q);
+		
 		return ".four.tour.tour.list";
 	}
-
-	@RequestMapping(value = "/tour/chungcheong")
-	public String tour3(Model model,@RequestParam(value = "page", defaultValue = "1") int current_page,
-			@RequestParam(defaultValue = "0") int cateNum,
-			@RequestParam(defaultValue = "2") int locNum,HttpServletRequest req) throws Exception {
-		
-	
-		String cp = req.getContextPath();
-		
-		int items = 9;
-		int total_page = 0;
-		int dataCount = 0;
-		
-		
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("cateNum", cateNum);
-		map.put("locNum", locNum);
-		map.put("name", 0);
-		
-		//cateNum과 locNum을 이용해서 카운터 세기
-		dataCount = service.dataCount(map);
-		
-		
-		if (dataCount != 0)
-			total_page = myUtil.pageCount(items, dataCount);
-
-		if (total_page < current_page)
-			current_page = total_page;
-		
-		int offset = (current_page - 1) * items;
-		if (offset < 0)
-			offset = 0;
-		
-		map.put("offset", offset);
-		map.put("items", items);
-
-		
-		//지역별 이미지를 가져옴
-		List<Tour> list = service.listBoard(map);
-		
-		//지역별 기차역을 가져옴
-		List<Tour> localStation = service.localStation(locNum);
-		
-		//추천해줄 곳을 가져옴
-		List<Tour> hitContentList = service.hitContentList(map);
-		
-		int listNum, n = 0;
-		for(Tour dto : list) {
-			listNum = dataCount - (offset+n);
-			dto.setListNum(listNum);
-			n++;
-		}
-		
-		
-		String listUrl = cp +"/tour/chungcheong?cateNum="+cateNum;
-	
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=chungcheong";
-        
-     /*   if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }
-        */
-        String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		// 큰 카테고리의 정보를 가져온다.
-        model.addAttribute("articleUrl", articleUrl);
-		List<Tour> tourCategoryList = service.tourCategoryList();
-		model.addAttribute("hitContentList", hitContentList);
-		model.addAttribute("localStation", localStation);
-		model.addAttribute("cateNum", cateNum);
-		model.addAttribute("tourCategoryList", tourCategoryList);
-		model.addAttribute("list", list);
-		model.addAttribute("paging", paging);
-		model.addAttribute("subMenu", "2");
-		model.addAttribute("title", "충청권");
-		model.addAttribute("subTitle", "chungcheong");
-		return ".four.tour.tour.list";
-	}
-
-	@RequestMapping(value = "/tour/gangwon")
-	public String tour2(Model model, @RequestParam(defaultValue = "0") int cateNum,
-			@RequestParam(defaultValue = "3") int locNum,
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			HttpServletRequest req) throws Exception {
-		
-String cp = req.getContextPath();
-		
-		int items = 12;
-		int total_page = 0;
-		int dataCount = 0;
-		
-		
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("cateNum", cateNum);
-		map.put("locNum", locNum);
-		map.put("name", 0);
-		
-		//cateNum과 locNum을 이용해서 카운터 세기
-		dataCount = service.dataCount(map);
-		
-		
-		if (dataCount != 0)
-			total_page = myUtil.pageCount(items, dataCount);
-
-		if (total_page < current_page)
-			current_page = total_page;
-		
-		int offset = (current_page - 1) * items;
-		if (offset < 0)
-			offset = 0;
-		
-		map.put("offset", offset);
-		map.put("items", items);
-
-		
-		//지역별 이미지를 가져옴
-		List<Tour> list = service.listBoard(map);
-		
-		//지역별 기차역을 가져옴
-		List<Tour> localStation = service.localStation(locNum);
-		
-		//추천해줄 곳을 가져옴
-		List<Tour> hitContentList = service.hitContentList(map);
-		
-		int listNum, n = 0;
-		for(Tour dto : list) {
-			listNum = dataCount - (offset+n);
-			dto.setListNum(listNum);
-			n++;
-		}
-		
-		
-		String listUrl = cp +"/tour/gangwon?cateNum="+cateNum;
-		
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=gangwon";
-		
-		/*
- 
-        if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }
-        */
-        String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		// 큰 카테고리의 정보를 가져온다.
-        model.addAttribute("articleUrl", articleUrl);
-		List<Tour> tourCategoryList = service.tourCategoryList();
-		model.addAttribute("hitContentList", hitContentList);
-		model.addAttribute("localStation", localStation);
-		model.addAttribute("cateNum", cateNum);
-		model.addAttribute("tourCategoryList", tourCategoryList);
-		model.addAttribute("list", list);
-		model.addAttribute("paging", paging);
-		model.addAttribute("subMenu", "3");
-		model.addAttribute("title", "강원권");
-		model.addAttribute("subTitle", "gangwon");
-		return ".four.tour.tour.list";
-	}
-
-	@RequestMapping(value = "/tour/jeonla")
-	public String tour4(Model model, @RequestParam(defaultValue = "0") int cateNum,
-			@RequestParam(defaultValue = "4") int locNum,
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			HttpServletRequest req) throws Exception {
-		
-
-		
-String cp = req.getContextPath();
-		
-		int items = 12;
-		int total_page = 0;
-		int dataCount = 0;
-		
-		
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("cateNum", cateNum);
-		map.put("locNum", locNum);
-		map.put("name", 0);
-		
-		//cateNum과 locNum을 이용해서 카운터 세기
-		dataCount = service.dataCount(map);
-		
-		
-		if (dataCount != 0)
-			total_page = myUtil.pageCount(items, dataCount);
-
-		if (total_page < current_page)
-			current_page = total_page;
-		
-		int offset = (current_page - 1) * items;
-		if (offset < 0)
-			offset = 0;
-		
-		map.put("offset", offset);
-		map.put("items", items);
-
-		
-		//지역별 이미지를 가져옴
-		List<Tour> list = service.listBoard(map);
-		
-		//지역별 기차역을 가져옴
-		List<Tour> localStation = service.localStation(locNum);
-		
-		//추천해줄 곳을 가져옴
-		List<Tour> hitContentList = service.hitContentList(map);
-		
-		int listNum, n = 0;
-		for(Tour dto : list) {
-			listNum = dataCount - (offset+n);
-			dto.setListNum(listNum);
-			n++;
-		}
-		
-
-		String listUrl = cp +"/tour/jeonla?cateNum="+cateNum;
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=jeonla";
-		
-		/*
-        if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }
-        */
-        String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		// 큰 카테고리의 정보를 가져온다.
-        model.addAttribute("articleUrl", articleUrl);
-		List<Tour> tourCategoryList = service.tourCategoryList();
-		model.addAttribute("hitContentList", hitContentList);
-		model.addAttribute("localStation", localStation);
-		model.addAttribute("cateNum", cateNum);
-		model.addAttribute("tourCategoryList", tourCategoryList);
-		model.addAttribute("list", list);
-		model.addAttribute("paging", paging);
-		model.addAttribute("subMenu", "4");
-		model.addAttribute("title", "전라권");
-		model.addAttribute("subTitle", "jeonla");
-		return ".four.tour.tour.list";
-	}
-
-	@RequestMapping(value = "/tour/gyeongsang")
-	public String tour5(Model model, @RequestParam(defaultValue = "0") int cateNum,
-			@RequestParam(defaultValue = "5") int locNum,
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			HttpServletRequest req) throws Exception {
-		
-		
-String cp = req.getContextPath();
-		
-		int items = 12;
-		int total_page = 0;
-		int dataCount = 0;
-		
-		
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("cateNum", cateNum);
-		map.put("locNum", locNum);
-		map.put("name", 0);
-		
-		//cateNum과 locNum을 이용해서 카운터 세기
-		dataCount = service.dataCount(map);
-		
-		
-		if (dataCount != 0)
-			total_page = myUtil.pageCount(items, dataCount);
-
-		if (total_page < current_page)
-			current_page = total_page;
-		
-		int offset = (current_page - 1) * items;
-		if (offset < 0)
-			offset = 0;
-		
-		map.put("offset", offset);
-		map.put("items", items);
-
-		
-		//지역별 이미지를 가져옴
-		List<Tour> list = service.listBoard(map);
-		
-		//지역별 기차역을 가져옴
-		List<Tour> localStation = service.localStation(locNum);
-		
-		//추천해줄 곳을 가져옴
-		List<Tour> hitContentList = service.hitContentList(map);
-		
-		int listNum, n = 0;
-		for(Tour dto : list) {
-			listNum = dataCount - (offset+n);
-			dto.setListNum(listNum);
-			n++;
-		}
-		
-
-		String listUrl = cp +"/tour/gyeongsang?cateNum="+cateNum;
-		
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=gyeongsang";
-		
-		/*
-        if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }
-        */
-        String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		// 큰 카테고리의 정보를 가져온다.
-        model.addAttribute("articleUrl", articleUrl);
-		List<Tour> tourCategoryList = service.tourCategoryList();
-		model.addAttribute("hitContentList", hitContentList);
-		model.addAttribute("localStation", localStation);
-		model.addAttribute("cateNum", cateNum);
-		model.addAttribute("tourCategoryList", tourCategoryList);
-		model.addAttribute("list", list);
-		model.addAttribute("paging", paging);
-		model.addAttribute("subMenu", "5");
-		model.addAttribute("title", "경상권");
-		model.addAttribute("subTitle", "gyeongsang");
-		return ".four.tour.tour.list";
-	}
-
 
 	@RequestMapping(value = "/tour/detailTourCategory", method = RequestMethod.POST)
 	@ResponseBody

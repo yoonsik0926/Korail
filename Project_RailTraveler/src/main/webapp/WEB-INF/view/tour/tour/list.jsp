@@ -17,8 +17,6 @@
 	
 <script type="text/javascript">
 
-
-
 //좋아요 관리하는 에이작스
 function test(ob){
 	
@@ -49,6 +47,58 @@ function test(ob){
 
 //메뉴 엑티브를 관리하는 스크립트
 $(function(){
+	var q = "${q}";
+	if(q) {
+		var qq = q.split(",");
+		var staNum=qq[0].split(":")[1];
+		var subTitle=qq[1].split(":")[1];
+		
+		$("#tab-0").removeClass("active");
+		$("#tab-4").addClass("active");
+		$("#searchengine").show();
+		
+		var url = "<%=cp%>/tour/detailTourCategory";
+		var query = "cateNum=1";
+		var fn = function(data){
+			for(var i =0 ; i<data.detailTourCategoy.length ;i++){
+				$("select[name=2stSelect]").append("<option value="+data.detailTourCategoy[i].detailcateNum+">"+data.detailTourCategoy[i].detailcateName+"</option>");				
+			}
+			
+			$("#stationSelect").val(staNum);
+			$("#1stSelect").val(1);
+			$("#2stSelect").val(1);
+			
+			listPage(1);			
+		}; 
+		ajaxJSON(url, "post", query, fn);		
+
+
+		$("ul.tabs li").click(function(){
+			tab = $(this).attr("data-tab");
+			
+			$("ul.tabs li").each(function(){
+				$(this).removeClass("active");
+			});
+			
+			$("#tab-"+tab).addClass("active");
+			
+			if(tab !=4){
+				var url = "<%=cp%>/tour/${subTitle}?cateNum="+tab;
+				location.href=url;	
+			}
+
+			if(tab ==4){
+				$("#searchengine").show();
+			}
+		});
+		
+		return;
+	}
+
+	
+	
+	
+	
 	//검색창은 일단 안띄울거야!!
 	$("#searchengine").hide();	
 	 
