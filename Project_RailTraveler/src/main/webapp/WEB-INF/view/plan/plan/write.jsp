@@ -27,6 +27,7 @@
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
 
+
 <style type="text/css">
 * {
 	margin: 0;
@@ -178,7 +179,7 @@ body::-webkit-scrollbar {
 	cursor: pointer;
 }
 
-.modal-planning {
+.modal-detailPlanning {
 	background: blue;
 	/* 	opacity: 0.7; */
 	/* 	padding: 10px; */
@@ -193,7 +194,6 @@ body::-webkit-scrollbar {
 .modal2 {
 	width: 75%;
 	height: 100%;
-	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -272,7 +272,7 @@ body::-webkit-scrollbar {
 	cursor: pointer;
 }
 
-.pickedStationDetail {
+[class*=pickedStationDetail] {
 	margin: 14px;
 	width: 20%;
 /* 	height: 100%; */
@@ -294,29 +294,45 @@ body::-webkit-scrollbar {
 	background: #9af6b6;
 }
 
-#detailPlanPlus {
-	width: 75%;
-	height: 100%;
-	border: 1px solid black;
-	background: black;
-	float: right;
-	transition: All 0.2s ease;
-		-webkit-transition: All 0.2s ease;
-		-moz-transition: All 0.2s ease;
-		-o-transition: All 0.2s ease;
-	position: fixed;
+.displayBlock {
+	display: block;
 }
 
-#detailPlanPlus .open {
-	right: 0px;
+.displayNone {
+	display: none;
 }
-
 
 .timeSelect {
 	width: 25%;
 	height: 100%;
-	background: blue;
+	background: black;
 	float: left;
+	z-index: 100;
+}
+
+.blackThing {
+	background: black;
+	margin: 14px 0 14px 28px;
+	padding: 0;
+}
+
+div.timeSelect {
+	height: 100%;
+	margin: 0;
+}
+.times {
+	width: 100%;
+	height: 5%;
+	border: 1px solid white;
+	text-align: left;
+	font-size: 20px;
+	color: white;
+	z-index: 200;
+	cursor: pointer;
+}
+
+.chosenTime {
+	background: red;
 }
 
 </style>
@@ -381,9 +397,9 @@ function close_pop(flag) {
 };
 
 
-function close_planning() {
-	$("#planModal").hide();
-};
+// function close_planning() {
+// 	$("#detailPlanPlus").hide();
+// };
 
 function getNumber(day) {
 	days=new Array(day.value);
@@ -417,16 +433,80 @@ function getNumber(day) {
 								+"</div>"
 								+"<ul class='planListDetail"+i+" leftThing' data-day='"+i+"'></ul>"
 								);
+		
+		$(".planListDetail"+i).sortable({
+			placeholder:"movingEnd",
+			stop: function( event, ui ) {
+		    	var day = ui.item.parent().attr("data-day");
+		    	ui.item.parent().find("li").each(function(index){
+		    		days[day-1][index] = $(this).attr("data-staNum");
+		    	});
+		    	
+			// ajax로 db작업(업데이트)
+		    	
+		    }
+		});
+		
+		$(".planListDetail"+i).droppable({
+	        out: function (event, ui) {
+	        	var $p=ui.helper.parent();
+	        	var day = ui.helper.parent().attr("data-day");
+	        	ui.helper.remove();
+ 		    	days[day-1].length=0;
+
+ 		    	var n=0;
+ 		    	$p.find("li").each(function(index){
+		    		if($(this).attr("data-staNum")) {		    				 
+				    	days[day-1][n++] = $(this).attr("data-staNum");
+		    		}		
+				});
+// 	        	console.log(days[day-1]);
+// 	        	console.log(days);
+	        }
+		    
+		});
+/* 고치기전 원본
+		$(".planListDetail"+i).sortable({
+			items:$(".pickedStation"),
+			placeholder:"movingEnd",
+		    stop: function( event, ui ) {
+		    	var day = ui.item.parent().attr("data-day");
+		    	ui.item.parent().find("li").each(function(index){
+		    		days[day-1][index] = $(this).attr("data-staNum");
+		    	});
+		    	
+			// ajax로 db작업(업데이트)
+		    	
+		    }
+		});
+		$(".planListDetail"+i).droppable({
+	        out: function (event, ui) {
+	        	var $p=ui.helper.parent();
+	        	var day = ui.helper.parent().attr("data-day");
+	        	ui.helper.remove();
+ 		    	days[day-1].length=0;
+
+ 		    	var n=0;
+ 		    	$p.find("li").each(function(index){
+		    		if($(this).attr("data-staNum")) {		    				 
+				    	days[day-1][n++] = $(this).attr("data-staNum");
+		    		}		
+				});
+// 	        	console.log(days[day-1]);
+// 	        	console.log(days);
+	        }
+		    
+		});
+*/		
 	}
 	console.log(days);
 	$('#myModal').hide();
 }
 
-
 $(document).ready(function(){
 	$('.plusStation').parent().hide();
 });
-    
+
 
 </script>
 </head>
@@ -589,22 +669,46 @@ $(document).ready(function(){
 	          });
 	         </script>
 
-				<div id="planModal" class="modal2">
+				<!-- <div id="planModal" class="modal2">
 					<div class="modal-planning">
 						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
 								style="display: block; font-size: 40px; margin: 10px;">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-				</div>
-
-				<div id="detailPlanPlus" class="modal2">
+				</div> -->
+				
+				<div id="detailPlanPlus" class="modal2" style="opacity: 0.85">
 					<div class="modal-detailPlanning">
 						<div class="timeSelect">
-							
+							<div class="times" data-time="5">05</div>
+							<div class="times" data-time="6">06</div>
+							<div class="times" data-time="7">07</div>
+							<div class="times" data-time="8">08</div>
+							<div class="times" data-time="9">09</div>
+							<div class="times" data-time="10">10</div>
+							<div class="times" data-time="11">11</div>
+							<div class="times" data-time="12">12</div>
+							<div class="times" data-time="13">13</div>
+							<div class="times" data-time="14">14</div>
+							<div class="times" data-time="15">15</div>
+							<div class="times" data-time="16">16</div>
+							<div class="times" data-time="17">17</div>
+							<div class="times" data-time="18">18</div>
+							<div class="times" data-time="19">19</div>
+							<div class="times" data-time="20">20</div>
+							<div class="times" data-time="21">21</div>
+							<div class="times" data-time="22">22</div>
+							<div class="times" data-time="23">23</div>
+							<div class="times" data-time="24">24</div>
 						</div>
+						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
+								style="display: block; font-size: 40px; margin: 10px;">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -670,7 +774,7 @@ $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
 // 		console.log($(this).prev().text());
 // 		console.log($("#planListForm").children().hasClass("activeGreen"));
-		
+
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
 	var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
 	
@@ -689,7 +793,7 @@ $(function() {
 			days[ilcha-1].push(staNum);
 			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"'>"
 								   +$(this).prev().text()
-								   +	"<div class='pickedStationDetail'><i class='fas fa-plus-circle'></i></div>"
+								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
 			
@@ -701,8 +805,11 @@ $(function() {
 	});
 });
 
+/*
+// 위에 append하는곳에 넣었음
 $(function() {
 	$("body").on('click',".insertStaPlan", function() {
+		
 		$("#planListForm ul").sortable({
 			items:$(".pickedStation"),
 			placeholder:"movingEnd",
@@ -716,7 +823,7 @@ $(function() {
 		    	
 		    }
 		});	
-		
+	
 
 		$("#planListForm ul").droppable({
 	        out: function (event, ui) {
@@ -738,11 +845,44 @@ $(function() {
 		});
 	});	
 });
+*/
+
+// 세부계획 디테일 모달
+$(function() {
+	$("body").on('click', ".plusWriting", function() {
+		var staNum=$(this).attr("class").replace(/[^0-9]/g,"");
+		var plusBlack=$(this).find("i").parent().hasClass("ddiring");
+		
+		if($(".pickedStation").children().hasClass("ddiring")===true && $(this).hasClass("ddiring")===false) {
+			alert("현재 창을 종료 후 다른창을 켜주세요.");
+			return false;
+		}
+		
+		if(! plusBlack) {
+			$(this).addClass("ddiring");
+			$(this).parent().find("i").attr("class","fas fa-minus-circle");
+			
+			$("#detailPlanPlus").show();
+		} else {
+			$(this).removeClass("ddiring");
+			$(this).parent().find("i").attr("class","fas fa-plus-circle");
+			
+			$("#detailPlanPlus").hide();
+			
+		}
+		
+	});
+});
 
 $(function() {
-	$("body").on('click', ".pickedStationDetail", function() {
-		$("#detailPlanPlus").addClass("open");
-		$("#detailPlanPlus").show();
+	$("body").on('click', ".times", function() {
+		console.log($(this).data());
+		if(! $(this).hasClass('addClass')) {
+			$(this).addClass('chosenTime');
+		} else {
+			$(this).removeClass('chosenTime');
+		}
+		
 	});
 });
 // $(".planListDetail1 leftThing sortable").disableSelection();
