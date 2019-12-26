@@ -22,7 +22,98 @@ function show() {
 	$(".sub-item").css("display","block");
 }
 
+
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+
+//페이징 처리 및 조건별 리스트 불러오는 에이작스
+function modallistPage(page) {
+			
+	var url = "<%=cp%>/tour/myBookMark";
+	var query = "pageNo="+page;
+	var selector = "#aaaa";
+
+		
+	ajaxHTML(url, "get", query, selector);
+	
+	if(page ==1){
+		$("#likeListModal").modal('show');
+	}
+
+}
+
+//검색하기를 눌렀을 때 
+function myBookMarkList() {	
+
+	modallistPage(1);	
+ }
+
 </script>
+
+
+
+
+
+<!--Modal: modalPush-->
+<div id="myBookMark">
+
+<div class="modal fade  bd-example-modal-sm" id="likeListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 800px; height:750px;   ">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center" style="background-color : yellow; padding-top:7px; height:50px; ">
+        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" id="aaaa" style="padding: 5px 5px; overflow-y: hidden; height: 410px">
+        
+        
+		
+		
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+     	 <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">삭제</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">확인</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ </div>
+<!--Modal: modalPush-->
+
+
+
+
+
+
+
+
+
 <%-- <h3><img alt="커뮤니티" src="<%=cp%>/resource/images/iconcommu1.png" style="width: 100%; --%>
 <!--     margin: 10px 0px;"></h3> -->
 <div style="        box-shadow: 1px 1px 2px #333333;
@@ -49,5 +140,10 @@ function show() {
     <a href="<%=cp%>/tour/gyeongsang" class="list-group-item">경상권</a>
 </div> 
 
+<c:if test="${sessionScope.member.userId != null}">
+<div class="list-group">
+    <a href="#" style="font-size: 14px;" class="list-group-item" onclick="myBookMarkList();">나의 북마크</a>   
+</div> 
+</c:if>
 
 

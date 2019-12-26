@@ -4,7 +4,7 @@
 <mapper namespace="tour">
 
 	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
-		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum, t2.name liketourName, t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum
+		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum, t2.name liketourName,loc.locnum, loc.locName ,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum,tc.cateName
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
@@ -13,10 +13,19 @@
 		left join tourbookmark tbm on tbm.tourNum = t.tournum
         left join tour t2 on t2.tourNum = tbm.tournum
 		<where>
+			<if test="name != 10">
 			 loc.locNum = #{locNum}
+			 </if>
+			 
 			<if test="cateNum !=0">
 				and tc.catenum = #{cateNum} 
 			</if>
+			
+			<if test="name == 10">
+			  userId = #{userId}
+			</if>
+			
+			
 		</where>
 		and ROWNUM <![CDATA[ < ]]>  1000
 		ORDER BY t.tournum DESC
@@ -59,6 +68,12 @@
 		</where>
 
 	</select>
+	
+	<select id="myBookMarkCount" parameterType="map" resultType="Integer">	
+	    select nvl(count(*),0) from tour t join tourbookmark tbm on t.tournum = tbm.tournum
+        where userid =#{userId}
+	</select>
+	
 	
 	<select id="localStation" parameterType="Integer" resultType="com.railer.rt.tour.Tour">
 		select staName, staNum from station where locnum = #{locNum}

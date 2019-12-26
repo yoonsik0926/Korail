@@ -17,5 +17,9 @@ public interface TourService {
 	public List<Tour> initLikeMark(Map<String, Object> map);
 	public List<Tour> hitContentList(Map<String, Object> map);
 	public Tour readDetailTour(int tourNum);
+	public List<Tour> myBookMark(Map<String, Object> map);
+	public int myBookMarkCount(Map<String, Object> map);
+	
+	
 	
 }

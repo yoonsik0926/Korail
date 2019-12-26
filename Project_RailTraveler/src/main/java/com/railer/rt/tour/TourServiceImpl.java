@@ -165,4 +165,32 @@ public class TourServiceImpl implements TourService {
 		return dto;
 	}
 
+	@Override
+	public List<Tour> myBookMark(Map<String, Object> map) {
+		List<Tour> list = null;
+
+		try {
+			list = dao.selectList("tour.tourList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+
+	@Override
+	public int myBookMarkCount(Map<String, Object> map) {
+		int result = 0;
+		try {
+
+			result = dao.selectOne("tour.myBookMarkCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+		
+	
+	}
+
 }

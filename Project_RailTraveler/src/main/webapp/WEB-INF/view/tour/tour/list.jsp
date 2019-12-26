@@ -17,6 +17,8 @@
 	
 <script type="text/javascript">
 
+
+
 //좋아요 관리하는 에이작스
 function test(ob){
 	
@@ -167,7 +169,7 @@ function listPage(page) {
 	var detailcateNum =detailcategory.options[detailcategory.selectedIndex].value;
 	
 	if(staNum ==""){
-		$("#modaltext").text("검색을 위한 역을 선택해주세요");
+		$("#modaltext").text("검색을 위한 역을 선택해주세요");			
 		$("#modalPush").modal();
 		return;
 	};
@@ -453,7 +455,7 @@ a {
 
 <!--Modal: modalPush-->
 <div class="modal fade  bd-example-modal-sm" id="likealarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+  aria-hidden="true" >
   <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
     <!--Content-->
     <div class="modal-content text-center">
@@ -479,8 +481,5 @@ a {
   </div>
 </div>
 <!--Modal: modalPush-->
-
-
-
 
 

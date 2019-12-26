@@ -562,9 +562,6 @@ String cp = req.getContextPath();
 	}
 	
 
-	
-	
-	
 	@RequestMapping(value="/tour/detail")
 	public String article(
 			@RequestParam int cateNum,
@@ -580,12 +577,6 @@ String cp = req.getContextPath();
 		
 		//쿠키를 이용하여 중복되지 않게 카운트 추가
 
-		
-		
-		
-		
-		
-		
         //크롤링할 url지정
         String url = "https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+vo.getName();          
         Document doc = null; 
@@ -646,6 +637,71 @@ String cp = req.getContextPath();
 		return ".four.tour.tour.detail";
 	}
 	
+	@RequestMapping(value = "/tour/myBookMark")
+	public String myBookMark(Model model,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			HttpServletRequest req,
+			HttpSession session) {
+		
+		
+		
+		//String cp = req.getContextPath();
+		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+		
+		if(userId== null) {
+			return "redirect:/member/login";
+		}
+		
+		int items = 7;
+		int total_page = 0;
+		int dataCount = 0;
+		
+	
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("name", 10);
+		map.put("userId", userId);
+		map.put("cateNum", 0);
+		
+
+		dataCount = service.myBookMarkCount(map);
+
+
+		
+		if (dataCount != 0)
+			total_page = myUtil.pageCount(items, dataCount);
+		
+
+		
+		if (total_page < current_page)
+			current_page = total_page;
+		
+		int offset = (current_page - 1) * items;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("items", items);
+
+		
+		List<Tour> myBookMarkList = service.myBookMark(map);
+		
+		
+		// AJAX 용 페이징
+		String paging=myUtil.pagingMethod(current_page, total_page, "modallistPage");
+		
+		//String articleUrl = cp+"/tour/detail?page="+current_page+"&subTitle="+subTitle+"&cateNum="+cateNum;
+		model.addAttribute("current_page", current_page);
+		model.addAttribute("list", myBookMarkList);
+		model.addAttribute("paging", paging);
+		model.addAttribute("dataCount",dataCount);
+		//model.addAttribute("articleUrl", articleUrl);
+
+		return "tour/tour/myBookMarkList";
+	}
+	 
 
 	
 	

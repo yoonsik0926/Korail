@@ -194,7 +194,7 @@ public class MyUtil {
            if(page == current_page) {
         	   sb.append("<span class='curBox'>"+page+"</span>");
            } else {
-			   sb.append("<a onclick='"+methodName+"("+page+");' class='numBox'>"+page+"</a>");
+			   sb.append("<a style='cursor: pointer'; onclick='"+methodName+"("+page+");' class='numBox'>"+page+"</a>");
            }
            page++;
         }
