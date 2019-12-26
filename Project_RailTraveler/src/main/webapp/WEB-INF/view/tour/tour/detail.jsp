@@ -49,6 +49,48 @@ function fnMove(seq){
 </script>
 
 <script type="text/javascript">
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
 
 
 //페이징 처리
@@ -57,15 +99,16 @@ $(function(){
 });
 
 function listPage(page) {
-	var url="<%=cp%>/tour/listReply";
-	var query="num=${dto.num}&pageNo="+page;
+	var url="<%=cp%>/tour2/listReply";
+	var query="tourNum=${vo.tourNum}&pageNo="+page;
 	
 	$.ajax({
 		type:"get"
 		,url:url
 		,data:query
 		,success:function(data) {
-			$("#listReply").html(data);
+			console.log(data);
+			/* $("#listReply").html(data); */
 		}
 	    ,beforeSend :function(jqXHR) {
 	    	jqXHR.setRequestHeader("AJAX", true);
@@ -79,6 +122,47 @@ function listPage(page) {
 	    }
 	});
 }
+
+//리플 등록
+$(function(){
+	$(".btnSendReply").click(function(){
+		
+		var userId = "${sessionScope.member.userId}";
+
+		  if ( userId == "") {
+			  alert("로그인 먼저~");
+			return;
+		  }
+		  
+		  
+		var tourNum="${vo.tourNum}";
+		var $tb = $(this).closest("table");
+		var content=$tb.find("textarea").val().trim();
+		if(! content) {
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		var url="<%=cp%>/tour2/insertReply";
+		var query="tourNum="+tourNum+"&content="+content+"&answer=0";
+		
+		var fn = function(data){
+			$tb.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			} 
+			
+
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
 </script>
 
 <style type="text/css">
@@ -264,7 +348,7 @@ function listPage(page) {
 			</div>
 			
 
-				<div id="listReply">여기에 AJAX 처리</div>
+				<div id="listReply"></div>
 			
 			
 			<table style='width: 100%; margin: 10px auto 0px; border-spacing: 0px; margin-top: 20px; margin-bottom: 50px;'>
@@ -278,8 +362,7 @@ function listPage(page) {
 					</tr>
 					<tr>
 						<td align='right'>
-							<button type='button' class='' data-num='10'
-								style='padding: 10px 20px;'>댓글 등록</button>
+							<button type='button' class='btn btnSendReply' data-num='10' style='padding: 10px 20px;'>댓글 등록</button>
 						</td>
 					</tr>
 				</table>

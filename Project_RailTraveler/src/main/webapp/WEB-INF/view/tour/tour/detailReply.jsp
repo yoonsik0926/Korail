@@ -22,7 +22,7 @@
 	<c:forEach var="vo" items="${listReply}">
 	    <tr height='35' style='background: #eeeeee;'>
 	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
-	           <span><b>${vo.userName}</b></span>
+	           <span><b>${vo.userId}</b></span>
 	        </td>
 	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-left:none;' align='right'>
 	           <span>${vo.created}</span> |
@@ -46,7 +46,7 @@
 	        </td>
 	        <td style='padding:7px 5px;' align='right'>
                 <button type='button' class='btn btnSendReplyLike' data-replyNum='${vo.replyNum}' data-replyLike='1' title="좋아요"><i class="far fa-hand-point-up"></i> <span>${vo.likeCount}</span></button>
-                <button type='button' class='btn btnSendReplyLike' data-replyNum='${vo.replyNum}' data-replyLike='0' title="싫어요"><i class="far fa-hand-point-down"></i> <span>${vo.disLikeCount}</span></button>	        
+	        
 	        </td>
 	    </tr>
 	

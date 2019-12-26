@@ -19,6 +19,11 @@ public interface TourService {
 	public Tour readDetailTour(int tourNum);
 	public List<Tour> myBookMark(Map<String, Object> map);
 	public int myBookMarkCount(Map<String, Object> map);
+	public void insertReply(TourReply dto);
+	public int replyCount(int tourNum);
+	public List<TourReply> replylist(Map<String, Object> map);
+	
+
 	
 	
 	

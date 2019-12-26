@@ -47,9 +47,10 @@ public class TourController {
 		int total_page = 0;
 		int dataCount = 0;
 		
-		String title = "수도권";
+		String title = "";
 		if(locName.equals("sudo")) {
 			locNum =1;
+			title = "수도권";
 		}
 		else if (locName.equals("chungcheong")) {
 			locNum =2;
@@ -76,8 +77,7 @@ public class TourController {
 		
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
-		
-		
+				
 		if (dataCount != 0)
 			total_page = myUtil.pageCount(items, dataCount);
 
@@ -111,26 +111,10 @@ public class TourController {
 		}
 		
 	
-		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;
-		
-		
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=sudo";
-		
-
-        
-/*        if(query.length()!=0) {
-        	listUrl = cp+"/sbbs/list?" + query;
-        	articleUrl = cp+"/sbbs/article?page=" + current_page + "&"+ query;
-        	listUrl +="&"+query;
-        	articleUrl+= "&"+query;
-        }*/
-      
-		
-		
+		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;				
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=sudo";		
         String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		// 큰 카테고리의 정보를 가져온다.
-        
+		      
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("hitContentList", hitContentList);
@@ -393,7 +377,82 @@ public class TourController {
 
 		return "tour/tour/myBookMarkList";
 	}
+	
+		// 댓글 및 댓글의 답글 등록 : AJAX-JSON
+		@RequestMapping(value="/tour2/insertReply", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> insertReply(
+				TourReply dto,
+				HttpSession session
+				) {
+			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String state="true";
+			
+			try {
+				dto.setUserId(info.getUserId());
+				service.insertReply(dto);
+			} catch (Exception e) {
+				state="false";
+			}
+			
+			Map<String, Object> model = new HashMap<>();
+			model.put("state", state);
+			return model;
+		}
 	 
+		
+		// 댓글 리스트 : AJAX-TEXT
+		@RequestMapping(value="/tour2/listReply", method = RequestMethod.GET)
+		public String listReply(
+				@RequestParam int tourNum,
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				Model model
+				) throws Exception {
+			
+
+			int rows=5;
+			int total_page=0;
+			int dataCount=0;
+			
+			Map<String, Object> map=new HashMap<>();
+			map.put("tourNum", tourNum);
+			
+			dataCount=service.replyCount(tourNum);
+			
+			
+			//여기까지 아주 잘나왔음!!!!!!!!!!
+			System.out.println("@@@@@@@@@@@@@@@");
+			System.out.println(dataCount);
+			
+			total_page = myUtil.pageCount(rows, dataCount);
+			if(current_page>total_page)
+				current_page=total_page;
+			
+	        int offset = (current_page-1) * rows;
+			if(offset < 0) offset = 0;
+	        map.put("offset", offset);
+	        map.put("rows", rows);
+	        
+			List<TourReply> listReply=service.replylist(map);
+			
+			for(TourReply dto : listReply) {
+				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			}
+			
+			// AJAX 용 페이징
+			String paging=myUtil.pagingMethod(current_page, total_page, "listPage");
+			
+			// 포워딩할 jsp로 넘길 데이터
+			model.addAttribute("listReply", listReply);
+			model.addAttribute("pageNo", current_page);
+			model.addAttribute("replyCount", dataCount);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			
+			
+			return "tour/detailReply";
+		}
 
 	
 	

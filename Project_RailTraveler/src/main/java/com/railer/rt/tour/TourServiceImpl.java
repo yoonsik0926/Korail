@@ -193,4 +193,39 @@ public class TourServiceImpl implements TourService {
 	
 	}
 
+	@Override
+	public void insertReply(TourReply dto) {
+		try {
+			dao.insertData("tour.insertReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public int replyCount(int tourNum) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("tour.replyCount", tourNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<TourReply> replylist(Map<String, Object> map) {
+		List<TourReply> list = null;
+		
+		try {
+			list = dao.selectList("tour.replylist", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
+		return list;
+	}
+
 }
