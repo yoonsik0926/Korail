@@ -9,6 +9,8 @@
 	type="text/css">
 
 
+
+
 <script type="text/javascript">
 
 $(function(){
@@ -41,6 +43,8 @@ function test(ob){
 	cnt++;	
 
 }
+
+
 
 </script>
 
@@ -86,9 +90,12 @@ function test(ob){
 		</div>
 		
 		<div style="width: 100%; display: inline-block;">
-			<div class="map" style="width: 45%; margin-right: 20px; display: inline; float: left;">
-				<img src="<%=cp%>/resource/images/map.PNG" style="width: 100%; height: 70%;">
+			<div class="map" style="width: 45%; height:70%; margin-right: 20px; display: inline; float: left;">
+				<div id="map" style="width:550px; height: 700px;"></div>
+				<%-- <img src="<%=cp%>/resource/images/map.PNG" style="width: 100%; height: 70%;"> --%>
+				
 			</div>
+			
 
 			<div class="tourList" style="width: 52%; margin-bottom:10px; display: inline; float: left;">
 				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">30개의 북마크</h5>
@@ -213,7 +220,39 @@ function test(ob){
 
 
 
-
-
 </div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2945f1b51ebe08a70d044a045286f0c9"></script>
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+        center: new kakao.maps.LatLng(36.518543, 127.817279), // 지도의 중심좌표
+        level: 12 // 지도의 확대 레벨
+    };
+
+// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+// 마커가 표시될 위치입니다 
+var markerPosition  = new kakao.maps.LatLng(37.553802, 126.969686); 
+
+// 마커를 생성합니다
+var marker = new kakao.maps.Marker({
+    position: markerPosition
+});
+
+// 마커가 지도 위에 표시되도록 설정합니다
+marker.setMap(map);
+
+var markerPosition  = new kakao.maps.LatLng(35.849909, 127.161830); 
+
+//마커를 생성합니다
+var marker = new kakao.maps.Marker({
+ position: markerPosition
+});
+
+//마커가 지도 위에 표시되도록 설정합니다
+marker.setMap(map);
+
+</script>
 
