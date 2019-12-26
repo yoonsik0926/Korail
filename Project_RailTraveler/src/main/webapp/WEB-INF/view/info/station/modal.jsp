@@ -91,7 +91,7 @@ function showTour(){
 	else if(locNum ==5)
 		subTitle = "gyeongsang";
  	
-	var query = "?q=staNum:"+${dto.staNum}+"subTitle:"+subTitle;
+	var query = "?q=staNum:"+${dto.staNum}+",subTitle:"+subTitle;
 	var url = "<%=cp%>/tour/"+subTitle+query;
 	
 	location.href=url;
