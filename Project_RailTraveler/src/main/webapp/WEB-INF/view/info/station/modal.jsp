@@ -96,10 +96,6 @@ function showTour(){
 	
 	location.href=url;
 	
-	//var url = "<%=cp%>/tour/detailTourList";
-	//var query = "?pageNo=1&staNum="+${dto.staNum}+"&detailcateNum=1&cateNum=4&subTitle="+subTitle;
-	
-	//location.href=url+query;
 }
 
 </script>
