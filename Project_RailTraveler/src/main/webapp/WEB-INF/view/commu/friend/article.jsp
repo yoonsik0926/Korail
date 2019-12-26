@@ -9,10 +9,58 @@
 <script src="<%=cp%>/resource/js/commu.js"></script>
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+//게시글 공감 여부
+$(function(){
+	$(".btnSendFriendLike").click(function(){
+		if(! confirm("북마크 하시겠습니까 ? ")) {
+			return false;
+		}
+		
+		var url="<%=cp%>/friend/insertFriendBookmark";
+		var friendNum="${dto.friendNum}";
+		var query = {friendNum:friendNum};
+		
+		var fn = function(data){
+			var state=data.state;
+			if(state=="true") {
+				var count = data.bookmarkCount;
+				$("#friendbookmarkCount").text(count);
+				var cs = document.getElementById("boardLikeIcon");
+				cs.className = 'fas fa-heart';
+			} else if(state=="false") {
+				alert("좋아요는 한번만 가능합니다. !!!");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+	
 	function modalOn() {
 		$('#myModal').modal('toggle');
 	}
-	function deleteNotice() {
+	function deleteFriend() {
 		var q="friendNum=${dto.friendNum}&${query}";
 		var url="<%=cp%>/friend/delete?"+q;
 		
@@ -186,7 +234,7 @@ a#MOVE_TOP_BTN {
 	<div class="modal-dialog" style="    width: 315px;
     position: absolute;
     right: 37%;
-    top: 25%;">
+    top: 48%;">
 		<div class="modal-content">
 			<div class="text-basic">
 				<div class="social-btn">
@@ -302,15 +350,20 @@ a#MOVE_TOP_BTN {
 						목록</button>
 				</td>
 
-				<td align="right"><c:if
-						test="${sessionScope.member.userId==dto.userId}">
+				<td align="right">
+<%-- 				<c:if --%>
+<%-- 						test="${sessionScope.member.userId==dto.userId}"> --%>
+						<button type="button" class="btn btn-default"
+							 style="background: #f97509; color: white;" disabled="disabled">모집완료</button>
+						<button type="button" class="btn btn-default"
+							onclick="updateBoard();" style="background: #aaa; color: white;">모집중</button>
 						<button type="button" class="btn btn-default"
 							onclick="updateBoard();">수정</button>
-					</c:if> <c:if
-						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+<%-- 					</c:if> <c:if --%>
+<%-- 						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}"> --%>
 						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();">삭제</button>
-					</c:if>
+							onclick="deleteFriend();">삭제</button>
+<%-- 					</c:if> --%>
 					<button type="button" class="btn btn-danger"
 						onclick="declare();">
 						<i class="far fa-bell" style="color: white"></i>신고
@@ -325,7 +378,7 @@ a#MOVE_TOP_BTN {
 					<td colspan="3" style="padding-top: 15px;">
 						<h3 style="margin: 10px 0 2px; font-size: 25px;">
 							${dto.subject} <span style="float: right;"> <i
-								class="fas fa-comments"></i> 5
+								class="fas fa-comments"></i> ${dto.replyCount}
 
 							</span>
 						</h3>
@@ -338,6 +391,10 @@ a#MOVE_TOP_BTN {
 							4</span><span style="float: right;"><span>기간 </span><span>|</span><span>
 							${dto.sDate} ~ ${dto.eDate}</span></span></td>
 				</tr>
+				<tr class="tb-row" style="height: 30px;">
+				<td colspan="3" align="left" style="padding-left: 5px; font-size: 13px; color:bbb;">
+				기간 : ${dto.sDate} ~ ${dto.eDate}</td>
+				</tr>
 				<tr>
 					<td colspan="3" style="padding: 20px 5px;" valign="top"
 						height="200">
@@ -347,6 +404,18 @@ a#MOVE_TOP_BTN {
 
 				<tr class="tb-row" style="border-bottom: 0;">
 					<td colspan="3" height="40" align="center">
+					<button type="button" class="btn btnSendFriendLike btn-default"
+						title="북마크"
+						style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
+						>
+						<i id="boardLikeIcon" class="far fa-heart"
+							style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
+							id="friendbookmarkCount" style="width: 41px;
+    font-size: 13px;
+    display: block;
+    color: #888888;
+    margin: 0 auto;" >${dto.bookmarkCount}</span>
+					</button>
 						<button type="button" class="btn btnSendBoardLike btn-default"
 							title="공유하기"
 							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
@@ -368,57 +437,35 @@ a#MOVE_TOP_BTN {
 			<tbody class="reTbody">
 				<tr height='30'>
 					<td align='left' colspan="3" style="background: beige;"><span
-						style='font-weight: bold;'>댓글 (3)</span></td>
+						style='font-weight: bold;'>댓글 (${dto.replyCount})</span></td>
 				</tr>
 				<tr height='35'
 					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
 					<td colspan="3">
+					<div>
+						<div style="float: left;margin-right: 10px;">
+							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
+						</div>
 						<div style="float: left;">
-							<div style="clear: both;">
+							<i class="fas fa-lock"></i>&nbsp;
+						</div>
+<!-- 						<div>비밀글입니다.</div> -->
+						<div style="width: 85%;
+    float: left;">
 									<div>
 										<b>작성자</b>
 									</div>
+							<div style="clear: both;">
 								<div style="clear: both;">
 									<span>내용이 이렇게 적히는거죠??????????????????????????</span>
 								</div>
-								
-							</div>
 							<div style="clear: both;">
 							<button class="btn btn-default">
 										<i class="fas fa-reply" style="transform: rotate(180deg);"></i>
 									</button>
 									<button class="btn btn-default">
-										<i class="fas fa-times"></i>
+										<i class="fas fa-pencil-alt"></i>
 									</button>
-									<button class="btn btn-danger"
-										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;">
-										<i class="far fa-bell" style="color: white"></i>
-									</button>
-								</div>
-						</div>
-						<div style="float: right; text-align: right;">
-							<div>2019-12-16 18:03:22</div>
-						</div>
-					</td>
-				</tr>
-				<tr height='35'
-					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
-					<td colspan="3">
-						<div style="float: left;margin-right: 10px;">
-							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
-						</div>
-						<div style="float: left;">
-							<div style="clear: both;">
-									<div>
-										<b>작성자</b>
-									</div>
-								<div style="clear: both;">
-									<span>내용이 이렇게 적히는거죠??????????????????????????</span>
-								</div>
-								
-							</div>
-							<div style="clear: both;">
-							
 									<button class="btn btn-default">
 										<i class="fas fa-times"></i>
 									</button>
@@ -427,42 +474,33 @@ a#MOVE_TOP_BTN {
 										<i class="far fa-bell" style="color: white"></i>
 									</button>
 								</div>
+							</div>
+<!-- <div> -->
+<!-- <textarea -->
+<!-- 							class='boxTA' -->
+<!-- 							style='width: 90%; height: 83px; float: left; resize: none; overflow-y: scroll;'></textarea> -->
+<!-- 						<div -->
+<!-- 							style='padding: 0 10px; -->
+<!--     width: 8%; height: 50px; float: left; font-size: 15px;'> -->
+<!-- 							<input type="checkbox" name="ss"><label -->
+<!-- 								style="margin: 0 0 0px 3px;">비밀글</label> -->
+<!-- 							<button type='button' class='btn btnSendReply btn-default' -->
+<!-- 								data-num='10' -->
+<!-- 								style='width: 100%; height: 29px; padding: 2px 1px;'>수정</button> -->
+<!-- 								<button type='button' class='btn btn-default' -->
+<!-- 								data-num='10' -->
+<!-- 								style='width: 100%; height: 29px; padding: 2px 1px;'>취소</button> -->
+
+<!-- 						</div> -->
+<!-- 						</div> -->
+					
+					
 						</div>
 						<div style="float: right; text-align: right;">
 							<div>2019-12-16 18:03:22</div>
 						</div>
-					</td>
-				</tr>
-				<tr height='35'
-					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
-					<td colspan="3">
-						<div style="float: left;margin-right: 10px;">
-							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
-						</div>
-						<div>비밀글입니다.</div>
-<!-- 						<div style="float: left;"> -->
-<!-- 							<div style="clear: both;"> -->
-<!-- 									<div> -->
-<!-- 										<b>작성자</b> -->
-<!-- 									</div> -->
-<!-- 								<div style="clear: both;"> -->
-<!-- 									<span>내용이 이렇게 적히는거죠??????????????????????????</span> -->
-<!-- 								</div> -->
-								
-<!-- 							</div> -->
-<!-- 							<div style="clear: both;"> -->
-<!-- 									<button class="btn btn-default"> -->
-<!-- 										<i class="fas fa-times"></i> -->
-<!-- 									</button> -->
-<!-- 									<button class="btn btn-danger" -->
-<!-- 										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;"> -->
-<!-- 										<i class="far fa-bell" style="color: white"></i> -->
-<!-- 									</button> -->
-<!-- 								</div> -->
-<!-- 						</div> -->
-<!-- 						<div style="float: right; text-align: right;"> -->
-<!-- 							<div>2019-12-16 18:03:22</div> -->
-<!-- 						</div> -->
+					</div>
+	
 					</td>
 				</tr>
 			</tbody>

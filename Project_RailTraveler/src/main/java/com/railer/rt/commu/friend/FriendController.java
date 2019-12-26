@@ -1,6 +1,7 @@
 package com.railer.rt.commu.friend;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -15,12 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.FileManager;
 import com.railer.rt.common.MyUtil;
@@ -212,4 +215,38 @@ public class FriendController {
 		model.addAttribute("subMenu", "3");
 		return ".four.commu.friend.article";
 	}
+	// 댓글의 좋아요/싫어요 추가 : AJAX-JSON
+		@RequestMapping(value="/friend/insertFriendBookmark", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> insertFriendBookmark(
+				@RequestParam Map<String, Object> paramMap,
+				HttpSession session
+				) {
+			String state="true";
+			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			Map<String, Object> model=new HashMap<>();
+			
+			try {
+				paramMap.put("userId", info.getUserId());
+				service.insertFriendBookmark(paramMap);
+			} catch (Exception e) {
+				state="false";
+			}
+			int friendNum = Integer.parseInt((String) paramMap.get("friendNum"));
+			int bookmarkCount= 0;
+			try {
+				bookmarkCount= service.bookmarkCount(friendNum);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			model.put("bookmarkCount", bookmarkCount);
+			model.put("state", state);
+			return model;
+		}
+
 }

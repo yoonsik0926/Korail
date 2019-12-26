@@ -225,5 +225,29 @@ public class FriendServiceImpl implements FriendService {
 			// TODO: handle exception
 		}
 	}
+	
+	/**
+	 * 원래 안빼고 위의 insertFriend에서 가능...
+	 */
+	@Override
+	public void insertFriendBookmark(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("friend.insertFriendBookmark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	@Override
+	public int bookmarkCount(int friendNum) throws Exception {
+		int cnt=0;
+		try {
+			cnt = dao.selectOne("friend.bookmarkCount", friendNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return cnt;
+	}
 
 }
