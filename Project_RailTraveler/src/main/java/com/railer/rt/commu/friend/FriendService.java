@@ -21,4 +21,7 @@ public interface FriendService {
 	public List<Friend> listFile(int num);
 	public Friend readFile(int fileNum);
 	public void deleteFile(Map<String, Object> map) throws Exception;
+
+	public void insertFriendBookmark(Map<String, Object> paramMap) throws Exception;
+	public int bookmarkCount(int friendNum) throws Exception ;
 }

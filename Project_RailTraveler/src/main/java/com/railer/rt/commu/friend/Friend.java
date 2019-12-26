@@ -23,6 +23,8 @@ public class Friend {
 	private List<MultipartFile> upload;
 	private long gap;
 	
+	private int replyCount;
+	private int bookmarkCount;
 	
 	
 	public int getNotice() {
@@ -133,6 +135,22 @@ public class Friend {
 	}
 	public void setGap(long gap) {
 		this.gap = gap;
+	}
+	
+	
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	
+	
+	public int getBookmarkCount() {
+		return bookmarkCount;
+	}
+	public void setBookmarkCount(int bookmarkCount) {
+		this.bookmarkCount = bookmarkCount;
 	}
 	@Override
 	public String toString() {

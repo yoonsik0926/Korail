@@ -85,13 +85,21 @@
 	result Type : Friend DTO-->
 	<select id="listFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created, sDate, eDate,
-            NVL(fileCount,0) fileCount 
+            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       LEFT OUTER JOIN (
          SELECT friendNum, COUNT(*) fileCount FROM friendFile
          GROUP BY friendNum
       ) ff On f.friendNum=ff.friendNum
+      LEFT OUTER JOIN (
+         SELECT friendNum, COUNT(*) replyCount FROM friendReply
+         GROUP BY friendNum
+      ) r On f.friendNum=r.friendNum
+      LEFT OUTER JOIN (
+         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
+         GROUP BY friendNum
+      ) fb On f.friendNum=fb.friendNum
       <where>
          <if test="keyword!=null and keyword!=''">
             <include refid="where-list"/>
@@ -106,12 +114,21 @@
 	result Type : Friend DTO-->
 	<select id="readFriend" parameterType="Integer"  resultType="com.railer.rt.commu.friend.Friend">
 		SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created,sDate, eDate, NVL(fileCount,0) fileCount
+            ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       LEFT OUTER JOIN (
          SELECT friendNum, COUNT(*) fileCount FROM friendFile
          GROUP BY friendNum
       ) ff On f.friendNum=ff.friendNum
+      LEFT OUTER JOIN (
+         SELECT friendNum, COUNT(*) replyCount FROM friendReply
+         GROUP BY friendNum
+      ) r On f.friendNum=r.friendNum
+      LEFT OUTER JOIN (
+         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
+         GROUP BY friendNum
+      ) fb On f.friendNum=fb.friendNum
       	WHERE f.friendNum=#{friendNum}
 	</select>
 	
@@ -195,4 +212,22 @@
 	<delete id="deleteFile" parameterType="map">
 		DELETE FROM friendFile WHERE ${field}=#{num}
 	</delete>
+	
+	<!-- 동행게시판 게시물을 insert
+	parameter Type : FriendDTO-->
+	<insert id="insertFriendBookmark" parameterType="map">
+		INSERT INTO friendBookmark(friendNum, userId)
+		VALUES(#{friendNum}, #{userId})
+	</insert>
+	
+	<!--게시물의 북마크 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="bookmarkCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM friendBookmark
+		where friendNum = #{friendNum}
+	</select>
+	
+	
 </mapper>

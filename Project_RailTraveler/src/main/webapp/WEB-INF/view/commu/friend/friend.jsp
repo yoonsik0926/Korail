@@ -100,14 +100,30 @@ optgroup {
 					<td>${dto.listNum}</td>
 					<td style="text-align: left; padding-left: 20px;">${dto.subject} <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>3  <i class="far fa-comment-alt" style="margin-right: 2px;
-    color: #969696;"></i>5</span><br> <span style="color: #aaa;">기간 : ${dto.sDate} ~ ${dto.eDate}</span></td>
+    color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;
+    color: #969696;"></i>${dto.replyCount}</span><span style="border-radius: 5px;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-block;
+    padding: 1px 3px;
+    background: #f97509;
+    color: #FFFFFF;
+    margin-left: 10px;">모집완료</span><span style="border-radius: 5px;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-block;
+    padding: 1px 3px;
+    background: #ccc;
+    color: #FFFFFF;
+    margin-left: 10px;">모집중</span><br> <span style="color: #aaa;">기간 : ${dto.sDate} ~ ${dto.eDate}</span></td>
 					<td>${dto.userName}</td>
 					<td>${dto.created}</td>
 					<td>${dto.hitCount}</td>
 				</tr>
 				</c:forEach>
-
+<tr>			<td>2</td>
+					<td colspan="4" align="center">삭제된 게시물입니다.</td>
+				</tr>
 			</tbody>
 		</table>
 
