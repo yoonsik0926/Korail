@@ -20,12 +20,15 @@
 <!--     Font Awesome     -->
 <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
+
 <script src="https://kit.fontawesome.com/9a196cb2bb.js" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="<%=cp%>/resource/js/util.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
 
 <style type="text/css">
@@ -307,7 +310,6 @@ body::-webkit-scrollbar {
 	height: 100%;
 	background: black;
 	float: left;
-	z-index: 100;
 }
 
 .blackThing {
@@ -327,13 +329,30 @@ div.timeSelect {
 	text-align: left;
 	font-size: 20px;
 	color: white;
-	z-index: 200;
 	cursor: pointer;
 }
 
 .chosenTime {
 	background: red;
 }
+
+.detailPlanWriting {
+	width: 75%;
+	height: 100%;
+	background: white;
+	float: right;
+}
+
+.modal3 {
+	width: 500px;
+	height: 500px;	
+}
+
+.mask{width:100%; height:100%; position:fixed; left:0; top:0; z-index:10; background:#000; opacity:.5; filter:alpha(opacity=50);}
+
+#modalLayer{display:none; position:relative;z-index: 9999;}
+#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
+#modalLayer .modalContent button{position:absolute; right:0; top:0; cursor:pointer;}
 
 </style>
 <script type="text/javascript">
@@ -681,37 +700,47 @@ $(document).ready(function(){
 				<div id="detailPlanPlus" class="modal2" style="opacity: 0.85">
 					<div class="modal-detailPlanning">
 						<div class="timeSelect">
-							<div class="times" data-time="5">05</div>
-							<div class="times" data-time="6">06</div>
-							<div class="times" data-time="7">07</div>
-							<div class="times" data-time="8">08</div>
-							<div class="times" data-time="9">09</div>
-							<div class="times" data-time="10">10</div>
-							<div class="times" data-time="11">11</div>
-							<div class="times" data-time="12">12</div>
-							<div class="times" data-time="13">13</div>
-							<div class="times" data-time="14">14</div>
-							<div class="times" data-time="15">15</div>
-							<div class="times" data-time="16">16</div>
-							<div class="times" data-time="17">17</div>
-							<div class="times" data-time="18">18</div>
-							<div class="times" data-time="19">19</div>
-							<div class="times" data-time="20">20</div>
-							<div class="times" data-time="21">21</div>
-							<div class="times" data-time="22">22</div>
-							<div class="times" data-time="23">23</div>
-							<div class="times" data-time="24">24</div>
+							<div class="times 5" data-time="5">05</div>
+							<div class="times 6" data-time="6">06</div>
+							<div class="times 7" data-time="7">07</div>
+							<div class="times 8" data-time="8">08</div>
+							<div class="times 9" data-time="9">09</div>
+							<div class="times 10" data-time="10">10</div>
+							<div class="times 11" data-time="11">11</div>
+							<div class="times 12" data-time="12">12</div>
+							<div class="times 13" data-time="13">13</div>
+							<div class="times 14" data-time="14">14</div>
+							<div class="times 15" data-time="15">15</div>
+							<div class="times 16" data-time="16">16</div>
+							<div class="times 17" data-time="17">17</div>
+							<div class="times 18" data-time="18">18</div>
+							<div class="times 19" data-time="19">19</div>
+							<div class="times 20" data-time="20">20</div>
+							<div class="times 21" data-time="21">21</div>
+							<div class="times 22" data-time="22">22</div>
+							<div class="times 23" data-time="23">23</div>
+							<div class="times 24" data-time="24">24</div>
 						</div>
-						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
+						<div class="detailPlanWriting">
+							<!-- <button type="button" class="close" aria-label="Close" onclick="close_planning();"
 								style="display: block; font-size: 40px; margin: 10px;">
-							<span aria-hidden="true">&times;</span>
-						</button>
+								<span aria-hidden="true">&times;</span>
+							</button> -->
+						</div>
+						
 					</div>
 				</div>
 				
 			</div>
 		</div>
 	</div>
+		
+		<div id="modalLayer">
+		  <div class="modalContent">
+		    <a href="#">모달창 테스트</a> 
+		    <button type="button">닫기</button>
+		  </div>
+		</div>
 <script type="text/javascript">
 
 $(function() {
@@ -876,15 +905,38 @@ $(function() {
 
 $(function() {
 	$("body").on('click', ".times", function() {
-		console.log($(this).data());
-		if(! $(this).hasClass('addClass')) {
-			$(this).addClass('chosenTime');
+		$("#modalLayer").show();
+		if($(this).attr('class').indexOf('chosenTime')==-1) {
+			$(this).addClass("chosenTime");
 		} else {
-			$(this).removeClass('chosenTime');
+			$(this).removeClass("chosenTime");
 		}
 		
 	});
 });
+
+
+$(function() {
+		  var modalLayer = $("#modalLayer");
+		  var modalLink = $(".times");
+		  var modalCont = $(".modalContent");
+		  var marginLeft = modalCont.outerWidth()/2;
+		  var marginTop = modalCont.outerHeight()/2; 
+
+		  modalLink.click(function(){
+		    modalLayer.fadeIn();
+		    modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+		    $(this).blur();
+		    $(".modalContent > a").focus(); 
+		    return false;
+		  });
+
+		  $(".modalContent > button").click(function(){
+		    modalLayer.fadeOut();
+		    modalLink.focus();
+		  });		
+});
+
 // $(".planListDetail1 leftThing sortable").disableSelection();
 
 
