@@ -5,22 +5,13 @@
 <%
    String cp = request.getContextPath();
 %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <html>
 <head>
 <style type="text/css">
-a{color:#000;}
 
-.mask{width:100%; height:100%; position:fixed; left:0; top:0; z-index:10; background:#000; opacity:.5; filter:alpha(opacity=50);}
-
-#modalLayer{display:none; position:relative;}
-#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
-#modalLayer .modalContent button{position:absolute; right:0; top:0; cursor:pointer;}
 </style>
 <script type="text/javascript">
-$(document).ready(function(){
+/* $(document).ready(function(){
 	  var modalLayer = $("#modalLayer");
 	  var modalLink = $(".modalLink");
 	  var modalCont = $(".modalContent");
@@ -39,23 +30,50 @@ $(document).ready(function(){
 	    modalLayer.fadeOut("slow");
 	    modalLink.focus();
 	  });		
-	});
+	}); */
+	
+
+// $(document).on('click', '#abcd', function() {
+// 	$("#myFullsizeModal").show();
+// });
+
 </script>
 </head>
 <div class="body-content-container">
      <div class="body-title">
          <h3>${title} </h3>
+		<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
+								<p>시간선택 및 세부일정 짜기</p>
+							</button>
      </div>
+</div>  
      
-     <div>
-     <a href="#modalLayer" class="modalLink">간단한 모달 창 만들기</a>
-		<div id="modalLayer">
-		  <div class="modalContent">
-		    <a href="#">모달창 테스트</a> 
-		    <button type="button">닫기</button>
-		  </div>
-		</div>
 
-     </div>
-</div>
+<!-- Modal -->
+<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <h4 class="modal-title" id="myModalLabel">Modal 제목</h4>
+							      </div>
+							      <div class="modal-body">
+							        Modal 내용
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+
+
+
+     
+     
+     
+     
+     
+     
+
 </html>

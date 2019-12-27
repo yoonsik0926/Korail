@@ -14,12 +14,12 @@
 <title>나의 계획 짜기</title>
 
 <link href="<%=cp%>/resource/bootstrap3/css/bootstrap.css" rel="stylesheet" />
+<link href="<%=cp%>/resource/bootstrap3/css/bootstrap-theme.min.css" rel="stylesheet" />
 <link href="<%=cp%>/resource/css/demo.css" rel="stylesheet" />
 <link rel="stylesheet" href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css" type="text/css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!--     Font Awesome     -->
 <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
 
 <script src="https://kit.fontawesome.com/9a196cb2bb.js" crossorigin="anonymous"></script>
 
@@ -27,9 +27,7 @@
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-
+<script type="text/javascript" src="<%=cp%>/resource/bootstrap3/js/bootstrap.js"></script>
 
 <style type="text/css">
 * {
@@ -183,7 +181,7 @@ body::-webkit-scrollbar {
 }
 
 .modal-detailPlanning {
-	background: blue;
+/* 	background: blue; */
 	/* 	opacity: 0.7; */
 	/* 	padding: 10px; */
 	margin: 0;
@@ -306,10 +304,17 @@ body::-webkit-scrollbar {
 }
 
 .timeSelect {
-	width: 25%;
+	width: 20%;
 	height: 100%;
 	background: black;
 	float: left;
+}
+
+.pleaseWritingHere {
+	width: 75%;
+	height: 100%;
+	float: left;
+	background: white;
 }
 
 .blackThing {
@@ -331,7 +336,15 @@ div.timeSelect {
 	color: white;
 	cursor: pointer;
 }
-
+.btn.btn-primary.times {
+	width: 100%;
+	height: 10%;
+	border: 1px solid white;
+	font-size: 20px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+}
 .chosenTime {
 	background: red;
 }
@@ -343,17 +356,27 @@ div.timeSelect {
 	float: right;
 }
 
-.modal3 {
-	width: 500px;
-	height: 500px;	
+.modal-content.selectTime {
+	width: 1000px;
+	height: 800px;
+	margin-top: 0;
+	border: 0;
 }
 
-.mask{width:100%; height:100%; position:fixed; left:0; top:0; z-index:10; background:#000; opacity:.5; filter:alpha(opacity=50);}
+.modal-body.selectTime {
+    position: relative;
+    padding: 20px;
+}
 
-#modalLayer{display:none; position:relative;z-index: 9999;}
-#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
-#modalLayer .modalContent button{position:absolute; right:0; top:0; cursor:pointer;}
+.modal-footer.selectTime {
+    border-top: 0 none;
+    padding: 5px 10px;
+    text-align: right;
+}
 
+.modal-dialog.selectTime {
+	margin-left: 40%;
+}
 </style>
 <script type="text/javascript">
 
@@ -407,12 +430,12 @@ function getDaysLater1(sDate, days) {
 
 // 일수 선택 모달
 function selectTripDay() {
-    $('#myModal').show();
+    $('#selectingDay').show();
 };
 
 // 팝업 Close 기능
 function close_pop(flag) {
-     $('#myModal').hide();
+     $('#selectingDay').hide();
 };
 
 
@@ -430,7 +453,7 @@ function getNumber(day) {
 			return;
 		}
 		days=new Array(day.value);	
-		$('#myModal').hide();
+		$('#selectingDay').hide();
 	}
 	
 	$('#planListForm').empty();
@@ -519,7 +542,7 @@ function getNumber(day) {
 */		
 	}
 	console.log(days);
-	$('#myModal').hide();
+	$('#selectingDay').hide();
 }
 
 $(document).ready(function(){
@@ -563,7 +586,7 @@ $(document).ready(function(){
 				<div id="planListForm"></div>
 				
 
-				<div id="myModal" class="modal" style="z-index: 1045;">
+				<div id="selectingDay" class="modal" style="z-index: 1045;">
 					<!-- Modal content -->
 					<div class="modal-content">
 						<div style="text-align: center;">
@@ -700,8 +723,9 @@ $(document).ready(function(){
 				<div id="detailPlanPlus" class="modal2" style="opacity: 0.85">
 					<div class="modal-detailPlanning">
 						<div class="timeSelect">
-							<div class="times 5" data-time="5">05</div>
-							<div class="times 6" data-time="6">06</div>
+							<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
+								<p>시간선택 및 세부일정 짜기</p>
+							</button>
 							<div class="times 7" data-time="7">07</div>
 							<div class="times 8" data-time="8">08</div>
 							<div class="times 9" data-time="9">09</div>
@@ -721,26 +745,31 @@ $(document).ready(function(){
 							<div class="times 23" data-time="23">23</div>
 							<div class="times 24" data-time="24">24</div>
 						</div>
-						<div class="detailPlanWriting">
-							<!-- <button type="button" class="close" aria-label="Close" onclick="close_planning();"
-								style="display: block; font-size: 40px; margin: 10px;">
-								<span aria-hidden="true">&times;</span>
-							</button> -->
-						</div>
 						
-					</div>
+					</div>		
 				</div>
+			</div>
 				
 			</div>
 		</div>
-	</div>
-		
-		<div id="modalLayer">
-		  <div class="modalContent">
-		    <a href="#">모달창 테스트</a> 
-		    <button type="button">닫기</button>
-		  </div>
-		</div>
+						<!-- Modal -->
+							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							  <div class="modal-dialog selectTime" role="document">
+							    <div class="modal-content selectTime">
+							      <div class="modal-header selectTime">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <h4 class="modal-title selectTime" id="myModalLabel">시간선택 및 세부일정 짜기</h4>
+							      </div>
+							      <div class="modal-body selectTime">
+							        Modal 내용
+							      </div>
+							      <div class="modal-footer selectTime">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+
 <script type="text/javascript">
 
 $(function() {
@@ -899,33 +928,28 @@ $(function() {
 			$("#detailPlanPlus").hide();
 			
 		}
-		
 	});
 });
 
 $(function() {
 	$("body").on('click', ".times", function() {
-		$("#modalLayer").show();
-		if($(this).attr('class').indexOf('chosenTime')==-1) {
+		/* if($(this).attr('class').indexOf('chosenTime')==-1) {
 			$(this).addClass("chosenTime");
 		} else {
 			$(this).removeClass("chosenTime");
-		}
-		
+		} */
 	});
 });
 
 
-$(function() {
+/* $(function() {
 		  var modalLayer = $("#modalLayer");
 		  var modalLink = $(".times");
 		  var modalCont = $(".modalContent");
-		  var marginLeft = modalCont.outerWidth()/2;
-		  var marginTop = modalCont.outerHeight()/2; 
 
 		  modalLink.click(function(){
 		    modalLayer.fadeIn();
-		    modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+		    modalCont.css({"margin-top" : "-180px", "margin-left" : "-60px"});
 		    $(this).blur();
 		    $(".modalContent > a").focus(); 
 		    return false;
@@ -935,7 +959,7 @@ $(function() {
 		    modalLayer.fadeOut();
 		    modalLink.focus();
 		  });		
-});
+}); */
 
 // $(".planListDetail1 leftThing sortable").disableSelection();
 
