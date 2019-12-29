@@ -150,6 +150,8 @@
 	<select id="replylist" parameterType="map" resultType="com.railer.rt.tour.TourReply">
 		SELECT replyNum , tourNum, userId, CONTENT, CREATED , ANSWER FROM tourreply
 		WHERE tourNum=#{tourNum} 
+		ORDER BY replyNum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 
 

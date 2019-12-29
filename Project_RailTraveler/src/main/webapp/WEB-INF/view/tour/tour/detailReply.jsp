@@ -18,35 +18,26 @@
 		</tr>
 	</thead>
 	
+	
 	<tbody id='listReplyBody'>
 	<c:forEach var="vo" items="${listReply}">
-	    <tr height='35' style='background: #eeeeee;'>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
-	           <span><b>${vo.userId}</b></span>
-	        </td>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-left:none;' align='right'>
-	           <span>${vo.created}</span> |
-	           <c:if test="${vo.userId == sessionScope.member.userId ||  sessionScope.member.userId == 'admin' }">
-	                <span class="deleteReply" style="cursor: pointer;" data-replyNum='${vo.replyNum}' data-pageNo='${pageNo}'>삭제</span>
-	           	</c:if>
-	           <c:if test="${vo.userId != sessionScope.member.userId &&  sessionScope.member.userId != 'admin' }">
-	           		<span class="notifyReply">신고</span>
-	           	</c:if>
+	    <tr height='35'>
+	       <td width='100%' style='padding:5px 5px; border-right:none;'>
+	           <span style="font-size: 21px; padding:5px 5px;display: block; font-weight: 700">${vo.userId}</span>	
+	           <span style="font-size: 18px; padding-top:3px; padding-bottom:15px; display: block; font-weight: 500">${vo.content}</span>            
+	           <span style="font-size: 13px; padding:5px 5px;display: block;">${vo.created}</span> 
 	        </td>
 	    </tr>
-	    <tr>
-	        <td colspan='2' valign='top' style='padding:5px 5px;'>
-	              ${vo.content}
-	        </td>
-	    </tr>
+
 	    
-	    <tr>
-	        <td style='padding:7px 5px;'>
+	    <tr style="border-bottom: 1px solid #c4c4c4;">
+	        <td style='padding:10px 5px;'>
 	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='${vo.replyNum}'>답글 <span id="answerCount${vo.replyNum}">${vo.answerCount}</span></button>
 	        </td>
 	        <td style='padding:7px 5px;' align='right'>
-                <button type='button' class='btn btnSendReplyLike' data-replyNum='${vo.replyNum}' data-replyLike='1' title="좋아요"><i class="far fa-hand-point-up"></i> <span>${vo.likeCount}</span></button>
-	        
+                <%-- <button type='button' class='btn btnSendReplyLike' data-replyNum='${vo.replyNum}' data-replyLike='1' title="좋아요"><i class="far fa-hand-point-up"></i> <span>${vo.likeCount}</span></button>
+	        	 --%>
+	        	 <i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>${vo.likeCount}명		
 	        </td>
 	    </tr>
 	

@@ -420,11 +420,6 @@ public class TourController {
 			
 			dataCount=service.replyCount(tourNum);
 			
-			
-			//여기까지 아주 잘나왔음!!!!!!!!!!
-			System.out.println("@@@@@@@@@@@@@@@");
-			System.out.println(dataCount);
-			
 			total_page = myUtil.pageCount(rows, dataCount);
 			if(current_page>total_page)
 				current_page=total_page;
@@ -451,7 +446,7 @@ public class TourController {
 			model.addAttribute("paging", paging);
 			
 			
-			return "tour/detailReply";
+			return "tour/tour/detailReply";
 		}
 
 	

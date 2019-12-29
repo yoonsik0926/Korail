@@ -101,14 +101,16 @@ $(function(){
 function listPage(page) {
 	var url="<%=cp%>/tour2/listReply";
 	var query="tourNum=${vo.tourNum}&pageNo="+page;
+	var selector = "#listReply";
 	
+	ajaxHTML(url, "get", query, selector);
+<%-- 	
 	$.ajax({
 		type:"get"
 		,url:url
 		,data:query
-		,success:function(data) {
-			console.log(data);
-			/* $("#listReply").html(data); */
+		,success:function(data) {			
+			$("#listReply").html(data);
 		}
 	    ,beforeSend :function(jqXHR) {
 	    	jqXHR.setRequestHeader("AJAX", true);
@@ -120,7 +122,10 @@ function listPage(page) {
 	    	}
 	    	console.log(jqXHR.responseText);
 	    }
-	});
+	}); --%>
+
+	
+
 }
 
 //리플 등록
