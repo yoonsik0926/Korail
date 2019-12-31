@@ -448,6 +448,70 @@ public class TourController {
 			
 			return "tour/tour/detailReply";
 		}
+		
+		
+		 // 댓글의 답글 리스트 : AJAX-TEXT
+		@RequestMapping(value="/tour2/listReplyAnswer")
+		public String listReplyAnswer(
+				@RequestParam int answer,
+				Model model
+				) throws Exception {
+			
+			List<TourReply> listReplyAnswer=service.replyAnswerList(answer);
+			
+			for(TourReply dto : listReplyAnswer) {
+				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			}
+			
+			model.addAttribute("listReplyAnswer", listReplyAnswer);
+			return "tour/tour/detailReplyAnswer";
+		}
+		
+		
+		// 댓글의 답글 개수 : AJAX-JSON
+		@RequestMapping(value="/tour2/replyCount")
+		@ResponseBody
+		public Map<String, Object> countReplyAnswer(
+				@RequestParam(value="answer") int answer
+				) {
+			
+			int count=service.replyAnswerCount(answer);
+			
+			Map<String, Object> model=new HashMap<>();
+			model.put("count", count);
+			return model;
+		}
+		
+		
+		//댓글 및 대글에 대한 리플 지우기
+		@RequestMapping(value="/tour2/deleteReply")
+		@ResponseBody
+		public Map<String, Object> deleteReply(
+				@RequestParam(value="replyNum") int replyNum,
+				@RequestParam String mode
+				) {
+					
+		Map<String, Object> map =new HashMap<>();
+		
+		map.put("mode", mode);
+		map.put("replyNum", replyNum);
+		String state ="true";
+		
+		try {
+			service.deleteReply(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			state = "false";
+		}
+		
+		
+		Map<String, Object> model =new HashMap<>();
+		model.put("state", state);
+		return model;
+		}
+
+
+		
 
 	
 	

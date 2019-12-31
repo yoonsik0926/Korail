@@ -149,11 +149,40 @@
 	<!--댓글 리스트-->
 	<select id="replylist" parameterType="map" resultType="com.railer.rt.tour.TourReply">
 		SELECT replyNum , tourNum, userId, CONTENT, CREATED , ANSWER FROM tourreply
-		WHERE tourNum=#{tourNum} 
+		WHERE tourNum=#{tourNum} and answer =0
 		ORDER BY replyNum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
-
+	
+	
+	<!-- 댓글의 답글 리스트 -->
+	<select id="listReplyAnswer" parameterType="Integer" resultType="com.railer.rt.tour.TourReply">
+		SELECT t.replyNum, t.tourNum, t.userId, userName, t.content, t.created, t.answer
+		FROM tourreply t
+		JOIN member2 m ON t.userId = m.userId
+		WHERE answer = #{answer}
+		ORDER BY t.replyNum DESC
+	</select>
+	
+	<!--리플 카운터-->
+	<select id="replyAnswerCount" parameterType="Integer" resultType="Integer">
+	select nvl(count(*),0) answerCount from tourreply where answer =#{answer}
+	</select>
+	
+		<!-- 댓글 및 답글 삭제 -->
+	<delete id="deleteReply" parameterType="map" >
+		DELETE FROM tourreply WHERE 
+		<if test="mode=='reply' ">
+			replyNum IN (
+				SELECT replyNum FROM tourreply
+					START WITH replyNum=#{replyNum}
+					CONNECT BY PRIOR replyNum = answer         
+			)
+		</if>
+		<if test="mode=='answer' ">
+			replyNum = #{replyNum}
+		</if>
+	</delete>
 
 		
 

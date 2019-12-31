@@ -134,8 +134,8 @@ function myBookMarkList() {
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/tour/sudo" class="list-group-item" onclick="show(this);">수도권</a>
-    <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>
-       <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>
+    <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>
+    <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>    
     <a href="<%=cp%>/tour/jeonla" class="list-group-item">전라권</a>
     <a href="<%=cp%>/tour/gyeongsang" class="list-group-item">경상권</a>
 </div> 

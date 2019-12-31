@@ -93,9 +93,12 @@ function ajaxHTML(url, type, query, selector) {
 }
 
 
+
+
+
 //페이징 처리
 $(function(){
-	listPage(1);
+	listPage(1);	
 });
 
 function listPage(page) {
@@ -104,31 +107,10 @@ function listPage(page) {
 	var selector = "#listReply";
 	
 	ajaxHTML(url, "get", query, selector);
-<%-- 	
-	$.ajax({
-		type:"get"
-		,url:url
-		,data:query
-		,success:function(data) {			
-			$("#listReply").html(data);
-		}
-	    ,beforeSend :function(jqXHR) {
-	    	jqXHR.setRequestHeader("AJAX", true);
-	    }
-	    ,error:function(jqXHR) {
-	    	if(jqXHR.status==403) {
-	    		location.href="<%=cp%>/member/login";
-	    		return false;
-	    	}
-	    	console.log(jqXHR.responseText);
-	    }
-	}); --%>
-
 	
-
 }
 
-//리플 등록
+//댓글 등록
 $(function(){
 	$(".btnSendReply").click(function(){
 		
@@ -168,6 +150,142 @@ $(function(){
 		ajaxJSON(url, "post", query, fn);
 	});
 });
+
+//리플달기 버튼(댓글별 답글 등록폼 및 답글리스트)
+$(function(){
+	$("body").on("click", ".btnReplyAnswerLayout", function(){
+		var $trReplyAnswer = $(this).closest("tr").next();
+		
+		var isVisible = $trReplyAnswer.is(':visible');
+		var replyNum = $(this).attr("data-replyNum");
+		
+		
+		if(isVisible) {
+			$trReplyAnswer.hide();
+		} else {
+			$trReplyAnswer.show();
+            
+
+			listReplyAnswer(replyNum);
+			
+			// 답글 개수
+			countReplyAnswer(replyNum); 
+			
+			
+		}
+	});
+	
+});
+
+//댓글에 리플 달기 (실제 추가)
+$(function(){
+	$("body").on("click", ".btnSendReplyAnswer", function(){
+		
+		var userId = "${sessionScope.member.userId}";
+		
+		if(userId==""){
+			alert("회원가입 하라궁~");
+			return;
+		}
+		
+		var tourNum="${vo.tourNum}";
+		var replyNum = $(this).attr("data-replyNum");
+		var $td = $(this).closest("td");
+		var content=$td.find("textarea").val().trim();
+		if(! content) {
+			$td.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		var url="<%=cp%>/tour2/insertReply";
+		var query="tourNum="+tourNum+"&content="+content+"&answer="+replyNum;
+		
+		var fn = function(data){
+			$td.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				
+				listReplyAnswer(replyNum);
+				countReplyAnswer(replyNum); 
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+		
+	});
+});
+
+//리플 리스트 출력
+ function listReplyAnswer(replyNum) {
+	
+	var url ="<%=cp%>/tour2/listReplyAnswer";
+	var query ="answer="+replyNum;
+	var selector = "#listReplyAnswer"+replyNum;
+	
+	ajaxHTML(url, "get", query, selector);	
+} 
+
+//리플 갯수
+function countReplyAnswer(replyNum) {
+	var url ="<%=cp%>/tour2/replyCount";
+	var query ="answer="+replyNum;
+	var fn= function(data) {
+		var count=data.count;
+ 		var vid="#answerCount"+replyNum;
+		$(vid).html(count); 
+	}
+	
+	ajaxJSON(url, "post", query, fn);
+}
+
+
+//댓글별 리플 삭제
+$(function(){
+	$("body").on("click", ".deleteReplyAnswer", function(){
+		if(! confirm("리플을 삭제하시겠습니까 ? "))
+		    return;
+		
+		var replyNum=$(this).attr("data-replyNum");
+		var answer=$(this).attr("data-answer");
+		
+		var url="<%=cp%>/tour2/deleteReply";
+		var query="replyNum="+replyNum+"&mode=answer";
+		
+		var fn = function(data){
+			if(! data.state) console.log("삭제 실패!!!")
+			listReplyAnswer(answer);
+			countReplyAnswer(answer);
+			
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
+
+//댓글 삭제 
+$(function(){
+	$("body").on("click", ".deleteReply", function(){
+		if(! confirm("댓글을 삭제하시겠습니까 ? 삭제하시면 해당 댓글의 리플까지 모두 다 삭제됩니다. "))
+		    return;
+		
+		var replyNum=$(this).attr("data-replyNum");
+		var page = $(this).attr("data-page");		
+		var url="<%=cp%>/tour2/deleteReply";
+		var query="replyNum="+replyNum+"&mode=reply";
+		
+		var fn = function(data){
+			if(! data.state) console.log("삭제 실패!!!")
+			listPage(page);
+			
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
 </script>
 
 <style type="text/css">

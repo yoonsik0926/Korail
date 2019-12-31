@@ -22,6 +22,9 @@ public interface TourService {
 	public void insertReply(TourReply dto);
 	public int replyCount(int tourNum);
 	public List<TourReply> replylist(Map<String, Object> map);
+	public int replyAnswerCount(int replyNum);
+	public List<TourReply> replyAnswerList(int answer);
+	public void deleteReply(Map<String, Object> map);
 	
 
 	
