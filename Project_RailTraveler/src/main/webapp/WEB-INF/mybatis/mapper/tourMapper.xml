@@ -4,26 +4,26 @@
 <mapper namespace="tour">
 
 	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
-		select NVL(tbm.userid,'no') likeuserId, NVL(tbm.tourNum,0) liketourNum, t2.name liketourName,loc.locnum, loc.locName ,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum,tc.cateName
+        select nvl(a.userid,'no') likeuserId,loc.locnum, loc.locName ,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum,tc.cateName
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
         join station st on st.stanum = t.stanum
         join location loc on loc.locnum =st.locnum
-		left join tourbookmark tbm on tbm.tourNum = t.tournum
-        left join tour t2 on t2.tourNum = tbm.tournum
+        left join ( select * from tourbookmark tbm where tbm.userid =#{userId}) a  on t.tournum = a.tournum
 		<where>
-			<if test="name != 10">
+			<if test='name =="list"'>
 			 loc.locNum = #{locNum}
-			 </if>
-			 
+	 		</if>
+			
 			<if test="cateNum !=0">
 				and tc.catenum = #{cateNum} 
 			</if>
 			
-			<if test="name == 10">
-			  userId = #{userId}
+			<if test='name =="mybookmark"'>
+				and a.userid =#{userId}
 			</if>
+			
 			
 			
 		</where>
@@ -148,12 +148,21 @@
 	
 	<!--댓글 리스트-->
 	<select id="replylist" parameterType="map" resultType="com.railer.rt.tour.TourReply">
-		SELECT replyNum , tourNum, userId, CONTENT, CREATED , ANSWER FROM tourreply
-		WHERE tourNum=#{tourNum} and answer =0
-		ORDER BY replyNum DESC
+	    SELECT nvl(count,0) likeCount,tr.replyNum , tr.tourNum, tr.userId, CONTENT, CREATED , ANSWER ,decode(a.userid, null, 'no',a.userid) likeuserId 
+        FROM tourreply tr
+        left join (
+        select * from tourreplylike
+        where userid =  #{userId}
+        ) a on tr.replynum = a.replynum
+        left join ( 
+        select replynum, nvl(count(*),0) count from tourreplylike group by replynum
+        ) b on b.replynum = tr.replynum 
+		WHERE tr.tourNum=#{tourNum} and answer =0
+		ORDER BY tr.replyNum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 	
+
 	
 	<!-- 댓글의 답글 리스트 -->
 	<select id="listReplyAnswer" parameterType="Integer" resultType="com.railer.rt.tour.TourReply">
@@ -183,8 +192,22 @@
 			replyNum = #{replyNum}
 		</if>
 	</delete>
+	
+	<!--댓글 좋아요 처리-->
+	
+	<insert id="replyLike" parameterType="map">
+		insert into tourreplylike(replyNum,userId) values (#{replyNum},#{userId})
+	</insert>
+	
+	<delete id="replyLikeCancel" parameterType="map">
+		delete from tourreplylike where replyNum =#{replyNum} and userId =#{userId}
+	</delete>
+	
+	<select id="checkReplyLike" parameterType="map" resultType="Integer">
+		select nvl(count(*),0)  from tourreplylike where replyNum =#{replyNum} and userId =#{userId}
+	</select>
+	
 
-		
 
 
 

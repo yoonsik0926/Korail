@@ -14,6 +14,7 @@ display: none;
 <script type="text/javascript">
 $(function(){
 	var idx="${subMenu}"-1;
+	console.log("idx="+idx);
 	if(! idx) idx=0;
 	var subMenu=$(".list-group-item")[idx];
 	$(subMenu).addClass("active");
@@ -66,6 +67,8 @@ function myBookMarkList() {
 
 	modallistPage(1);	
  }
+ 
+
 
 </script>
 
@@ -134,15 +137,15 @@ function myBookMarkList() {
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/tour/sudo" class="list-group-item" onclick="show(this);">수도권</a>
-    <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>
-    <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>    
+    <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>
+    <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>    
     <a href="<%=cp%>/tour/jeonla" class="list-group-item">전라권</a>
     <a href="<%=cp%>/tour/gyeongsang" class="list-group-item">경상권</a>
 </div> 
 
 <c:if test="${sessionScope.member.userId != null}">
 <div class="list-group">
-    <a href="#" style="font-size: 14px;" class="list-group-item" onclick="myBookMarkList();">나의 북마크</a>   
+    <a style="font-size: 14px;" class="list-group-item" onclick="myBookMarkList();">나의 북마크</a>   
 </div> 
 </c:if>
 

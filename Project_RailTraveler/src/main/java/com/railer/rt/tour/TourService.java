@@ -25,6 +25,9 @@ public interface TourService {
 	public int replyAnswerCount(int replyNum);
 	public List<TourReply> replyAnswerList(int answer);
 	public void deleteReply(Map<String, Object> map);
+	public void replyLike(Map<String, Object> map);
+	public void replyLikeCancel(Map<String, Object> map);
+	public int  checkReplyLike (Map<String, Object> map);
 	
 
 	

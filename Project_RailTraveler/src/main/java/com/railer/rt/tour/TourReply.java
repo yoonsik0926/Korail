@@ -9,8 +9,18 @@ public class TourReply {
 	private int answerCount;
 	private int likeCount;
 	
+	private String likeuserId;
 	
 	
+	
+	
+	
+	public String getLikeuserId() {
+		return likeuserId;
+	}
+	public void setLikeuserId(String likeuserId) {
+		this.likeuserId = likeuserId;
+	}
 	public int getReplyNum() {
 		return replyNum;
 	}

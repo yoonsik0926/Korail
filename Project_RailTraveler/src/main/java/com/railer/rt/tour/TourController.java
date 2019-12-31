@@ -39,7 +39,8 @@ public class TourController {
 			@RequestParam(defaultValue = "1") int locNum,
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
 			@RequestParam(value = "q", defaultValue = "" ) String q,
-			HttpServletRequest req) {
+			HttpServletRequest req,
+			HttpSession session) {
 		
 		String cp = req.getContextPath();
 		
@@ -53,12 +54,13 @@ public class TourController {
 			title = "수도권";
 		}
 		else if (locName.equals("chungcheong")) {
+	
 			locNum =2;
-			title="충청권";			
+			title="충청권";	
 		}
 		else if (locName.equals("gangwon")) {
 			locNum =3;
-			title="강원권";	
+			title="강원권";
 		}
 		else if (locName.equals("jeonla")) {
 			locNum =4;
@@ -73,7 +75,7 @@ public class TourController {
 
 		map.put("cateNum", cateNum);
 		map.put("locNum", locNum);
-		map.put("name", 0);
+
 		
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
@@ -91,6 +93,18 @@ public class TourController {
 		map.put("offset", offset);
 		map.put("items", items);
 
+		
+		
+		String userId = "";
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
+		if(info ==null) {
+			map.put("userId", userId);
+		}else {
+			map.put("userId", info.getUserId());
+		}
+		
+		map.put("name", "list");
 		
 		//지역별 정보를 가져옴
 		List<Tour> list = service.listBoard(map);
@@ -318,10 +332,8 @@ public class TourController {
 			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
 			HttpServletRequest req,
 			HttpSession session) {
-		
-		
-		
-		//String cp = req.getContextPath();
+	
+		String cp = req.getContextPath();		
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		String userId = info.getUserId();
@@ -337,7 +349,7 @@ public class TourController {
 	
 		Map<String, Object> map = new HashMap<>();
 
-		map.put("name", 10);
+		map.put("name", "mybookmark");
 		map.put("userId", userId);
 		map.put("cateNum", 0);
 		
@@ -368,12 +380,13 @@ public class TourController {
 		// AJAX 용 페이징
 		String paging=myUtil.pagingMethod(current_page, total_page, "modallistPage");
 		
-		//String articleUrl = cp+"/tour/detail?page="+current_page+"&subTitle="+subTitle+"&cateNum="+cateNum;
+		String detailInfoUrl = cp+"/tour/detail?page="+current_page;
+		
 		model.addAttribute("current_page", current_page);
 		model.addAttribute("list", myBookMarkList);
 		model.addAttribute("paging", paging);
 		model.addAttribute("dataCount",dataCount);
-		//model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("detailInfoUrl", detailInfoUrl);
 
 		return "tour/tour/myBookMarkList";
 	}
@@ -407,6 +420,7 @@ public class TourController {
 		public String listReply(
 				@RequestParam int tourNum,
 				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				HttpSession session,
 				Model model
 				) throws Exception {
 			
@@ -429,6 +443,17 @@ public class TourController {
 	        map.put("offset", offset);
 	        map.put("rows", rows);
 	        
+
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+	        String userId="";
+	        	 		
+	        if(info !=null) {
+	        	map.put("userId", info.getUserId());
+	        }else {
+	        	map.put("userId", userId );
+	        }
+			
+        
 			List<TourReply> listReply=service.replylist(map);
 			
 			for(TourReply dto : listReply) {
@@ -510,10 +535,35 @@ public class TourController {
 		return model;
 		}
 
+		@RequestMapping(value = "/tour2/replyLike" )
+		@ResponseBody
+		public Map<String, Object> replyLike(
+				@RequestParam int replyNum,
+				HttpSession session) throws Exception {
+			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			
+			 		
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("replyNum", replyNum);
+			map.put("userId", info.getUserId());
+			
 
+			//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
+			int checkreplyLike = service.checkReplyLike(map);
+					
+			if(checkreplyLike==0) {
+				service.replyLike(map);			
+			}else{
+				service.replyLikeCancel(map);
+			}
+			
+			Map<String, Object> model = new HashMap<>();
+			model.put("checkreplyLike", checkreplyLike);
 		
 
-	
+			return model;
+		}
 	
 	
 

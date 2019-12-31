@@ -25,7 +25,7 @@
 	       <td width='93%' style='padding:5px 5px; border-right:none;'>
 	           <span style="font-size: 21px; padding:5px 5px; font-weight: 700">${vo.userId}</span>
 	           <c:if test="${vo.likeCount!=0}">
-	           <span style="font-size: 9px; color: tomato">${vo.likeCount}명이 댓글 좋아합니다.</span>	
+	           <span style="font-size: 13px; color: tomato">${vo.likeCount}명이 댓글 좋아합니다.</span>	
 	           </c:if>           	
 	           <span style="font-size: 18px; padding-top:3px; padding-top :12px;  display: block; font-weight: 500">${vo.content}</span>            
 	           <span style="font-size: 13px; padding:5px 5px; margin-top:20px; display: block;">${vo.created}</span> 
@@ -44,9 +44,19 @@
 	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='${vo.replyNum}'>답글 <span id="answerCount${vo.replyNum}">${vo.answerCount}</span></button>
 	        </td>
 	        <td style='padding:7px 5px;' align='center'>
-                <%-- <button type='button' class='btn btnSendReplyLike' data-replyNum='${vo.replyNum}' data-replyLike='1' title="좋아요"><i class="far fa-hand-point-up"></i> <span>${vo.likeCount}</span></button>
-	        	 --%>
-	        	 <i class="far fa-heart" onclick="test(this);" style="font-size: 24px; padding-left:17px;  color: tomato"></i>	
+
+	        	
+	        
+			   <c:choose>
+       				<c:when test="${vo.likeuserId==sessionScope.member.userId}">
+				 <i class="fas fa-heart" onclick="replyLike(this);"  style="font-size: 24px; padding-left:17px;  color: tomato" data-replyNum='${vo.replyNum}'></i>	
+					</c:when>						
+					<c:otherwise>
+				 <i class="far fa-heart" onclick="replyLike(this);"  style="font-size: 24px; padding-left:17px;  color: tomato" data-replyNum='${vo.replyNum}'></i>	
+					</c:otherwise>
+				</c:choose>	        
+	        
+	        
 	        </td>
 	    </tr>
 	

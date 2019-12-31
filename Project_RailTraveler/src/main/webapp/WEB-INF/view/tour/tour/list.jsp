@@ -441,7 +441,7 @@ a {
 					<button id="btn-${dto.tourNum}" class="img-button find" value="${dto.tourNum}" >
 					
 					   <c:choose>
-       						<c:when test="${dto.likeuserId==sessionScope.member.userId && dto.liketourName== dto.name}">
+       						<c:when test="${dto.likeuserId==sessionScope.member.userId}">
 						<i class="fas fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
 							</c:when>						
 							<c:otherwise>

@@ -264,4 +264,38 @@ public class TourServiceImpl implements TourService {
 		
 	}
 
+	@Override
+	public void replyLike(Map<String, Object> map) {
+		
+		
+		try {
+			dao.insertData("tour.replyLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void replyLikeCancel(Map<String, Object> map) {
+		try {
+			dao.deleteData("tour.replyLikeCancel", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public int checkReplyLike(Map<String, Object> map) {
+		int result =0;
+		
+		try {
+			result = dao.selectOne("tour.checkReplyLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

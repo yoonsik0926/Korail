@@ -286,6 +286,37 @@ $(function(){
 	});
 });
 
+
+//좋아요 관리하는 에이작스
+function replyLike(ob){
+	
+	var userId = "${sessionScope.member.userId}";
+
+	  if ( userId == "") {
+		 // $("#likealarm").modal();
+		alert("로그인 먼저~")
+		 return;
+	  }
+	
+	var replyNum = $(ob).attr('data-replyNum');
+	
+	var url = "<%=cp%>/tour2/replyLike";
+	var query = "replyNum="+replyNum;
+	var fn = function(data){
+		console.log(data.checkreplyLike);
+			if(data.checkreplyLike==0){
+				ob.className = "fas fa-heart"; 
+			}
+			else if (data.checkreplyLike==1){
+				ob.className = "far fa-heart";
+			}
+
+	}; 
+	
+	ajaxJSON(url, "get", query, fn);
+
+};
+
 </script>
 
 <style type="text/css">
@@ -426,7 +457,7 @@ $(function(){
 		<div id="div2" class="container"
 			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
 			<div class="row" style="width: 100%; margin-bottom: 5px; ">
-				<p style="font-size: 25px; font-weight: 700">후기/리뷰</p>
+				<p style="font-size: 25px; font-weight: 700"><b style="color: green;border: 2px solid green; padding: 1px 3px;">N</b><b style="color: green">네이버</b>&nbsp;&nbsp;후기/리뷰</p>
 			</div>
 			<div style="margin-bottom: 50px;">
 				
@@ -448,7 +479,7 @@ $(function(){
 					</h6>
 					
 					<span style="font-size: 17px;font-weight: 700">${list.blogName} </span>
-					<span style="font-size: 14px">/ <a href="${list.blogUrl}">블로그로 가기</a></span> 
+					<span style="font-size: 14px">/ <a href="${list.blogUrl}" target="_blank">블로그로 가기</a></span> 
 					
 				</div>
 			</div>
@@ -501,7 +532,7 @@ $(function(){
 			<div class="box1 img nonscroll" style="width: 96%; height:400px; overflow-y: scroll; padding:10px 10px;border: 1px solid #eeeeee; align-content: center">
 			<c:forEach var="ivo" items="${imagelist}" >
 				<div class="scale" style="float:left;  width: 160px; height: 160px;" >
-				<a href="${ivo.imgUrl}"><img class="img" style="border-radius:25px; width: 160px; height: 160px; padding: 10px 10px;" alt="" src="${ivo.imgUrl}"></a>			
+				<a href="${ivo.imgUrl}" target="_blank"><img class="img" style="border-radius:25px; width: 160px; height: 160px; padding: 10px 10px;" alt="" src="${ivo.imgUrl}"></a>			
 				</div>
 			</c:forEach>		
 			</div>
