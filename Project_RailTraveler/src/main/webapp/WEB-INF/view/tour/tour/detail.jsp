@@ -379,7 +379,7 @@ function replyLike(ob){
 									길찾기</a></li>
 
 							<li class="nav-item "><a class="nav-link active"
-								onclick="kakaoroadmap();" style="cursor: pointer;"><i class="fas fa-map-marker-alt"></i>
+								onclick="roadmap();" style="cursor: pointer;"><i class="fas fa-map-marker-alt"></i>
 									로드뷰</a></li>
 
 							<li class="nav-item "><a class="nav-link active"
@@ -602,7 +602,7 @@ map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
 
 </script>
 <script type="text/javascript">
-function kakaoroadmap() {
+$(function() {
 	var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
 	var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
 	var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
@@ -613,14 +613,18 @@ function kakaoroadmap() {
 	roadviewClient.getNearestPanoId(position, 50, function(panoId) {
 	    roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
 	   
-	    //특정 css를 지우면 화면 전체로 만들 수 있어서 수정해 주었습니다.
-	  var element = document.getElementById("daum:roadview:1");	    
-	  element.style.removeProperty("position");
+	
 	  
-	  //모달창 띄우기
-	    $("#roadMapModal").modal();
 	});
 }
+);
 
+function roadmap() {
+    //특정 css를 지우면 화면 전체로 만들 수 있어서 수정해 주었습니다.
+	  var element = document.getElementById("daum:roadview:1");	    
+	  element.style.removeProperty("position");
+	  //모달창 띄우기
+    $("#roadMapModal").modal();
+};
 </script>
 

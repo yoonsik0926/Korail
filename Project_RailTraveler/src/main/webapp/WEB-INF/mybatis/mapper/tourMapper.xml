@@ -166,7 +166,7 @@
 	
 	<!--댓글 리스트-->
 	<select id="replylist" parameterType="map" resultType="com.railer.rt.tour.TourReply">
-	    SELECT nvl(count,0) likeCount,tr.replyNum , tr.tourNum, tr.userId, CONTENT, CREATED , ANSWER ,decode(a.userid, null, 'no',a.userid) likeuserId 
+	    SELECT nvl(answerCount,0) answerCount, nvl(count,0) likeCount,tr.replyNum , tr.tourNum, tr.userId, CONTENT, CREATED , tr.ANSWER ,decode(a.userid, null, 'no',a.userid) likeuserId 
         FROM tourreply tr
         left join (
         select * from tourreplylike
@@ -174,10 +174,13 @@
         ) a on tr.replynum = a.replynum
         left join ( 
         select replynum, nvl(count(*),0) count from tourreplylike group by replynum
-        ) b on b.replynum = tr.replynum 
-		WHERE tr.tourNum=#{tourNum} and answer =0
+        ) b on b.replynum = tr.replynum
+        left join (
+        select answer , nvl(count(*),0) answerCount from tourreply group by answer
+        ) c on c.answer = tr.replynum
+		WHERE tr.tourNum=#{tourNum} and tr.answer =0
 		ORDER BY tr.replyNum DESC
-		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+        OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 	
 
