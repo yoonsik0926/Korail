@@ -49,9 +49,10 @@
 			
 			<choose>
 
-				<when test = "name == 0">
+				<when test='name =="list"'>
 
 					loc.locNum = #{locNum}
+					
 					<if test="cateNum !=0">
 						and tc.catenum = #{cateNum} 
 					</if>
@@ -100,7 +101,24 @@
 	</insert>
 	
 	<delete id="cancelLikeTour" parameterType="map">
-		delete from tourbookmark where tournum = #{tourNum} and userId =#{userId}
+		delete from tourbookmark
+		<where>
+			<choose>
+			
+				<when test='mode == "deleteList"'>
+					userId =#{userId} and tournum In 
+						       <foreach collection="deleteListArray" item="item" index="index" separator="," open="(" close=")">
+           									 ${item}
+        						</foreach>			
+				</when>
+				
+				<otherwise>
+					tournum = #{tourNum} and userId =#{userId}
+				</otherwise>	
+			</choose>
+	
+		</where>
+	
 	</delete>
 	
 	<select id="checkLike" parameterType="map" resultType="Integer">
@@ -180,7 +198,9 @@
 	
 		<!-- 댓글 및 답글 삭제 -->
 	<delete id="deleteReply" parameterType="map" >
+		
 		DELETE FROM tourreply WHERE 
+		
 		<if test="mode=='reply' ">
 			replyNum IN (
 				SELECT replyNum FROM tourreply
@@ -193,6 +213,9 @@
 		</if>
 	</delete>
 	
+	<delete id="deleteReplyLike" parameterType="map">
+		delete from tourreplylike where replyNum =#{replyNum}
+	</delete>
 	<!--댓글 좋아요 처리-->
 	
 	<insert id="replyLike" parameterType="map">

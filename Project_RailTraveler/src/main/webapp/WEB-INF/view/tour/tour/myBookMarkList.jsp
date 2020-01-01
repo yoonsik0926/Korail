@@ -23,7 +23,7 @@
 	<c:forEach var="dto" items="${list}">
 
 		<tr style="border-bottom: 1px solid #d4cbcb; height: 40px;">
-			<td><input type="radio" name="choice" value="${dto.tourNum}"></td>
+			<td><input type="checkbox" name="choice" value="${dto.tourNum}" class="checkSelect"></td>
 			<td>${dto.locName}</td>
 			<td>${dto.cateName}</td>
 			<td>${dto.name}</td>

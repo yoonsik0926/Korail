@@ -72,6 +72,49 @@ function myBookMarkList() {
 
 </script>
 
+<script>
+
+	function deleteLikeList() {		
+
+		var deleteList = "";
+
+		$("input[name=choice]:checked").each(function() {
+
+		if(deleteList == ""){
+
+			deleteList = $(this).val();
+
+		} else {
+
+			deleteList = deleteList + "," + $(this).val();
+
+		}
+
+		});
+		
+		if(deleteList ==""){
+			alert("삭제하실 북마크를 먼저 선택해주세요");
+			return;
+		}
+			
+		var url = "<%=cp%>/tour2/deleteMyBookMark";
+		var query = "deleteList="+deleteList;
+		var fn = function(data) {
+			
+			modallistPage(1);
+		};	
+		
+		ajaxJSON(url, "get", query, fn);
+		
+		
+	}
+	
+
+
+
+
+</script>
+
 
 
 
@@ -91,16 +134,13 @@ function myBookMarkList() {
 
       <!--Body-->
       <div class="modal-body" id="aaaa" style="padding: 5px 5px; overflow-y: hidden; height: 410px">
-        
-        
-		
-		
+        	
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center" style="margin-top: 5px;">
-     	 <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">삭제</a>
-        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">확인</a>
+     	 <a type="button" class="btn  btn-info " onclick="deleteLikeList();" >삭제</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal" onclick="window.location.reload()">확인</a>
       </div>
     </div>
   </div>

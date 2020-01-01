@@ -75,7 +75,8 @@ public class TourController {
 
 		map.put("cateNum", cateNum);
 		map.put("locNum", locNum);
-
+		
+		map.put("name", "list");
 		
 		//cateNum과 locNum을 이용해서 카운터 세기
 		dataCount = service.dataCount(map);
@@ -104,7 +105,7 @@ public class TourController {
 			map.put("userId", info.getUserId());
 		}
 		
-		map.put("name", "list");
+
 		
 		//지역별 정보를 가져옴
 		List<Tour> list = service.listBoard(map);
@@ -183,7 +184,7 @@ public class TourController {
 
 		map.put("staNum", staNum);
 		map.put("detailcateNum", detailcateNum);
-		map.put("name", 1);
+		map.put("name", "listBySearch");
 		
 		//카운터 세기
 		dataCount = service.dataCount(map);
@@ -561,6 +562,46 @@ public class TourController {
 			Map<String, Object> model = new HashMap<>();
 			model.put("checkreplyLike", checkreplyLike);
 		
+
+			return model;
+		}
+		
+		@RequestMapping(value = "/tour2/deleteMyBookMark" )
+		@ResponseBody
+		public Map<String, Object> deleteMyBookMark(
+				@RequestParam String deleteList,
+				HttpSession session) throws Exception {
+			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			
+			ArrayList<Integer> deleteListArray  = new ArrayList<>();
+			String[] temp = deleteList.split(",");
+			
+			
+			for(String item : temp ) {
+				deleteListArray.add(Integer.parseInt(item));
+			}
+		
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			map.put("deleteListArray", deleteListArray);
+			map.put("userId", info.getUserId());
+			map.put("mode", "deleteList");
+			
+			String state ="";
+			
+			try {
+				service.disLikeTour(map);
+			} catch (Exception e) {
+				e.printStackTrace();
+				state = "false";
+			}
+					
+		
+			Map<String, Object> model = new HashMap<>();
+			
+			model.put("state", state);
 
 			return model;
 		}
