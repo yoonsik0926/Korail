@@ -159,10 +159,14 @@ $(function(){
 		var isVisible = $trReplyAnswer.is(':visible');
 		var replyNum = $(this).attr("data-replyNum");
 		
+		var $element = $(this).closest("tr")
+		
 		
 		if(isVisible) {
 			$trReplyAnswer.hide();
+			$element.css("border-bottom","1px solid #c4c4c4");
 		} else {
+			$element.css("border-bottom","0px solid #c4c4c4");
 			$trReplyAnswer.show();
             
 
@@ -507,8 +511,7 @@ function replyLike(ob){
 			
 			<table style='width: 100%; margin: 10px auto 0px; border-spacing: 0px; margin-top: 20px; margin-bottom: 50px;'>
 					<tr height='30'>
-						<td align='left'><span style='font-weight: bold;'>댓글쓰기</span><span>
-								- 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가 주세요.</span></td>
+						<td align='left'><span style='font-weight: bold;'>댓글을 달아보세요!</span></td>
 					</tr>
 					<tr>
 						<td style='padding: 5px 5px 0px;'><textarea class='boxTA'

@@ -43,7 +43,7 @@
 	        <td style='padding:10px 5px; width: 93%'>
 	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='${vo.replyNum}'>답글 <span id="answerCount${vo.replyNum}">${vo.answerCount}</span></button>
 	        </td>
-	        <td style='padding:7px 5px;' align='center'>
+	    <td style='padding:7px 5px;' align='center'>
 
 	        	
 	        
@@ -60,7 +60,7 @@
 	        </td>
 	    </tr>
 	
-	    <tr class='replyAnswer' style='display: none;'>
+	    <tr class='replyAnswer' style='display: none; border-bottom: 1px solid #c4c4c4;'>
 	        <td colspan='2'>
 	            <div id='listReplyAnswer${vo.replyNum}' class='answerList' style='border-top: 1px solid #cccccc;'></div>
 	            <div style='clear: both; padding: 10px 10px;'>
