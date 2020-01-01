@@ -98,14 +98,15 @@ function test(ob){
 			
 
 			<div class="tourList" style="width: 52%; margin-bottom:10px; display: inline; float: left;">
-				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">30개의 북마크</h5>
+				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">${dataCount}개의 북마크</h5>
+				<c:forEach var="dto" items="${list}">
 				<div class="tourContent" style="width: 100%; height:170px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
-					<div style="width: 40%; height:100%; float: left;"><img src="<%=cp%>/resource/img/sudo.jpg" style="width:100%; height: 100%;"></div>
+					<div style="width: 40%; height:100%; float: left;"><img src="${dto.imagefilename}" style="width:100%; height: 100%;"></div>
 					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">
 						<table style="width:100%; margin-top:10px;">
 							<tr style="height: 40px;">
-								<td style="font-size: 18px; font-weight: 900;">강릉 펜션</td>
-								<td style="text-align: right;" colspan="2">
+								<td style="font-size: 18px; font-weight: 900;" colspan="2">${dto.name}</td>
+								<td style="text-align: right;">
 									<button class="img-button">
 										<i class="fas fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
 									</button>
@@ -113,100 +114,34 @@ function test(ob){
 							</tr>
 							<tr style="height: 30px;">
 								<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  카테고리 : </td>
-								<td style=" text-align: left;" colspan="2">숙소</td>
+								<td style=" text-align: left;" colspan="2">${dto.cateName}</td>
 							</tr>
 							<tr style="height: 30px;">
 								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  위치 : </td>
-								<td style="text-align: left;" colspan="2">강원도 강릉시 포남동 경강로2255번길 21 엄지빌딩 1층</td>
+								<td style="text-align: left;" colspan="2">${dto.address}</td>
 							</tr>
 							<tr style="height: 30px;">
-								<td style="text-align: right;" colspan="2">
+								<td style="text-align: center;" colspan="3">
 									<button type="button" class="btn btn-default" style="margin-top: 5px;">더 알아보기</button>
 								</td>
+								
 							</tr>
 						
 						</table>
 					</div>
 
 				</div>
+				</c:forEach>
 				
-				<div class="tourContent" style="width: 100%; height:170px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
-					<div style="width: 40%; height:100%; float: left;"><img src="<%=cp%>/resource/img/sudo.jpg" style="width:100%; height: 100%;"></div>
-					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">
-						<table style="width:100%; margin-top:10px;">
-							<tr style="height: 40px;">
-								<td style="font-size: 18px; font-weight: 900;">강릉 펜션</td>
-								<td style="text-align: right;" colspan="2">
-									<button class="img-button">
-										<i class="fas fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-									</button>
-								</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  카테고리 : </td>
-								<td style=" text-align: left;" colspan="2">숙소</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  위치 : </td>
-								<td style="text-align: left;" colspan="2">강원도 강릉시 포남동 경강로2255번길 21 엄지빌딩 1층</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="text-align: right;" colspan="2">
-									<button type="button" class="btn btn-default" style="margin-top: 5px;">더 알아보기</button>
-								</td>
-							</tr>
-						
-						</table>
-					</div>
-
 				</div>
 				
-				<div class="tourContent" style="width: 100%; height:170px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
-					<div style="width: 40%; height:100%; float: left;"><img src="<%=cp%>/resource/img/sudo.jpg" style="width:100%; height: 100%;"></div>
-					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">
-						<table style="width:100%; margin-top:10px;">
-							<tr style="height: 40px;">
-								<td style="font-size: 18px; font-weight: 900;">강릉 펜션</td>
-								<td style="text-align: right;" colspan="2">
-									<button class="img-button">
-										<i class="fas fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-									</button>
-								</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  카테고리 : </td>
-								<td style=" text-align: left;" colspan="2">숙소</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  위치 : </td>
-								<td style="text-align: left;" colspan="2">강원도 강릉시 포남동 경강로2255번길 21 엄지빌딩 1층</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="text-align: right;" colspan="2">
-									<button type="button" class="btn btn-default" style="margin-top: 5px;">더 알아보기</button>
-								</td>
-							</tr>
-						
-						</table>
-					</div>
-
-				</div>
-				
-				<div>
+				<div style="width: 89%;">
 					<nav style="text-align: center;">
 						<ul class="pagination">
-							<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-							</span></li>
-							<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-							</li>
-							<li><span>2</span></li>
-							<li><span>3</span></li>
-							<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-							</span></li>
+							<li>${dataCount==0?"등록된 북마크가 없습니다.":paging}</li>
 						</ul>
 					</nav>
 				</div>
-
 
 			</div>
 			
@@ -219,8 +154,6 @@ function test(ob){
 	</div>
 
 
-
-</div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2945f1b51ebe08a70d044a045286f0c9"></script>
 <script>

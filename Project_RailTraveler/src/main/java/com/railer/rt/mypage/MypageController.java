@@ -1,18 +1,98 @@
 package com.railer.rt.mypage;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.railer.rt.common.MyUtil;
+import com.railer.rt.member.SessionInfo;
+import com.railer.rt.tour.Tour;
+import com.railer.rt.tour.TourService;
 
 @Controller("mypage.mypageController")
 public class MypageController {
 	
+	@Autowired
+	private MyUtil myUtil;
+	
+	@Autowired
+	private TourService tourService;
+	
 	@RequestMapping(value="/bookmark/tour")
 	public String bookmarkTour(
-			Model model) {
+			Model model,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			HttpServletRequest req,
+			HttpSession session) {
+	
+		String cp = req.getContextPath();		
+		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+		
+		if(userId== null) {
+			return "redirect:/member/login";
+		}
+		
+		int items = 3;
+		int total_page = 0;
+		int dataCount = 0;
+		
+	
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("name", "mybookmark");
+		map.put("userId", userId);
+		map.put("cateNum", 0);
+		
+
+		dataCount = tourService.myBookMarkCount(map);
+
+
+		
+		if (dataCount != 0)
+			total_page = myUtil.pageCount(items, dataCount);
+		
+
+		
+		if (total_page < current_page)
+			current_page = total_page;
+		
+		int offset = (current_page - 1) * items;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("items", items);
+
+		
+		List<Tour> myBookMarkList = tourService.myBookMark(map);
+		
+		
+		String listUrl = cp + "/bookmark/tour";
+		
+		String paging = myUtil.paging(current_page, total_page,listUrl);
+		
+		String detailInfoUrl = cp+"/tour/detail?page="+current_page;
+		
+		model.addAttribute("current_page", current_page);
+		model.addAttribute("list", myBookMarkList);
+		model.addAttribute("paging", paging);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("detailInfoUrl", detailInfoUrl);
 		
 		model.addAttribute("subMenu", "2");
 		model.addAttribute("subItems", "0");
+		
 		return ".four.mypage.bookmark.tour";
 	}
 	
