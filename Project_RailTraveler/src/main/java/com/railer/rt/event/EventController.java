@@ -26,14 +26,13 @@ public class EventController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	@RequestMapping(value="/event/current")
+	@RequestMapping(value= {"/event/current", "/event/last"})
 	public String current(
 			@RequestParam(value="page", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="0") int order,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
 			HttpServletRequest req,
-						
 			Model model) throws Exception {
 		
 		String cp = req.getContextPath();
@@ -45,11 +44,22 @@ public class EventController {
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			keyword = URLDecoder.decode(keyword, "utf-8");
 		}
-       
+
+		String mode="current";
+        if(req.getRequestURI().indexOf("/event/current")==-1) {
+        	 mode="last";
+        }
+		
         Map<String, Object> map = new HashMap<String, Object>();
+        map.put("mode", mode);
         map.put("order", order);
         map.put("condition", condition);
         map.put("keyword", keyword);
+        if(req.getRequestURI().indexOf("/event/current")!=-1) {
+        	map.put("mode", "current");
+        } else {
+        	map.put("mode", "last");
+        }
                 
         dataCount = service.dataCount(map);
         if(dataCount != 0)
@@ -79,13 +89,16 @@ public class EventController {
         	query += "&condition=" +condition + 
         	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
         }
-        
-    	listUrl = cp+"/event/current?"+query;
+        listUrl = cp+"/event/"+mode+"?"+query;
         
         String paging = myUtil.paging(current_page, total_page, listUrl);
         
         if(keyword.length()!=0)
 			model.addAttribute("search", "search");
+        
+        model.addAttribute("subMenu", mode.equals("current")?0:1);
+        model.addAttribute("mode", mode);
+        
         model.addAttribute("list", list);
         model.addAttribute("page", current_page);
         model.addAttribute("total_page", total_page);
@@ -96,15 +109,7 @@ public class EventController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("order", order);
 		
-		
 		return ".four.event.current.list";
-	}
-
-	@RequestMapping(value="/event/last")
-	public String last(Model model) throws Exception {
-		model.addAttribute("subMenu", "1");
-		model.addAttribute("title", "지난 이벤트");
-		return ".four.event.last.list";
 	}
 	
 	@RequestMapping(value="/event/created", method=RequestMethod.GET)

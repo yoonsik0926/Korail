@@ -18,15 +18,7 @@
 			<when test="condition == 'content'">
 			    DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
 			</when>
-			<when test="condition == 'sdate' ">
-			   ( TO_CHAR(sdate, 'YYYYMMDD') = #{keyword}
-		          OR TO_CHAR(sdate, 'YYYY-MM-DD') = #{keyword} )
-			</when>
-			<when test="condition == 'edate' ">
-			   ( TO_CHAR(edate, 'YYYYMMDD') = #{keyword}
-		          OR TO_CHAR(edate, 'YYYY-MM-DD') = #{keyword} )
-			</when>
-			
+		
 			<otherwise>
 			    INSTR(${condition}, #{keyword}) &gt; 0
 			</otherwise>
@@ -43,8 +35,14 @@
 	<select id="listevent" parameterType="map" resultType="com.railer.rt.event.Event">
 	 SELECT eventNum, name, content, sDate, eDate 
 	 from event
-	 WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt; SYSDATE
-	
+	 <choose>
+	 	<when test="mode=='current'">
+	 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+	 	</when>
+	 	<otherwise>
+	 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE	
+	 	</otherwise>
+	 </choose>
 	<if test="keyword!=null and keyword!='' ">
 			and <include refid="where-list"/>
 	</if>
@@ -64,9 +62,16 @@
 		
 	<select id="dataCount" parameterType="map" resultType="Integer">
 	 SELECT NVL(COUNT(*), 0) FROM event
-	WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt; SYSDATE
+	 <choose>
+	 	<when test="mode=='current'">
+	 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+	 	</when>
+	 	<otherwise>
+	 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE	
+	 	</otherwise>
+	 </choose>
 	<if test="keyword!=null and keyword!='' ">
-			and <include refid="where-list"/>
+		and <include refid="where-list"/>
 	</if>
 
 	</select>

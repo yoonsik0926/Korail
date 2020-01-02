@@ -78,7 +78,6 @@ ul{
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 
 <script>
@@ -121,7 +120,7 @@ ul{
     		}
     		
     		var o = $(this).attr("data-order");
-    		var url = "<%=cp%>/event/current?order="+o;
+    		var url = "<%=cp%>/event/${mode}?order="+o;
     		location.href=url;
     	});
     });
@@ -138,9 +137,10 @@ ul{
      <!-- 여기서부터 body -->
      
       <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
-    	<h3> 베스트 이벤트 </h3>
+    	<h3> ${mode=="current"?"베스트 이벤트":"종료 이벤트"} </h3>
 	 </div>    
      
+     <c:if test="${mode=='current' }">
      <div style="margin-left: 300px;">
      	<ul class="bxslider">
      		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event1.jpg"></a></li>
@@ -152,6 +152,7 @@ ul{
      <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
     	<h3> 이벤트 모음 </h3>
 	 </div>
+     </c:if>
 	 	 	 	  
 	 <div class="type-section">
                         <div class="type-list-event" style="float: left; border: 1px solid grey; height: 55px;">
@@ -167,7 +168,7 @@ ul{
                                        
                     <!-- type-section -->
                     <div class="search-section" style="float: right">
-                    	<form name="searchForm" action="<%=cp%>/event/current" method="post"
+                    	<form name="searchForm" action="<%=cp%>/event/${mode}" method="post"
 							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 							<select name="condition" class="boxTF"
 								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
