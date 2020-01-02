@@ -29,4 +29,9 @@
 		</where>   
 	</select>
 	
+<!-- 	<insert id="insertDetailPlan" parameterType="com.railer.re.plan.Plan"> -->
+<!-- 		INSERT INTO moreDetailPlan(mdpNum, detailPlanNum, cateNum, name, tel, address, longiude, latitude, memo, sTime, eTime, price) -->
+<!-- 			   VALUE(mdp_seq.NEXTVAL, #{detailPlanNum}, #{cateNum}) -->
+<!-- 	</insert> -->
+	
 </mapper>

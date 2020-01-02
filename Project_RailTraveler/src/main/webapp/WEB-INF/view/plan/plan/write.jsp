@@ -370,7 +370,7 @@ div.timeSelect {
 }
 
 .modal-body.selectTime {
-	height: 70%;
+	height: 85%;
 }
 
 .modal-footer.selectTime {
@@ -399,6 +399,62 @@ div.timeSelect {
     height: 100px;
     padding: 20px;
 }
+
+.selBox {
+	display: inline-block;
+    height: 34px;
+    margin: 5px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    vertical-align: middle;
+}
+
+.modal-dialog.searchDetail {
+	margin-left: 50%;
+    margin-top: 10%;
+}
+
+.modal-content.searchDetail {
+	width: 600px;
+	height: 400px;
+	margin-top: 0;
+	border: 0;
+}
+
+.modal-body.searchDetail {
+	height: 85%;
+}
+
+.modal-footer.searchDetail {
+    border-top: 0 none;
+    padding: 5px 10px;
+    text-align: right;
+}
+
+.searchTourList {
+	width: 100%;
+	height: 90%;
+	border: 1px solid black;
+}
+
+.resultSearchingTour {
+	width: 400px;
+	height: 35px;
+	border: 1px solid black;
+	overflow: hidden;
+  	text-overflow: ellipsis;
+  	white-space: nowrap;
+}
+
+.detailMemo {
+	width: 100%;
+	height: 80%;
+	margin-top: 20px;
+	border: 1px solid black;
+}
+
 </style>
 <script type="text/javascript">
 
@@ -593,6 +649,7 @@ function ajaxJSON(url, type, query, fn) {
 	});
 }
 
+// 역 검색기능
 $(function(){
 	$("body").on("click", ".findNow", function(){
 	
@@ -740,31 +797,52 @@ $(function(){
 				
 			</div>
 		</div>
-						<!-- Modal -->
+						<!-- 세부계획 Modal -->
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
 							      <div class="modal-header selectTime">
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							        <h4 class="modal-title selectTime" id="myModalLabel">시간선택 및 세부일정 짜기</h4>
+							        <h4 class="modal-title selectTime" id="myModalLabel"></h4>
 							      </div>
-							      <div class="startEndTime">
-							      	  <p>${staName}</p>
-								      <p>시작 시간 :</p>
-								     	<select class="form-control" id="startNow">
-									     	<c:forEach var="i" begin="7" end="24">
-									     		<option>${i}</option>
-											</c:forEach>	
-								     	</select>
-							     	  <p>종료 시간 :</p>
-								     	<select class="form-control" id="endNow">
-									     	<c:forEach var="i" begin="7" end="24">
-									     		<option>${i}</option>
-											</c:forEach>	
-								     	</select>
-							      </div>
+							
 							      <div class="modal-body selectTime">
-							        <input style="width: 100%; height: 90%;">
+							      	<span>시작 시간 : </span>
+								     	<select class="selBox startNow" id="startNow">
+									     	<c:forEach var="i" begin="7" end="24">
+									     		<option>${i}</option>
+											</c:forEach>	
+								     	</select>
+								     
+							     	<span>종료 시간 : </span>
+								     	<select class="selBox endNow" id="endNow">
+									     	<c:forEach var="i" begin="7" end="24">
+									     		<option>${i}</option>
+											</c:forEach>	
+								     	</select>
+								   <br>
+							      	<span>카테고리</span>
+									   <select class="selBox tourCategory" id="tourCategory">
+									      <option value="1" ${cateNum=="1" ? "selected='selected'":""}>명소</option>
+									      <option value="2" ${cateNum=="2" ? "selected='selected'":""}>맛집</option>
+									      <option value="3" ${cateNum=="3" ? "selected='selected'":""}>숙박</option>
+									   </select>
+									<span>세부 카테고리</span>
+									   <select class="selBox detailTourCategory" id="detailTourCategory">
+									      <option value="1" ${detailCateNum=="1" ? "selected='selected'":""}>자연</option>
+									      <option value="2" ${detailCateNum=="2" ? "selected='selected'":""}>역사</option>
+									      <option value="3" ${detailCateNum=="3" ? "selected='selected'":""}>쇼핑</option>
+									      <option value="4" ${detailCateNum=="4" ? "selected='selected'":""}>레저/스포츠</option>
+									      <option value="5" ${detailCateNum=="5" ? "selected='selected'":""}>문화시설</option>
+									      <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option>
+									      <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option>
+									   </select>
+									<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>
+							        <div class="resultSearchingTour">
+							        	
+							        </div>
+							        <div class="detailMemo">
+							        	
+							        </div>
 							      </div>
 							      <div class="modal-footer selectTime">
 							      	<button type="button" class="btn btn-default">저장</button>
@@ -774,6 +852,49 @@ $(function(){
 							  </div>
 							</div>
 
+
+				<!-- 세부계획에서 검색하기 버튼 클릭시 뜨는 Modal -->
+				<div class="modal fade" id="searchDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					<div class="modal-dialog searchDetail" role="document">
+						<div class="modal-header searchDetail">
+							<h4 class="modal-title searchDetail" id="myModalLabel"></h4>
+						</div>
+						<div class="modal-content searchDetail">
+							<div class="modal-body searchDetail">
+ 								<input type="text" id="tourSearch" name="tourKeyword"
+ 									style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;"
+									placeholder="검색할 내용을 입력하세요">
+								<button class="btn findTourThing"><i class="fas fa-search" style="max-width: 100%;"></i></button>
+								
+								<!-- 검색결과가 출력되는 곳 -->
+								<div class="searchTourList">
+									<table>
+										<tr align="center" bgcolor="#eeeeee" height="35" style="font-size: 14px; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;">
+											<td width="200">이름</td>
+											<td width="100">전화번호</td>
+											<td width="240">주소</td>
+										</tr>
+										<tr style="font-size: 14px;" align="center">
+											<td onclick="insertTourSearch();" style="cursor: pointer;">대한민국 산업기술 R&D대전 2019</td>
+											<td>02-6000-0820</td>
+											<td>서울특별시 강남구 영동대로 513</td>
+										</tr>
+										<tr style="font-size: 14px;" align="center">
+											<td onclick="insertTourSearch();" style="cursor: pointer;">드림갤러리</td>
+											<td></td>
+											<td>경기도 성남시 분당구 서현로439번길 11</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							
+							<div class="modal-footer searchDetail">
+								<button type="button" class="btn btn-default closePlease" data-dismiss="modal">닫기</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 <script type="text/javascript">
 
 // 역 이미지 클릭시 원본크기 사진 띄우기
@@ -838,7 +959,7 @@ $(function() {
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
-			$(this).parent().parent().hide();
+// 			$(this).parent().parent().hide();
 			
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
@@ -1063,7 +1184,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
 			    map.panTo(pos);
 			    
          	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
-         	$('.plusStation').parent().show();
+//          	$('.plusStation').parent().show();
          	
 			});
         markers.push(marker);
@@ -1162,6 +1283,11 @@ function drawMap(searchList) {
 	});
 }
 
+function insertTourSearch() {
+// 	console.log($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
+	$(".resultSearchingTour").append($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
+	$(".closePlease").click();
+}
 
 </script>
 </body>
