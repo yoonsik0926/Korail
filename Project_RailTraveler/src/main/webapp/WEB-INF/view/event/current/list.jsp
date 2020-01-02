@@ -131,7 +131,9 @@ ul{
     }
     
     function article(eventNum) {
-    	var url="${articleUrl}&eventNum="+eventNum;
+	
+    	var url="${articleUrl}?eventNum="+eventNum;
+    	
     	location.href=url;
     }    
     

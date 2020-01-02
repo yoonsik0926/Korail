@@ -90,6 +90,9 @@ public class EventController {
         }
         listUrl = cp+"/event/"+mode+"?"+query;
         
+        //이부분 추가했씁니다.
+        String articleUrl = cp+"/event/article";	
+        
         String paging = myUtil.paging(current_page, total_page, listUrl);
         
         if(keyword.length()!=0)
@@ -108,6 +111,8 @@ public class EventController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("order", order);
 		
+		//이부분 추가했씁니다.
+		model.addAttribute("articleUrl", articleUrl);
 		return ".four.event.current.list";
 	}
 	
@@ -170,8 +175,8 @@ public class EventController {
 	
 	@RequestMapping(value="/event/article")
 	public String article(
-			@RequestParam int eventnum,
-			@RequestParam String page,
+			@RequestParam int eventNum,
+			@RequestParam (defaultValue="1")String page,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
 			Model model) throws Exception {
@@ -183,12 +188,12 @@ public class EventController {
 			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
 		}
 
-		Event dto = service.readEvent(eventnum);
+		Event dto = service.readEvent(eventNum);
 		if (dto == null)
 			return "redirect:/event/current?"+query;
 		
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 				
-		return "redirect:/event/current";
+		return ".four.event.current.article";
 	}
 }
