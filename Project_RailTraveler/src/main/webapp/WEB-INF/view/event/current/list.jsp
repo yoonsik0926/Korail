@@ -132,14 +132,13 @@ ul{
     
     function article(eventNum) {
 	
-    	var url="${articleUrl}?eventNum="+eventNum;
-    	
+    	var url="${articleUrl}?eventNum="+eventNum+"${page}?page="+page+
+    			"${condition}?condition="+condition;
+    			"${keyword}?keyword="+keyword;
     	location.href=url;
     }    
     
 </script>
-
-
           
      <!-- 여기서부터 body -->
      
