@@ -12,7 +12,65 @@
 
 
 <script type="text/javascript">
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
 
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+//페이징 처리
+$(function(){
+	tourlistPage(1);	
+});
+
+
+function tourlistPage(page) {
+	var url="<%=cp%>/bookmark/tourlist";
+	var query="pageNo="+page;
+	var selector = "#bookmarkList";
+	
+	ajaxHTML(url, "get", query, selector);
+
+}
+
+//소메뉴 관리
 $(function(){
 	$("#tab-${group}").addClass("active");
 	
@@ -30,24 +88,42 @@ $(function(){
 		});
 	});
 	
-var cnt =1;
 
-function test(ob){
-
-  if(cnt%2==1){
-	  ob.className = "far fa-heart"; 
-  }else{
-	  ob.className = "fas fa-heart";
-  }
-
-	cnt++;	
-
-}
-
+//검색
 function searchList(){
-	var f=document.searchForm;
-	f.submit();
+	var condition = $("select[name=condition]").val();
+	var keyword = $("input[name=keyword]").val();
+	
+	var url="<%=cp%>/bookmark/tourlist";
+	var query="pageNo="+${pageNo}+"&condition="+condition+"&keyword="+keyword;
+	var selector = "#bookmarkList";
+	
+	ajaxHTML(url, "get", query, selector);
+	
 }
+
+//북마크 삭제
+$(function(){
+	$("body").on("click", ".img-button", function(){
+		if(! confirm("북마크를 삭제하시겠습니까 ? ")) {
+		    return false;
+		}
+		
+		var tourNum=$(this).attr("data-tourNum");
+		var page=$(this).attr("data-pageNo");
+		
+		var url="<%=cp%>/bookmark/deleteBookmark";
+		var query="tourNum="+tourNum;
+		
+		var fn = function(data){
+			//var state=data.state;
+			tourlistPage(page);
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
 
 </script>
 
@@ -64,8 +140,7 @@ function searchList(){
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 나의 북마크 : 관광
-				정보</span>
+			<span style="padding: 10px 0px; display: block;"> 나의 북마크 : 관광 정보</span>
 		</h3>
 	</div>
 
@@ -94,94 +169,20 @@ function searchList(){
 		<div style="width: 100%; display: inline-block;">
 			<div class="map" style="width: 45%; height:70%; margin-right: 20px; display: inline; float: left;">
 				<div id="map" style="width:550px; height: 700px;"></div>
-				<%-- <img src="<%=cp%>/resource/images/map.PNG" style="width: 100%; height: 70%;"> --%>
-				
-			</div>
-			
-
-			<div class="tourList" style="width: 52%; margin-bottom:10px; display: inline; float: left;">
-				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">${dataCount}개의 북마크</h5>
-				<c:forEach var="dto" items="${list}">
-				<div class="tourContent" style="width: 100%; height:185px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
-					<div style="width: 40%; height:100%; float: left;"><img src="${dto.imagefilename}" style="width:100%; height: 100%;"></div>
-					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">
-						<table style="width:100%; margin-top:10px;">
-							<tr style="height: 40px;">
-								<td style="font-size: 18px; font-weight: 900;" colspan="2">${dto.name}</td>
-								<td style="text-align: right;">
-									<button class="img-button">
-										<i class="fas fa-heart" onclick="test(this);" style="font-size: 20px;color: tomato"></i>
-									</button>
-								</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700; width:30%; "><i class="fas fa-check"></i>  카테고리 : </td>
-								<td style=" text-align: left;" colspan="2">${dto.cateName}</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  역 : </td>
-								<td style="text-align: left;" colspan="2">${dto.staName}역</td>
-							</tr>
-							<tr style="height: 30px;">
-								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  위치 : </td>
-								<td style="text-align: left;" colspan="2">${dto.address}</td>
-							</tr>
-							
-							<tr style="height: 30px;">
-								<td style="text-align: center;" colspan="3">
-								<c:choose>
-									<c:when test="${dto.locNum==1}">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;"
-											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=sudo'">바로가기</button>
-									</c:when>
-									<c:when test="${dto.locNum==2}">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;"
-											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=chungcheong'">바로가기</button>
-									</c:when>
-									<c:when test="${dto.locNum==3}">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;"
-											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=gangwon'">바로가기</button>
-									</c:when>
-									<c:when test="${dto.locNum==4}">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;"
-											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=jeonla'">바로가기</button>
-									</c:when>
-									<c:when test="${dto.locNum==5}">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;"
-											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=gyeongsang'">바로가기</button>
-									</c:when>
-				
-								</c:choose>
-								
-								</td>
-								
-							</tr>
-						
-						</table>
-					</div>
-
-				</div>
-				</c:forEach>
-				
-				</div>
-				
-				<div style="width: 89%;">
-					<nav style="text-align: center;">
-						<ul class="pagination">
-							<li>${dataCount==0?"등록된 북마크가 없습니다.":paging}</li>
-						</ul>
-					</nav>
-				</div>
 
 			</div>
-			
-			
 
-
-
+			<div id="bookmarkList" class="tourList" style="width: 52%; margin-bottom:10px; display: inline; float: left;">
+				
+			</div>
+				
 		</div>
-
+						
 	</div>
+			
+</div>
+
+
 
 
 
@@ -196,26 +197,61 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-// 마커가 표시될 위치입니다 
-var markerPosition  = new kakao.maps.LatLng(37.553802, 126.969686); 
+<c:forEach var="dto" items="${list}">
+	var longitude = ${dto.longitude};
+	var latitude = ${dto.latitude};
+	var imageSrc = '<%=cp%>/resource/images/mapmarker.png', // 마커이미지의 주소입니다    
+    imageSize = new kakao.maps.Size(25, 30), // 마커이미지의 크기입니다
+    imageOption = {offset: new kakao.maps.Point(10, 30)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+      
+	// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+	
+	
+	var positions = [
+	    {
+	        content: '<div style="color">${dto.name}</div>', 
+	        latlng: new kakao.maps.LatLng(longitude, latitude)
+	    }
+	];
 
-// 마커를 생성합니다
-var marker = new kakao.maps.Marker({
-    position: markerPosition
-});
+	for (var i = 0; i < positions.length; i ++) {
+	    // 마커를 생성합니다
+	    var marker = new kakao.maps.Marker({
+	        map: map, // 마커를 표시할 지도
+	        position: positions[i].latlng, // 마커의 위치
+	        image: markerImage // 마커이미지 설정
+	    });
 
-// 마커가 지도 위에 표시되도록 설정합니다
-marker.setMap(map);
+	    // 마커에 표시할 인포윈도우를 생성합니다 
+	    var infowindow = new kakao.maps.InfoWindow({
+	        content: positions[i].content // 인포윈도우에 표시할 내용
+	    });
 
-var markerPosition  = new kakao.maps.LatLng(35.849909, 127.161830); 
+	    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+	    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+	    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+	    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+	}
 
-//마커를 생성합니다
-var marker = new kakao.maps.Marker({
- position: markerPosition
-});
+	// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+	function makeOverListener(map, marker, infowindow) {
+	    return function() {
+	        infowindow.open(map, marker);
+	    };
+	}
 
-//마커가 지도 위에 표시되도록 설정합니다
-marker.setMap(map);
+	// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+	function makeOutListener(infowindow) {
+	    return function() {
+	        infowindow.close();
+	    };
+	}
+	
+	
+</c:forEach>
+
 
 </script>
 
