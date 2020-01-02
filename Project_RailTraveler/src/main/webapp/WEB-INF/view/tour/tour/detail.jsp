@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String cp = request.getContextPath();
+	String nowUrl =request.getRequestURL().toString();
 %>
 
 <link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
@@ -388,7 +389,7 @@ function replyLike(ob){
 									로드뷰</a></li>
 
 							<li class="nav-item "><a class="nav-link active"
-								href="<%=cp%>/main"><i class="fas fa-map-marker-alt"></i>
+								onclick="sharebox();"><i class="fas fa-map-marker-alt"></i>
 									공유하기</a></li>
 
 
@@ -603,6 +604,52 @@ function replyLike(ob){
 <!--Modal: modalPush-->
 
 
+
+
+<!--Modal: 공유 모달-->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+
+    <!--Content-->
+    <div class="modal-content">
+
+      <!--Header-->
+      <div class="modal-header light-blue darken-3 white-text">
+        <h4 class="title"><i class="fas fa-users"></i> 공유해 보세요!</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body mb-0 text-center">
+
+     
+        <!--Twitter-->
+        <a a href="javascript:sendLinkTwitter()" type="button" class="btn-floating btn-tw" style="font-size: 30px;"><i class="fab fa-twitter"></i></a>
+        
+        <!--Google +-->
+        <a href="javascript:sendLinkFacebook()" type="button" class="btn-floating btn-gplus" style="font-size: 30px;"><i class="fab fa-google-plus-g"></i></a>
+        
+        <!--Instagram-->
+        <a type="button" class="btn-floating btn-ins" style="font-size: 30px;"><i class="fab fa-instagram"></i></a>
+        
+        <!--Comments-->
+        <a onclick="shareKakaotalk();" type="button" class="btn-floating btn-comm " style="font-size: 30px;"><i class="fas fa-comments"></i></a>
+        
+        <!--Email-->
+        <a href="javascript:sendLinkNaver()" type="button" class="btn-floating btn-email" style="font-size: 30px;"><i class="fas fa-envelope"></i></a>
+
+      </div>
+
+    </div>
+    <!--/.Content-->
+
+  </div>
+</div>
+<!--Modal: modalSocial-->
+
+
 <!--지도 API 스크립트!!!-->
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -654,6 +701,8 @@ $(function() {
 }
 );
 
+
+
 function roadmap() {
     //특정 css를 지우면 화면 전체로 만들 수 있어서 수정해 주었습니다.
 	  var element = document.getElementById("daum:roadview:1");	    
@@ -661,5 +710,62 @@ function roadmap() {
 	  //모달창 띄우기
     $("#roadMapModal").modal();
 };
+
+function sharebox() {
+	var userId = "${sessionScope.member.userId}";
+	
+	  if ( userId == "") {
+			$("#modaltext").text("공유하기 전에 로그인 먼저 해주세요~");			
+			$("#commonModal").modal();
+				return;
+		  }
+	  else{
+		  $("#shareModal").modal();
+	 	 }
+	
+}
+</script>
+
+
+
+<script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<script type="text/javascript">
+    function shareKakaotalk() {
+        Kakao.init("134ec7b5b1389d0316b7c1bed3033f48");      // 사용할 앱의 JavaScript 키를 설정
+        Kakao.Link.sendDefault({
+              objectType:"feed"
+            , content : {
+                  title:"${vo.name}"   // 콘텐츠의 타이틀
+                , description:"${vo.address}"   // 콘텐츠 상세설명
+                , imageUrl:"${vo.imagefilename}"   // 썸네일 이미지
+                , link : {
+                      mobileWebUrl:"<%=nowUrl%>"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                    , webUrl:"<%=nowUrl%>" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                }
+            }
+            , social : {
+                  likeCount:0       // LIKE 개수
+                , commentCount:0    // 댓글 개수
+                , sharedCount:0     // 공유 회수
+            }
+            , buttons : [
+                {
+                      title:"게시글 확인"    // 버튼 제목
+                    , link : {
+                        mobileWebUrl:"<%=nowUrl%>"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                      , webUrl:"<%=nowUrl%>" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                    }
+                }
+            ]
+        });
+    };
+    
+    function sendLinkFacebook(){
+        var facebook_share_url = "https://www.facebook.com/sharer/sharer.php?u={<%=nowUrl%>}";
+        window.open(facebook_share_url,
+                    'Share on Facebook',
+                    'scrollbars=no, width=500, height=500');
+    } 
 </script>
 
