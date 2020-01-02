@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="plan">
+	
+   <!-- 검색한 역 리스트  -->
+   <select id="listStation" resultType="com.railer.rt.plan.Station">
+   	SELECT staNum, locNum, staName, staTel, staAddress, imageFilename
+   	FROM station
+   	<where>
+		<if test="keyword!=null and keyword!=''">
+			INSTR(staName, #{keyword}) &gt; 0
+		</if>
+		<if test="locNum!=0">
+			AND locNum=#{locNum}
+		</if>
+	</where>
+   </select>
+   
+   <!-- 검색한 역 개수 -->
+   <select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM station s
+		JOIN location l on s.locNum=l.locNum
+		<where>
+			<if test="locNum!=0">
+				l.locNum=#{locNum}
+			</if>
+		</where>   
+	</select>
+	
+</mapper>

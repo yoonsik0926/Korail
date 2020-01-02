@@ -370,7 +370,7 @@ div.timeSelect {
 }
 
 .modal-body.selectTime {
-	height: 70%;
+	height: 80%;
 }
 
 .modal-footer.selectTime {
@@ -593,6 +593,13 @@ function ajaxJSON(url, type, query, fn) {
 	});
 }
 
+function listStation() {
+	var url="<%=cp%>/plan/plan/listStation";
+	var query;
+	var selector = "#listStation";
+	
+	ajaxJSON(url, "get", query, fn);
+}
 $(function(){
 	$("body").on("click", ".findNow", function(){
 	
@@ -605,8 +612,7 @@ $(function(){
 		var query="locNum="+locNum+"&keyword="+keyword;
 		
 		var fn = function(data){
-// 			console.log(data.list);
-			drawMap(data.list);
+			console.log(data.list);
 		};
 		
 		ajaxJSON(url, "post", query, fn);
@@ -685,8 +691,8 @@ $(function(){
 						<select name="locNum" style="width: 80px; height: 35px; float: left;">
 							<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
 							<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
-							<option value="2" ${locNum=="2" ? "selected='selected'":""}>충청권</option>						
-							<option value="3" ${locNum=="3" ? "selected='selected'":""}>강원권</option>						
+							<option value="2" ${locNum=="2" ? "selected='selected'":""}>강원권</option>						
+							<option value="3" ${locNum=="3" ? "selected='selected'":""}>충청권</option>						
 							<option value="4" ${locNum=="4" ? "selected='selected'":""}>전라권</option>						
 							<option value="5" ${locNum=="5" ? "selected='selected'":""}>경상권</option>						
 						</select>
@@ -698,7 +704,89 @@ $(function(){
 				<div id="map" style="width: 100%; height: 100%; z-index: 2;"></div>
 				<script type="text/javascript"
 					src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ea24f69cc8602cd4d0ce33868b3dd46d&libraries=services"></script>
-			
+				<script>
+				var container = document.getElementById('map');
+	            var options = {
+	                  center : new kakao.maps.LatLng(36.656960, 128.134321),
+	                  level : 11
+	               };
+	            var map = new kakao.maps.Map(container, options);
+
+	            // 주소-좌표 변환 객체를 생성합니다
+	            var geocoder = new kakao.maps.services.Geocoder();
+	            
+	            // 주소로 좌표를 검색합니다
+	         <c:forEach var="dto" items="${list}">
+	            geocoder.addressSearch('${dto.staAddress}', function(result, status) {
+
+	                // 정상적으로 검색이 완료됐으면 
+	                 if (status === kakao.maps.services.Status.OK) {
+
+	                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+	                    var imageSrc = '<%=cp%>/resource/images/plan/stationThing.png';      
+	    	            var imageSize = new kakao.maps.Size(32, 32); // 마커이미지의 크기입니다
+	    	            var imageOption = {offset: new kakao.maps.Point(8, 32)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+	    	           	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+	                    // 결과값으로 받은 위치를 마커로 표시합니다
+	                    var marker = new kakao.maps.Marker({
+	                        map: map,
+	                        position: coords,
+	                        image: markerImage
+	                    });
+
+	                    var closeOverlay = function() {
+			            	customOverlay.setMap(null);
+			            };
+			            var $plusStation=$('<div class="plusStation" />');
+			            var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
+			            var $span=$('<span aria-hidden="true">&times;</span>');
+			            var $staContent=$('<div class="staContent" />');
+			            var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/${dto.imageFilename}" "width=800px, height=800px">');
+			            var $staName=$('<div class="staName" />')
+						var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
+						
+			            $plusStation.append($close);
+			            $plusStation.append($staContent);
+			            $plusStation.append($staName);
+			            $($staContent).append($stationImage);
+			            $($staName).append("${dto.staName}");
+			            $($staName).attr("data-staNum", ${dto.staNum});
+						$plusStation.append($insertStaPlan);
+						
+			            $close.append($span);
+			            
+			            
+			            var content=$plusStation[0];
+			            
+			            var customOverlay = new kakao.maps.CustomOverlay({
+			            	content: content,
+			            	position: coords
+			            });
+
+	                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+// 	                    map.setCenter(coords);
+		                
+	                    kakao.maps.event.addListener(marker, 'click', function() {
+		 	            	customOverlay.setMap(map);
+		 	            	
+		 	            	var pos = marker.getPosition();
+		 				    map.panTo(pos);
+		 				    
+		 	            	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
+		 	            	$('.plusStation').parent().show();
+		 	            	
+		 				});
+	                    
+	                }
+	                
+	          });
+	         </c:forEach>
+	         
+
+	        	
+	         </script>
+
 				<!-- <div id="planModal" class="modal2">
 					<div class="modal-planning">
 						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
@@ -764,10 +852,9 @@ $(function(){
 								     	</select>
 							      </div>
 							      <div class="modal-body selectTime">
-							        <input style="width: 100%; height: 90%;">
+							        Modal 내용
 							      </div>
 							      <div class="modal-footer selectTime">
-							      	<button type="button" class="btn btn-default">저장</button>
 							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 							      </div>
 							    </div>
@@ -991,176 +1078,6 @@ $("#endNow").change(function() {
 	
 	
 });
-var markers = [];
-var customOverlays =[];
-
-var container = document.getElementById('map');
-var options = {
-      center : new kakao.maps.LatLng(36.656960, 128.134321),
-      level : 11
-   };
-var map = new kakao.maps.Map(container, options);
-
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new kakao.maps.services.Geocoder();
-
-// 주소로 좌표를 검색합니다
-<c:forEach var="dto" items="${list}">
-geocoder.addressSearch('${dto.staAddress}', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면 
-     if (status === kakao.maps.services.Status.OK) {
-
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        var imageSrc = '<%=cp%>/resource/images/plan/stationThing.png';      
-        var imageSize = new kakao.maps.Size(32, 32); // 마커이미지의 크기입니다
-        var imageOption = {offset: new kakao.maps.Point(8, 32)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-       	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords,
-            image: markerImage
-        });
-
-        var closeOverlay = function() {
-        	customOverlay.setMap(null);
-        };
-        var $plusStation=$('<div class="plusStation" />');
-        var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
-        var $span=$('<span aria-hidden="true">&times;</span>');
-        var $staContent=$('<div class="staContent" />');
-        var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/${dto.imageFilename}" "width=800px, height=800px">');
-        var $staName=$('<div class="staName" />')
-		var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
-		
-        $plusStation.append($close);
-        $plusStation.append($staContent);
-        $plusStation.append($staName);
-        $($staContent).append($stationImage);
-        $($staName).append("${dto.staName}");
-        $($staName).attr("data-staNum", ${dto.staNum});
-		$plusStation.append($insertStaPlan);
-		
-        $close.append($span);
-        
-        
-        var content=$plusStation[0];
-        
-        var customOverlay = new kakao.maps.CustomOverlay({
-        	content: content,
-        	position: coords
-        });
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-//         map.setCenter(coords);
-        
-        kakao.maps.event.addListener(marker, 'click', function() {
-         	customOverlay.setMap(map);
-         	
-         	var pos = marker.getPosition();
-			    map.panTo(pos);
-			    
-         	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
-         	$('.plusStation').parent().show();
-         	
-			});
-        markers.push(marker);
-        customOverlays.push(customOverlay);
-    }
-    
-});
-</c:forEach>
-//지도 위에 표시되고 있는 마커를 모두 제거합니다
-function removeMarker() {
-    for ( var i = 0; i < markers.length; i++ ) {
-        markers[i].setMap(null);
-    }   
-    markers = [];
-}
-function removeCustomOverlay() {
-    for ( var i = 0; i < customOverlays.length; i++ ) {
-    	customOverlays[i].setMap(null);
-    }   
-    customOverlays = [];
-}
-
-function drawMap(searchList) {
-	removeMarker();
-	removeCustomOverlay();
-	
-	searchList.forEach(function(element){
-// 		console.log(searchList[i]);
-		var add = element.staAddress;
-		var staName = element.staName;
-		var staNum = element.staNum;
-		var imgf = element.imageFilename;
-		geocoder.addressSearch(add, function(result, status) {
-
-		    // 정상적으로 검색이 완료됐으면 
-		     if (status === kakao.maps.services.Status.OK) {
-		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-		        var imageSrc = '<%=cp%>/resource/images/plan/stationThing.png';      
-		        var imageSize = new kakao.maps.Size(32, 32); // 마커이미지의 크기입니다
-		        var imageOption = {offset: new kakao.maps.Point(8, 32)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-		       	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-
-		        // 결과값으로 받은 위치를 마커로 표시합니다
-		        var marker = new kakao.maps.Marker({
-		            map: map,
-		            position: coords,
-		            image: markerImage
-		        });
-
-		        var closeOverlay = function() {
-		        	customOverlay.setMap(null);
-		        };
-		        var $plusStation=$('<div class="plusStation" />');
-		        var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
-		        var $span=$('<span aria-hidden="true">&times;</span>');
-		        var $staContent=$('<div class="staContent" />');
-		        var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/'+imgf+'" width=800px, height=800px>');
-		        var $staName=$('<div class="staName" />')
-				var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
-				
-		        $plusStation.append($close);
-		        $plusStation.append($staContent);
-		        $plusStation.append($staName);
-		        $($staContent).append($stationImage);
-		        $($staName).append(staName);
-		        $($staName).attr("data-staNum", staNum);
-				$plusStation.append($insertStaPlan);
-				
-		        $close.append($span);
-		        
-		        var content=$plusStation[0];
-		        
-		        var customOverlay = new kakao.maps.CustomOverlay({
-		        	content: content,
-		        	position: coords
-		        });
-
-		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-//		         map.setCenter(coords);
-		        
-		        kakao.maps.event.addListener(marker, 'click', function() {
-		         	customOverlay.setMap(map);
-		         	
-		         	var pos = marker.getPosition();
-					    map.panTo(pos);
-					    
-		         	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
-		         	$('.plusStation').parent().show();
-		         	
-					});
-		        markers.push(marker);
-		        customOverlays.push(customOverlay);
-		    }
-		});
-		
-	});
-}
 
 
 </script>
