@@ -11,7 +11,7 @@
 		<tr height='35'>
 		    <td colspan='2'>
 		       <div style='clear: both;'>
-		           <div style='float: left;'><span style='color: #3EA9CD; font-weight: bold;'>댓글 ${replyCount}개</span> <span>[댓글 목록, ${pageNo}/${total_page} 페이지]</span></div>
+		           <div style='float: left;'><span style='color: #3EA9CD; font-weight: bold;'>댓글 ${replyCount}개</span> </div>
 		           <div style='float: right; text-align: right;'></div>
 		       </div>
 		    </td>
@@ -23,12 +23,12 @@
 	<c:forEach var="vo" items="${listReply}">
 	    <tr height='35'>
 	       <td width='93%' style='padding:5px 5px; border-right:none;'>
-	           <span style="font-size: 21px; padding:5px 5px; font-weight: 700">${vo.userId}</span>
+	           <span style="font-size: 19px; padding:5px 5px; font-weight: 700">${vo.userId}</span>
 	           <c:if test="${vo.likeCount!=0}">
 	           <span style="font-size: 13px; color: tomato">${vo.likeCount}명이 댓글 좋아합니다.</span>	
 	           </c:if>           	
-	           <span style="font-size: 18px; padding-top:3px; padding-top :12px;  display: block; font-weight: 500">${vo.content}</span>            
-	           <span style="font-size: 13px; padding:5px 5px; margin-top:20px; display: block;">${vo.created}</span> 
+	           <span style="font-size: 15px; padding-top:3px; padding-top :10px;  display: block; font-weight: 500">${vo.content}</span>            
+	           <span style="font-size: 12px; padding:5px 5px; margin-top:25px; display: block;">${vo.created}</span> 
 	        </td>
 	        
 	        <td style='padding:7px 5px;' align='right'>

@@ -9,7 +9,7 @@
 
 
 <table
-	style="margin: 15px auto; text-align: center; font-size: 15px; width: 100%">
+	style="margin: 0px auto; text-align: center; font-size: 15px; width: 100%">
 
 	<tr
 		style="background: #283164; color: white; height: 50px; font-weight: 700">

@@ -51,7 +51,7 @@ function modallistPage(page) {
 			
 	var url = "<%=cp%>/tour/myBookMark";
 	var query = "pageNo="+page;
-	var selector = "#aaaa";
+	var selector = "#MyBookMarkList";
 
 		
 	ajaxHTML(url, "get", query, selector);
@@ -128,12 +128,12 @@ function myBookMarkList() {
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
-      <div class="modal-header d-flex justify-content-center" style="background-color : yellow; padding-top:7px; height:50px; ">
+      <div class="modal-header d-flex justify-content-center" style="padding:7px 7px; margin:0px 0px;height:50px; ">
         <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler</p>
       </div>
 
       <!--Body-->
-      <div class="modal-body" id="aaaa" style="padding: 5px 5px; overflow-y: hidden; height: 410px">
+      <div class="modal-body" id="MyBookMarkList" style="padding: 5px 2px; overflow-y: hidden; height: 410px">
         	
       </div>
 

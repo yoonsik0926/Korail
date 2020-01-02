@@ -5,6 +5,7 @@
 <%
 	String cp = request.getContextPath();
 %>
+
 <link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
 <script src="<%=cp%>/resource/js/flickity.pkgd.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -117,8 +118,10 @@ $(function(){
 		var userId = "${sessionScope.member.userId}";
 
 		  if ( userId == "") {
-			  alert("로그인 먼저~");
-			return;
+			$("#modaltext").text("댓글 작성을 위해서 로그인이 필요합니다");			
+			$("#commonModal").modal();
+				return;
+
 		  }
 		  
 		  
@@ -297,9 +300,11 @@ function replyLike(ob){
 	var userId = "${sessionScope.member.userId}";
 
 	  if ( userId == "") {
-		 // $("#likealarm").modal();
-		alert("로그인 먼저~")
-		 return;
+
+			$("#modaltext").text("댓글 좋아요는 로그인한 회원에게만 제공됩니다.");			
+			$("#commonModal").modal();
+			
+		return;
 	  }
 	
 	var replyNum = $(ob).attr('data-replyNum');
@@ -461,7 +466,7 @@ function replyLike(ob){
 		<div id="div2" class="container"
 			style="margin-top: 10px; margin-bottom: 50px; border-bottom: 2px solid #eeeeee; width: 93%">
 			<div class="row" style="width: 100%; margin-bottom: 5px; ">
-				<p style="font-size: 25px; font-weight: 700"><b style="color: green;border: 2px solid green; padding: 1px 3px;">N</b><b style="color: green">네이버</b>&nbsp;&nbsp;후기/리뷰</p>
+				<p style="font-size: 25px; font-weight: 700"><b style="color: green;border: 2px solid green; padding: 1px 4px;">N</b><b style="color: green">네이버</b>&nbsp;&nbsp;후기/리뷰</p>
 			</div>
 			<div style="margin-bottom: 50px;">
 				
@@ -483,7 +488,7 @@ function replyLike(ob){
 					</h6>
 					
 					<span style="font-size: 17px;font-weight: 700">${list.blogName} </span>
-					<span style="font-size: 14px">/ <a href="${list.blogUrl}" target="_blank">블로그로 가기</a></span> 
+					<span style="font-size: 15px">/ <a href="${list.blogUrl}" target="_blank">블로그로 가기</a></span> 
 					
 				</div>
 			</div>
@@ -545,7 +550,7 @@ function replyLike(ob){
 	</div>
 </div>
 
-<!--Modal: modalPush-->
+<!--Modal: 로드맵모달-->
 <div class="modal fade  bd-example-modal-sm" id="roadMapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document" style="width: 600px; height: 350px;">
@@ -561,6 +566,36 @@ function replyLike(ob){
       <div class="modal-footer flex-center" style="margin-top: 5px;">
        
         <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: 로드맵모달-->
+
+<!--Modal: 공통 모달-->
+<div class="modal fade  bd-example-modal-sm" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px;">
+        <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
+
+        <p id="modaltext" style="font-size: 17px; font-weight:500; margin-top: 10px;"></p>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+       	<a href="<%=cp%>/member/login" type="button" class="btn  btn-info " >로그인</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+        
       </div>
     </div>
   </div>
