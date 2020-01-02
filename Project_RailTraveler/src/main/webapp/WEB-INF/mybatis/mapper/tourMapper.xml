@@ -12,6 +12,9 @@
         join location loc on loc.locnum =st.locnum
         left join ( select * from tourbookmark tbm where tbm.userid =#{userId}) a  on t.tournum = a.tournum
 		<where>
+			
+		
+		
 			<if test='name =="list"'>
 			 loc.locNum = #{locNum}
 	 		</if>
@@ -23,8 +26,6 @@
 			<if test='name =="mybookmark"'>
 				and a.userid =#{userId}
 			</if>
-			
-			
 			
 		</where>
 		and ROWNUM <![CDATA[ < ]]>  1000
