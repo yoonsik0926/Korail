@@ -3,8 +3,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tour">
 
+	<sql id="where-list">
+		<choose>
+			<when test="condition == 'all' ">
+			   ( INSTR(name, #{keyword}) &gt; 0
+		          OR INSTR(staName, #{keyword}) &gt; 0 
+		          OR INSTR(cateName,#{keyword}) &gt; 0)
+			</when>
+			<when test="condition == 'name' ">
+			  	INSTR(name, #{keyword}) &gt; 0
+			</when>
+			<when test="condition == 'staName'">
+			   INSTR(staName, #{keyword}) &gt; 0 
+			</when>
+			<when test="condition == 'cateName'">
+			   INSTR(cateName,#{keyword}) &gt; 0
+			</when>
+			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+
 	<select id="tourList" parameterType="map" resultType="com.railer.rt.tour.Tour">
-        select nvl(a.userid,'no') likeuserId,loc.locnum, loc.locName ,t.tournum , t.stanum, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum,tc.cateName
+        select nvl(a.userid,'no') likeuserId,loc.locnum, loc.locName ,t.tournum , t.stanum, st.staName, t.detailcatenum, t.name, t.tel , t.address ,t.content, t.longitude,t.latitude, t.hitcount,tf.imagefilename,tc.catenum,tc.cateName
 		from tour t join tourfile tf on t.tournum = tf.tournum
 		join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
 		join tourcategory tc on dtc.catenum = tc.catenum 
@@ -12,8 +34,6 @@
         join location loc on loc.locnum =st.locnum
         left join ( select * from tourbookmark tbm where tbm.userid =#{userId}) a  on t.tournum = a.tournum
 		<where>
-			
-		
 		
 			<if test='name =="list"'>
 			 loc.locNum = #{locNum}
@@ -25,6 +45,9 @@
 			
 			<if test='name =="mybookmark"'>
 				and a.userid =#{userId}
+				<if test="keyword!=null and keyword!='' ">
+				AND <include refid="where-list"/>
+				</if>
 			</if>
 			
 		</where>
@@ -72,8 +95,16 @@
 	</select>
 	
 	<select id="myBookMarkCount" parameterType="map" resultType="Integer">	
-	    select nvl(count(*),0) from tour t join tourbookmark tbm on t.tournum = tbm.tournum
+	    select nvl(count(*),0) from tour t 
+	    join tourbookmark tbm on t.tournum = tbm.tournum
+	    join detailtourcategory dtc on t.detailcatenum = dtc.detailcatenum
+		join tourcategory tc on dtc.catenum = tc.catenum 
+        join station st on st.stanum = t.stanum
+        join location loc on loc.locnum =st.locnum
         where userid =#{userId}
+        <if test="keyword!=null and keyword!='' ">
+			AND <include refid="where-list"/>
+		</if>
 	</select>
 	
 	

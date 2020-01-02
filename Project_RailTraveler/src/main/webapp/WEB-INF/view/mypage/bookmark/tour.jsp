@@ -44,7 +44,10 @@ function test(ob){
 
 }
 
-
+function searchList(){
+	var f=document.searchForm;
+	f.submit();
+}
 
 </script>
 
@@ -68,22 +71,21 @@ function test(ob){
 
 	<div style="width: 100%;">
 		<div style="margin-bottom: 10px;">
-			<form name="searchForm" action="<%=cp%>/notice/list" method="post"
+			<form name="searchForm" action="<%=cp%>/bookmark/tour" method="post"
 				style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: left; margin: 20px 0;">
 				<select name="condition" class="boxTF"
 					style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
 					<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
-					<option value="subject"
-						${condition=="subject"?"selected='selected'":""}>이름</option>
-					<option value="content"
-						${condition=="content"?"selected='selected'":""}>내용</option>
-					<option value="userName"
-						${condition=="userName"?"selected='selected'":""}>역이름</option>
-					<option value="created"
-						${condition=="created"?"selected='selected'":""}>카테고리명</option>
-				</select> <input type="text" name="keyword" value="${keyword}" class="boxTF"
-					style="display: inline-block; height: 100%; width: 58%;"> <img
-					src="<%=cp%>/resource/images/magnifying-glass.png" class=""
+					<option value="name"
+						${condition=="name"?"selected='selected'":""}>이름</option>
+					<option value="staName"
+						${condition=="staName"?"selected='selected'":""}>역이름</option>
+					<option value="cateName"
+						${condition=="cateName"?"selected='selected'":""}>카테고리명</option>
+				</select> 
+				<input type="text" name="keyword" value="${keyword}" class="boxTF"
+					style="display: inline-block; height: 100%; width: 58%;"> 
+				<img src="<%=cp%>/resource/images/magnifying-glass.png" class=""
 					onclick="searchList()"
 					style="padding: 6px; cursor: pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 			</form>
@@ -100,7 +102,7 @@ function test(ob){
 			<div class="tourList" style="width: 52%; margin-bottom:10px; display: inline; float: left;">
 				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">${dataCount}개의 북마크</h5>
 				<c:forEach var="dto" items="${list}">
-				<div class="tourContent" style="width: 100%; height:170px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
+				<div class="tourContent" style="width: 100%; height:185px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
 					<div style="width: 40%; height:100%; float: left;"><img src="${dto.imagefilename}" style="width:100%; height: 100%;"></div>
 					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">
 						<table style="width:100%; margin-top:10px;">
@@ -117,12 +119,40 @@ function test(ob){
 								<td style=" text-align: left;" colspan="2">${dto.cateName}</td>
 							</tr>
 							<tr style="height: 30px;">
+								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  역 : </td>
+								<td style="text-align: left;" colspan="2">${dto.staName}역</td>
+							</tr>
+							<tr style="height: 30px;">
 								<td style="font-weight: 700;width:20%; "><i class="fas fa-check"></i>  위치 : </td>
 								<td style="text-align: left;" colspan="2">${dto.address}</td>
 							</tr>
+							
 							<tr style="height: 30px;">
 								<td style="text-align: center;" colspan="3">
-									<button type="button" class="btn btn-default" style="margin-top: 5px;">더 알아보기</button>
+								<c:choose>
+									<c:when test="${dto.locNum==1}">
+										<button type="button" class="btn btn-default" style="margin-top: 5px;"
+											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=sudo'">바로가기</button>
+									</c:when>
+									<c:when test="${dto.locNum==2}">
+										<button type="button" class="btn btn-default" style="margin-top: 5px;"
+											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=chungcheong'">바로가기</button>
+									</c:when>
+									<c:when test="${dto.locNum==3}">
+										<button type="button" class="btn btn-default" style="margin-top: 5px;"
+											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=gangwon'">바로가기</button>
+									</c:when>
+									<c:when test="${dto.locNum==4}">
+										<button type="button" class="btn btn-default" style="margin-top: 5px;"
+											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=jeonla'">바로가기</button>
+									</c:when>
+									<c:when test="${dto.locNum==5}">
+										<button type="button" class="btn btn-default" style="margin-top: 5px;"
+											onclick="javascript:location.href='${detailInfoUrl}&cateNum=${dto.cateNum}&tourNum=${dto.tourNum}&subTitle=gyeongsang'">바로가기</button>
+									</c:when>
+				
+								</c:choose>
+								
 								</td>
 								
 							</tr>

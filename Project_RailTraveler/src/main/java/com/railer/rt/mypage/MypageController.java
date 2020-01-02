@@ -1,5 +1,7 @@
 package com.railer.rt.mypage;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +33,10 @@ public class MypageController {
 	public String bookmarkTour(
 			Model model,
 			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			@RequestParam(defaultValue = "all") String condition,
+			@RequestParam(defaultValue = "") String keyword,
 			HttpServletRequest req,
-			HttpSession session) {
+			HttpSession session) throws Exception {
 	
 		String cp = req.getContextPath();		
 		
@@ -47,22 +51,23 @@ public class MypageController {
 		int total_page = 0;
 		int dataCount = 0;
 		
+		if (req.getMethod().equalsIgnoreCase("GET")) {
+			keyword = URLDecoder.decode(keyword, "utf-8");
+		}
+		
 	
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("name", "mybookmark");
 		map.put("userId", userId);
 		map.put("cateNum", 0);
-		
+		map.put("condition", condition);
+		map.put("keyword", keyword);
 
 		dataCount = tourService.myBookMarkCount(map);
-
-
 		
 		if (dataCount != 0)
 			total_page = myUtil.pageCount(items, dataCount);
-		
-
 		
 		if (total_page < current_page)
 			current_page = total_page;
@@ -77,18 +82,29 @@ public class MypageController {
 		
 		List<Tour> myBookMarkList = tourService.myBookMark(map);
 		
-		
+        String query = "";
 		String listUrl = cp + "/bookmark/tour";
+		
+		if(keyword.length()!=0) {
+        	query = "condition=" +condition + 
+        	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
+        }
+        
+        if(query.length()!=0) {
+        	listUrl +="&"+query;
+        }
 		
 		String paging = myUtil.paging(current_page, total_page,listUrl);
 		
 		String detailInfoUrl = cp+"/tour/detail?page="+current_page;
 		
-		model.addAttribute("current_page", current_page);
+		model.addAttribute("page", current_page);
 		model.addAttribute("list", myBookMarkList);
 		model.addAttribute("paging", paging);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("detailInfoUrl", detailInfoUrl);
+		model.addAttribute("condition", condition);
+		model.addAttribute("keyword", keyword);
 		
 		model.addAttribute("subMenu", "2");
 		model.addAttribute("subItems", "0");
