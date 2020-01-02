@@ -130,6 +130,11 @@ ul{
     	f.submit();
     }
     
+    function article(eventNum) {
+    	var url="${articleUrl}&eventNum="+eventNum;
+    	location.href=url;
+    }    
+    
 </script>
 
 
@@ -137,7 +142,7 @@ ul{
      <!-- 여기서부터 body -->
      
       <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
-    	<h3> ${mode=="current"?"베스트 이벤트":"종료 이벤트"} </h3>
+    	<h3> ${mode=="current"?"추천 이벤트":"종료 이벤트"} </h3>
 	 </div>    
      
      <c:if test="${mode=='current' }">
@@ -203,16 +208,13 @@ ul{
                     <div class="box-image">
                         
                             <span class="thumb-image">
-                            <a data-target="#layerpop" data-toggle="modal">
-                                <img src="/Project_RailTraveler/resource/img/aaa.jpg"/>
-                             </a>   
+                              <img src="/Project_RailTraveler/resource/img/aaa.jpg" onclick="javascript:article('${dto.eventNum}');"/>
                             </span>
                     </div>
                     <div class="box-contents">
-                        <a data-target="#layerpop" data-toggle="modal">
+                        
                             <em class="txt-lightblue">${dto.name}</em>
                             <p>${dto.content}</p>
-                        </a>   
                         <p class="date">
                             <span>기간: </span>${dto.sdate} ~ ${dto.edate}
                         </p>
@@ -253,38 +255,4 @@ ul{
 		   </tr>
 		</table>
     	
-	<div class="modal fade" id="layerpop">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <!-- header -->
-		      <div class="modal-header">
-		        <!-- 닫기(x) 버튼 -->
-		        <button type="button" class="close" data-dismiss="modal">×</button>
-		        <!-- header title -->
-		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;">이벤트1</h4>
-		      </div>
-		      <!-- body -->
-		      <div class="modal-body" style="text-align: center;">
-		      	<img src="<%=cp%>/resource/img/aaa.jpg" style="width: 90%; margin-bottom: 20px;">
-		      	<div style="width: 90%; margin: 0 auto; line-height: 2.5;">
-					<div style="text-align: left;">
-						<span style="font-size: 18px; font-weight: 800;">
-							<i class="fas fa-map-marker-alt" style="color:#e82b2b; font-size: 23px;"></i>&nbsp;&nbsp;내용&nbsp;&nbsp;</span>
-						<span style="font-size: 15px; color: #636363;">이벤트 설명1</span>
-					</div>
-									
-					</div>
-		       	  </div>
-
-		        </div>
-		      </div>
-		            
-		      <!-- Footer -->
-		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
-		      	<c:if test="${sessionScope.member.userId!='admin'}">
-		        	<button type="button" class="btnTour">이벤트정보 보러가기</button>
-		        </c:if>
-		     		        
-		      </div>
-		    </div>
-		
+	

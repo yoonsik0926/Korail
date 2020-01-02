@@ -181,6 +181,15 @@ input[type=text], input[type=file] {
 						<textarea name="content" rows="12" class="boxTA" style="width:100%;">${dto.content}</textarea>
 					</td>
 				</tr>
+				
+				<tr class="tb-row" align="left" height="40">
+			      <td width="100" class="tb-title" style="text-align: center;">이미지</td>
+			      <td style="padding-left:10px;"> 
+			          <input type="file" name="upload" class="boxTF" size="53"
+			                     accept="image/*" 
+			                     style="height: 35px;">
+			       </td>
+			  </tr>
 			</table>
 			
 			<table style="width: 100%; margin: 0px auto; border-spacing: 0px; text-align: center;">
@@ -193,6 +202,7 @@ input[type=text], input[type=file] {
 						
 						<c:if test="${mode =='update'}">
 							<input type="hidden" name="num" value="${dto.num}">
+							<input type="hidden" name="imagename" value="${dto.imagename}">
 						</c:if>
 					</td>
 				</tr>

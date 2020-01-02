@@ -7,6 +7,7 @@ public class Event {
 	private String content;
 	private String sdate;
 	private String edate;
+	private String imagename;
 	public int getEventNum() {
 		return eventNum;
 	}
@@ -42,5 +43,11 @@ public class Event {
 	}
 	public void setListNum(int listNum) {
 		this.listNum = listNum;
+	}
+	public String getImagename() {
+		return imagename;
+	}
+	public void setImagename(String imagename) {
+		this.imagename = imagename;
 	}
 }

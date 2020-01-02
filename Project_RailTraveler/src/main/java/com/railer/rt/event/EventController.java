@@ -1,5 +1,4 @@
 package com.railer.rt.event;
-
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -128,7 +127,6 @@ public class EventController {
 		
 		model.addAttribute("subMenu", "0");
 		model.addAttribute("mode", "update");
-
 		
 		return ".four.event.current.created";
 	}
@@ -170,4 +168,27 @@ public class EventController {
 		return "redirect:/event/current";
     }
 	
+	@RequestMapping(value="/event/article")
+	public String article(
+			@RequestParam int eventnum,
+			@RequestParam String page,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			Model model) throws Exception {
+		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
+		String query="page="+page;
+		if(keyword.length()!=0) {
+			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
+		}
+
+		Event dto = service.readEvent(eventnum);
+		if (dto == null)
+			return "redirect:/event/current?"+query;
+		
+		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+				
+		return "redirect:/event/current";
+	}
 }

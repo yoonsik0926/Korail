@@ -70,8 +70,17 @@ public class EventServiceImpl implements EventService {
 		
 		return result;
 	}
-	
-	
-	
-	
+
+	@Override
+	public Event readEvent(int num) {
+		Event dto=null;
+		
+		try {
+			dto=dao.selectOne("Event.readEvent", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 }
