@@ -61,8 +61,11 @@ $(function(){
 });
 
 function tourlistPage(page) {
+	var condition = $("select[name=condition]").val();
+	var keyword = $("input[name=keyword]").val();
+	
 	var url="<%=cp%>/bookmark/tourlist";
-	var query="pageNo="+page;
+	var query="pageNo="+page+"&keyword="+keyword+"&condition="+condition;
 	var selector = "#bookmarkList";
 
 	ajaxHTML(url, "get", query, selector);
@@ -94,7 +97,7 @@ function searchList(){
 	var keyword = $("input[name=keyword]").val();
 	
 	var url="<%=cp%>/bookmark/tourlist";
-	var query="pageNo="+${pageNo}+"&condition="+condition+"&keyword="+keyword;
+	var query="pageNo="+${pageNo}+"&keyword="+keyword+"&condition="+condition;
 	var selector = "#bookmarkList";
 	
 	ajaxHTML(url, "get", query, selector);

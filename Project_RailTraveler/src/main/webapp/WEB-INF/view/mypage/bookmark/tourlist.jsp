@@ -68,9 +68,7 @@
 
 				</div>
 				</c:forEach>
-				
-				
-				
+
 				<div style="width: 89%;">
 					<nav style="text-align: center;">
 						<ul class="pagination">

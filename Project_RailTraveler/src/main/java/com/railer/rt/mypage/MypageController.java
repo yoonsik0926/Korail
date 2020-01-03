@@ -61,7 +61,7 @@ public class MypageController {
 		
 		model.addAttribute("list",myBookMarkList);
 		model.addAttribute("pageNo",current_page);
-		
+
 		model.addAttribute("subMenu", "2");
 		model.addAttribute("subItems", "0");
 		
@@ -123,17 +123,9 @@ public class MypageController {
 
 		
 		List<Tour> myBookMarkList = tourService.myBookMark(map);
-		
-		String query = "";
 
 		String detailInfoUrl = cp+"/tour/detail?page="+current_page;
-	
-		
-		if(keyword.length()!=0) {
-        	query = "condition=" +condition + 
-        	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
-        }
-        
+
 		String paging=myUtil.pagingMethod(current_page, total_page, "tourlistPage");
 		
 		model.addAttribute("paging",paging);
@@ -143,7 +135,6 @@ public class MypageController {
 		model.addAttribute("condition",condition);
 		model.addAttribute("list",myBookMarkList);
 		model.addAttribute("detailInfoUrl",detailInfoUrl);
-		model.addAttribute("query",query);
 		model.addAttribute("dataCount",dataCount);
 		
 		
