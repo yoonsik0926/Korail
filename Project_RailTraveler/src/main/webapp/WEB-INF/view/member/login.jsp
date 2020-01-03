@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String cp = request.getContextPath();
+
 %>
 
 <style type="text/css">
@@ -39,7 +40,10 @@ function bgLabel(ob, id) {
     }
 }
 
+
 function sendLogin() {
+	
+	
     var f = document.loginForm;
 
 	var str = f.userId.value;
@@ -55,9 +59,13 @@ function sendLogin() {
         f.userPwd.focus();
         return;
     }
+	   
 
-    f.action = "<%=cp%>/member/login";
-	f.submit();
+        f.action = "<%=cp%>/member/login";
+    	f.submit();	
+
+    
+
 	}
 </script>
 <style>
