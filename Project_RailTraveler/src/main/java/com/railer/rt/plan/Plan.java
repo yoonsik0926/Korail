@@ -15,6 +15,7 @@ public class Plan {
 	private int mdpNum;
 	private int cateNum;
 	private String name;
+	private String tel;
 	private String address;
 	private String longitude; // 경도
 	private String latitude; // 위도
@@ -125,6 +126,12 @@ public class Plan {
 	}
 	public void setPrice(String price) {
 		this.price = price;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 	

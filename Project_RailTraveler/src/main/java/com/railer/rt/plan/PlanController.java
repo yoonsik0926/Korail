@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -72,7 +73,20 @@ public class PlanController {
 		
 		return model;
 	}
-
+	
+	@RequestMapping(value="/plan/write", method=RequestMethod.POST)
+	public String detailPlanSubmit(Plan dto) throws Exception {
+		
+		try {
+			service.insertDetailPlan(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return "/plan/plan/write";
+	}
+	
 	@RequestMapping(value="/plan/planlist")
 	public String planlist(Model model) throws Exception {
 		model.addAttribute("subMenu", "1");

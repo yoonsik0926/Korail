@@ -53,12 +53,13 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public void insertDetailPlan(Plan dto) {
+	public void insertDetailPlan(Plan dto) throws Exception {
 		
 		try {
 			dao.insertData("plan.insertDetailPlan",dto);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 		
 	}

@@ -439,7 +439,7 @@ div.timeSelect {
 	border: 1px solid black;
 }
 
-.resultSearchingTour {
+/* .resultSearchingTour {
 	width: 400px;
 	height: 35px;
 	border: 1px solid black;
@@ -447,7 +447,7 @@ div.timeSelect {
   	text-overflow: ellipsis;
   	white-space: nowrap;
   	float: left;
-}
+} */
 
 .detailMemo {
 	width: 100%;
@@ -808,7 +808,7 @@ $(function(){
 			</div>
 		</div>
 						<!-- 세부계획 Modal -->
-						<form action="">
+						<form name="detailPlanForm" method="post">
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
@@ -818,27 +818,27 @@ $(function(){
 							
 							      <div class="modal-body selectTime">
 							   <span>시작 시간 : </span>
-                                <select class="selBox startNow" id="startNow">
+                                <select class="selBox startNow" id="startNow" name="sTime">
                                    <c:forEach var="i" begin="7" end="24">
                                       <option>${i}</option>
                                    </c:forEach>   
                                 </select>
                              
                              <span>종료 시간 : </span>
-                                <select class="selBox endNow" id="endNow">
+                                <select class="selBox endNow" id="endNow" name="eTime">
                                    <c:forEach var="i" begin="7" end="24">
                                       <option>${i}</option>
                                  </c:forEach>   
                                 </select>
                            <br>
                               <span>카테고리</span>
-	                              <select class="selBox tourCategory" id="tourCategory">
+	                              <select class="selBox tourCategory" id="tourCategory" name="cateNum">
 	                                 <option value="1" ${cateNum=="1" ? "selected='selected'":""}>명소</option>
 	<%--                                  <option value="2" ${cateNum=="2" ? "selected='selected'":""}>맛집</option> --%>
 	<%--                                  <option value="3" ${cateNum=="3" ? "selected='selected'":""}>숙박</option> --%>
 	                              </select>
                            	  <span>세부 카테고리</span>
-	                              <select class="selBox detailTourCategory" id="detailTourCategory">
+	                              <select class="selBox detailTourCategory" id="detailTourCategory" name="detailCateNum">
 	                                 <option value="1" ${detailCateNum=="1" ? "selected='selected'":""}>자연</option>
 	<%--                                  <option value="2" ${detailCateNum=="2" ? "selected='selected'":""}>역사</option> --%>
 	<%--                                  <option value="3" ${detailCateNum=="3" ? "selected='selected'":""}>쇼핑</option> --%>
@@ -847,17 +847,15 @@ $(function(){
 	<%--                                  <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option> --%>
 	<%--                                  <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option> --%>
 	                              </select>
-	                              <div>
-							        <div class="resultSearchingTour"></div>
-							        <button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>
-							     	<div style="clear: both;"></div>
-							      </div>
+							        <input class="inputThing resultSearchingTour" name="name" placeholder="이름">
+							        <button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>							     	
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" style="display: block;">
-<!-- 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" style="display: block;"> -->
-<!-- 							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" style="display: block;"> -->
+							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" style="display: block;">
+							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" style="display: block;">
 							      	<input class="inputThing" type="text" name="memo" placeholder="메모" style="display: block;">
 							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" style="display: block;">
+							      </div>
 							      	
 							      </div>
 							      <div class="modal-footer selectTime">
@@ -866,7 +864,6 @@ $(function(){
 							      </div>
 							    </div>
 							  </div>
-							</div>
 						</form>
 
 
@@ -1299,7 +1296,7 @@ function drawMap(searchList) {
 // 모달 검색창에서 이름 누르면 추가되는 곳
 function insertTourSearch() {
 // 	console.log($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
-	$(".resultSearchingTour").append($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
+	$("input[name='name']").val($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
 	$("input[name='tel']").val($(".searchTourList").find("tr:eq(1)>td:eq(1)").html());
 	$("input[name='address']").val($(".searchTourList").find("tr:eq(1)>td:eq(2)").html());
 	$(".closePlease").click();
@@ -1307,7 +1304,21 @@ function insertTourSearch() {
 
 // 세부계획 저장버튼 누르면 DB에 저장
 function saveDetail() {
+	var f=document.detailPlanForm;
+	var str=f.memo.value;
+	if(! str) {
+		alert("메모를 입력하세요.");
+		f.memo.focus();
+		return;
+	}
 	
+	str=f.price.value;
+	if(! str) {
+		alert("예상금액을 입력하세요.");
+		f.price.focus();
+		return;
+	}
+	f.submit();
 }
 
 </script>
