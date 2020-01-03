@@ -25,6 +25,16 @@
         <h3><i class="far fa-image"></i> 이벤트 보기 </h3>
     </div>
     
+   
+   <div>
+   <h2>미션</h2>
+   <p>제목: ${dto.name} </p>
+   <p>시작일: ${dto.sdate} 
+   <p>종료일: ${dto.edate}
+   <img src="<%=cp%>/uploads/event/${dto.imageFilename}">
+   <p>이벤트설명 : ${dto.content}</p>
+   </div>
+      
     <div>
 			<table style="width: 100%; margin: 20px auto 0px; border-spacing: 0px; border-collapse: collapse;">
 			<tr height="35" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
@@ -42,7 +52,7 @@
 			
 			<tr>
 			  <td colspan="2" align="left" style="padding: 10px 5px;">
-			      
+			      <img src="<%=cp%>/uploads/photo/${dto.imageFilename}" style="max-width:100%; height:auto; resize:both;">
 			   </td>
 			</tr>			
 			<tr style="border-bottom: 1px solid #cccccc;">

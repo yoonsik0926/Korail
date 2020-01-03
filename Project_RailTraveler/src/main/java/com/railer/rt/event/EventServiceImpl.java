@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railer.rt.common.FileManager;
 import com.railer.rt.common.dao.CommonDAO;
 
 @Service("Event.EventService")
@@ -13,23 +14,41 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	private CommonDAO dao;
+	@Autowired
+	private FileManager fileManager;
 	
 	@Override
-	public void insertEvent(Event dto) throws Exception {
-		
-		try{
-			dao.insertData("event.insertevent", dto);
-		} catch(Exception e) {
+	public void insertEvent(Event dto, String pathname) throws Exception {
+		try {
+			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+			if(saveFilename!=null) {
+				dto.setImageFilename(saveFilename);
+
+				dao.insertData("event.insertevent", dto);
+			} 
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} 
+		}
 	}
 	
 	@Override
-	public void updateEvent(Event dto) throws Exception {
-		try{
+	public void updateEvent(Event dto, String pathname) throws Exception {
+		try {
+			// 업로드한 파일이 존재한 경우
+			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+		
+			if (saveFilename != null) {
+				// 이전 파일 지우기
+				if(dto.getImageFilename().length()!=0) {
+					fileManager.doFileDelete(dto.getImageFilename(), pathname);
+				}
+					
+				dto.setImageFilename(saveFilename);
+			}
+			
 			dao.updateData("event.updateevent", dto);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
@@ -76,7 +95,7 @@ public class EventServiceImpl implements EventService {
 		Event dto=null;
 		
 		try {
-			dto=dao.selectOne("Event.readEvent", num);
+			dto=dao.selectOne("event.readevent", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

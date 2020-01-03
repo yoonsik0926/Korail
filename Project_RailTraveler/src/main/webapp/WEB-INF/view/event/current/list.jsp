@@ -13,8 +13,7 @@
 
 .sect-eventlist li{ float:left; color:#333333; letter-spacing:-1px;}
 .sect-eventlist li a{ display:block;}
-.sect-eventlist li .thumb-image{ width:240px; height:200px;}
-.sect-eventlist li img{ display:block;width:300px; height:auto;}
+.sect-eventlist li img{ display:block; width:240px; height:200px;}
 .sect-eventlist li em{ display:inline-block; font-size:15px; font-weight:500;}
 .sect-eventlist li strong{ display:block; width:100%; font-size:14px; font-weight:500;white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
 .sect-eventlist li p{ display:block; width:100%;white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
@@ -132,9 +131,7 @@ ul{
     
     function article(eventNum) {
 	
-    	var url="${articleUrl}?eventNum="+eventNum+"${page}?page="+page+
-    			"${condition}?condition="+condition;
-    			"${keyword}?keyword="+keyword;
+    	var url="${articleUrl}&eventNum="+eventNum;
     	location.href=url;
     }    
     
@@ -209,13 +206,16 @@ ul{
                     <div class="box-image">
                         
                             <span class="thumb-image">
-                              <img src="/Project_RailTraveler/resource/img/aaa.jpg" onclick="javascript:article('${dto.eventNum}');"/>
+                              <img src="<%=cp%>/uploads/event/${dto.imageFilename}" width="180"
+			                   height="180"
+                              
+                              onclick="javascript:article('${dto.eventNum}');"/>
                             </span>
                     </div>
                     <div class="box-contents">
                         
                             <em class="txt-lightblue">${dto.name}</em>
-                            <p>${dto.content}</p>
+                            
                         <p class="date">
                             <span>기간: </span>${dto.sdate} ~ ${dto.edate}
                         </p>
