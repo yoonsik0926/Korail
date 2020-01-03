@@ -7,7 +7,7 @@
 %>
 				<h5 style="font-weight: 700; margin-bottom : 10px; border-bottom: #c1bebe 1px solid; padding-bottom: 5px;">${dataCount}개의 북마크</h5>
 				<c:forEach var="dto" items="${list}">
-				<div class="tourContent" style="width: 100%; height:190px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
+				<div class="tourContent" data-tourNum='${dto.tourNum}' style="width: 100%; height:190px; margin-bottom:15px; background: #F9F0DA; border: none; border-radius: 8px; ">
 					<div style="width: 40%; height:100%; float: left;"><img src="${dto.imagefilename}" style="width:100%; height: 100%;"></div>
 					
 					<div style="width: 55%; height:100%; float: left; margin-left: 15px;">

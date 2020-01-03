@@ -29,6 +29,7 @@ public interface TourService {
 	public void replyLikeCancel(Map<String, Object> map);
 	public int  checkReplyLike (Map<String, Object> map);
 	
+	public Tour readAddress(Map<String, Object> map);
 
 	
 	

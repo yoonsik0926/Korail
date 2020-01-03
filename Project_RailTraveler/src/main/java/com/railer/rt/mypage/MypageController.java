@@ -177,6 +177,27 @@ public class MypageController {
 		return model;
 	}
 	
+	@RequestMapping(value="/bookmark/address")
+	@ResponseBody
+	public Map<String, Object> readAddress(
+			@RequestParam int tourNum){
+		
+		Tour dto = new Tour();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("tourNum",tourNum);
+		
+		try {
+			dto = tourService.readAddress(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("dto", dto);
+		
+		return model;
+	}
 	
 	
 	

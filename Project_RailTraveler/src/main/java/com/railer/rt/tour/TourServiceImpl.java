@@ -300,4 +300,15 @@ public class TourServiceImpl implements TourService {
 		return result;
 	}
 
+	@Override
+	public Tour readAddress(Map<String, Object> map) {
+		Tour dto = null;
+		try {
+			dto = dao.selectOne("tour.readAddress", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
 }
