@@ -1308,6 +1308,7 @@ function saveDetail() {
 	var str=f.memo.value;
 	if(! str) {
 		alert("메모를 입력하세요.");
+		
 		f.memo.focus();
 		return;
 	}

@@ -37,6 +37,18 @@
 		WHERE t.cateNum=#{cateNum}
 	</select>
 	
+	<!-- 몇일차 여행인지 추가하기 -->
+	<insert id="insertTicketDay">
+		INSERT INTO plan(planNum, userId, ticketDay, sDate)
+			VALUES(plan_seq.NEXTVAL, #{userId}, #{tickeyDay}, #{sDate})
+	</insert>
+	
+	<!-- 몇일차의 역과 세부계획 추가하기 -->
+	<insert id="insertPlans">
+		INSERT INTO detailPlan(detailPlanNum, planNum, staNum, nthDay)
+			VALUES()
+	</insert>
+	
 	<!-- 세부계획 저장하기  -->
 	<insert id="insertDetailPlan" parameterType="com.railer.rt.plan.Plan">
 		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
