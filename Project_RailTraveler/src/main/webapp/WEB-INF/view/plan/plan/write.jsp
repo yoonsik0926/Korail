@@ -446,6 +446,7 @@ div.timeSelect {
 	overflow: hidden;
   	text-overflow: ellipsis;
   	white-space: nowrap;
+  	float: left;
 }
 
 .detailMemo {
@@ -455,6 +456,15 @@ div.timeSelect {
 	border: 1px solid black;
 }
 
+.inputThing {
+	width: 400px;
+    height: 35px;
+    border: 1px solid black;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 10;
+}
 </style>
 <script type="text/javascript">
 
@@ -681,7 +691,7 @@ $(function(){
 				<div id="searchStation">
 					<div>
 						<div style="float: left; width: 70%; height: 100%;">
-							<a href="#"><img
+							<a href="/Project_RailTraveler/"><img
 								src="<%=cp%>/resource/images/plan/logoWhite_planner.png"></a>
 							<div style="margin-top: 20px; padding-right: 30px; width: 100%;">
 								<div
@@ -798,6 +808,7 @@ $(function(){
 			</div>
 		</div>
 						<!-- 세부계획 Modal -->
+						<form action="">
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
@@ -806,51 +817,57 @@ $(function(){
 							      </div>
 							
 							      <div class="modal-body selectTime">
-							      	<span>시작 시간 : </span>
-								     	<select class="selBox startNow" id="startNow">
-									     	<c:forEach var="i" begin="7" end="24">
-									     		<option>${i}</option>
-											</c:forEach>	
-								     	</select>
-								     
-							     	<span>종료 시간 : </span>
-								     	<select class="selBox endNow" id="endNow">
-									     	<c:forEach var="i" begin="7" end="24">
-									     		<option>${i}</option>
-											</c:forEach>	
-								     	</select>
-								   <br>
-							      	<span>카테고리</span>
-									   <select class="selBox tourCategory" id="tourCategory">
-									      <option value="1" ${cateNum=="1" ? "selected='selected'":""}>명소</option>
-									      <option value="2" ${cateNum=="2" ? "selected='selected'":""}>맛집</option>
-									      <option value="3" ${cateNum=="3" ? "selected='selected'":""}>숙박</option>
-									   </select>
-									<span>세부 카테고리</span>
-									   <select class="selBox detailTourCategory" id="detailTourCategory">
-									      <option value="1" ${detailCateNum=="1" ? "selected='selected'":""}>자연</option>
-									      <option value="2" ${detailCateNum=="2" ? "selected='selected'":""}>역사</option>
-									      <option value="3" ${detailCateNum=="3" ? "selected='selected'":""}>쇼핑</option>
-									      <option value="4" ${detailCateNum=="4" ? "selected='selected'":""}>레저/스포츠</option>
-									      <option value="5" ${detailCateNum=="5" ? "selected='selected'":""}>문화시설</option>
-									      <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option>
-									      <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option>
-									   </select>
-									<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>
-							        <div class="resultSearchingTour">
-							        	
-							        </div>
-							        <div class="detailMemo">
-							        	
-							        </div>
+							   <span>시작 시간 : </span>
+                                <select class="selBox startNow" id="startNow">
+                                   <c:forEach var="i" begin="7" end="24">
+                                      <option>${i}</option>
+                                   </c:forEach>   
+                                </select>
+                             
+                             <span>종료 시간 : </span>
+                                <select class="selBox endNow" id="endNow">
+                                   <c:forEach var="i" begin="7" end="24">
+                                      <option>${i}</option>
+                                 </c:forEach>   
+                                </select>
+                           <br>
+                              <span>카테고리</span>
+	                              <select class="selBox tourCategory" id="tourCategory">
+	                                 <option value="1" ${cateNum=="1" ? "selected='selected'":""}>명소</option>
+	<%--                                  <option value="2" ${cateNum=="2" ? "selected='selected'":""}>맛집</option> --%>
+	<%--                                  <option value="3" ${cateNum=="3" ? "selected='selected'":""}>숙박</option> --%>
+	                              </select>
+                           	  <span>세부 카테고리</span>
+	                              <select class="selBox detailTourCategory" id="detailTourCategory">
+	                                 <option value="1" ${detailCateNum=="1" ? "selected='selected'":""}>자연</option>
+	<%--                                  <option value="2" ${detailCateNum=="2" ? "selected='selected'":""}>역사</option> --%>
+	<%--                                  <option value="3" ${detailCateNum=="3" ? "selected='selected'":""}>쇼핑</option> --%>
+	<%--                                  <option value="4" ${detailCateNum=="4" ? "selected='selected'":""}>레저/스포츠</option> --%>
+	<%--                                  <option value="5" ${detailCateNum=="5" ? "selected='selected'":""}>문화시설</option> --%>
+	<%--                                  <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option> --%>
+	<%--                                  <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option> --%>
+	                              </select>
+	                              <div>
+							        <div class="resultSearchingTour"></div>
+							        <button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>
+							     	<div style="clear: both;"></div>
+							      </div>
+							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" style="display: block;">
+							      	<input class="inputThing" type="text" name="address" placeholder="주소" style="display: block;">
+<!-- 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" style="display: block;"> -->
+<!-- 							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" style="display: block;"> -->
+							      	<input class="inputThing" type="text" name="memo" placeholder="메모" style="display: block;">
+							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" style="display: block;">
+							      	
 							      </div>
 							      <div class="modal-footer selectTime">
-							      	<button type="button" class="btn btn-default">저장</button>
+							      	<button type="button" class="btn btn-default" onclick="saveDetail();">저장</button>
 							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 							      </div>
 							    </div>
 							  </div>
 							</div>
+						</form>
 
 
 				<!-- 세부계획에서 검색하기 버튼 클릭시 뜨는 Modal -->
@@ -879,11 +896,6 @@ $(function(){
 											<td>02-6000-0820</td>
 											<td>서울특별시 강남구 영동대로 513</td>
 										</tr>
-										<tr style="font-size: 14px;" align="center">
-											<td onclick="insertTourSearch();" style="cursor: pointer;">드림갤러리</td>
-											<td></td>
-											<td>경기도 성남시 분당구 서현로439번길 11</td>
-										</tr>
 									</table>
 								</div>
 							</div>
@@ -895,6 +907,7 @@ $(function(){
 					</div>
 				</div>
 				
+				
 <script type="text/javascript">
 
 // 역 이미지 클릭시 원본크기 사진 띄우기
@@ -904,7 +917,7 @@ function fnImgPop(url){
   	var win_width=800;
   	var win_height=500;
 //   	var win=img.height+50;
-  	var OpenWindow=window.open('','_blank', 'width='+win_width+', height='+win_height+', menubars=no, scrollbars=auto, left=500, top=100');
+  	var OpenWindow=window.open('','_blank', 'width=810, height=510, menubars=no, scrollbars=auto, left=500, top=100');
   	OpenWindow.document.write("<style>body{margin:2px; padding:0px;}</style><img src='"+url+"' width='"+win_width+"', height='"+win_height+"'>");
 }
 
@@ -1069,12 +1082,12 @@ $("#endNow").change(function() {
 			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenSecond");
 			var coloredTime=$("[class*='chosen']").text().trim().split(" ");
 			
-			for(var j=0; j<coloredTime.length; j++) {	
-				if(coloredTime[j]=i) {
-					alert("다른역의 시간과 중복됩니다!");
-					return false;
-				}
-			}
+// 			for(var j=0; j<coloredTime.length; j++) {	
+// 				if(coloredTime[j]=i) {
+// 					alert("다른역의 시간과 중복됩니다!");
+// 					return false;
+// 				}
+// 			}
 			
 		}
 		
@@ -1095,7 +1108,7 @@ $("#endNow").change(function() {
 	
 	
 	
-// 	console.log($("[class*='chosen']").text().trim().split(" "));
+	console.log($("[class*='chosen']").text().trim().split(" "));
 	
 	
 // 	for(var j=0; j<coloredTime.length; j++) {
@@ -1283,10 +1296,18 @@ function drawMap(searchList) {
 	});
 }
 
+// 모달 검색창에서 이름 누르면 추가되는 곳
 function insertTourSearch() {
 // 	console.log($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
 	$(".resultSearchingTour").append($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
+	$("input[name='tel']").val($(".searchTourList").find("tr:eq(1)>td:eq(1)").html());
+	$("input[name='address']").val($(".searchTourList").find("tr:eq(1)>td:eq(2)").html());
 	$(".closePlease").click();
+}
+
+// 세부계획 저장버튼 누르면 DB에 저장
+function saveDetail() {
+	
 }
 
 </script>

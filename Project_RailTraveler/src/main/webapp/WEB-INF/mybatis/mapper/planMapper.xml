@@ -29,9 +29,17 @@
 		</where>   
 	</select>
 	
-<!-- 	<insert id="insertDetailPlan" parameterType="com.railer.re.plan.Plan"> -->
-<!-- 		INSERT INTO moreDetailPlan(mdpNum, detailPlanNum, cateNum, name, tel, address, longiude, latitude, memo, sTime, eTime, price) -->
-<!-- 			   VALUE(mdp_seq.NEXTVAL, #{detailPlanNum}, #{cateNum}) -->
-<!-- 	</insert> -->
+	<!-- 세부계획 모달창에서 카테고리 뿌리기 -->
+	<select id="listCategory" parameterType="map" resultType="com.railer.rt.plan.Tour">
+		SELECT t.cateNum, cateName, detailcateNum, detailcateName
+		FROM tourcategory t
+		JOIN detailtourcategory dt ON t.cateNum=dt.cateNum
+		WHERE t.cateNum=#{cateNum}
+	</select>
 	
+	<!-- 세부계획 저장하기  -->
+	<insert id="insertDetailPlan" parameterType="com.railer.rt.plan.Plan">
+		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
+			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel},#{address},"","",#{memo},#{sTime},#{eTime},#{price})
+	</insert>
 </mapper>
