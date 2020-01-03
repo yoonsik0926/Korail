@@ -197,7 +197,7 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 
 // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption); 
-<%-- 전체 리스트 마커 뽑는거
+//전체 리스트 마커 뽑는거
 <c:forEach var="dto" items="${list}">
 	var longitude = ${dto.longitude};
 	var latitude = ${dto.latitude};
@@ -238,7 +238,8 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
 	    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
 	}
-</c:forEach> --%>
+</c:forEach>
+
 //인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 function makeOverListener(map, marker, infowindow) {
     return function() {
@@ -253,12 +254,12 @@ function makeOutListener(infowindow) {
     };
 }
 
-//지도에 표시된 마커 객체를 가지고 있을 배열입니다
+/* //지도에 표시된 마커 객체를 가지고 있을 배열입니다
 var markers = [];
 
 //마커에 표시할 인포윈도우를 생성합니다 
 var infowindow = new kakao.maps.InfoWindow({  });
-
+ */
 // 마커를 생성하고 지도위에 표시하는 함수입니다
 function addMarker(markerImage,markerPosition,name) {
     
@@ -287,7 +288,7 @@ function setMarkers(map) {
 
 // 마커 삭제
 function hideMarkers() {
-    setMarkers(null);
+    //setMarkers(null);
     infowindow.close();
 }
 
@@ -323,7 +324,6 @@ $(function(){
 	
 	$("body").on("mouseout", ".tourContent", function(){
 		hideMarkers();
-
 	});
 });
 
