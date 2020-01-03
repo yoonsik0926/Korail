@@ -633,7 +633,8 @@ a {
 	data-backdrop="true" data-keyboard="true"
 	class="modal1 modal_post_social" style="display: none;">
 	<div class="modal-dialog"
-		style="width: 315px; position: absolute; right: 37%; top: 48%;">
+		style="width: 315px; position: absolute; right: 16.5%;
+    top: 18.5%;">
 		<div class="modal-content">
 			<div class="text-basic">
 				<div class="social-btn">
