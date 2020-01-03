@@ -13,6 +13,7 @@ public class Friend {
 	private String sDate,eDate;
 	private int hitCount;
 	private int notice;
+	private int enable;
 	
 	
 	private int friendFileNum;
@@ -25,6 +26,7 @@ public class Friend {
 	
 	private int replyCount;
 	private int bookmarkCount;
+	private int myBookMark;
 	
 	
 	public int getNotice() {
@@ -151,6 +153,20 @@ public class Friend {
 	}
 	public void setBookmarkCount(int bookmarkCount) {
 		this.bookmarkCount = bookmarkCount;
+	}
+	
+	
+	public int getEnable() {
+		return enable;
+	}
+	public void setEnable(int enable) {
+		this.enable = enable;
+	}
+	public int getMyBookMark() {
+		return myBookMark;
+	}
+	public void setMyBookMark(int myBookMark) {
+		this.myBookMark = myBookMark;
 	}
 	@Override
 	public String toString() {

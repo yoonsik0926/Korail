@@ -9,13 +9,14 @@
 	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
 <script type="text/javascript"
 	src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
-<script type="text/javascript"
-	src="<%=cp%>/resource/se/js/HuskyEZCreator.js" charset="utf-8"></script>
+
 <link rel="stylesheet"
 	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
 	type="text/css">
-
+<script type="text/javascript"
+	src="<%=cp%>/resource/se/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
+// 첨부파일 부분에 빈 부분이 있을 때 막기
 $(function () {
 	$("form input[name=upload]").change(function () {
 		//빈 부분이 있을 때 막는 것
@@ -37,27 +38,8 @@ $(function () {
 		 $("#friendtb").append($tr);
 	})
 });
-    function sendOk() {
-        var f = document.friendForm;
 
-    	var str = f.subject.value;
-        if(!str) {
-            alert("제목을 입력하세요. ");
-            f.subject.focus();
-            return;
-        }
-
-    	str = f.content.value;
-        if(!str) {
-            alert("내용을 입력하세요. ");
-            f.content.focus();
-            return;
-        }
-
-    	f.action="<%=cp%>/friend/${mode}";
-
-        f.submit();
-    }
+// 인서트 전 유효성 검사
     function check() {
         var f = document.friendForm;
     	str = f.content.value;
@@ -66,14 +48,14 @@ $(function () {
             f.content.focus();
             return false;
         }
-	f.datepicker1.name='sDate';
-	f.datepicker2.name='eDate';
-   		f.action="<%=cp%>/friend/created";
+		f.datepicker1.name='sDate';
+		f.datepicker2.name='eDate';
+   		f.action="<%=cp%>/friend/${mode}";
 
         return true;
-//         return false;
     }
     
+    //데이트 피커 등록 - 시작일이 오늘보다 작을 수 없도록
     $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
 		$("#datepicker1").datepicker({
 			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
@@ -102,12 +84,14 @@ $(function () {
 		    });
     });
 
+    //입력폼 리셋 기능
     function resetDate() {
     	$('#sDate').val('');
     	 $('#eDate').val('');
     	 $('#datepicker1').val('');
     	 $('#datepicker2').val('');
 	}
+    
 </script>
 <style type="text/css">
 .tb-row {
@@ -155,18 +139,14 @@ input[type=text], input[type=file] {
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<form name="friendForm" method="post" enctype="multipart/form-data"
 			onsubmit="return submitContents(this);">
-			<table
-				style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
-				<tr>
-					<td style="text-align: right;"><button type="reset"
-							class="btn btn-default"
-							style="padding: 6px 6px; border-radius: 5px;"
+			<!-- 입력폼 리셋 기능 -->
+			<div style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;text-align: right;">
+				<button type="reset" class="btn btn-default" style="padding: 6px 6px; border-radius: 5px;"
 							onclick="resetContent(this);">
-							<img alt="" src="<%=cp%>/resource/images/resetIcon1.png"
-								style="width: 20px;">
-						</button></td>
-				</tr>
-			</table>
+					<img alt="" src="<%=cp%>/resource/images/resetIcon1.png" style="width: 20px;">
+				</button>		
+			</div>
+			<!-- 동행구하기 입력 폼 테이블 -->
 			<table class="tb-created">
 				<tbody id="friendtb">
 					<tr class="tb-row">
@@ -175,8 +155,9 @@ input[type=text], input[type=file] {
 							maxlength="100" class="boxTF" style="padding: 5px 5px;"
 							value="${dto.subject}"></td>
 					</tr>
-					<%--  <c:if test="${sessionScope.member.userId=='admin'}">	 --%>
-					<tr class="tb-row">
+					<!-- 공지글은 기간을 입력하지 않음 -->
+					 <c:if test="${sessionScope.member.userId!='admin'}">	
+					<tr class="tb-row daysTr">
 						<td width="100" class="tb-title">기간</td>
 						<td class="tb-content">
 							<div
@@ -198,12 +179,7 @@ input[type=text], input[type=file] {
 							</div>
 						</td>
 					</tr>
-					<tr class="tb-row">
-						<td width="100" class="tb-title">공지여부</td>
-						<td class="tb-content"><input type="checkbox" name="notice"  value="1" 
-							id="notice"></td>
-					</tr>
-					<%-- 				</c:if> --%>
+					</c:if>
 					<tr class="tb-row">
 						<td width="100" class="tb-title">작성자</td>
 						<td class="tb-content">${sessionScope.member.userName}</td>
@@ -236,6 +212,7 @@ input[type=text], input[type=file] {
 					</c:if>
 				</tbody>
 			</table>
+			<!-- 취소 및 글쓰기 버튼 -->
 			<table class="tb-board"
 				style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 				<tr>
@@ -276,8 +253,8 @@ nhn.husky.EZCreator.createInIFrame({
 		}, //boolean
 		fOnAppLoad : function() {
 			//예제 코드
-			oEditors.getById["content"].exec("PASTE_HTML",
-					[ "로딩이 완료된 후에 본문에 삽입되는 text입니다." ]);
+// 			oEditors.getById["content"].exec("PASTE_HTML",
+// 					[ "로딩이 완료된 후에 본문에 삽입되는 text입니다." ]);
 
 		},
 		fCreator : "createSEditor2"

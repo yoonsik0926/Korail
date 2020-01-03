@@ -5,13 +5,47 @@
 <%
 	String cp = request.getContextPath();
 %>
+
+<script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+<link rel="stylesheet"
+	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
+	type="text/css">
 <script>
-	function searchList() {
-		$("#searchCount").css("display", "block");
+function searchList() {
+	var f = document.searchForm;
+	console.log(f.condition.value);
+	console.log(f.keyword.value);
+	f.submit();
+}
+function reset() {
+	location.href="<%=cp%>/friend/friend";
 	}
-	function reset() {
-		$("#searchCount").css("display", "none");
+
+	function changeSelectBox() {
+		if ($("select[name=condition]").val() == 'created' || $("select[name=condition]").val() == 'period') {
+			$("input[name=keyword]").attr("id", "datepicker1");
+
+			$("#datepicker1").datepicker({
+				dateFormat : "yy" + "-" + "mm" + "-" + "dd",
+				altField : "#sDate",
+				showAnim : "slide",
+				changeYear : true //콤보박스에서 년 선택 가능
+				,
+				changeMonth : true
+			//콤보박스에서 월 선택 가능    
+			});
+		} else {
+			$("input[name=keyword]").attr("class", "boxTF");
+			$("#ui-datepicker-div").remove();
+
+		}
 	}
+	$(function() {
+		// 	$("input[name=keyword]").tooltip({title:"",trigger:"focus"});
+	})
 </script>
 <style type="text/css">
 optgroup {
@@ -25,34 +59,40 @@ optgroup {
 			<span style="padding: 10px 0px; display: block;"> 동행구하기</span>
 		</h3>
 	</div>
-
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-top: 5px;"></div>
 
+		<!-- 공지사항 리스트 테이블 -->
 		<table class="table table-hover tb-board"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
+			<!-- 검색 및 글쓰기 버튼 위치 -->
 			<thead>
 				<tr>
 					<td width="200" colspan="5"
 						style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-						<span id="searchCount"
-						style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-							<span style="color: #ca4a0d;">>${dataCount}건 </span> <img alt=""
-							src="/Project_RailTraveler/resource/images/close_icon.png"
-							onclick="reset()"
-							style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
-					</span>
+						<c:if test="${search=='search'}">
+							<span id="searchCount"
+								style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+								<span style="color: #ca4a0d;">${dataCount}건 </span> <img alt=""
+								src="/Project_RailTraveler/resource/images/close_icon.png"
+								onclick="reset()"
+								style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+							</span>
+						</c:if>
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/friend/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
-								style="height: 21px;"> 글쓰기
+								style="height: 21px;"> ${sessionScope.member.userId=='admin'?"공지작성":"글쓰기" }
 						</button>
-						<form name="searchForm" action="<%=cp%>/notice/list" method="post"
+						<!-- 검색 폼 -->
+						<form name="searchForm" action="<%=cp%>/friend/friend"
+							method="post"
 							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 							<select name="condition" class="boxTF"
-								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
+								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;"
+								onchange="changeSelectBox();">
 								<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
 								<option value="subject"
 									${condition=="subject"?"selected='selected'":""}>제목</option>
@@ -60,10 +100,13 @@ optgroup {
 									${condition=="content"?"selected='selected'":""}>내용</option>
 								<option value="userName"
 									${condition=="userName"?"selected='selected'":""}>작성자</option>
+								<option value="period"
+									${condition=="period"?"selected='selected'":""}>날짜</option>
 								<option value="created"
 									${condition=="created"?"selected='selected'":""}>등록일</option>
 							</select> <input type="text" name="keyword" value="${keyword}"
 								class="boxTF"
+								${condition=="created" || condition=="period"?"id='datepicker1'":""}
 								style="display: inline-block; height: 100%; width: 58%;">
 							<img src="<%=cp%>/resource/images/magnifying-glass.png" class=""
 								onclick="searchList()"
@@ -71,6 +114,7 @@ optgroup {
 						</form>
 					</td>
 				</tr>
+				<!-- 테이블 헤더 -->
 				<tr class="lbo_li lbo_legend lbo_legend_like">
 					<th width="75" style="padding-left: 1.5%;">번호</th>
 					<th><span style="padding-left: 10px;">제목</span></th>
@@ -79,66 +123,70 @@ optgroup {
 					<th width="80"><span>조회수</span></th>
 				</tr>
 			</thead>
+			<!-- 공지사항 리스트 + 일반 동행 게시물 리스트 -->
 			<tbody style="border-bottom: 2px solid black;">
-			<c:forEach var="dto" items="${noticeList}">
-				<tr class="lbo_li lbo_notice li_bg0 lbo_like"
-					style="font-weight: 600;"  onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
-					<td>
-						<div class="noticeBox">
-							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
-								width="18" style="display: inline-block; float: left;"> <span
-								style="font-size: 14px; font-weight: 600; display: block;">공지</span>
-						</div>
-					</td>
-					<td colspan="2" style="text-align: left; padding-left: 20px;">※
-						${dto.subject} ※</td>
-					<td colspan="2" style="text-align: right; padding-right: 20px;"><i>${dto.created}</i></td>
-				</tr>
+			<!-- 공지사항 리스트 출력 -->
+				<c:forEach var="dto" items="${noticeList}">
+					<tr class="lbo_li lbo_notice li_bg0 lbo_like"
+						style="font-weight: 600;"
+						onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
+						<td>
+							<div class="noticeBox">
+								<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+									width="18" style="display: inline-block; float: left;"> <span
+									style="font-size: 14px; font-weight: 600; display: block;">공지</span>
+							</div>
+						</td>
+						<td colspan="2" style="text-align: left; padding-left: 20px;">※
+							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if></td>
+						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
+					</tr>
 				</c:forEach>
+				<!-- 현재 날짜 계산 : 마감일이 지났는지 판단 위해 필요. -->
+				<jsp:useBean id="now" class="java.util.Date" />
+				<fmt:formatDate value="${now}" var="today" pattern="yyyy-MM-dd" />  
+							
+				<!-- 동행 게시글 리스트 출력 -->
 				<c:forEach var="dto" items="${list}">
-				<tr onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
-					<td>${dto.listNum}</td>
-					<td style="text-align: left; padding-left: 20px;">${dto.subject} <span style="margin-left: 7px;
-    font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;
-    color: #969696;"></i>${dto.replyCount}</span><span style="border-radius: 5px;
-    font-size: 13px;
-    font-weight: 900;
-    display: inline-block;
-    padding: 1px 3px;
-    background: #f97509;
-    color: #FFFFFF;
-    margin-left: 10px;">모집완료</span><span style="border-radius: 5px;
-    font-size: 13px;
-    font-weight: 900;
-    display: inline-block;
-    padding: 1px 3px;
-    background: #ccc;
-    color: #FFFFFF;
-    margin-left: 10px;">모집중</span><br> <span style="color: #aaa;">기간 : ${dto.sDate} ~ ${dto.eDate}</span></td>
-					<td>${dto.userName}</td>
-					<td>${dto.created}</td>
-					<td>${dto.hitCount}</td>
-				</tr>
+					<tr
+						onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
+						<td>${dto.listNum}</td>
+						<td style="text-align: left; padding-left: 20px;">${dto.subject}
+							<span style="margin-left: 7px; font-size: 14px;"> <i
+								class="far fa-heart" style="margin-right: 2px; color: #969696;"></i>${dto.bookmarkCount}
+								<i class="far fa-comment-alt"
+								style="margin-right: 2px; color: #969696; margin-left: 5px;"></i>${dto.replyCount}
+								<c:if test="${dto.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${dto.fileCount}</c:if>
+								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
+								</span>
+
+							<fmt:parseDate value="${dto.eDate}" var="eDate" pattern="yyyy-MM-dd"/>
+						<c:if test="${dto.enable==1 || eDate < today}">
+								<span
+									style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #ccc; color: #FFFFFF; margin-left: 10px;">모집완료</span>
+							</c:if>
+							
+							<c:if test="${dto.enable != 1 && eDate >= today}">
+								<span
+									style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #f97509; color: #FFFFFF; margin-left: 10px;">모집중</span>
+							</c:if><br> <span style="background: #aaa;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 12px;">
+							
+							기간 : ${dto.sDate}  ~  ${dto.eDate}</span>
+						</td>
+						<td>${dto.userName}</td>
+						<td>${dto.created}</td>
+						<td>${dto.hitCount}</td>
+					</tr>
 				</c:forEach>
-<tr>			<td>2</td>
-					<td colspan="4" align="center">삭제된 게시물입니다.</td>
-				</tr>
 			</tbody>
 		</table>
-
+		<!-- 페이징 -->
 		<nav style="text-align: center;">
 		${dataCount==0? "등록된 자료가 없습니다":paging}
-<!-- 			<ul class="pagination"> -->
-<!-- 				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span> -->
-<!-- 				</span></li> -->
-<!-- 				<li class="active"><span>1 <span class="sr-only">(current)</span></span> -->
-<!-- 				</li> -->
-<!-- 				<li><span>2</span></li> -->
-<!-- 				<li><span>3</span></li> -->
-<!-- 				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span> -->
-<!-- 				</span></li> -->
-<!-- 			</ul> -->
 		</nav>
 
 
