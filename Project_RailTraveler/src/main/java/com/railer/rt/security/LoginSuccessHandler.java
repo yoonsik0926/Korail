@@ -64,8 +64,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         
          HttpSession session = request.getSession();
-         Object object = session.getAttribute("old_url");
+         Object object = session.getAttribute("realPath");
          
+
          if(object != null) {
         	 defaultUrl = (String) object;
          }

@@ -100,11 +100,15 @@ public class MemberController {
 	@RequestMapping(value="/member/login")
 	public String loginForm(HttpSession session , HttpServletRequest req) throws Exception {		
 		
-		String old_url =req.getHeader("referer");
-		
-		
-		session.setAttribute("old_url", old_url);	
-	
+			
+			String old_url=req.getHeader("referer");
+			
+			
+			if(! old_url.equals("http://localhost:8080/Project_RailTraveler/member/login")) {
+				String realPath = old_url;
+				session.setAttribute("realPath", realPath);
+			}
+			
 		return ".member.login";
 	}
 
