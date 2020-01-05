@@ -102,9 +102,9 @@ public class MemberController {
 		
 			
 			String old_url=req.getHeader("referer");
+			String finding = "Project_RailTraveler/member/login";
 			
-			
-			if(! old_url.equals("http://localhost:8080/Project_RailTraveler/member/login")) {
+			if(old_url.indexOf(finding) == -1) {
 				String realPath = old_url;
 				session.setAttribute("realPath", realPath);
 			}
