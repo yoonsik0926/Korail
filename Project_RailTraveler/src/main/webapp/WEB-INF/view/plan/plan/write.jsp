@@ -681,7 +681,7 @@ $(function(){
 				<div id="searchStation">
 					<div>
 						<div style="float: left; width: 70%; height: 100%;">
-							<a href="#"><img
+							<a href="/Project_RailTraveler/"><img
 								src="<%=cp%>/resource/images/plan/logoWhite_planner.png"></a>
 							<div style="margin-top: 20px; padding-right: 30px; width: 100%;">
 								<div
