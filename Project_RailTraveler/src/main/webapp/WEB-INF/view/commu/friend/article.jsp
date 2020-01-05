@@ -9,6 +9,7 @@
 <script src="<%=cp%>/resource/js/commu.js"></script>
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
+
 function ajaxJSON(url, type, query, fn) {
 	$.ajax({
 		type:type
@@ -30,36 +31,84 @@ function ajaxJSON(url, type, query, fn) {
 	    }
 	});
 }
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
 //게시글 공감 여부
 $(function(){
 	$(".btnSendFriendLike").click(function(){
-		if(! confirm("북마크 하시겠습니까 ? ")) {
-			return false;
-		}
-		
-		var url="<%=cp%>/friend/insertFriendBookmark";
-		var friendNum="${dto.friendNum}";
-		var query = {friendNum:friendNum};
-		
-		var fn = function(data){
-			var state=data.state;
-			if(state=="true") {
-				var count = data.bookmarkCount;
-				$("#friendbookmarkCount").text(count);
-				var cs = document.getElementById("boardLikeIcon");
-				cs.className = 'fas fa-heart';
-			} else if(state=="false") {
-				alert("좋아요는 한번만 가능합니다. !!!");
+		var cs = document.getElementById("boardLikeIcon");
+		if( cs.className =="far fa-heart"){
+			if(! confirm("북마크 하시겠습니까 ? ")) {
+				return false;
 			}
-		};
-		
-		ajaxJSON(url, "post", query, fn);
+			
+			var url="<%=cp%>/friend/insertFriendBookmark";
+			var friendNum="${dto.friendNum}";
+			var query = {friendNum:friendNum};
+			
+			var fn = function(data){
+				var state=data.state;
+				if(state=="true") {
+					var count = data.bookmarkCount;
+					$("#friendbookmarkCount").text(count);
+					cs.className = 'fas fa-heart';
+				} else if(state=="false") {
+					alert("좋아요는 한번만 가능합니다. !!!");
+				}
+			}; 
+			
+			ajaxJSON(url, "post", query, fn);
+			
+			
+			
+		}else{
+			if(! confirm("북마크를 취소하시겠습니까 ? ")) {
+				return false;
+			}
+			
+			var url="<%=cp%>/friend/deleteFriendBookmark";
+			var friendNum="${dto.friendNum}";
+			var query = {friendNum:friendNum};
+			
+			var fn = function(data){
+				var state=data.state;
+				if(state=="true") {
+					var count = data.bookmarkCount;
+					$("#friendbookmarkCount").text(count);
+					cs.className = 'far fa-heart';
+				} else if(state=="false") {
+					alert("좋아요는 한번만 가능합니다. !!!");
+				}
+			};
+			
+			ajaxJSON(url, "post", query, fn);
+		}
 	});
 });
 	
+	//첨부파일 모달
 	function modalOn() {
 		$('#myModal').modal('toggle');
 	}
+	//게시물 삭제
 	function deleteFriend() {
 		var q="friendNum=${dto.friendNum}&${query}";
 		var url="<%=cp%>/friend/delete?"+q;
@@ -69,13 +118,136 @@ $(function(){
 			location.href=url;
 		}
 	}
-	function updateNotice() {
-		var q="friendNum=${dto.friendNum}&${query}";
-		var url="<%=cp%>/friend/update?"+q;
+
+	//모집완료 처리 변경
+	function updateEnable(friendNum) {
+		var q="friendNum="+friendNum+"&${query}";
+// 		console.log(q);
+		var url="<%=cp%>/friend/updateEnable?"+q;
 		
 		location.href=url;
 	}
+	
+// *********
+// 댓글 처리 관련
+// *********
 
+// 리플 등록
+$(function(){
+	$(".btnSendReply").click(function(){
+		var friendNum="${dto.friendNum}";
+		var $tb = $(this).closest("table");
+		var content=$tb.find("textarea").val().trim();
+		if(! content) {
+			alert("내용을 입력해주세요");
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		var url="<%=cp%>/friend/insertReply";
+		var query="friendNum="+friendNum+"&content="+content+"&answer=0&content="+content;
+		
+		var fn = function(data){
+			$tb.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+// _btnReply
+function displayReplyForm(num){
+	var cs = ".replyForm"+num;
+	var $cs = $(cs);
+	var test_cs=".btnReReply"+num;
+		if($(cs).is(":visible")){
+			$cs.find("textarea").val("");
+			$(cs).css("display","none");
+			$(test_cs).text("답글");
+		}else{
+			$(cs).css("display","block");
+			$(test_cs).text("답글취소");
+			
+		}
+};
+function insertReply(num){
+	var friendNum="${dto.friendNum}";
+	var cs = ".replyForm"+num;
+	var $tb = $(cs);
+	var content=$tb.find("textarea").val().trim();
+	if(! content) {
+		alert("내용을 입력해주세요");
+		$tb.find("textarea").focus();
+		return false;
+	}
+	content = encodeURIComponent(content);
+	var url="<%=cp%>/friend/insertReply";
+	var query="friendNum="+friendNum+"&content="+content+"&answer="+num+"&content="+content;
+	
+	var fn = function(data){
+		displayReplyForm(num);
+		
+		var state=data.state;
+		if(state=="true") {
+			listPage(1);
+		} else if(state=="false") {
+			alert("댓글을 추가 하지 못했습니다.");
+		}
+	};
+	
+	ajaxJSON(url, "post", query, fn);
+};
+
+$(function(){
+	$("body").on(".btnSendReReply","click", function(){
+		console.log("ㅎㅇㅎㅇ");
+		var friendNum="${dto.friendNum}";
+		var $tb = $(this).closest("table");
+		var content=$tb.find("textarea").val().trim();
+		var parent=$(this).data('num');
+		if(! content) {
+			alert("내용을 입력해주세요");
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		var url="<%=cp%>/friend/insertReply";
+		var query="friendNum="+friendNum+"&content="+content+"&answer="+parent+"&content="+content;
+		
+		var fn = function(data){
+			$tb.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
+//페이징 처리
+$(function(){
+	listPage(1);
+});
+
+function listPage(page) {
+	var url = "<%=cp%>/friend/listReply";
+	var query = "friendNum=${dto.friendNum}&pageNo="+page;
+	var selector = "#listReply";
+	
+	ajaxHTML(url, "get", query, selector);
+}
+	
 </script>
 <style type="text/css">
 tfoot td {
@@ -90,7 +262,7 @@ tfoot td {
 }
 
 .tb-row {
-	height: 35px;
+	height: 40px;
 }
 
 #boardLikeCount {
@@ -139,30 +311,6 @@ a#MOVE_TOP_BTN {
 	background: none;
 }
 
-.reBoardBtn {
-	display: inline-block;
-	padding: 10px 25px;
-	font-size: 15px;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	outline: none;
-	color: #fff;
-	background-color: #283164;
-	border: none;
-	border-radius: 15px;
-	box-shadow: 0 9px #999;
-}
-
-.reBoardBtn:hover {
-	background-color: #283164
-}
-
-.reBoardBtn:active {
-	background-color: black;
-	box-shadow: 0 5px #666;
-	transform: translateY(4px);
-}
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
 	{
 	background-color: #eee;
@@ -202,7 +350,7 @@ a#MOVE_TOP_BTN {
 	top: 0;
 	background: #fff;
 	letter-spacing: 0;
-} 
+}
 
 .text-center {
 	text-align: center;
@@ -218,23 +366,275 @@ a#MOVE_TOP_BTN {
 	padding: 0px;
 	border-radius: 5px;
 }
-/* .modal1 {
-    z-index: 9999;
-    background: #8080807a;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-} */
+
+#noticeListTb td, #noticeListTb th {
+	height: 40px;
+}
+
+#noticeListTb tr {
+	font-weight: 600;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+}
+
+.fl {
+	float: left;
+	margin-top: 8px;
+}
+
+.fr {
+	float: right;
+	margin-top: 8px;
+}
+
+a {
+	color: black;
+}
+
+.cb {
+	clear: both;
+}
+
+.list-blog .tit-box td, .gate-box .tit-box td {
+	padding-right: 5px;
+	line-height: 1.5;
+}
+
+.board-box-line-dashed {
+	border-bottom-style: dashed;
+	border-bottom-width: 1px;
+	-ms-filter: "alpha(opacity=30)";
+	filter: alpha(opacity = 30);
+	opacity: 0.3;
+	height: 3px;
+}
+
+.span {
+	font-size: 14px;
+}
+
+.m-tcol-c {
+	color: #666;
+	word-wrap: break-word;
+}
+
+.h-10 {
+	clear: both;
+	height: 15px;
+	margin: 0;
+	font-size: 0;
+	overflow: hidden;
+}
+
+#main-area .inbox .tbody {
+	/*     width: 743px; */
+	margin: 20px auto 0;
+	color: #222;
+}
+
+.h-35 {
+	clear: both;
+	height: 35px;
+	margin: 0;
+	font-size: 0;
+	overflow: hidden;
+}
+
+.filter-30 {
+	opacity: 0.3;
+}
+
+.reply-box .filter-30 {
+	padding-right: 3px;
+}
+
+.list-blog .inbox .reply-box td {
+	vertical-align: middle;
+}
+
+.reply-box .fr .m-tcol-c.filter-30 {
+	padding-top: 1px;
+}
+
+.reply-box td {
+	padding-right: 3px;
+	vertical-align: top;
+}
+
+.spi_lst li {
+	float: left;
+	position: relative;
+	margin-left: 5px;
+	list-style: none;
+}
+
+.reply-box .u_likeit_list_module {
+	display: inline-block;
+	margin: -2px 0 0 3px;
+	vertical-align: top;
+}
+
+.reply-box .u_likeit_list_module .u_likeit_list_btn {
+	height: 25px;
+	padding: 0 10px 0 8px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background-color: #fff;
+}
+
+.u_likeit_list_module .u_likeit_list_btn {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.reply-box .u_likeit_list_module .u_likeit_list_btn .u_ico {
+	width: 14px;
+	height: 9px;
+	margin-top: 4px;
+	background-position: -14px -26px;
+}
+
+.u_likeit_list_module .u_likeit_list_btn .u_ico, .article-movie-sub .u_likeit_list_module .u_likeit_list_btn .u_ico
+	{
+	background-image:
+		url(https://ssl.pstatic.net/static/common/likeit/cafe/sp_likeit.png);
+}
+
+.u_likeit_list_module .u_likeit_list_btn .u_ico {
+	display: inline-block;
+	overflow: hidden;
+}
+
+.reply-box .u_likeit_list_module .u_likeit_list_btn .u_cnt {
+	margin-top: 2px;
+	color: #666;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: '돋움', dotum, Helvetica, sans-serif;
+}
+
+.u_likeit_list_module .u_likeit_list_btn .u_cnt, .u_likeit_list_module .u_likeit_list_btn .u_txt
+	{
+	display: inline-block;
+	vertical-align: top;
+	font-weight: 700;
+}
+
+.list-btn-nor {
+	height: auto;
+	padding-top: 8px;
+}
+
+.list-btn-nor {
+	clear: both;
+}
+
+/* 댓글관련 */
+.box-reply2 {
+	zoom: 1;
+	margin: 0;
+	padding: 11px 26px 16px 24px;
+}
+
+.box-reply2 {
+	background-color: #f9f9f9;
+}
+
+.cmlist {
+	margin: 0;
+	padding: 0;
+}
+
+.u_cbox ul, .u_cbox ol {
+	list-style: none;
+}
+
+.cmlist li {
+	list-style: none;
+	margin: 0;
+	padding: 10px 0 7px;
+	height: 1%;
+}
+
+.cmlist .board-box-line-dashed {
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	font: 0/0 arial;
+	border-bottom-width: 1px;
+	border-bottom-style: dotted;
+}
+
+.box-reply2 .pers_nick_area {
+    padding: 0 !important;
+    margin: 0;
+    text-align: left;
+    width: auto;
+    float: left;
+}
+
+.cmlist .date {
+    float: left;
+   font-size: 15px;
+    font-family: '돋움',dotum,Helvetica,sans-serif;
+    margin: 2px 0 0 1px;
+}
+.box-reply2 .m-tcol-c {
+    color: #666;
+}
+.cmlist .dsc_comm {
+    float: left;
+    margin: 3px 0 0 7px;
+    padding-left: 10px;
+    background: url(https://cafe.pstatic.net/cafe4/bu_arr.png) no-repeat 0 0;
+    _background: none;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://cafe.pstatic.net/cafe4/bu_arr.png', sizingMethod='crop');
+    font-size: 11px;
+    font-family: '돋움',Dotum;
+    letter-spacing: -1px;
+}
+.cmlist .btn_edit {
+    float: right;
+    margin: 0;
+    padding-top: 3px;
+}
+.box-reply2 .h ~ .comm {
+    padding-left: 40px;
+}
+.cmlist .comm {
+    overflow: hidden;
+    padding: 3px 0 3px 28px;
+    margin: 0;
+    line-height: 15px;
+    text-align: left;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+/* 댓글의 페이징 */
+.cc_paginate.cmt {
+    height: 29px;
+}
+.cc_paginate {
+    height: 51px;
+    padding: 7px 0 0;
+    text-align: center;
+}
+
+.cmlist li.reply {
+    padding-left: 29px;
+}
 </style>
+
+<!-- SNS 공유하기 모달 -->
 <div id="snsModal" role="dialog" tabindex="-1"
 	aria-labelledby="mySmallModalLabel" aria-hidden="true"
-	data-backdrop="true" data-keyboard="true" class="modal1 modal_post_social" style="display: none;">
-	<div class="modal-dialog" style="    width: 315px;
-    position: absolute;
-    right: 37%;
-    top: 48%;">
+	data-backdrop="true" data-keyboard="true"
+	class="modal1 modal_post_social" style="display: none;">
+	<div class="modal-dialog"
+		style="width: 315px; position: absolute; right: 16.5%;
+    top: 18.5%;">
 		<div class="modal-content">
 			<div class="text-basic">
 				<div class="social-btn">
@@ -275,36 +675,25 @@ a#MOVE_TOP_BTN {
 	</div>
 </div>
 
-
+<!-- 신고하기 모달 -->
 <div id="declarationModal" role="dialog" tabindex="-1"
 	aria-labelledby="mySmallModalLabel" aria-hidden="true"
-	data-backdrop="true" data-keyboard="true" class="modal1 modal_post_social" style="display: none;">
-	<div class="modal-dialog" style="    width: 35%;
-    position: absolute;
-    right: 30%;
-    top: 25%;">
-		<div class="modal-content" style="background: aliceblue;
-    text-align: center;
-    border: 10px solid;
-">
+	data-backdrop="true" data-keyboard="true"
+	class="modal1 modal_post_social" style="display: none;">
+	<div class="modal-dialog"
+		style="width: 35%; position: absolute; right: 30%; top: 25%;">
+		<div class="modal-content"
+			style="background: aliceblue; text-align: center; border: 10px solid;">
 			<div class="text-basic">
 				<div>
 					<h2>신고하기</h2>
-					<div style="    padding: 10px 20px;">
-					<span>*신고 사유*</span>
-					<textarea
-							class='boxTA'
-							style='width: 100%;
-    height: 150px;
-    resize: none;
-    border-radius: 7px;'></textarea>
-							<button type='button' class='btn btnSendReply btn-default'
-								data-num='10'
-								style='width: 100%;
-    height: 60px;
-    margin-top: 20px;
-    font-size: 20px;
-    padding: 0px 0px;'>등록</button>
+					<div style="padding: 10px 20px;">
+						<span>*신고 사유*</span>
+						<textarea class='boxTA'
+							style='width: 100%; height: 150px; resize: none; border-radius: 7px;'></textarea>
+						<button type='button' class='btn btnSendReply btn-default'
+							data-num='10'
+							style='width: 100%; height: 60px; margin-top: 20px; font-size: 20px; padding: 0px 0px;'>등록</button>
 					</div>
 				</div>
 				<div id="copy_complete" class="text-center"></div>
@@ -313,23 +702,58 @@ a#MOVE_TOP_BTN {
 	</div>
 </div>
 
-<!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content" style="padding: 15px;
-    background: #fffff5;
-    border: 3px navy dotted;">
-   <h3 style="    font-weight: 900;
-    border-bottom: 1px solid;">다운로드</h3>
-      <ul>
-      <c:forEach var="file" items="${files}">
-      	<li style=" padding: 5px;"><a href="#"><span><i class="far fa-arrow-alt-circle-down"></i> ${file.originalFilename}</span></a>(<fmt:formatNumber value="${file.fileSize/1024}" pattern="0.00" />KByte)</li>
-      	</c:forEach>
-      	
-      	<li> <a href="<%=cp%>/friend/zipDownload?friendNum=${dto.friendNum}">zip 파일로 받기</a> </li>
-      	</ul>
-    </div>
-  </div>
+<!-- 첨부파일 관리 모달 -->
+<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
+	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="margin: 0 auto; width: 500px;">
+			<h3
+				style="margin: 0; padding: 10px; color: white; background: #141832f2; text-align: center; font-weight: 900;">첨부파일</h3>
+			<div style="padding: 10px;">
+				<table id="fileDownTb" style="
+    width: 100%;
+">
+					<tbody><tr style="border-bottom: 1px solid;    height: 35px;">
+						<th style="
+    width: 10%;
+">다운</th>
+						<th style="    text-align: center;
+    width: 50%;
+">파일명</th>
+						<th style="
+    width: 10%;
+">파일크기</th>
+					</tr>
+					<c:forEach var="file" items="${files}">
+					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
+					<td>
+					 <a href="<%=cp%>/friend/download?friendFileNum=${file.friendFileNum}">
+					<i
+								class="far fa-arrow-alt-circle-down"></i></a></td>
+								<td>${file.originalFilename}</td>
+								
+								<td>
+					(<fmt:formatNumber
+							value="${file.fileSize/1024}" pattern="0.00" />KByte)</td>
+					</tr>
+						
+				</c:forEach>
+					<tr>
+						<td colspan="3"><a class="btn"
+							href="<%=cp%>/friend/zipDownload?friendNum=${dto.friendNum}" style="    width: 100%;
+    height: 45px;
+    padding: 10px;
+    font-size: 15px;
+    background: #eee;">
+								zip 파일로 받기</a></td>
+					</tr>
+					
+				</tbody></table>
+					
+					
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="body-content-container">
@@ -342,227 +766,394 @@ a#MOVE_TOP_BTN {
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-bottom: 10px;"></div>
+
+		<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
+			<div class="fl">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+					이전글</button>
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+					다음글</button>
+			</div>
+			<div class="fr">
+				<c:if test="${dto.notice!=1}">
+					<c:if test="${dto.enable==1}">
+						<button type="button" class="btn btn-default"
+							style="background: #aaa; color: white;" disabled='disabled'>모집완료</button>
+					</c:if>
+					<c:if test="${dto.enable!=1}">
+						<button type="button" class="btn btn-default"
+							onclick="updateEnable(${dto.friendNum});"
+							style="background: #f97509; color: white;"
+							${dto.userId==sessionScope.member.userId?"":"disabled='disabled'"}>모집중</button>
+					</c:if>
+				</c:if>
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+					목록</button>
+			</div>
+			<div class="cb"></div>
+		</div>
+
+		<div style="border: 1px solid rgba(139, 139, 139, 0.3); clear: both;">
+			<div class="inBox" style="margin: 14px; clear: both;">
+				<div class="tit-box">
+					<div class="fl" style="width: 470px; margin-top: 4px;">
+						<table role="presentation" border=0>
+							<tbody>
+								<tr valign="top">
+									<td><span class="b m-tcol-c" style="font-weight: 900;">${dto.subject}</span></td>
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+									<td nowrap="" class="m-tcol-c"><a
+										href="https://cafe.naver.com/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay="
+										onclick="targetChangeForMacSafari('/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay=');return false;"
+										class="m-tcol-c">동행구하기 게시판</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="fr">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td></td>
+									<td class="m-tcol-c date">${dto.created}</td>
+
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+
+									<td class="edit _rosRestrict" onclick="updateBoard();"><a
+										id="modifyFormLink" href="#" class="m-tcol-c">수정</a></td>
+
+
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+									<td class="delete _rosRestrict" onclick="deleteBoard();"><a
+										href="javascript:checkLogin('delete');" class="m-tcol-c">삭제</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+				</div>
+				<div class="board-box-line-dashed"></div>
+				<div class="etc-box">
+					<div class="fl">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td class="m-tcol-c b nick">
+										<table role="presentation" cellspacing="0">
+											<tbody>
+												<tr>
+													<td class="pc2w"><img alt=""
+														src="<%=cp%>/resource/images/commu/profileImg.png"
+														width="30"></td>
+													<td class="p-nick"><a href="#" class="m-tcol-c b"
+														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}(${dto.userId})</a></td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+									<td class="m-tcol-c step">
+									<c:if test="${dto.userId=='admin'}">
+									<span class="filter-50">관리자</span>
+									</c:if>
+									<c:if test="${dto.userId!='admin'}">
+									<span class="filter-50">회원</span>
+									</c:if>
+										<span><img class="levelico"
+											src="https://cafe.pstatic.net/levelicon/1/3_110.gif"
+											border="0"></span></td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="fr">
+						<table role="presentation" cellspacing="0" cellpadding="0"
+							border="0">
+							<tbody>
+								<tr>
+									<td valign="top" class="url" align="right"><span
+										class="filter-50"><a id="linkUrl"
+											href="https://cafe.naver.com/ite/653777" target="_top"
+											class="m-tcol-c url-txt">https://cafe.naver.com/ite/653777</a></span>
+										<span><a href="#" onclick="return false;"
+											class="_copyUrl url-btn" data-clipboard-action="copy"
+											data-clipboard-target="#linkUrl"><img
+												src="https://cafe.pstatic.net/cafe4/btn-copy-add.gif"
+												width="41" height="15" alt="주소복사" class="copy"></a></span></td>
+								</tr>
+								<tr>
+									<td id="sendPost_653777" class="m-tcol-c" align="right"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+				</div>
+				<c:if test="${not empty files}">
+					<div class="atch_file_area">
+
+						<a class="fr" onclick="modalOn();" style="cursor: pointer;">
+							첨부파일 <span class="m-tcol-p" style="margin-right: 2px;">(<em>${dto.fileCount}</em>)
+						</span><i class="far fa-caret-square-up"></i>
+						</a>
+						<div class="cb"></div>
+					</div>
+				</c:if>
+
+				<div class="h-10"></div>
+				<div class="tbody m-tcol-c" id="tbody"
+					style="width: 744px; padding-left: 43px; padding-right: 43px; margin-right: 0px;">
+					${dto.content}</div>
+
+				<div class="h-35"></div>
+				<div
+					style="border: 1px solid; background: beige; padding: 5px 10px;">기간
+					: ${dto.sDate} ~ ${dto.eDate}</div>
+
+				<div class="h-35"></div>
+				<div class="reply-box" id="cmtMenu">
+					<div class="fl reply_sort">
+						<table role="presentation" cellspacing="0" cellpadding="0"
+							border="0">
+							<tbody>
+								<tr style="vertical-align: top">
+
+									<td class="reply"><a href="javascript:"
+										class="reply_btn b m-tcol-c m-tcol-p _totalCnt" id="comment">댓글
+											${dto.replyCount} <img
+											src="https://cafe.pstatic.net/cafe4/ico-new.gif" width="10"
+											height="9" alt="new" style="margin-left: 3px;">
+
+									</a></td>
+									<td class="m-tcol-c filter-30">|</td>
+									<td class="_sortList" style="padding: 0;">
+										<div style="position: relative; _top: 3px;">
+											<a href="#" class="b m-tcol-c"><span>등록순</span><span
+												style="display: none">최신순</span><i class="fas fa-caret-down"
+												style="margin: 5px;"></i> </a>
+										</div>
+									</td>
+									<td class="m-tcol-c filter-30">|</td>
+
+									<td><span class="b m-tcol-c reply ">조회수 </span><span
+										class="b m-tcol-c reply">${dto.hitCount}</span></td>
+
+									<td class="m-tcol-c filter-30">|</td>
+									<td id=><a href="#"
+										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="    color: tomato">좋아요<i
+											class="fas fa-caret-down" style="margin: 5px;"></i></a>
+										<div class="u_likeit_list_module _reactionModule"
+											style="visibility: visible;">
+											<a href="#" class="u_likeit_list_btn _button off btnSendFriendLike"
+												> 
+												<i id="boardLikeIcon"
+								${dto.myBookMark==0? "class='far fa-heart'": "class='fas fa-heart'"}
+								style="color: orangered;"></i>
+												<em class="u_cnt _count" id="friendbookmarkCount">${dto.bookmarkCount}</em>
+											</a>
+										</div></td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="fr cafe_spi">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td>
+										<div id="spiButton" data-style="type_c" class="naver-splugin"
+											data-url="https://cafe.naver.com/ite/653777"
+											data-title="답변이 어떻게 달리는지 확인 하는 게시물" data-likeserviceid="CAFE"
+											data-likecontentsid="11672934_ite_653777"
+											data-option="{textClass: 'm-tcol-c', align: 'right', onLoginRedirect: parent.openLoginLayer}"
+											data-cafe-source-type="111"
+											data-cafe-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
+											data-blog-source-type="111"
+											data-blog-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
+											data-blog-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=blog"
+											data-cafe-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=cafe"
+											data-me-display="off"
+											data-oninitialize="splugin_oninitialize();"
+											splugin-id="2779035978"></div>
+									</td>
+									<td><i class="far fa-share-square btnSendBoardLike"
+										onclick="snsShare();"
+										style="font-size: 20px; display: block; margin: 0 auto; color: #555555; cursor: pointer;"></i><span
+										class="blind"></span></td>
+									<td class="m-tcol-c filter-30">|</td>
+									<td onclick="declare();" style="cursor: pointer;">신고</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+				<div class="box-reply2 bg-color u_cbox" id="eNvhT"
+					style="display: block;">
+					<!-- 댓글 리스트  -->
+						<div id="listReply"></div>
+
+
+
+<div style="padding-top: 20px;">
+					<table class="cminput" style="width: 100%;">
+						<tbody>
+							<tr>
+						<td><textarea
+								class='boxTA'
+								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;'></textarea>
+							<div
+								style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
+								<input type="checkbox" name="secret" value="0"><label
+									style="margin: 0 0 0px 3px;">비밀글</label>
+								<button type='button' class='btn btnSendReply btn-default'
+									data-num='10'
+									style='width: 100%; height: 80px; padding: 2px 1px;'>등록</button>
+
+							</div></td>
+					</tr>
+						</tbody>
+					</table>
+</div>
+
+
+					<div class="m-tcol-c reply_error" style="display: none;">
+						<strong>죄송합니다. 댓글 시스템 오류로 댓글을 읽거나 쓸 수 없습니다.</strong> 문제가 지속될 경우 <a
+							href="http://help.naver.com/" target="_blank" class="m-tcol-c">고객센터</a>에
+						알려주시면 친절하게 안내해 드리겠습니다.
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+			<!-- 인라인 -->
+		</div>
 		<table style="width: 100%; border-spacing: 0px;">
 			<tr height="45">
-				<td width="300" align="left">
+				<td align="right"><c:if test="${dto.notice!=1}">
+						<c:if test="${dto.enable==1}">
+							<button type="button" class="btn btn-default"
+								style="background: #aaa; color: white;" disabled='disabled'>모집완료</button>
+						</c:if>
+						<c:if test="${dto.enable!=1}">
+							<button type="button" class="btn btn-default"
+								onclick="updateEnable(${dto.friendNum});"
+								style="background: #f97509; color: white;"
+								${dto.userId==sessionScope.member.userId?"":"disabled='disabled'"}>모집중</button>
+						</c:if>
+					</c:if>
 					<button type="button" class="btn btn-default"
-						onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
-						목록</button>
-				</td>
-
-				<td align="right">
-<%-- 				<c:if --%>
-<%-- 						test="${sessionScope.member.userId==dto.userId}"> --%>
+						onclick="updateBoard();">수정</button> <%-- 					<c:if --%> <%-- 						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}"> --%>
+					<button type="button" class="btn btn-default"
+						onclick="deleteFriend();">삭제</button> <%-- 					</c:if> --%> <c:if
+						test="${dto.notice!=1}">
 						<button type="button" class="btn btn-default"
-							 style="background: #f97509; color: white;" disabled="disabled">모집완료</button>
-						<button type="button" class="btn btn-default"
-							onclick="updateBoard();" style="background: #aaa; color: white;">모집중</button>
-						<button type="button" class="btn btn-default"
-							onclick="updateBoard();">수정</button>
-<%-- 					</c:if> <c:if --%>
-<%-- 						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}"> --%>
-						<button type="button" class="btn btn-default"
-							onclick="deleteFriend();">삭제</button>
-<%-- 					</c:if> --%>
-					<button type="button" class="btn btn-danger"
-						onclick="declare();">
-						<i class="far fa-bell" style="color: white"></i>신고
-					</button>
-					</td>
+							onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+							목록</button>
+					</c:if></td>
 			</tr>
 		</table>
-		<table
-			style="width: 100%; margin: 0px auto 0px; border-spacing: 0px; border-collapse: collapse; border-top: 2px solid #000; border-bottom: 2px solid #000;">
-			<thead>
-				<tr>
-					<td colspan="3" style="padding-top: 15px;">
-						<h3 style="margin: 10px 0 2px; font-size: 25px;">
-							${dto.subject} <span style="float: right;"> <i
-								class="fas fa-comments"></i> ${dto.replyCount}
+<div class="h-35"></div>
+		<c:if test="${dto.notice!=1}">
 
-							</span>
-						</h3>
+			<table
+				style="width: 100%; margin: 0px auto 0px; border-spacing: 0px; border-collapse: collapse;">
+		<c:if test="${not empty preReadDto}">
+				<tr class="tb-row" style="border-top: 1px solid #eee;border-bottom: 1px solid #eee;">
+					<td align="left" style="padding-left: 10px; font-weight: 800;" width="100"><i
+						class="fas fa-caret-up" style="margin: 5px; color: orange;"></i> 이전글
 					</td>
+						<td><a
+							href="<%=cp%>/friend/article?${query}&friendNum=${preReadDto.friendNum}"
+							style="color: #737373;">${preReadDto.subject}</a></td>
+						<td width="150">${preReadDto.created}</td>
 				</tr>
-
-				<tr class="tb-row" style="height: 30px;">
-					<td colspan="3" align="left"
-						style="padding-left: 5px; font-size: 13px;"><span>${dto.userName}</span><span>|</span><span>${dto.created}</span><span>|</span><span>조회 101회</span><span>|</span><span>댓글
-							4</span><span style="float: right;"><span>기간 </span><span>|</span><span>
-							${dto.sDate} ~ ${dto.eDate}</span></span></td>
-				</tr>
-				<tr class="tb-row" style="height: 30px;">
-				<td colspan="3" align="left" style="padding-left: 5px; font-size: 13px; color:bbb;">
-				기간 : ${dto.sDate} ~ ${dto.eDate}</td>
-				</tr>
-				<tr>
-					<td colspan="3" style="padding: 20px 5px;" valign="top"
-						height="200">
-						${dto.content}
+					</c:if>
+					<c:if test="${not empty nextReadDto}">
+				<tr class="tb-row" style="border-top: 1px solid #eee;border-bottom: 1px solid #eee;">
+					<td align="left" style="padding-left: 10px;font-weight: 800;" width="100"><i
+						class="fas fa-caret-down" style="margin: 5px;color: orange;"></i> 다음글
 					</td>
+						<td><a
+							href="<%=cp%>/friend/article?${query}&friendNum=${nextReadDto.friendNum}"
+							style="color: #737373;">${nextReadDto.subject}</a></td>
+						<td width="150">${nextReadDto.created}</td>
 				</tr>
+					</c:if>
+			</table>
+		</c:if>
+		<c:if test="${dto.notice==1 and not empty noticeList}">
 
-				<tr class="tb-row" style="border-bottom: 0;">
-					<td colspan="3" height="40" align="center">
-					<button type="button" class="btn btnSendFriendLike btn-default"
-						title="북마크"
-						style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
-						>
-						<i id="boardLikeIcon" class="far fa-heart"
-							style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
-							id="friendbookmarkCount" style="width: 41px;
-    font-size: 13px;
-    display: block;
-    color: #888888;
-    margin: 0 auto;" >${dto.bookmarkCount}</span>
-					</button>
-						<button type="button" class="btn btnSendBoardLike btn-default"
-							title="공유하기"
-							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
-							onclick="snsShare();">
-							<i class="far fa-share-square"
-								style="font-size: 20px; display: block; margin: 0 auto; color: #555555;"></i><span
-								id="boardLikeCount">공유</span>
-						</button>
-					</td>
-				</tr>
-				<tr class="tb-row">
-			    <td colspan="3" align="left" style="padding-left: 5px; color:blue;">
-			    <c:if test="${not empty files}">
-			     <a onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (${dto.fileCount})</a>
-			     </c:if>
-			    </td>
-			</tr>
-			</thead>
-			<tbody class="reTbody">
-				<tr height='30'>
-					<td align='left' colspan="3" style="background: beige;"><span
-						style='font-weight: bold;'>댓글 (${dto.replyCount})</span></td>
-				</tr>
-				<tr height='35'
-					style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
-					<td colspan="3">
-					<div>
-						<div style="float: left;margin-right: 10px;">
-							<i class="fas fa-reply" style="transform: rotate(180deg);"></i>&nbsp;
-						</div>
-						<div style="float: left;">
-							<i class="fas fa-lock"></i>&nbsp;
-						</div>
-<!-- 						<div>비밀글입니다.</div> -->
-						<div style="width: 85%;
-    float: left;">
-									<div>
-										<b>작성자</b>
-									</div>
-							<div style="clear: both;">
-								<div style="clear: both;">
-									<span>내용이 이렇게 적히는거죠??????????????????????????</span>
-								</div>
-							<div style="clear: both;">
-							<button class="btn btn-default">
-										<i class="fas fa-reply" style="transform: rotate(180deg);"></i>
-									</button>
-									<button class="btn btn-default">
-										<i class="fas fa-pencil-alt"></i>
-									</button>
-									<button class="btn btn-default">
-										<i class="fas fa-times"></i>
-									</button>
-									<button class="btn btn-danger"
-										style="width: 25px; height: 25px; padding: 0px; border-radius: 5px;">
-										<i class="far fa-bell" style="color: white"></i>
-									</button>
-								</div>
-							</div>
-<!-- <div> -->
-<!-- <textarea -->
-<!-- 							class='boxTA' -->
-<!-- 							style='width: 90%; height: 83px; float: left; resize: none; overflow-y: scroll;'></textarea> -->
-<!-- 						<div -->
-<!-- 							style='padding: 0 10px; -->
-<!--     width: 8%; height: 50px; float: left; font-size: 15px;'> -->
-<!-- 							<input type="checkbox" name="ss"><label -->
-<!-- 								style="margin: 0 0 0px 3px;">비밀글</label> -->
-<!-- 							<button type='button' class='btn btnSendReply btn-default' -->
-<!-- 								data-num='10' -->
-<!-- 								style='width: 100%; height: 29px; padding: 2px 1px;'>수정</button> -->
-<!-- 								<button type='button' class='btn btn-default' -->
-<!-- 								data-num='10' -->
-<!-- 								style='width: 100%; height: 29px; padding: 2px 1px;'>취소</button> -->
-
-<!-- 						</div> -->
-<!-- 						</div> -->
-					
-					
-						</div>
-						<div style="float: right; text-align: right;">
-							<div>2019-12-16 18:03:22</div>
-						</div>
-					</div>
-	
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td style='padding: 15px 20px;' colspan="3"><textarea
-							class='boxTA'
-							style='width: 92%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
-						<div
-							style='padding: 0 10px;
-    width: 8%; height: 50px; float: left; font-size: 15px;'>
-							<input type="checkbox" name="ss"><label
-								style="margin: 0 0 0px 3px;">비밀글</label>
-							<button type='button' class='btn btnSendReply btn-default'
-								data-num='10'
-								style='width: 100%; height: 29px; padding: 2px 1px;'>등록</button>
-
+			<table id='noticeListTb'
+				style="width: 100%; margin: 50px auto 10px; border-spacing: 0px; border-collapse: collapse; border-bottom: 2px dotted #000;">
+				<tr style="border-bottom: 2px dotted black; border-top: 0;">
+					<td colspan="3"><div class="noticeBox">
+							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+								width="20" style="display: inline-block; float: left;"> <span
+								style="font-size: 20px; font-weight: 600; display: block;">공지
+								목록</span>
 						</div></td>
 				</tr>
+				<c:forEach var="notice" items="${noticeList}">
+					<tr
+						${dto.friendNum== notice.friendNum? "style='background
+					:#f1f4ff'":""}
+						onclick="javascript:location.href='<%=cp%>/friend/article?${query}&friendNum=${notice.friendNum}'">
+						<td colspan="2" style="text-align: left; padding-left: 20px;"><i
+							class="fas fa-caret-right"></i> ${notice.subject}</td>
+						<td width="170" style="text-align: right; padding-right: 13px;"><i>${notice.created}</i></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
+		<c:if test="${dto.notice==1}">
+			<table style="width: 100%; border-spacing: 0px;">
+				<tr height="45">
+					<td width="300" align="left">
+						<button type="button" class="btn btn-default"
+							onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+							목록</button>
+					</td>
 
-
-<tr class="tb-row" style="border-top: 1px solid #cccccc;">
-			    <td align="left" style="padding-left: 5px;" width="100">
-			       이전글<i class="fas fa-caret-up" style="    margin: 5px;"></i> : 
-			    </td>
-			    <c:if test="${empty preReadDto}">
-			    <td colspan="2">
-						<span style="color: #bbb;">이전글이 존재하지 않습니다.</span>
-						</td>
-					</c:if>
-			     <c:if test="${not empty preReadDto}">
-			    <td>
-			    <a href="<%=cp%>/friend/article?${query}&friendNum=${preReadDto.friendNum}" style="color:#737373;">${preReadDto.subject}</a>
-			    </td>
-			    <td  width="90">
-			   ${preReadDto.created}
-			    </td>
-			    </c:if>
-			</tr>
-			<tr class="tb-row">
-			   <td align="left" style="padding-left: 5px;" width="100">
-			       다음글<i class="fas fa-caret-up" style="    margin: 5px;"></i> : 
-			    </td>
-			    <c:if test="${empty nextReadDto}">
-			    <td colspan="2">
-						<span style="color: #bbb;">다음글이 존재하지 않습니다.</span>
-						</td>
-					</c:if>
-			     <c:if test="${not empty nextReadDto}">
-			    <td>
-			    <a href="<%=cp%>/friend/article?${query}&friendNum=${nextReadDto.friendNum}" style="color:#737373;">${nextReadDto.subject}</a>
-			    </td>
-			    <td  width="90">
-			   ${nextReadDto.created}
-			    </td>
-			    </c:if>
-			</tr>
-
-
-			</tfoot>
-		</table>
-
+					<td align="right">
+						<button type="button" class="btn btn-default"
+							onclick="javascript:location.href='<%=cp%>/friend/created';"
+							style="float: right; margin-left: 6px;">
+							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
+								style="height: 21px;"> 글쓰기
+						</button>
+				</tr>
+			</table>
+		</c:if>
 	</div>
 </div>
 <script>
@@ -588,4 +1179,20 @@ a#MOVE_TOP_BTN {
 			} ]
 		});
 	}
+	
+	function deleteBoard() {
+			var q = "friendNum=${dto.friendNum}&${query}";
+			var url = "<%=cp%>/friend/delete?" + q;
+
+			if(confirm("위 자료를 삭제 하시 겠습니까 ? ")) {
+					location.href=url;
+			}
+		}
+
+		function updateBoard() {
+			var q = "friendNum=${dto.friendNum}&page=${page}";
+			var url = "<%=cp%>/friend/update?" + q;
+
+			location.href=url;
+		}
 </script>

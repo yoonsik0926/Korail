@@ -1,4 +1,5 @@
 package com.railer.rt.event;
+import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -6,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -83,7 +85,9 @@ public class EventController {
 
         String query = "order="+order;
         String listUrl;
-                
+        
+        
+
         if(keyword.length()!=0) {
         	query += "&condition=" +condition + 
         	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
@@ -91,7 +95,7 @@ public class EventController {
         listUrl = cp+"/event/"+mode+"?"+query;
         
         //이부분 추가했씁니다.
-        String articleUrl = cp+"/event/article";	
+        String articleUrl = cp+"/event/article?"+query+"&page="+current_page;	
         
         String paging = myUtil.paging(current_page, total_page, listUrl);
         
@@ -137,9 +141,15 @@ public class EventController {
 	}
 		
 	@RequestMapping(value="/event/created", method=RequestMethod.POST)
-	public String createdSubmit(Event dto, HttpServletRequest req) throws Exception {
+	public String createdSubmit(Event dto
+			,HttpServletRequest req
+			,HttpSession session) throws Exception {
+		
+		String root=session.getServletContext().getRealPath("/");
+		String path=root+"uploads"+File.separator+"event";
+		
 		try {
-			service.insertEvent(dto);
+			service.insertEvent(dto, path);
 		} catch (Exception e) {
 		}
     	
@@ -147,9 +157,14 @@ public class EventController {
     }
 	
 	@RequestMapping(value="/event/update", method=RequestMethod.POST)
-	public String updateSubmit(Event dto) throws Exception {
+	public String updateSubmit(Event dto,
+			@RequestParam String page,
+			HttpSession session) throws Exception {
+			String root=session.getServletContext().getRealPath("/");
+			String pathname=root+"uploads"+File.separator+"event";
+		
 		try {
-			service.updateEvent(dto);
+			service.updateEvent(dto, pathname);
 		} catch (Exception e) {
 		}
     	
@@ -193,6 +208,10 @@ public class EventController {
 			return "redirect:/event/current?"+query;
 		
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
+		model.addAttribute("query", query);
 				
 		return ".four.event.current.article";
 	}

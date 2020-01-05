@@ -39,4 +39,29 @@ public class PlanServiceImpl implements PlanService {
 		return result;
 	}
 
+	@Override
+	public List<Tour> listCategory(Map<String, Object> map) {
+		List<Tour> list=null;
+		
+		try {
+			list=dao.selectList("plan.listCategory", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public void insertDetailPlan(Plan dto) throws Exception {
+		
+		try {
+			dao.insertData("plan.insertDetailPlan",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
 }

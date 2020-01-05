@@ -16,6 +16,6 @@ $(function(){
 </script>
 <h3><span style="font-family: Webdings">2</span> 이벤트 </h3>
 <div class="list-group">
-    <a href="<%=cp%>/event/current" class="list-group-item">진행중인 이벤트</a>
-    <a href="<%=cp%>/event/last" class="list-group-item">지난 이벤트</a>
+    <a href="<%=cp%>/event/current" class="list-group-item" >진행중인 이벤트</a>
+    <a href="<%=cp%>/event/last" class="list-group-item" >지난 이벤트</a>
 </div> 

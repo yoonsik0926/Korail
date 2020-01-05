@@ -7,7 +7,7 @@
 %>
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript"
@@ -140,7 +140,7 @@ input[type=text], input[type=file] {
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		
-		<form name="boardForm" method="post">
+		<form name="boardForm" method="post" enctype="multipart/form-data">
 			
 			<table style="width: 100%; margin: 20px auto 5px; border-spacing: 0px;">
 				<tr>

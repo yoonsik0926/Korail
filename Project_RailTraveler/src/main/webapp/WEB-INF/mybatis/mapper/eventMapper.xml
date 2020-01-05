@@ -4,9 +4,9 @@
 <mapper namespace="event">
 	
 	<insert id="insertevent" parameterType="com.railer.rt.event.Event">
-		INSERT INTO event (eventNum, name, content, sDate, eDate, imagename) 
+		INSERT INTO event (eventNum, name, content, sDate, eDate, imageFilename) 
 		
-		VALUES (event_seq.nextval, #{name}, #{content}, #{sdate}, #{edate}, #{imagename})
+		VALUES (event_seq.nextval, #{name}, #{content}, #{sdate}, #{edate}, #{imageFilename})
 	</insert>
 	
 	<sql id="where-list">
@@ -33,7 +33,7 @@
 	</update> 
 	
 	<select id="listevent" parameterType="map" resultType="com.railer.rt.event.Event">
-	 SELECT eventNum, name, content, sDate, eDate, imagename 
+	 SELECT eventNum, name, content, sDate, eDate, imageFilename 
 	 from event
 	 <choose>
 	 	<when test="mode=='current'">
@@ -81,7 +81,7 @@
 	 </delete>
 	 
 	 <select id="readevent" parameterType="Integer" resultType="com.railer.rt.event.Event">
-		SELECT eventNum, name, content, sDate, eDate 
+		SELECT eventNum, name, content, sDate, eDate, imageFilename 
 	 	from event 
 	 	WHERE eventNum = #{eventNum}
 	</select>

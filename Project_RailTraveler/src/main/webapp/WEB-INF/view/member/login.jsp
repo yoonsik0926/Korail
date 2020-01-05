@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String cp = request.getContextPath();
+
 %>
 
 <style type="text/css">
@@ -39,7 +40,10 @@ function bgLabel(ob, id) {
     }
 }
 
+
 function sendLogin() {
+	
+	
     var f = document.loginForm;
 
 	var str = f.userId.value;
@@ -55,9 +59,13 @@ function sendLogin() {
         f.userPwd.focus();
         return;
     }
+	   
 
-    f.action = "<%=cp%>/member/login";
-	f.submit();
+        f.action = "<%=cp%>/member/login";
+    	f.submit();	
+
+    
+
 	}
 </script>
 <style>
@@ -171,14 +179,15 @@ input{
 </div>
 
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
-<script type="text/javascript">
-		var clientId = "e2FLdnwqeota8urONJ21";
-		var callbackUrl = "http://localhost:9090/Project_RailTraveler/";
-		var naver_id_login = new naver_id_login(clientId, callbackUrl);
-		var state = naver_id_login.getUniqState();
-		naver_id_login.setButton("white", 3, 40);
-		naver_id_login.setDomain("localhost:9090/Project_RailTraveler/");
-		naver_id_login.setState(state);
-		naver_id_login.setPopup();
-		naver_id_login.init_naver_id_login();
-</script>
+
+
+<!-- //네이버아이디로로그인 버튼 노출 영역 -->
+  <script type="text/javascript">
+  	var naver_id_login = new naver_id_login("L0dFCUa0xOlHzDj_boAW", "http://localhost:8080/Project_RailTraveler/view/memeber/callback.jsp");
+  	var state = naver_id_login.getUniqState();
+	naver_id_login.setButton("white", 3, 40);
+  	naver_id_login.setDomain("http://localhost:8080/Project_RailTraveler/");
+  	naver_id_login.setState(state);
+  	naver_id_login.setPopup();
+  	naver_id_login.init_naver_id_login();
+  </script>

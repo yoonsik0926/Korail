@@ -3,6 +3,7 @@ package com.railer.rt.member;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,8 +98,17 @@ public class MemberController {
 	
 /*	@RequestMapping(value="/member/login", method=RequestMethod.GET)*/
 	@RequestMapping(value="/member/login")
-	public String loginForm() throws Exception {		
+	public String loginForm(HttpSession session , HttpServletRequest req) throws Exception {		
 		
+			
+			String old_url=req.getHeader("referer");
+			String finding = "Project_RailTraveler/member/login";
+			
+			if(old_url.indexOf(finding) == -1) {
+				String realPath = old_url;
+				session.setAttribute("realPath", realPath);
+			}
+			
 		return ".member.login";
 	}
 

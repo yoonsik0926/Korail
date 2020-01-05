@@ -63,6 +63,15 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         
+         HttpSession session = request.getSession();
+         Object object = session.getAttribute("realPath");
+         
+
+         if(object != null) {
+        	 defaultUrl = (String) object;
+         }
+         
+        
         if(savedRequest!=null) {
         	// 권한이 필요한 페이지에 접근했을 경우(게시판 등)
             String targetUrl = savedRequest.getRedirectUrl();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="friend">
+<mapper namespace="friend2">
 
 	<!--현재 시퀀스 번호를 가져오는 쿼리 
 	return type : 정수형-->
@@ -13,7 +13,7 @@
 	parameter Type : FriendDTO-->
 	<insert id="insertFriend" parameterType="com.railer.rt.commu.friend.Friend">
 		INSERT INTO friend(friendNum, userId, notice, subject, content, sDate, eDate)
-		VALUES(#{friendNum}, #{userId}, #{notice}, #{subject}, #{content}, #{sDate, jdbcType=VARCHAR}, #{eDate, jdbcType=VARCHAR})
+		VALUES(#{friendNum}, #{userId}, #{notice}, #{subject}, #{content}, #{sDate}, #{eDate})
 	</insert>
 	
 	<!--동행게시판의 첨부파일을 insert
@@ -24,7 +24,7 @@
 	</insert>
 	
 	<!--검색 기능에 관련 된 where 조건에 관련된 sql
-	전체 / 내용 / 날짜 / 작성일 / 제목 / 작성자-->
+	전체 / 내용 / 작성일 / 제목 / 작성자-->
 	<sql id="where-list">
 		<choose>
 			<when test="condition=='all'">	
@@ -36,11 +36,9 @@
 				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
 			</when>
 			<when test="condition=='created'">
-				(TO_CHAR(f.created, 'YYYY-MM-DD'))=#{keyword}
-			</when>
-			<when test="condition=='period'">
-				TO_date(eDate, 'YYYY-MM-DD')&gt;=TO_date(#{keyword}, 'YYYY-MM-DD')
-				and TO_date(sDate, 'YYYY-MM-DD')&lt;=TO_date(#{keyword}, 'YYYY-MM-DD')
+				(TO_CHAR(created, 'YYYY-MM-DD')=#{keyword}
+				OR
+				TO_CHAR(created, 'YYYYMMDD')=#{keyword})
 			</when>
 			<otherwise>
 				INSTR(${condition},#{keyword}) &gt; 0
@@ -48,14 +46,16 @@
 		</choose>
 	</sql>
 	
-
-	<!--공지사항 리스트를 가져오는 쿼리 
-	parameter Type : 없음
-	return type : Friend dto-->
+		
 	<select id="listFriendTop" resultType="com.railer.rt.commu.friend.Friend">
-       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created
+       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created,
+            NVL(fileCount,0) fileCount 
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT friendNum, COUNT(*) fileCount FROM friendFile
+         GROUP BY friendNum
+      ) ff On f.friendNum=ff.friendNum
       <where>
          <if test="keyword!=null and keyword!=''">
             <include refid="where-list"/>
@@ -77,7 +77,6 @@
 			<if test="keyword!=null and keyword!=''">
 				<include refid="where-list" />
 			</if>
-			and notice=0
 		</where>
 	</select>
 	
@@ -105,18 +104,18 @@
          <if test="keyword!=null and keyword!=''">
             <include refid="where-list"/>
          </if>
-         and notice != 1
+         and notice!=1
       </where>
       ORDER BY f.friendNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
    </select>
 	
-	<!--동행구하기 게시물 정보를 가져오기
+	<!--공지사항 게시물 정보를 가져오기
 	parameter Type : 정수
 	result Type : Friend DTO-->
-	<select id="readFriend" parameterType="map"  resultType="com.railer.rt.commu.friend.Friend">
+	<select id="readFriend" parameterType="Integer"  resultType="com.railer.rt.commu.friend.Friend">
 		SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created,sDate, eDate,f.enable, notice, NVL(fileCount,0) fileCount
-            ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
+            ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       LEFT OUTER JOIN (
@@ -131,10 +130,6 @@
          SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
          GROUP BY friendNum
       ) fb On f.friendNum=fb.friendNum
-      LEFT OUTER JOIN (
-         SELECT friendNum, userid, COUNT(*) myBookMark FROM friendBookMark
-         where userid=#{userId} and friendNum=#{friendNum} group by friendNum, userid
-      ) fb1 On f.friendNum=fb1.friendNum
       	WHERE f.friendNum=#{friendNum}
 	</select>
 	
@@ -151,7 +146,7 @@
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="preReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT friendNum, subject, f.created 
+      SELECT friendNum, subject,f.created ,sDate, eDate
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -159,17 +154,16 @@
             <include refid="where-list"/>
          </if>
          AND (friendNum &gt; #{friendNum})
-         AND notice != 1
       </where>
       ORDER BY friendNum ASC
-      FETCH FIRST 1 ROWS ONLY
+      FETCH FIRST 1ROWS ONLY
 	</select>
 	
 	<!--공지사항 해당 게시물에 대한 다음글 정보 가져오기
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="nextReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT friendNum, subject,f.created 
+      SELECT friendNum, subject,f.created ,sDate, eDate
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -177,19 +171,18 @@
             <include refid="where-list"/>
          </if>
          AND (friendNum &lt; #{friendNum})
-         AND notice != 1
       </where>
       ORDER BY friendNum DESC
-      FETCH FIRST 1 ROWS ONLY
+      FETCH FIRST 1ROWS ONLY
 	</select>
 	
 	<!--해당 공지사항의 조회수 증가
 	parameter Type : 공지사항번호-->
-	<update id="updateHitCount" parameterType="Integer">
+	<select id="updateHitCount" parameterType="Integer">
 		UPDATE friend SET
 			hitCount=hitCount+1
 		WHERE friendNum=#{friendNum}
-	</update>
+	</select>
 	
 	<!--해당 공지사항 파일에 대한 상세정보
 	parameter Type : 공지사항 파일번호
@@ -205,40 +198,30 @@
 		WHERE friendNum=#{friendNum}
 	</update>
    
-   <!--공지사항 제목, 내용 수정
+   
+	<!--공지사항 제목, 내용 수정
 	parameter Type : map
-	result Type : Notice DTO-->
-	<update id="updateFriend" parameterType="com.railer.rt.commu.friend.Friend">
-		UPDATE Friend SET subject=#{subject},content=#{content}
-		WHERE friendNum=#{friendNum}
-	</update>
+	result Type : Friend DTO-->
 	
 	<!--공지사항 삭제
 	parameter Type : 정수
-	result Type : Notice DTO-->
+	result Type : Friend DTO-->
 	<delete id="deleteFriend" parameterType="Integer">
 		DELETE FROM friend WHERE friendNum=#{friendNum}
 	</delete>
 	
-	<!--동행게시판 게시물의 파일 삭제 (게시물 수정)
+	<!--공지사항 게시물의 파일 삭제 (게시물 수정)
 	parameter Type : map-->
 	<delete id="deleteFile" parameterType="map">
 		DELETE FROM friendFile WHERE ${field}=#{num}
 	</delete>
-
+	
 	<!-- 동행게시판 게시물을 insert
 	parameter Type : FriendDTO-->
 	<insert id="insertFriendBookmark" parameterType="map">
 		INSERT INTO friendBookmark(friendNum, userId)
 		VALUES(#{friendNum}, #{userId})
 	</insert>
-	
-	<!-- 동행게시판 게시물을 delete
-	parameter Type : FriendDTO-->
-	<delete id="deleteFriendBookmark" parameterType="map">
-		DELETE FROM friendBookmark
-		WHERE friendNum=#{friendNum} and userId=#{userId}
-	</delete>
 	
 	<!--게시물의 북마크 수를 반환
 	parameter Type : map
@@ -249,44 +232,5 @@
 		where friendNum = #{friendNum}
 	</select>
 	
-	<!-- 댓글 등록 -->
-	<insert id="insertReply" parameterType="com.railer.rt.commu.friend.FriendReply">
-		INSERT INTO FRIENDREPLY(friendReplyNum, userId, friendNum, content, answer, secret)
-			VALUES (FRIENDREPLY_SEQ.NEXTVAL, #{userId}, #{friendNum}, #{content}, #{answer}, #{secret})
-	</insert>
-	
-	<!--게시물의 댓글수를 반환
-	parameter Type : Integer
-	return type : Integer-->
-	<select id="replyCount" parameterType="Integer" resultType="Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM FRIENDREPLY
-		where friendNum = #{friendNum}
-	</select>
-	
-	<!-- 댓글 리스트 -->
-	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.friend.FriendReply">
-<!-- 		select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount -->
-<!-- 	from friendReply fr -->
-<!-- 	JOIN MEMBER2 m2 on m2.userId = fr.userId -->
-<!-- 	LEFT OUTER JOIN ( -->
-<!-- 			SELECT answer, COUNT(*) answerCount -->
-<!-- 			FROM friendReply WHERE answer!=0 GROUP BY answer -->
-<!-- 		) a ON fr.friendReplyNum = a.answer -->
-<!-- 	WHERE fr.friendNum=#{friendNum} -->
-<!-- 		ORDER BY fr.answer asc,friendReplyNum DESc -->
-select friendReplyNum, userId, userName, friendNum, content, created, answer, secret, NVL(answerCount, 0) answerCount 
-from(select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount
-	from friendReply fr
-	JOIN MEMBER2 m2 on m2.userId = fr.userId
-	LEFT OUTER JOIN (
-			SELECT answer, COUNT(*) answerCount
-			FROM friendReply WHERE answer!=0 GROUP BY answer
-		) a ON fr.friendReplyNum = a.answer
-	WHERE fr.friendNum=#{friendNum}
-   ORDER BY answer asc, friendReplyNum desc) 
-   START WITH answer = 0
-CONNECT BY PRIOR friendReplyNum =  answer
-	</select>
 	
 </mapper>

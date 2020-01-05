@@ -265,7 +265,11 @@
 		select nvl(count(*),0)  from tourreplylike where replyNum =#{replyNum} and userId =#{userId}
 	</select>
 	
-
+	<select id="readAddress" parameterType="map" resultType="com.railer.rt.tour.Tour">
+		select tourNum, staNum, detailCateNum,name,tel,address,longitude,latitude
+		from tour
+		where tourNum = #{tourNum}
+	</select>
 
 
 

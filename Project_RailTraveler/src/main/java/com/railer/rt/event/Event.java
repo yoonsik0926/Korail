@@ -1,13 +1,16 @@
 package com.railer.rt.event;
- 
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class Event {
 	private int listNum, eventNum;
-	
 	private String name;
 	private String content;
 	private String sdate;
 	private String edate;
-	private String imagename;
+	private String imageFilename;
+	private MultipartFile upload;
+	
 	public int getEventNum() {
 		return eventNum;
 	}
@@ -44,10 +47,17 @@ public class Event {
 	public void setListNum(int listNum) {
 		this.listNum = listNum;
 	}
-	public String getImagename() {
-		return imagename;
+	public String getImageFilename() {
+		return imageFilename;
 	}
-	public void setImagename(String imagename) {
-		this.imagename = imagename;
+	public void setImageFilename(String imageFilename) {
+		this.imageFilename = imageFilename;
 	}
+	public MultipartFile getUpload() {
+		return upload;
+	}
+	public void setUpload(MultipartFile upload) {
+		this.upload = upload;
+	}
+		
 }

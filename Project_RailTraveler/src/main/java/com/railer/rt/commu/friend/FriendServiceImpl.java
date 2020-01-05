@@ -25,20 +25,21 @@ public class FriendServiceImpl implements FriendService {
 		try {
 			int seq = dao.selectOne("friend.seq");
 			dto.setFriendNum(seq);
-			
+
 			dao.insertData("friend.insertFriend", dto);
-			
-			if(!dto.getUpload().isEmpty()) {
+
+			if (!dto.getUpload().isEmpty()) {
 				for (MultipartFile mf : dto.getUpload()) {
 					String saveFilename = fileManager.doFileUpload(mf, pathname);
-					if (saveFilename == null) continue;
+					if (saveFilename == null)
+						continue;
 					String originalFilename = mf.getOriginalFilename();
 					long fileSize = mf.getSize();
-					
+
 					dto.setOriginalFilename(originalFilename);
 					dto.setSaveFilename(saveFilename);
 					dto.setFileSize(fileSize);
-					
+
 					insertFile(dto);
 				}
 			}
@@ -50,7 +51,7 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public int dataCount(Map<String, Object> map) {
-		int result =0;
+		int result = 0;
 		try {
 			result = dao.selectOne("friend.dataCount", map);
 		} catch (Exception e) {
@@ -80,11 +81,11 @@ public class FriendServiceImpl implements FriendService {
 		}
 		return list;
 	}
-	
+
 	@Override
 	public void updateHitCount(int num) throws Exception {
 		try {
-			dao.selectOne("friend.updateHitCount", num);
+			dao.updateData("friend.updateHitCount", num);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -92,10 +93,10 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public Friend readFriend(int num) {
+	public Friend readFriend(Map<String, Object> readMap) {
 		Friend dto = null;
 		try {
-			dto = dao.selectOne("friend.readFriend", num);
+			dto = dao.selectOne("friend.readFriend", readMap);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -103,7 +104,7 @@ public class FriendServiceImpl implements FriendService {
 		return dto;
 	}
 
-	@Override 
+	@Override
 	public Friend preReadFriend(Map<String, Object> map) {
 		Friend dto = null;
 		try {
@@ -128,25 +129,25 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	/**
-	 * 업데이트 하면서 새로운 파일 업로드를 함께 한다.
-	 * 이미 올린 파일은 삭제하거나 추가 할 수 밖에 없다. 파일 수정 불가
+	 * 업데이트 하면서 새로운 파일 업로드를 함께 한다. 이미 올린 파일은 삭제하거나 추가 할 수 밖에 없다. 파일 수정 불가
 	 */
 	@Override
 	public void updateFriend(Friend dto, String pathname) throws Exception {
 		try {
 			dao.updateData("friend.updateFriend", dto);
-			
-			if(!dto.getUpload().isEmpty()) {
+
+			if (!dto.getUpload().isEmpty()) {
 				for (MultipartFile mf : dto.getUpload()) {
 					String saveFilename = fileManager.doFileUpload(mf, pathname);
-					if (saveFilename == null) continue;
+					if (saveFilename == null)
+						continue;
 					String originalFilename = mf.getOriginalFilename();
 					long fileSize = mf.getSize();
-					
+
 					dto.setOriginalFilename(originalFilename);
 					dto.setSaveFilename(saveFilename);
 					dto.setFileSize(fileSize);
-					
+
 					insertFile(dto);
 				}
 			}
@@ -154,26 +155,26 @@ public class FriendServiceImpl implements FriendService {
 			e.printStackTrace();
 			throw e;
 		}
-		
+
 	}
 
 	@Override
 	public void deleteFriend(int num, String pathname) throws Exception {
 		try {
-			//파일 지우기
+			// 파일 지우기
 			List<Friend> list = listFile(num);
-			if(list!=null) {
+			if (list != null) {
 				for (Friend dto : list) {
 					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
 				}
 			}
-			//파일 테이블지우기
-			Map<String , Object> map = new HashMap<String, Object>();
-			map.put("field", "num");
+			// 파일 테이블지우기
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("field", "friendFileNum");
 			map.put("num", num);
 			deleteFile(map);
 
-			//게시물지우기
+			// 게시물지우기
 			dao.deleteData("friend.deleteFriend", num);
 
 		} catch (Exception e) {
@@ -196,9 +197,9 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public List<Friend> listFile(int num) {
-		List<Friend> list =null;
+		List<Friend> list = null;
 		try {
-			list=dao.selectList("friend.listFile", num);
+			list = dao.selectList("friend.listFile", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -225,10 +226,7 @@ public class FriendServiceImpl implements FriendService {
 			// TODO: handle exception
 		}
 	}
-	
-	/**
-	 * 원래 안빼고 위의 insertFriend에서 가능...
-	 */
+
 	@Override
 	public void insertFriendBookmark(Map<String, Object> map) throws Exception {
 		try {
@@ -238,9 +236,20 @@ public class FriendServiceImpl implements FriendService {
 			throw e;
 		}
 	}
+
+	@Override
+	public void deleteFriendBookmark(Map<String, Object> map) throws Exception {
+		try {
+			dao.deleteData("friend.deleteFriendBookmark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	@Override
 	public int bookmarkCount(int friendNum) throws Exception {
-		int cnt=0;
+		int cnt = 0;
 		try {
 			cnt = dao.selectOne("friend.bookmarkCount", friendNum);
 		} catch (Exception e) {
@@ -250,4 +259,49 @@ public class FriendServiceImpl implements FriendService {
 		return cnt;
 	}
 
+	@Override
+	public void updateEnable(int friendNum) throws Exception {
+		try {
+			dao.updateData("friend.updateEnable", friendNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 * 댓글 등록
+	 */
+	@Override
+	public void insertFriendReply(FriendReply dto) throws Exception {
+		try {
+			dao.insertData("friend.insertReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public int replyCount(Map<String, Object> map) throws Exception {
+		int count = 0;
+		try {
+			count = dao.selectOne("friend.replyCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return count;
+	}
+	
+	@Override
+	public List<FriendReply> listReply(Map<String, Object> map) {
+		List<FriendReply> list=null;
+		try {
+			list=dao.selectList("friend.listReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }
