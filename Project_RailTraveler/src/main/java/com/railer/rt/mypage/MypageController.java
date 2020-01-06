@@ -235,18 +235,7 @@ public class MypageController {
 		// 지도에 마크 찍을 스탬프 리스트
 		List<Stamp> stampList = stampSerivce.listStamp(userId);
 
-		/*
-		 * // 현재 위치 비교를 위한 역 목록 리스트 List<Station> stationList =
-		 * stampSerivce.listStation();
-		 * 
-		 * for (int i = 0; i < stationList.size(); i++) { String longitude =
-		 * stationList.get(i).getLongitude(); String latitude =
-		 * stationList.get(i).getLatitude();
-		 * 
-		 * }
-		 */
 		model.addAttribute("stampList", stampList);
-/*		model.addAttribute("stationList", stationList);*/
 
 		model.addAttribute("subMenu", "6");
 

@@ -115,7 +115,7 @@ function modal(){
    </div>
 
 	<!-- 역 목록 모달 -->
-	<div class="modal" id="stationList" tabindex="-1" role="dialog" aria-labelledby="layerpopLabel" aria-hidden="true">
+	<div class="modal" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="layerpopLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <!-- header -->
@@ -123,10 +123,31 @@ function modal(){
 	        <!-- 닫기(x) 버튼 -->
 	        <button type="button" class="close" data-dismiss="modal" style="margin:10px;">×</button>
 	        <!-- header title -->
-	        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;padding: 10px 20px;">스탬프 목록</h4>
+	        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;padding: 10px 20px;">스탬프 찍을 역을 선택하세요.</h4>
 	      </div>
 	      <!-- body -->
 	      <div class="modal-body" id="matchStation" style="text-align: center;">
+	      	<table
+				style="margin: 0px auto; text-align: center; font-size: 15px; width: 100%">
+			
+				<tr style="background: #283164; color: white; height: 50px; font-weight: 700">
+					<td width="80">선택</td>
+					<td width="80">역 이름</td>
+					<td width="80">지역</td>
+					<td width="350">위&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;치</td>
+				</tr>
+				<c:forEach var="dto" items="${matchList}">
+					<tr style="border-bottom: 1px solid #d4cbcb; height: 40px;">
+						<td><input type="radio" name="choice" value="${dto.staNum}"></td>
+						<td>${dto.staName}</td>
+						<td>${dto.locName}</td>
+						<td>${dto.staAddress}</td>
+					</tr>
+				</c:forEach>
+			
+			</table>
+			
+	      
 	      </div>
 	      <!-- Footer -->
 	      <div class="modal-footer" style="text-align: center; margin: 20px 0;"></div>
@@ -215,20 +236,22 @@ function onSuccessGeolocation(position) {
 	var query = "locLogitude="+locLogitude+"&locLatitude="+locLatitude;
     
 	var fn = function(data){
-		console.log(data.matchList[0].staName);	
+		console.log(data.matchList[0].staName);
+		
+		$("#matchModal").show();
 	}
 	
 	ajaxJSON(url,"get", query, fn);
 	
                                          
-    map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
+/*     map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
     map.setZoom(10); // 지도의 줌 레벨을 변경합니다.
 
    infowindow.setContent('<div class="stationList" data-staNum="${dto.staNum}" data-staName="${dto.staName}" style="padding:20px;">' + '너 지금 여기니? '+ '</div>');
 
    infowindow.open(map, location);
    
-   console.log('Coordinates: ' + location.toString());
+   console.log('Coordinates: ' + location.toString()); */
     
 
 }
