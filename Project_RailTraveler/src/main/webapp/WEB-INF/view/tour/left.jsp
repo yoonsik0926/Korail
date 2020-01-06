@@ -62,7 +62,7 @@ function modallistPage(page) {
 
 }
 
-//검색하기를 눌렀을 때 
+
 function myBookMarkList() {	
 
 	modallistPage(1);	

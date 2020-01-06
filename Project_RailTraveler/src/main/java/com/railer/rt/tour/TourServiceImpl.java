@@ -257,9 +257,11 @@ public class TourServiceImpl implements TourService {
 	public void deleteReply(Map<String, Object> map) {
 		
 		try {
-			dao.deleteData("tour.deleteReplyLike", map);
+/*			dao.deleteData("tour.deleteReplyLike", map);
+						
+			dao.deleteData("tour.deleteReply", map);*/
 			
-			dao.deleteData("tour.deleteReply", map);
+			dao.updateData("tour.deleteReply", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

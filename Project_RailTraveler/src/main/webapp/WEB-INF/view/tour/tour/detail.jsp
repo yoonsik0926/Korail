@@ -327,6 +327,47 @@ function replyLike(ob){
 
 };
 
+
+
+//신고 버튼 눌렀을 시 
+function replySingo(replyNum) {
+	var userId = "${sessionScope.member.userId}";
+	  
+	if ( userId == "") {
+			$("#modaltext").text("로그인이 필요한 기능입니다.");			
+			$("#commonModal").modal();
+				return;
+		  }else{
+				$('#modalreplyNum').val(replyNum);
+				$("#singo").modal(); 
+		  }
+		
+}
+
+function singosubmit() {
+	var targetNo = $('#modalreplyNum').val();
+	var content = $('#reason').val();
+	var targetUrl = "<%= nowUrl%>";
+	
+	var url = "<%=cp%>/singo/insertSingo";
+	var query = "targetNo="+targetNo+"&content="+content+"&targetUrl="+targetUrl;
+	var fn = function(data){
+		
+			if(data.state=="true"){
+				alert("신고 접수 성공");
+				$("#singo").modal('hide');
+			}else{
+				alert("신고 접수 실패");
+			}
+
+	}; 
+	
+	ajaxJSON(url, "get", query, fn);
+	
+
+
+}
+
 </script>
 
 <style type="text/css">
@@ -606,7 +647,7 @@ function replyLike(ob){
 
 
 
-<!--Modal: 공유 모달-->
+<!--Modal: 공유기능 모달-->
 <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog cascading-modal" role="document">
@@ -647,7 +688,38 @@ function replyLike(ob){
 
   </div>
 </div>
-<!--Modal: modalSocial-->
+<!--Modal: 공유기능 모달-->
+
+
+<!--Modal: 신고 모달-->
+<div class="modal fade  bd-example-modal-sm" id="singo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <input type="hidden"  id="modalreplyNum" value="">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler : 신고창</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px;">
+        <span>신고이유 :</span>
+        <textarea id="reason" style="font-size: 17px; font-weight:500; margin-top: 10px;"></textarea>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" style="margin-top: 5px;">
+       	<a onclick="singosubmit();" type="button" class="btn  btn-info " >신고하기</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: 신고모달-->
 
 
 <!--지도 API 스크립트!!!-->

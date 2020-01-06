@@ -11,10 +11,27 @@ public class TourReply {
 	
 	private String likeuserId;
 	
+	private int deleted;
+	private String deleteId;
 	
 	
 	
 	
+	
+	
+	
+	public int getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(int deleted) {
+		this.deleted = deleted;
+	}
+	public String getDeleteId() {
+		return deleteId;
+	}
+	public void setDeleteId(String deleteId) {
+		this.deleteId = deleteId;
+	}
 	public String getLikeuserId() {
 		return likeuserId;
 	}

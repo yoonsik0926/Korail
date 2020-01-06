@@ -509,16 +509,20 @@ public class TourController {
 		}
 		
 		
-		//댓글 및 대글에 대한 리플 지우기
+		//댓글 및 댓글에 대한 리플 지우기
 		@RequestMapping(value="/tour2/deleteReply")
 		@ResponseBody
 		public Map<String, Object> deleteReply(
 				@RequestParam(value="replyNum") int replyNum,
-				@RequestParam String mode
+				@RequestParam String mode,
+				HttpSession session
 				) {
-					
+		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+			
 		Map<String, Object> map =new HashMap<>();
 		
+		map.put("userId", info.getUserId());
 		map.put("mode", mode);
 		map.put("replyNum", replyNum);
 		String state ="true";
