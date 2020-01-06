@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,6 +21,7 @@ public class PlanController {
 //	@Autowired
 //	private MyUtil myUtil;
 	
+	// 첫 로딩시 모든 마커 출력
 	@RequestMapping(value="/plan/write")
 	public String writeForm(Model model) throws Exception {
 		
@@ -37,6 +39,8 @@ public class PlanController {
 		
 		return "/plan/plan/write";
 	}
+	
+	// 지도에서 원하는 역 검색
 	@RequestMapping(value="/plan/searchStation")
 	@ResponseBody
 	public  Map<String, Object> searchStation(
@@ -55,7 +59,34 @@ public class PlanController {
 		
 		return model;
 	}
-
+	
+	// 카테고리 뿌리기
+	@RequestMapping(value="/plan/listCategory")
+	@ResponseBody
+	public Map<String, Object> listCategory(@RequestParam int cateNum,
+										   @RequestParam Map<String, Object> model) throws Exception {
+		Map<String, Object> map=new HashMap<>();
+		map.put("cateNum", cateNum);
+		List<Tour> listCate=service.listCategory(map);
+		
+		model.put("listCategory", listCate);
+		
+		return model;
+	}
+	
+	@RequestMapping(value="/plan/write", method=RequestMethod.POST)
+	public String detailPlanSubmit(Plan dto) throws Exception {
+		
+		try {
+			service.insertDetailPlan(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return "/plan/plan/write";
+	}
+	
 	@RequestMapping(value="/plan/planlist")
 	public String planlist(Model model) throws Exception {
 		model.addAttribute("subMenu", "1");

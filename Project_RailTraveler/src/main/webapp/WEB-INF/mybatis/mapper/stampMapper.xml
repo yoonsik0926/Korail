@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stamp">
+	
+	<select id="listStamp" parameterType="String" resultType="com.railer.rt.mypage.Stamp">
+		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress
+		from stamp st
+		join station s on st.stanum = s.stanum
+		join sale ss on ss.salenum = st.salenum
+		join member2 m on ss.usernum = m.usernum
+		where m.userId = #{userId}
+	</select>
+	
+	<select id="readStamp" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
+		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress
+		from stamp st
+		join station s on st.stanum = s.stanum
+		join sale ss on ss.salenum = st.salenum
+		join member2 m on ss.usernum = m.usernum
+		where stampNum = #{stampNum}
+	</select>
+	
+	<select id="stampDataCount" parameterType="map" resultType="Integer">	
+		select nvl(count(*),0) from stamp st 
+		join station s on st.stanum = s.stanum
+		join sale ss on ss.salenum = st.salenum
+		join member2 m on ss.usernum = m.usernum
+		where m.userId = #{userId}
+	</select>
+	
+	
+</mapper>
