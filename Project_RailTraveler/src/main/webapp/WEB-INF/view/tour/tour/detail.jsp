@@ -2,6 +2,7 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <%
 	String cp = request.getContextPath();
 	String nowUrl =request.getRequestURL().toString();
@@ -333,20 +334,30 @@ function replyLike(ob){
 function replySingo(replyNum) {
 	var userId = "${sessionScope.member.userId}";
 	  
-	if ( userId == "") {
+	/* if ( userId == "") {
 			$("#modaltext").text("로그인이 필요한 기능입니다.");			
 			$("#commonModal").modal();
 				return;
 		  }else{
-				$('#modalreplyNum').val(replyNum);
+				$('#singoreplyNum').val(replyNum);
 				$("#singo").modal(); 
-		  }
+		  } */
+		  
+	$("#singo").modal(); 
 		
 }
 
-function singosubmit() {
-	var targetNo = $('#modalreplyNum').val();
-	var content = $('#reason').val();
+function singosubmit() {		
+	var targetNo = $('#singoreplyNum').val();
+	var content = $('#singoreason').val();
+	
+	if (content == 'etc'){
+		var f = document.singoForm;
+
+		 content = f.etcText.value;
+	}
+	
+	console.log(content);
 	var targetUrl = "<%= nowUrl%>";
 	
 	var url = "<%=cp%>/singo/insertSingo";
@@ -362,7 +373,7 @@ function singosubmit() {
 
 	}; 
 	
-	ajaxJSON(url, "get", query, fn);
+	//ajaxJSON(url, "get", query, fn);
 	
 
 
@@ -667,7 +678,7 @@ function singosubmit() {
 
      
         <!--Twitter-->
-        <a a href="javascript:sendLinkTwitter()" type="button" class="btn-floating btn-tw" style="font-size: 30px;"><i class="fab fa-twitter"></i></a>
+        <a href="javascript:sendLinkTwitter()" type="button" class="btn-floating btn-tw" style="font-size: 30px;"><i class="fab fa-twitter"></i></a>
         
         <!--Google +-->
         <a href="javascript:sendLinkFacebook()" type="button" class="btn-floating btn-gplus" style="font-size: 30px;"><i class="fab fa-google-plus-g"></i></a>
@@ -691,34 +702,148 @@ function singosubmit() {
 <!--Modal: 공유기능 모달-->
 
 
+
+<script type="text/javascript">
+
+
+//신고 모달을 관리하는 스크립트
+$(function() {
+	
+	//첫번째 더보기 클릭시 보이기/숨기기
+	$('#adverClick').click(function(){
+		if($("#adverInfo").css("display") == "none"){   
+	        $('#adverInfo').css("display", "block");   
+	    } else {  
+	        $('#adverInfo').css("display", "none");   
+	    } 
+	});
+	
+	//두번째 더보기 클릭시 보이기/숨기기
+	$('#19ageClick').click(function(){
+		if($("#19ageInfo").css("display") == "none"){   
+	        $('#19ageInfo').css("display", "block");   
+	    } else {  
+	        $('#19ageInfo').css("display", "none");   
+	    } 
+	});
+	
+	//라디오 박스 중 기타를 선택했을 시
+	$("input:radio[id=etc]").click(function(){		
+		if($("#etcTextarea").css("display") == "none"){   
+	        $('#etcTextarea').css("display", "block");   
+	    } else {  
+	        $('#etcTextarea').css("display", "none");   
+	    } 
+		
+	});
+	
+	//기타를 선택하지 않은 나머지를 선택했을시
+	$("input:radio[class=notEtc]").click(function(){		
+		 $('#etcTextarea').css("display", "none");  		
+	});
+	
+	//content 값 보내기	
+	$("input:radio[name=chk_info]").click(function(){		
+		var val = $(this).val();
+		var content;
+		
+		if(val != 'etc'){
+			content =$(this).val();	
+			$('#singoreason').val(content);
+		}else{
+			$('#singoreason').val('etc');
+		}
+		
+	});
+	
+	
+	
+	
+})
+
+	 
+
+
+</script>
+
+
+
 <!--Modal: 신고 모달-->
+<form name="singoForm" method="post" action="">
 <div class="modal fade  bd-example-modal-sm" id="singo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+  <div class="modal-dialog modal-sm" role="document" style="width: 560px;">
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
-      <input type="hidden"  id="modalreplyNum" value="">
-      <div class="modal-header d-flex justify-content-center">
-        <p class="heading" style="font-size:25px;font-weight: 700">Rail Traveler : 신고창</p>
+      <input type="hidden"  id="singoreplyNum" value="">
+      <input type="hidden" id="singoreason" value="etc" >
+      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 12px 0px 12px 15px; border-bottom:1px solid #c4c4c4 ">
+        <p style="font-size:25px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
       </div>
 
       <!--Body-->
-      <div class="modal-body" style="padding: 5px 5px;">
-        <span>신고이유 :</span>
-        <textarea id="reason" style="font-size: 17px; font-weight:500; margin-top: 10px;"></textarea>
-
-      </div>
-
-      <!--Footer-->
-      <div class="modal-footer flex-center" style="margin-top: 5px;">
-       	<a onclick="singosubmit();" type="button" class="btn  btn-info " >신고하기</a>
-        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+      <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
+		<div style=" border-bottom:1px solid #c4c4c4">
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<span style="font-weight: 500">얄라리얄라 얄라숑</span> </p>
+		<p>작성자 :&nbsp;&nbsp;<span style="font-weight: 500">yoonsik09(김**)</span></p>
+        </div>
         
-      </div>
+        <div style="margin: 10px 0px;">
+        	<table style="width: 100%; ">
+        		<tr>
+        			<td width="17%" valign="top">
+        			<p>신고사유:&nbsp;&nbsp;</p>
+        			</td>
+        			<td width="83%" valign="top">
+        			<span style="font-size: 14px; color: #a9a9a9;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
+        			</td>
+        		</tr>
+        		
+        		<tr>
+        		<td width="17%"></td>
+        		<td width="83%">
+        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #bdbdbd; cursor: pointer;">| 더보기</a></P> 
+        		    <div id="adverInfo" style="display: none ">
+        		   	 <ul style="font-size: 13px; color: #a9a9a9;font-weight: 500 ;margin: 10px 0px ; padding: 0px 0px 0px 20px; ">
+      						<li>불법 사행성, 도박사이트를 홍보하는 경우</li>
+      						<li>개인정보, 이미테이션, 성인의약품, 마약, 대포폰 등 불법 제품 및 정보를 홍보, 판매하는 경우</li>
+      						<li>성매매, 장기매매 등의 신체 관련 거래 정보</li>
+    				 </ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #bdbdbd; cursor: pointer;">| 더보기</a></P>
+					<div id="19ageInfo" style="display: none ">
+       		   	 		<ul style="font-size: 13px; color: #a9a9a9;font-weight: 500;margin: 10px 0px ; padding: 0px 0px 0px 20px;">
+      						<li>음란물 또는 음란한 행위(노골적인 성행위 장면)를 묘사하는 이미지/동영상</li>
+      						<li>살해/상해/폭력 등 잔인한 장면을 묘사하는 이미지/동영상</li>
+      						<li>중고 속옷 판매, 가출 유도 등의 청소년 유해 정보 공유</li>
+    				 	</ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="명예훼손/사생활 침해 및 저작권침해 등">명예훼손/사생활 침해 및 저작권침해 등</P>
+					<P style="font-weight: 500"><input type="radio" name="chk_info" id="etc" value="etc">기타</P>
+					
+					<div id="etcTextarea" style="display: none">
+						<textarea id="etcText" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
+					</div>					
+        		</td>
+
+        		</tr>
+        	</table>
+      	</div>
+      	
+      	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
+      	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
+        	<a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">취소</a>
+      	
+      	</div>
+        
+        </div>
+
+
     </div>
   </div>
 </div>
+</form>
 <!--Modal: 신고모달-->
 
 
