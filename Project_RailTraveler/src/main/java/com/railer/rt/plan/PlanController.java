@@ -75,10 +75,10 @@ public class PlanController {
 	}
 	
 	@RequestMapping(value="/plan/write", method=RequestMethod.POST)
-	public String detailPlanSubmit(Plan dto) throws Exception {
+	public String moreDetailPlanSubmit(Plan dto) throws Exception {
 		
 		try {
-			service.insertDetailPlan(dto);
+			service.insertMoreDetailPlan(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

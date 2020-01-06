@@ -307,16 +307,13 @@ body::-webkit-scrollbar {
 	display: none;
 }
 
-.moreDetailPlanList {
-	width: 40%;
+.timeSelect {
+	width: 20%;
 	height: 100%;
 	background: #f5f5f5;
 	float: left;
-	overflow: scroll;
 }
-.moreDetailPlanList::-webkit-scrollbar {
-	display: none;
-}
+
 .pleaseWritingHere {
 	width: 75%;
 	height: 100%;
@@ -484,11 +481,6 @@ div.timeSelect {
 	float: right;
 	padding: 5px;
 	text-align: center;
-}
-
-.inputThing.moreDetail {
-	width: 100%;
-	height: 80px;
 }
 </style>
 <script type="text/javascript">
@@ -817,27 +809,48 @@ $(function(){
 				<script type="text/javascript"
 					src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ea24f69cc8602cd4d0ce33868b3dd46d&libraries=services"></script>
 			
+				<!-- <div id="planModal" class="modal2">
+					<div class="modal-planning">
+						<button type="button" class="close" aria-label="Close" onclick="close_planning();"
+								style="display: block; font-size: 40px; margin: 10px;">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div> -->
 				
 				<div id="detailPlanPlus" class="modal2" style="opacity: 0.85">
 					<div class="modal-detailPlanning">
-						<div class="moreDetailPlanList">
+						<div class="timeSelect">
 							<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
 								<p>시간선택 및 세부일정 짜기</p>
 							</button>
-							<ul class="mdList">
-<!-- 								<li> -->
-<!-- 									<input class="inputThing moreDetail" name="name" placeholder="이름" data-days="1", data-staNum="24", data-mdNum="1"> -->
-<!-- 								</li> -->
-							</ul>
+							<div class="times 7" data-time="7">07 </div>
+							<div class="times 8" data-time="8">08 </div>
+							<div class="times 9" data-time="9">09 </div>
+							<div class="times 10" data-time="10">10 </div>
+							<div class="times 11" data-time="11">11 </div>
+							<div class="times 12" data-time="12">12 </div>
+							<div class="times 13" data-time="13">13 </div>
+							<div class="times 14" data-time="14">14 </div>
+							<div class="times 15" data-time="15">15 </div>
+							<div class="times 16" data-time="16">16 </div>
+							<div class="times 17" data-time="17">17 </div>
+							<div class="times 18" data-time="18">18 </div>
+							<div class="times 19" data-time="19">19 </div>
+							<div class="times 20" data-time="20">20 </div>
+							<div class="times 21" data-time="21">21 </div>
+							<div class="times 22" data-time="22">22 </div>
+							<div class="times 23" data-time="23">23 </div>
+							<div class="times 24" data-time="24">24 </div>
 						</div>
+						
 					</div>		
 				</div>
 			</div>
 				
 			</div>
-		</div>		
+		</div>
 						<!-- 세부계획 Modal -->
-						<form name="detailPlanForm">
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
@@ -887,7 +900,7 @@ $(function(){
 							      	<input class="inputThing" type="text" name="memo" placeholder="메모" style="display: block;" value="재밌겠당">
 							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" style="display: block;" value="1500원">
 							     </div>
-							      	<div class="modal-footer selectTime" style="float: left;">
+							      	<div class="modal-footer selectTime">
 							      		<button type="button" class="btn btn-default" onclick="saveDetail();">저장</button>
 							        	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 							      	</div>
@@ -895,7 +908,7 @@ $(function(){
 							     
 							    </div>
 							  </div>
-							</form>
+
 
 				<!-- 세부계획에서 검색하기 버튼 클릭시 뜨는 Modal -->
 				<div class="modal fade" id="searchDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -994,14 +1007,12 @@ $(function() {
 				}
 			}
 			days[ilcha-1].push(staNum);
-			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"' data-index='"+(days[ilcha-1].length-1)+"'>"
+			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"'>"
 								   +$(this).prev().text()
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
 // 			$(this).parent().parent().hide();
-// 			console.log(days[ilcha-1].length);
-			days[ilcha-1][days[ilcha-1].length-1]=new Array();
 			
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
@@ -1056,7 +1067,7 @@ $(function() {
 // 세부계획 디테일 모달
 $(function() {
 	$("body").on('click', ".plusWriting", function() {
-		
+		var staNum=$(this).attr("class").replace(/[^0-9]/g,"");
 		var plusBlack=$(this).find("i").parent().hasClass("ddiring");
 		
 		if($(".pickedStation").children().hasClass("ddiring")===true && $(this).hasClass("ddiring")===false) {
@@ -1069,28 +1080,12 @@ $(function() {
 			$(this).parent().find("i").attr("class","fas fa-minus-circle");
 			
 			$("#detailPlanPlus").show();
-			
-
-			var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
-			var staNum=$(this).attr("class").replace(/[^0-9]/g,"");
-			var index=$(".ddiring").parent().attr("data-index");
-			
-			for(var i in days[ilcha-1][index]) {
-				$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index][i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'"></li>')
-				console.log("시작");
-				console.log(days[ilcha-1][index][i]);
-				console.log("일자:"+ilcha);
-				console.log("역정보인덱스:"+index);
-				console.log("디테일:"+i);
-				console.log("끝");
-			}
-			
 		} else {
 			$(this).removeClass("ddiring");
 			$(this).parent().find("i").attr("class","fas fa-plus-circle");
 			
 			$("#detailPlanPlus").hide();
-			$(".mdList").empty();
+			
 		}
 	});
 });
@@ -1344,31 +1339,30 @@ function drawMap(searchList) {
 // 모달 검색창에서 이름 누르면 추가되는 곳
 function insertTourSearch() {
 // 	console.log($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
-	$("form[name='detailPlanForm']").find("input[name='name']").val($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
+	$("input[name='name']").val($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
 	$("input[name='tel']").val($(".searchTourList").find("tr:eq(1)>td:eq(1)").html());
 	$("input[name='address']").val($(".searchTourList").find("tr:eq(1)>td:eq(2)").html());
 	$(".closePlease").click();
 }
 
-// 세부계획 저장버튼 누르면 mdList에 저장
+// 세부계획 저장버튼 누르면 DB에 저장
 function saveDetail() {
 	var f=document.detailPlanForm;
-	
-	var md={
-		name:f.name.value	
+	var str=f.memo.value;
+	if(! str) {
+		alert("메모를 입력하세요.");
+		
+		f.memo.focus();
+		return;
 	}
 	
-	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
-	var staNum=$(".ddiring").parent().attr("data-staNum");
-	var index=$(".ddiring").parent().attr("data-index");
-	console.log(staNum+", "+index+", "+md);
-	days[ilcha-1][index].push(md);
-	
-	var mdNum=days[ilcha-1][index].length-1;
-	$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+mdNum+'"></li>')
-	
-	// console.log(days[ilcha-1][index][mdNum].name);
-	
+	str=f.price.value;
+	if(! str) {
+		alert("예상금액을 입력하세요.");
+		f.price.focus();
+		return;
+	}
+	f.submit();
 }
 
 
