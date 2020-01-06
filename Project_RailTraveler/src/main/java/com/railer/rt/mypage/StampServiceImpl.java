@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railer.rt.common.dao.CommonDAO;
+import com.railer.rt.info.Station;
 
 @Service("stamp.stampService")
 public class StampServiceImpl implements StampService{
@@ -46,6 +47,18 @@ public class StampServiceImpl implements StampService{
 			e.printStackTrace();
 		}
 		return dataCount;
+	}
+
+	@Override
+	public List<Station> listStation() throws Exception {
+		List<Station> list = null;
+		try {
+			list = dao.selectList("stamp.stationlist");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 }

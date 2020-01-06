@@ -4,20 +4,22 @@
 <mapper namespace="stamp">
 	
 	<select id="listStamp" parameterType="String" resultType="com.railer.rt.mypage.Stamp">
-		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress
+		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress,l.locNum, l.locName
 		from stamp st
 		join station s on st.stanum = s.stanum
 		join sale ss on ss.salenum = st.salenum
 		join member2 m on ss.usernum = m.usernum
+		join location l on l.locNum = s.locNum
 		where m.userId = #{userId}
 	</select>
 	
 	<select id="readStamp" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
-		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress
+		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress,l.locNum, l.locName
 		from stamp st
 		join station s on st.stanum = s.stanum
 		join sale ss on ss.salenum = st.salenum
 		join member2 m on ss.usernum = m.usernum
+		join location l on l.locNum = s.locNum
 		where stampNum = #{stampNum}
 	</select>
 	
@@ -26,8 +28,14 @@
 		join station s on st.stanum = s.stanum
 		join sale ss on ss.salenum = st.salenum
 		join member2 m on ss.usernum = m.usernum
+		join location l on l.locNum = s.locNum
 		where m.userId = #{userId}
 	</select>
 	
+	<select id="stationlist" resultType="com.railer.rt.info.Station">
+		select staNum, staName, staAddress,s.locNum, locName,longitude, latitude
+		from station s
+		join location l on s.locNum = l.locNum
+	</select>
 	
 </mapper>

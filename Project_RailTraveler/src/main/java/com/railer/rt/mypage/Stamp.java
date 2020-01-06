@@ -8,6 +8,8 @@ public class Stamp {
 	private int userNum;
 	private String userId;
 	private String staAddress;
+	private int locNum;
+	private String locName;
 	public int getStampNum() {
 		return stampNum;
 	}
@@ -50,6 +52,19 @@ public class Stamp {
 	public void setStaAddress(String staAddress) {
 		this.staAddress = staAddress;
 	}
+	public int getLocNum() {
+		return locNum;
+	}
+	public void setLocNum(int locNum) {
+		this.locNum = locNum;
+	}
+	public String getLocName() {
+		return locName;
+	}
+	public void setLocName(String locName) {
+		this.locName = locName;
+	}
+	
 	
 	
 }

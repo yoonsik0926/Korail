@@ -8,9 +8,6 @@
 <link rel="stylesheet" href="<%=cp%>/resource/css/tabs.css"
 	type="text/css">
 
-
-
-
 <script type="text/javascript">
 function ajaxHTML(url, type, query, selector) {
 	$.ajax({
