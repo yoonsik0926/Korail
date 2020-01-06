@@ -8,6 +8,9 @@ public class FriendReply {
 	private String created;
 	private int answer;
 	private int secret;
+
+	private int deleted;
+	private String deleteId;
 	
 	private int replyCount;
 
@@ -90,6 +93,22 @@ public class FriendReply {
 	public void setReplyCount(int replyCount) {
 		this.replyCount = replyCount;
 	}	//대댓글 개수
+
+	public int getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(int deleted) {
+		this.deleted = deleted;
+	}
+
+	public String getDeleteId() {
+		return deleteId;
+	}
+
+	public void setDeleteId(String deleteId) {
+		this.deleteId = deleteId;
+	}
 
 	@Override
 	public String toString() {

@@ -409,29 +409,34 @@ public class FriendController {
 				service.insertFriendReply(dto);
 			} catch (Exception e) { 
 				state="false";
-			}
-			
+			} 
+			   
 			Map<String, Object> model = new HashMap<>();
 			model.put("state", state);
 			return model;
 		} 
-		
+		 
 		// 댓글 및 댓글의 답글 삭제 : AJAX-JSON
 		@RequestMapping(value="/friend/deleteReply", method=RequestMethod.POST)
 		@ResponseBody
 		public Map<String, Object> deleteReply(
-				@RequestParam Map<String, Object> paramMap
+				@RequestParam Map<String, Object> paramMap,
+				HttpSession session
 				) {
-			
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
 			String state="true";
+			String userId = info.getUserId();
+			paramMap.put("userId", userId);
 			try {
 				service.deleteReply(paramMap);
 			} catch (Exception e) {
 				state="false";
 			}
+			String pageNo = String.valueOf(paramMap.get("pageNo"));
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("state", state);
+			map.put("pageNo", pageNo);
 			return map;
 		}
 		 
@@ -464,7 +469,7 @@ public class FriendController {
 				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 //				System.out.println(dto.toString());
 			}
-			 
+			   
 			// AJAX 용 페이징
 			String paging=util.pagingMethod(current_page, total_page, "listPage");
 			
@@ -477,6 +482,7 @@ public class FriendController {
 			model.addAttribute("paging", paging);
 			
 			return "commu/friend/listReply";
+			
 		}
 		
 		
