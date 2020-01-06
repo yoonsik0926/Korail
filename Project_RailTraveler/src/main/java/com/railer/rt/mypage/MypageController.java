@@ -1,7 +1,6 @@
 package com.railer.rt.mypage;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,10 @@ public class MypageController {
 	@Autowired
 	private TourService tourService;
 	
+	@Autowired
+	private StampService stampSerivce;
+	
+	//관광 정보 북마크
 	@RequestMapping(value="/bookmark/tour")
 	public String bookmarkTour(
 			Model model,
@@ -191,7 +194,7 @@ public class MypageController {
 	}
 	
 	
-	
+	//여행 코스 북마크
 	@RequestMapping(value="/bookmark/recommend")
 	public String bookmarkRecommend(
 			Model model) {
@@ -201,6 +204,8 @@ public class MypageController {
 		return ".four.mypage.bookmark.recommend";
 	}
 	
+	
+	//커뮤니티 북마크
 	@RequestMapping(value="/bookmark/commu")
 	public String bookmarkCommu(
 			Model model) {
@@ -212,7 +217,7 @@ public class MypageController {
 	}
 
 
-
+	//나의 티켓
 	@RequestMapping(value="/ticket/ticket")
 	public String myTicket(
 			Model model) {
@@ -222,15 +227,29 @@ public class MypageController {
 		return ".four.mypage.ticket.ticket";
 	}
 	
+	
+	//스탬프 찍기
 	@RequestMapping(value="/stamp/stamp")
 	public String stamp(
-			Model model) {
+			Model model,
+			HttpServletRequest req,
+			HttpSession session) throws Exception {		
 		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+		
+		//지도에 마크 찍을 스탬프 리스트
+		List<Stamp> stampList = stampSerivce.listStamp(userId);
+		
+		model.addAttribute("stampList",stampList);
+
 		model.addAttribute("subMenu", "6");
 
 		return ".four.mypage.stamp.stamp";
 	}
 
+	
+	//나의 여행 계획
 	@RequestMapping(value="/plan/plan")
 	public String myPlan(
 			Model model) {
@@ -240,6 +259,8 @@ public class MypageController {
 		return ".four.mypage.plan.plan";
 	}
 	
+	
+	//내가 쓴 게시물
 	@RequestMapping(value="/bbs/mybbs")
 	public String myBbs(
 			Model model) {

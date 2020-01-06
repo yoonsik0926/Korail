@@ -159,8 +159,10 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public void deleteFriend(int num, String pathname) throws Exception {
+	public void deleteFriend(Map<String, Object> datamap, String pathname) throws Exception {
 		try {
+			String snum = String.valueOf(datamap.get("friendNum"));
+			int num = Integer.parseInt(snum);
 			// 파일 지우기
 			List<Friend> list = listFile(num);
 			if (list != null) {
@@ -170,12 +172,12 @@ public class FriendServiceImpl implements FriendService {
 			}
 			// 파일 테이블지우기
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("field", "friendFileNum");
+			map.put("field", "friendNum");
 			map.put("num", num);
 			deleteFile(map);
 
 			// 게시물지우기
-			dao.deleteData("friend.deleteFriend", num);
+			dao.updateData("friend.deleteFriend", datamap);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -207,10 +209,10 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public Friend readFile(int fileNum) {
+	public Friend readFile(int friendFileNum) {
 		Friend dto = null;
 		try {
-			dto = dao.selectOne("friend.readFile", fileNum);
+			dto = dao.selectOne("friend.readFile", friendFileNum);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -282,6 +284,16 @@ public class FriendServiceImpl implements FriendService {
 		}
 	}
 
+	@Override
+	public void deleteReply(Map<String, Object> map) throws Exception{
+		try {
+			dao.updateData("friend.deleteReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 	@Override
 	public int replyCount(Map<String, Object> map) throws Exception {
 		int count = 0;

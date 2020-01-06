@@ -52,6 +52,15 @@ optgroup {
 	/*  border-bottom: 1px solid black; */
 	
 }
+a{
+color:#666;
+font-weight:300;
+}
+a:hover{
+ font-weight:300;
+color:#666;
+text-decoration: underline;
+}
 </style>
 <div class="body-content-container">
 	<div class="page-three-title mt40">
@@ -148,10 +157,13 @@ optgroup {
 							
 				<!-- 동행 게시글 리스트 출력 -->
 				<c:forEach var="dto" items="${list}">
-					<tr
-						onclick="javascript:location.href='${articleUrl}&friendNum=${dto.friendNum}'">
+				
+					<tr>
 						<td>${dto.listNum}</td>
-						<td style="text-align: left; padding-left: 20px;">${dto.subject}
+						<c:if test="${dto.deleted==0}">
+						<td style="text-align: left; padding-left: 20px;">
+						
+						<a href="${articleUrl}&friendNum=${dto.friendNum}">${dto.subject}</a>
 							<span style="margin-left: 7px; font-size: 14px;"> <i
 								class="far fa-heart" style="margin-right: 2px; color: #969696;"></i>${dto.bookmarkCount}
 								<i class="far fa-comment-alt"
@@ -180,6 +192,17 @@ optgroup {
 						<td>${dto.userName}</td>
 						<td>${dto.created}</td>
 						<td>${dto.hitCount}</td>
+						</c:if>
+						<c:if test="${dto.deleted==1 && dto.deleteId=='admin'}">
+							<td style="color: #888;
+    height: 30px;
+    padding: 7px 0; text-align: center;"><div>관리자에 의해 삭제된 게시물입니다.</div></td><td colspan="3"></td>
+						</c:if>
+						<c:if test="${dto.deleted==1 && dto.deleteId!='admin'}">
+							<td style="color: #888;
+    height: 30px;
+    padding: 7px 0; text-align: center;"><div>삭제된 게시물입니다.</div></td><td colspan="3"></td>
+						</c:if>
 					</tr>
 				</c:forEach>
 			</tbody>

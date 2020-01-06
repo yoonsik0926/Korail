@@ -32,9 +32,17 @@
 	        </td>
 	        
 	        <td style='padding:7px 5px;' align='right'>
-	        	<c:if test="${vo.userId==sessionScope.member.userId}">
-	           <span style="display: block;"> <button type='button' class='btn-danger deleteReply' data-replyNum='${vo.replyNum}' data-page='${pageNo}'>삭제</button> </span>
-	           </c:if>
+	        	<c:choose>
+	        	
+	        	<c:when test="${vo.userId==sessionScope.member.userId ||sessionScope.member.userId=='admin'}">
+	        		<span style="display: block;"> <button type='button' class='btn-danger deleteReply' data-replyNum='${vo.replyNum}' data-page='${pageNo}'>삭제</button> </span>
+	        	</c:when>
+	        	
+	        	<c:otherwise>
+	        		<a><span style="display: block;"> <button type='button' class='' data-replyNum='${vo.replyNum}' data-page='${pageNo}'>신고</button> </span></a>
+	        	</c:otherwise>	
+	        	
+	        	</c:choose>
 	        </td>
 	    </tr>
 

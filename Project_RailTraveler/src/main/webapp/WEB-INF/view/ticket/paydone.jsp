@@ -105,8 +105,8 @@
 			</div>
 		</div>
 		<div style="margin: 60px auto; width: 33%">
-			<button class="btn">메인으로 가기</button>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button class="btn">마이페이지</button>
+			<a href="<%=cp%>/main"><button class="btn">메인으로 가기</button></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="<%=cp%>/ticket/ticket"><button class="btn">마이페이지</button></a>
 		</div>
 	
 
