@@ -214,6 +214,9 @@ function insertReply(num){
 
 //페이징 처리
 $(function(){
+// 	<c:if test="${not empty pageNo}">
+// 		listPage(${pageNo});
+// 	</c:if>
 	listPage(1);
 });
 
