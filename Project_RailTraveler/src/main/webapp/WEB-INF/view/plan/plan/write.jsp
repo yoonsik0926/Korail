@@ -465,26 +465,47 @@ div.timeSelect {
     white-space: nowrap;
     margin-top: 10;
 }
+
+.finalSave {
+	width: 100px;
+    height: 35px;
+    font-size: 20;
+    background: red;
+    color: white;
+}
 </style>
 <script type="text/javascript">
 
+// 여행 출발일자 선택하기
 $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
+
+		var pandocki=$("#planListForm").children().attr("class")!="planList1";
+	
 		$("#datepicker").datepicker({
 			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
 			altField:"#selectedDay1",
 			showAnim: "slide"
 		});
-	        
-		$("#datepicker").change(function(){	        
-	        var tempDate=$("#selectedDay1").val();
-	       
-	        for (var i = 1; i <= $("#selectDays").val(); i++) {
-	        	$("#selectedDay"+i).val(getDaysLater1(tempDate, i));
+		
+		
+		$("body").on("change", "#datepicker", function(){
+// 			console.log($("#planListForm").children().eq(0).attr("class")!="planList1");
+			console.log(! pandocki);
+// 			if(! pandocki) {
+// 				alert("몇일차인지 먼저 선택해주세요.");
+// 			} 
+			
+		    var tempDate=$("#selectedDay1").val();
+		       
+		    for (var i = 1; i <= $("#selectDays").val(); i++) {
+		     	$("#selectedDay"+i).val(getDaysLater1(tempDate, i));
 			}
-	  
+		
 	    });
+		
 });
 
+// 위에서 출발일자를 선택하면 나머지 일차에도 자동으로 날짜입력
 // 기준일부터 몇일 후(기준일 포함)
 function getDaysLater1(sDate, days) {
 	var week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -519,6 +540,7 @@ function getDaysLater1(sDate, days) {
 // 일수 선택 모달
 function selectTripDay() {
     $('#selectingDay').show();
+    
 };
 
 // 팝업 Close 기능
@@ -659,6 +681,13 @@ function ajaxJSON(url, type, query, fn) {
 	});
 }
 
+//최종저장버튼 클릭시 모든 세부계획 저장
+$(function() {
+	$("body").on("click", ".finalSave", function() {
+		var userId
+	});
+});
+
 // 역 검색기능
 $(function(){
 	$("body").on("click", ".findNow", function(){
@@ -748,7 +777,7 @@ $(function(){
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
 				<div style="z-index: 5; padding: 20px; position: absolute;">
-					<div style="width: 330px; background-color: white;">
+					<div style="width: 100%; background-color: white; height: 35px;">
 						<select name="locNum" style="width: 80px; height: 35px; float: left;">
 							<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
 							<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
@@ -760,8 +789,10 @@ $(function(){
 						<input type="text" id="findStation" name="keyword" value="${keyword}"
 							style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;"
 							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
+						<button type="button" class="finalSave">최종저장</button>	
 					</div>
 				</div>
+				
 				<div id="map" style="width: 100%; height: 100%; z-index: 2;"></div>
 				<script type="text/javascript"
 					src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ea24f69cc8602cd4d0ce33868b3dd46d&libraries=services"></script>
@@ -808,7 +839,6 @@ $(function(){
 			</div>
 		</div>
 						<!-- 세부계획 Modal -->
-						<form name="detailPlanForm" method="post">
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
@@ -847,24 +877,25 @@ $(function(){
 	<%--                                  <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option> --%>
 	<%--                                  <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option> --%>
 	                              </select>
-							        <input class="inputThing resultSearchingTour" name="name" placeholder="이름">
-							        <button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>							     	
+	                              	<div style="display: block;">
+							        	<input class="inputThing resultSearchingTour" name="name" placeholder="이름">
+							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>							     	
+							        </div>
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" style="display: block;">
 							      	<input class="inputThing" type="text" name="memo" placeholder="메모" style="display: block;">
 							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" style="display: block;">
+							     </div>
+							      	<div class="modal-footer selectTime">
+							      		<button type="button" class="btn btn-default" onclick="saveDetail();">저장</button>
+							        	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+							      	</div>
 							      </div>
-							      	
-							      </div>
-							      <div class="modal-footer selectTime">
-							      	<button type="button" class="btn btn-default" onclick="saveDetail();">저장</button>
-							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-							      </div>
+							     
 							    </div>
 							  </div>
-						</form>
 
 
 				<!-- 세부계획에서 검색하기 버튼 클릭시 뜨는 Modal -->
@@ -889,9 +920,9 @@ $(function(){
 											<td width="240">주소</td>
 										</tr>
 										<tr style="font-size: 14px;" align="center">
-											<td onclick="insertTourSearch();" style="cursor: pointer;">대한민국 산업기술 R&D대전 2019</td>
-											<td>02-6000-0820</td>
-											<td>서울특별시 강남구 영동대로 513</td>
+											<td onclick="insertTourSearch();" style="cursor: pointer;">국립 오서산자연휴양림</td>
+											<td>041-936-5465</td>
+											<td>충청남도 보령시 청라면 오서산길 531</td>
 										</tr>
 									</table>
 								</div>
@@ -1303,24 +1334,25 @@ function insertTourSearch() {
 }
 
 // 세부계획 저장버튼 누르면 DB에 저장
-function saveDetail() {
-	var f=document.detailPlanForm;
-	var str=f.memo.value;
-	if(! str) {
-		alert("메모를 입력하세요.");
+// function saveDetail() {
+// 	var f=document.detailPlanForm;
+// 	var str=f.memo.value;
+// 	if(! str) {
+// 		alert("메모를 입력하세요.");
 		
-		f.memo.focus();
-		return;
-	}
+// 		f.memo.focus();
+// 		return;
+// 	}
 	
-	str=f.price.value;
-	if(! str) {
-		alert("예상금액을 입력하세요.");
-		f.price.focus();
-		return;
-	}
-	f.submit();
-}
+// 	str=f.price.value;
+// 	if(! str) {
+// 		alert("예상금액을 입력하세요.");
+// 		f.price.focus();
+// 		return;
+// 	}
+// 	f.submit();
+// }
+
 
 </script>
 </body>
