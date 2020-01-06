@@ -209,7 +209,17 @@ public class EventController {
 		
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		map.put("eventNum", eventNum);
+		
+		Event preReadDto = service.preReadEvent(map);
+		Event nextReadDto = service.nextReadEvent(map);
+		
 		model.addAttribute("dto", dto);
+		model.addAttribute("preReadDto", preReadDto);
+		model.addAttribute("nextReadDto", nextReadDto);
 		model.addAttribute("page", page);
 		model.addAttribute("query", query);
 				

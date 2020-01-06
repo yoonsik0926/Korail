@@ -11,48 +11,36 @@
 .tit-heading {position:relative; height:51px; margin-top:30px; border-bottom:3px solid #241d1e;}
 .tit-evt {background:none; color:#333333; font-size:14px; text-align:justify; height:38px; line-height:38px; margin:0;}
 
-.event-poster {
-}
-
-.event-info {
-
+.subject {
+	font-size: 16px;
+	padding-top: 10px;
+	font-weight: bold;
 }
 
 </style>
 
-<div class="body-container" style="width: 700px;">
+<div class="body-container" style="width: 700px; margin-left: auto; margin-right: auto;">
     <div class="body-title">
         <h3><i class="far fa-image"></i> 이벤트 보기 </h3>
-    </div>
-    
    
-   <div>
-   <h2>미션</h2>
-   <p>제목: ${dto.name} </p>
-   <p>시작일: ${dto.sdate} 
-   <p>종료일: ${dto.edate}
-   <img src="<%=cp%>/uploads/event/${dto.imageFilename}">
-   <p>이벤트설명 : ${dto.content}</p>
-   </div>
-      
-    <div>
 			<table style="width: 100%; margin: 20px auto 0px; border-spacing: 0px; border-collapse: collapse;">
-			<tr height="35" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;">
+			<tr height="35" style= "border-top: 2px solid #444444; border-bottom: 1px solid #cccccc;">
 			    <td colspan="2" align="center">
-				   ${dto.name}
+				   <p class="subject">${dto.name}<p>
 			    </td>
 			</tr>
 			
 			<tr height="35" style="border-bottom: 1px solid #cccccc;">
 			    
-			    <td width="50%" align="right" style="padding-right: 5px;">
+			    <td width="50%" align="right" style="padding-right: 5px; background: #fafafa;">
 			        <span>기간: </span>${dto.sdate} ~ ${dto.edate}
 			    </td>
 			</tr>
 			
 			<tr>
 			  <td colspan="2" align="left" style="padding: 10px 5px;">
-			      <img src="<%=cp%>/uploads/photo/${dto.imageFilename}" style="max-width:100%; height:auto; resize:both;">
+			      <img src="<%=cp%>/uploads/event/${dto.imageFilename}" style="max-width:100%; 
+			      height:auto; resize:both;">
 			   </td>
 			</tr>			
 			<tr style="border-bottom: 1px solid #cccccc;">
@@ -60,13 +48,30 @@
 			      ${dto.content}
 			   </td>
 			</tr>
+								
+			<tr height="35" style="border-bottom: 1px solid #cccccc;">
+			    <td colspan="2" align="left" style="padding-left: 5px;">
+			      	 이전글 :
+			         <c:if test="${not empty preReadDto}">
+			              <a href="<%=cp%>/photo/article?${query}&num=${preReadDto.num}">${preReadDto.subject}</a>
+			        </c:if>
+			    </td>
+			</tr>
+				<tr height="35" style="border-bottom: 2px solid #444444;">
+				   	 <td colspan="2" align="left" style="padding-left: 5px;">
+				       다음글 :
+				         <c:if test="${not empty nextReadDto}">
+				              <a href="<%=cp%>/photo/article?${query}&num=${nextReadDto.num}">${nextReadDto.subject}</a>
+				        </c:if>
+				    </td>
+				</tr>
 						
 			</table>
-			
+						
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">
 			    <td align="right">
-			        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/current?${query}';">리스트</button>
+			        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/current?${query}';">목록으로</button>
 			    </td>
 			</tr>
 			</table>

@@ -25,54 +25,26 @@
     margin: 10px 30px 20px 10px;
     padding: 10px;
     padding-bottom: 30px;}
+
+ul {
+   list-style: none;
+   }    
+
 .sect-eventlist .box-contents{ margin-top:10px; line-height:1.6;}
 .sect-eventlist .box-contents p{ white-space:nowrap;}
-
-ul{
-   list-style:none;
-   }
-   
-.type-section .type-list-event:after { content:''; display:block; clear:both; }
-.type-section .type-list-event .type-list { float:left; position:relative; width:100%; } 
-.type-section .type-list-event .type-list:after{clear:both; display:block; content:""}
-.type-section .type-list-event .type-list div:last-child:after { display:none; }
-
 
 .type-section .type-list-event .type-list div{ float:left; position:relative; width:163px; text-align:center;}
 .type-section .type-list-event .type-list .list:after { display:block; position:absolute; top:14px; right:0; content:''; width:1px; height:22px; background:#ddd; }
 .type-section .type-list-event .type-list div a{display:block; height:49px; line-height:49px; color:#777; font-size:16px;}
-.type-section .type-list-event .type-list div.active a span, .type-section .type-list-event .type-list div a:hover span{ display:block; position:relative; padding-bottom:0; color: #1429a0; }
-.type-section .type-list-event .type-list div.active a span:after, .type-section .type-list-event .type-list div a:hover span:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
-
 .type-section .type-list-event .type-list div a h3 {font-size:16px; font-weight:normal}
 .type-section .type-list-event .type-list div.active a h3, .type-section .type-list-event .type-list div a:hover h3{ display:block; position:relative; padding-bottom:17px; color: #1429a0; }
 .type-section .type-list-event .type-list div.active a h3:after, .type-section .type-list-event .type-list div a:hover h3:after { content: ''; position:absolute; left:0; bottom:0; width:100%; height:3px; background-color:#1429a0; }
-
 
 .search-section{ width: calc(25% - 12px); max-width: 348px;}
 .search-section .section-container{ background:#f3f3f3;}
 .search-section .input-area{position:relative; width:100%; margin:0 auto; padding-right:50px; background:#e7e7e7; -webkit-box-sizing:border-box; box-sizing:border-box;}
 .search-section .input-area input{width:100%; height:51px; line-height:51px; padding-left:20px; border:0 none; background:transparent; font-size:14px; -webkit-box-sizing:border-box; box-sizing:border-box; }
 .search-section .input-area .btn-event-search{position:absolute; right:15px; top:50%; width:23px; height:22px; margin-top:-11px; background-image:url(/Project_RailTraveler/resource/img/search.jpg); background-repeat:no-repeat;}
-
-.modal {
-          text-align: center;
-        }
-        @@media screen and (min-width: 768px) {
-          .modal:before {
-            display: inline-block;
-            vertical-align: middle;
-            content: " ";
-            height: 100%;
-          }
-        }
-        .modal-dialog {
-          display: inline-block;
-          text-align: left;
-          vertical-align: middle;
-          width: 55%; 
-		  height: 55%; 
-        } 
 
 </style>
 
@@ -164,8 +136,7 @@ ul{
                                	<div class="list" data-order="0"><a><h3>등록순</h3></a></div>
 								
 								<div class="list" data-order="1"><a><h3>마감순</h3></a></div>
-															
-                            </div>
+					       </div>
                         </div>
                     </div>
                                        
@@ -197,28 +168,25 @@ ul{
 			 <div class="sect-eventlist highlight" style=" display: block; padding-top: 150px;
 		    width: 100%; min-height: 350px; ">
 		    		    
-		    <div style="width: 1200px; margin: 0 auto; ">
-    	    	
+		    <div style="width: 1200px; margin: auto; padding-left: 70px">
     	    	<ul>
-
-    	         <c:forEach var="dto" items="${list}">
+				  <c:forEach var="dto" items="${list}">
     	         	<li>
-                    <div class="box-image">
-                        
-                            <span class="thumb-image">
-                              <img src="<%=cp%>/uploads/event/${dto.imageFilename}" width="180"
-			                   height="180"
-                              
-                              onclick="javascript:article('${dto.eventNum}');"/>
-                            </span>
-                    </div>
-                    <div class="box-contents">
-                        
-                            <em class="txt-lightblue">${dto.name}</em>
+	                   	<div class="box-image">
+	                        
+	                            <span class="thumb-image">
+	                              <img src="<%=cp%>/uploads/event/${dto.imageFilename}" width="180"
+				                   height="180"
+	                              
+	                              onclick="javascript:article('${dto.eventNum}');"/>
+	                            </span>
+	                    </div>
+	                    <div class="box-contents">
+                           <em class="txt-lightblue">${dto.name}</em>
                             
-                        <p class="date">
-                            <span>기간: </span>${dto.sdate} ~ ${dto.edate}
-                        </p>
+	                        <p class="date">
+	                            <span>기간: </span>${dto.sdate} ~ ${dto.edate}
+	                        </p>
                      <c:if test="${sessionScope.member.userId=='admin'}">
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
                      	<tr height="45">
@@ -229,11 +197,12 @@ ul{
 						
 						</tr>
 						</table>
-					 </c:if>	
-						</div>
+					 </c:if>
+					 </div>	
+				
 					</li>
                  </c:forEach> 
-             			
+                             			
     	    </ul>	
     	</div>
     </div>
@@ -255,5 +224,4 @@ ul{
 		      </td>
 		   </tr>
 		</table>
-    	
-	
+ 

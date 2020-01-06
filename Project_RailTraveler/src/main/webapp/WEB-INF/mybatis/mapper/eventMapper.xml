@@ -85,5 +85,23 @@
 	 	from event 
 	 	WHERE eventNum = #{eventNum}
 	</select>
-	 	
+	
+	<!-- 이전글 -->
+	<select id="preReadevent" parameterType="map" resultType="com.railer.rt.event.Event">
+		SELECT eventNum, name
+		FROM event
+				
+		ORDER BY num ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+
+	<!-- 다음글 -->
+	<select id="nextReadevent" parameterType="map" resultType="com.railer.rt.event.Event">
+		SELECT eventNum, name
+		FROM event
+				
+		ORDER BY num DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+ 	
 </mapper>
