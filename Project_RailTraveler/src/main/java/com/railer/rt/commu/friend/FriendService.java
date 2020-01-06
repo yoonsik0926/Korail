@@ -16,7 +16,7 @@ public interface FriendService {
 	
 	public void updateFriend(Friend dto, String pathname) throws Exception;
 	public void updateEnable(int friendNum) throws Exception;
-	public void deleteFriend(int num, String pathname) throws Exception;
+	public void deleteFriend(Map<String, Object> map, String pathname) throws Exception;
 	
 	public void insertFile(Friend dto) throws Exception;
 	public List<Friend> listFile(int num);
@@ -32,4 +32,5 @@ public interface FriendService {
 	public void insertFriendReply(FriendReply dto) throws Exception;
 	public int replyCount(Map<String, Object> map) throws Exception;
 	public List<FriendReply> listReply(Map<String, Object> map);
+	public void deleteReply(Map<String, Object> map) throws Exception;
 }

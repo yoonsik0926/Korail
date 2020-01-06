@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.railer.rt.common.FileManager;
 import com.railer.rt.common.MyUtil;
 import com.railer.rt.member.SessionInfo;
+//import com.sp.customer.notice.Notice;
 
 @Controller("commu.friend.friendController")
 public class FriendController {
@@ -104,7 +105,7 @@ public class FriendController {
 			dto.setGap(gap);
 			dto.setCreated(dto.getCreated().substring(0, 10));
 			n++;
-		}
+		} 
 		
 		for (Friend dto : noticeList) {
 
@@ -405,9 +406,8 @@ public class FriendController {
 			
 			try {
 				dto.setUserId(info.getUserId());
-				System.out.println(dto.toString());
 				service.insertFriendReply(dto);
-			} catch (Exception e) {
+			} catch (Exception e) { 
 				state="false";
 			}
 			
@@ -416,10 +416,29 @@ public class FriendController {
 			return model;
 		} 
 		
+		// 댓글 및 댓글의 답글 삭제 : AJAX-JSON
+		@RequestMapping(value="/friend/deleteReply", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> deleteReply(
+				@RequestParam Map<String, Object> paramMap
+				) {
+			
+			String state="true";
+			try {
+				service.deleteReply(paramMap);
+			} catch (Exception e) {
+				state="false";
+			}
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("state", state);
+			return map;
+		}
+		 
 		// 댓글 리스트 : AJAX-TEXT
 		@RequestMapping(value="/friend/listReply")
 		public String listReply(
-				@RequestParam int friendNum,
+				@RequestParam int friendNum,@RequestParam String userId,
 				@RequestParam(value="pageNo", defaultValue="1") int current_page,
 				Model model
 				) throws Exception {
@@ -450,6 +469,7 @@ public class FriendController {
 			String paging=util.pagingMethod(current_page, total_page, "listPage");
 			
 			// 포워딩할 jsp로 넘길 데이터 
+			model.addAttribute("writer", userId);
 			model.addAttribute("listReply", listReply);
 			model.addAttribute("pageNo", current_page);
 			model.addAttribute("replyCount", dataCount);
@@ -475,6 +495,11 @@ public class FriendController {
 			readMap.put("friendNum", friendNum);
 			
 			Friend dto = service.readFriend(readMap);
+			
+
+			List<Friend> listFile=service.listFile(friendNum);
+	
+			
 			if(dto==null) {
 				return "redirect:/friend/friend?page="+page;
 			}
@@ -482,7 +507,7 @@ public class FriendController {
 			if(! info.getUserId().equals(dto.getUserId())) {
 				return "redirect:/friend/friend?page="+page;
 			}
-			
+			model.addAttribute("listFile", listFile);
 			model.addAttribute("dto", dto);
 			model.addAttribute("mode", "update");
 			model.addAttribute("page", page);
@@ -520,41 +545,119 @@ public class FriendController {
 			String query="page="+page;
 			if(keyword.length()!=0) {
 				query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
-			}
+			} 
 			
 			String root=session.getServletContext().getRealPath("/");
 			String pathname=root+"uploads"+File.separator+"friend";
 			
-			service.deleteFriend(friendNum, pathname);
+			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("userId", info.getUserId());
+			map.put("friendNum", friendNum);
+			
+			service.deleteFriend(map, pathname);
 			
 			return "redirect:/friend/friend?"+query;
 		}
 		
 		@RequestMapping(value="/friend/download")
 		public void download(
-				@RequestParam int friendNum,
-				HttpServletRequest req,
+				@RequestParam int friendFileNum,
 				HttpServletResponse resp,
-				HttpSession session
-				) throws Exception {
+				HttpSession session) throws Exception {
+			String root = session.getServletContext().getRealPath("/");
+			String pathname = root + "uploads" + File.separator + "friend";
+
+			boolean b = false; 
 			
-			String root=session.getServletContext().getRealPath("/");
-			String pathname=root+"uploads"+File.separator+"friend";
-			SessionInfo info=(SessionInfo)session.getAttribute("member");
-			Map<String, Object> readMap = new HashMap<String, Object>();
-			readMap.put("userId", info.getUserId());
-			readMap.put("friendFileNum", friendNum);
-			
-			Friend dto = service.readFriend(readMap);
-			
+			Friend dto = service.readFile(friendFileNum);
 			if(dto!=null) {
-				boolean b=fileManager.doFileDownload(dto.getSaveFilename(),
-						                   dto.getOriginalFilename(), pathname, resp);
-				if(b) return;
+				String saveFilename = dto.getSaveFilename();
+				String originalFilename = dto.getOriginalFilename();
+				  
+				b = fileManager.doFileDownload(saveFilename, originalFilename, pathname, resp);
 			}
 			
-			resp.setContentType("text/html;charset=utf-8");
-			PrintWriter out=resp.getWriter();
-			out.print("<script>alert('파일 다운로드가 실패 했습니다.');history.back();</script>");
+			if (!b) {
+				try {
+					resp.setContentType("text/html; charset=utf-8");
+					PrintWriter out = resp.getWriter();
+					out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+				} catch (Exception e) {
+				}
+			}
 		}
+
+		@RequestMapping(value="/friend/zipDownload")
+		public void zipdownload(
+				@RequestParam int friendNum,
+				HttpServletResponse resp,
+				HttpSession session) throws Exception {
+			String root = session.getServletContext().getRealPath("/");
+			String pathname = root + "uploads" + File.separator + "friend";
+
+			boolean b = false;
+			
+			List<Friend> listFile = service.listFile(friendNum);
+			if(listFile.size()>0) {
+				String []sources = new String[listFile.size()];
+				String []originals = new String[listFile.size()];
+				String zipFilename = friendNum+".zip";
+				
+				for(int idx = 0; idx<listFile.size(); idx++) {
+					sources[idx] = pathname+File.separator+listFile.get(idx).getSaveFilename();
+					originals[idx] = File.separator+listFile.get(idx).getOriginalFilename();
+				}
+				
+				b = fileManager.doZipFileDownload(sources, originals, zipFilename, resp);
+			}
+			
+			if (!b) {
+				try {
+					resp.setContentType("text/html; charset=utf-8");
+					PrintWriter out = resp.getWriter();
+					out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		@RequestMapping(value="/friend/deleteFile", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> deleteFile(
+				@RequestParam int friendFileNum,
+				HttpServletResponse resp,
+				HttpSession session) throws Exception {
+			String root = session.getServletContext().getRealPath("/");
+			String pathname = root + "uploads" + File.separator + "friend";
+			
+			Friend dto=service.readFile(friendFileNum);
+			if(dto!=null) {
+				fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			}
+			
+			Map<String, Object> model = new HashMap<>(); 
+			try {
+				Map<String, Object> map=new HashMap<String, Object>();
+				map.put("field", "friendFileNum");
+				map.put("num", friendFileNum);
+				service.deleteFile(map);
+				model.put("state", "true");
+			} catch (Exception e) {
+				model.put("state", "false");
+			}
+			
+			return model;
+		}
+		
+		
 }

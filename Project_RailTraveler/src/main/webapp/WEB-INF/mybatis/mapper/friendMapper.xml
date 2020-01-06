@@ -61,6 +61,7 @@
             <include refid="where-list"/>
          </if>
          and notice=1
+         and deleted=0
       </where>
       ORDER BY f.friendNum DESC
    </select>
@@ -86,6 +87,7 @@
 	result Type : Friend DTO-->
 	<select id="listFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created, sDate, eDate, f.enable,
+      		deleted, deleteId,
             NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
@@ -147,11 +149,11 @@
    	WHERE friendNum=#{friendNum}
    </select>
 	
-	<!--공지사항 해당 게시물에 대한 이전글 정보 가져오기
+	<!-- 해당 게시물에 대한 이전글 정보 가져오기
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="preReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT friendNum, subject, f.created 
+      SELECT friendNum, subject,f.created 
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -160,12 +162,13 @@
          </if>
          AND (friendNum &gt; #{friendNum})
          AND notice != 1
+         AND deleted = 0
       </where>
       ORDER BY friendNum ASC
       FETCH FIRST 1 ROWS ONLY
 	</select>
 	
-	<!--공지사항 해당 게시물에 대한 다음글 정보 가져오기
+	<!--해당 게시물에 대한 다음글 정보 가져오기
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="nextReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
@@ -178,6 +181,7 @@
          </if>
          AND (friendNum &lt; #{friendNum})
          AND notice != 1
+         AND deleted = 0
       </where>
       ORDER BY friendNum DESC
       FETCH FIRST 1 ROWS ONLY
@@ -216,9 +220,9 @@
 	<!--공지사항 삭제
 	parameter Type : 정수
 	result Type : Notice DTO-->
-	<delete id="deleteFriend" parameterType="Integer">
-		DELETE FROM friend WHERE friendNum=#{friendNum}
-	</delete>
+	<update id="deleteFriend" parameterType="map">
+		update friend set deleted=1, deleteID=#{userId} WHERE friendNum=#{friendNum}
+	</update>
 	
 	<!--동행게시판 게시물의 파일 삭제 (게시물 수정)
 	parameter Type : map-->
@@ -252,7 +256,12 @@
 	<!-- 댓글 등록 -->
 	<insert id="insertReply" parameterType="com.railer.rt.commu.friend.FriendReply">
 		INSERT INTO FRIENDREPLY(friendReplyNum, userId, friendNum, content, answer, secret)
-			VALUES (FRIENDREPLY_SEQ.NEXTVAL, #{userId}, #{friendNum}, #{content}, #{answer}, #{secret})
+			<if test="answer==0">
+			VALUES (FRIENDREPLY_SEQ.NEXTVAL, #{userId}, #{friendNum}, #{content}, null, #{secret})
+			</if>
+			<if test="answer!=0">
+			VALUES (FRIENDREPLY_SEQ.NEXTVAL, #{userId}, #{friendNum}, #{content}, #{answer, jdbcType=INTEGER}, #{secret})
+			</if>
 	</insert>
 	
 	<!--게시물의 댓글수를 반환
@@ -266,27 +275,33 @@
 	
 	<!-- 댓글 리스트 -->
 	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.friend.FriendReply">
-<!-- 		select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount -->
-<!-- 	from friendReply fr -->
-<!-- 	JOIN MEMBER2 m2 on m2.userId = fr.userId -->
-<!-- 	LEFT OUTER JOIN ( -->
-<!-- 			SELECT answer, COUNT(*) answerCount -->
-<!-- 			FROM friendReply WHERE answer!=0 GROUP BY answer -->
-<!-- 		) a ON fr.friendReplyNum = a.answer -->
-<!-- 	WHERE fr.friendNum=#{friendNum} -->
-<!-- 		ORDER BY fr.answer asc,friendReplyNum DESc -->
-select friendReplyNum, userId, userName, friendNum, content, created, answer, secret, NVL(answerCount, 0) answerCount 
-from(select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount
+select friendReplyNum, userId, userName, friendNum, content, created, NVL(answer,0) answer, secret, NVL(answerCount, 0) answerCount 
+from(
+select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount
 	from friendReply fr
 	JOIN MEMBER2 m2 on m2.userId = fr.userId
 	LEFT OUTER JOIN (
-			SELECT answer, COUNT(*) answerCount
-			FROM friendReply WHERE answer!=0 GROUP BY answer
+			SELECT  answer, COUNT(*) answerCount
+			FROM friendReply WHERE  answer!=0 GROUP BY  answer
 		) a ON fr.friendReplyNum = a.answer
 	WHERE fr.friendNum=#{friendNum}
-   ORDER BY answer asc, friendReplyNum desc) 
-   START WITH answer = 0
-CONNECT BY PRIOR friendReplyNum =  answer
+   ORDER BY friendReplyNum DESC) 
+   START WITH answer IS NULL
+CONNECT BY PRIOR friendReplyNum =   answer
 	</select>
 	
+	<!-- 댓글 및 답글 삭제 -->
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM FriendReply WHERE 
+		<if test="mode=='reply' ">
+			friendReplyNum IN (
+				SELECT friendReplyNum FROM FriendReply
+					START WITH friendReplyNum=#{friendReplyNum}
+					CONNECT BY PRIOR friendReplyNum = answer         
+			)
+		</if>
+		<if test="mode=='answer' ">
+			friendReplyNum = #{friendReplyNum}
+		</if>
+	</delete>
 </mapper>

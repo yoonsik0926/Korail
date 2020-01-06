@@ -91,7 +91,81 @@ $(function () {
     	 $('#datepicker1').val('');
     	 $('#datepicker2').val('');
 	}
-    
+// 	deleteFile('${vo.friendFileNum}');
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+//리플 등록
+function deleteFile(num) {
+	console.log(num);
+	var trcs = "#f"+num;
+	var $tr = $(trcs);
+	
+	var url="<%=cp%>/friend/deleteFile";
+	var query="friendFileNum="+num;
+	
+	var fn = function(data){
+		
+		var state=data.state;
+		if(state=="true") {
+			alert("삭제완료!");
+			$tr.remove();
+		} else if(state=="false") {
+			alert("파일을 삭제 하지 못했습니다.");
+		}
+	};
+	
+	ajaxJSON(url, "post", query, fn);
+	
+}
+$(function () {
+	
+	$(".btnSendReply").click(function(){
+		var friendNum="${dto.friendNum}";
+		var $tb = $(this).closest("table");
+		var content=$tb.find("textarea").val().trim();
+		if(! content) {
+			alert("내용을 입력해주세요");
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		var url="<%=cp%>/friend/insertReply";
+		var query="friendNum="+friendNum+"&content="+content+"&answer=0&content="+content;
+		
+		var fn = function(data){
+			$tb.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
 </script>
 <style type="text/css">
 .tb-row {
@@ -192,24 +266,25 @@ input[type=text], input[type=file] {
 								name="content" rows="12" id="content" class="boxTA"
 								style="width: 100%; height: 270px;">${dto.content}</textarea></td>
 					</tr>
-
+<c:if test="${mode=='update'}">
+   <c:forEach var="vo" items="${listFile}">
+		  <tr id="f${vo.friendFileNum}" height="40" style="border-bottom: 1px solid #cccccc;"> 
+		      <td class="tb-title" width="100" style="text-align: center;">첨부된파일</td>
+		      <td style="padding-left:10px;">
+		        <a href="javascript:deleteFile('${vo.friendFileNum}');"><i class="far fa-trash-alt"></i></a> 
+				${vo.originalFilename}
+		      </td>
+		  </tr>
+   </c:forEach>
+</c:if>	  
 					<tr class="tb-row">
 						<td width="100" class="tb-title">첨&nbsp;&nbsp;&nbsp;&nbsp;부</td>
 						<td class="tb-content"><input type="file" name="upload"
 							class="boxTF" size="53"></td>
 					</tr>
 
-					<c:if test="${mode=='update' }">
-						<tr class="tb-row">
-							<td width="100" class="tb-title">첨부된파일</td>
-							<td class="tb-content"><c:if
-									test="${not empty dto.saveFilename}">
-									<a
-										href="<%=cp%>/friend/deleteFile?friendNum=${dto.friendNum}&page=${page}"><i
-										class="far fa-trash-alt"></i></a>
-								</c:if> ${dto.originalFilename}</td>
-						</tr>
-					</c:if>
+						
+					
 				</tbody>
 			</table>
 			<!-- 취소 및 글쓰기 버튼 -->
@@ -290,4 +365,7 @@ nhn.husky.EZCreator.createInIFrame({
 		var nFontSize = 24;
 		oEditors.getById["content"].setDefaultFont(sDefaultFont, nFontSize);
 	}
+	
+	
+
 </script>

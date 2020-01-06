@@ -2,6 +2,7 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
 %>
@@ -138,17 +139,21 @@ $(function(){
 		var friendNum="${dto.friendNum}";
 		var $tb = $(this).closest("table");
 		var content=$tb.find("textarea").val().trim();
+		var $secret=$(this).parent().find("input[name=secret]");
+		var secret=$secret.is(":checked")?1:0;
 		if(! content) {
 			alert("내용을 입력해주세요");
 			$tb.find("textarea").focus();
 			return false;
 		}
+		console.log(content);
 		content = encodeURIComponent(content);
 		var url="<%=cp%>/friend/insertReply";
-		var query="friendNum="+friendNum+"&content="+content+"&answer=0&content="+content;
-		
+		var query="friendNum="+friendNum+"&content="+content+"&answer=0&secret="+secret;
+		console.log(query);
 		var fn = function(data){
 			$tb.find("textarea").val("");
+			
 			
 			var state=data.state;
 			if(state=="true") {
@@ -181,6 +186,9 @@ function insertReply(num){
 	var cs = ".replyForm"+num;
 	var $tb = $(cs);
 	var content=$tb.find("textarea").val().trim();
+	var secret_id = "#inputCK"+num;
+	var $secret=$(secret_id);
+	var secret=$secret.is(":checked")?1:0;
 	if(! content) {
 		alert("내용을 입력해주세요");
 		$tb.find("textarea").focus();
@@ -188,7 +196,7 @@ function insertReply(num){
 	}
 	content = encodeURIComponent(content);
 	var url="<%=cp%>/friend/insertReply";
-	var query="friendNum="+friendNum+"&content="+content+"&answer="+num+"&content="+content;
+	var query="friendNum="+friendNum+"&content="+content+"&answer="+num+"&secret="+secret;
 	
 	var fn = function(data){
 		displayReplyForm(num);
@@ -204,37 +212,6 @@ function insertReply(num){
 	ajaxJSON(url, "post", query, fn);
 };
 
-$(function(){
-	$("body").on(".btnSendReReply","click", function(){
-		console.log("ㅎㅇㅎㅇ");
-		var friendNum="${dto.friendNum}";
-		var $tb = $(this).closest("table");
-		var content=$tb.find("textarea").val().trim();
-		var parent=$(this).data('num');
-		if(! content) {
-			alert("내용을 입력해주세요");
-			$tb.find("textarea").focus();
-			return false;
-		}
-		content = encodeURIComponent(content);
-		var url="<%=cp%>/friend/insertReply";
-		var query="friendNum="+friendNum+"&content="+content+"&answer="+parent+"&content="+content;
-		
-		var fn = function(data){
-			$tb.find("textarea").val("");
-			
-			var state=data.state;
-			if(state=="true") {
-				listPage(1);
-			} else if(state=="false") {
-				alert("댓글을 추가 하지 못했습니다.");
-			}
-		};
-		
-		ajaxJSON(url, "post", query, fn);
-	});
-});
-
 //페이징 처리
 $(function(){
 	listPage(1);
@@ -242,7 +219,7 @@ $(function(){
 
 function listPage(page) {
 	var url = "<%=cp%>/friend/listReply";
-	var query = "friendNum=${dto.friendNum}&pageNo="+page;
+	var query = "friendNum=${dto.friendNum}&userId=${dto.userId}&pageNo="+page;
 	var selector = "#listReply";
 	
 	ajaxHTML(url, "get", query, selector);
@@ -534,7 +511,7 @@ a {
 .box-reply2 {
 	zoom: 1;
 	margin: 0;
-	padding: 11px 26px 16px 24px;
+	padding: 5px 26px 16px 24px;
 }
 
 .box-reply2 {
@@ -553,8 +530,8 @@ a {
 .cmlist li {
 	list-style: none;
 	margin: 0;
-	padding: 10px 0 7px;
-	height: 1%;
+	padding: 10px 10px 7px;
+	height: 1%;color: #666;
 }
 
 .cmlist .board-box-line-dashed {
@@ -627,6 +604,9 @@ a {
 }
 </style>
 
+
+
+
 <!-- SNS 공유하기 모달 -->
 <div id="snsModal" role="dialog" tabindex="-1"
 	aria-labelledby="mySmallModalLabel" aria-hidden="true"
@@ -683,19 +663,18 @@ a {
 	<div class="modal-dialog"
 		style="width: 35%; position: absolute; right: 30%; top: 25%;">
 		<div class="modal-content"
-			style="background: aliceblue; text-align: center; border: 10px solid;">
-			<div class="text-basic">
+			style="background: aliceblue;
+    text-align: center;
+    padding: 0;">
+			<div class="declare_title">
+				<span style="font-weight: 800; background: #eee;">신고하기</span>
+			</div>
 				<div>
-					<h2>신고하기</h2>
-					<div style="padding: 10px 20px;">
-						<span>*신고 사유*</span>
-						<textarea class='boxTA'
-							style='width: 100%; height: 150px; resize: none; border-radius: 7px;'></textarea>
-						<button type='button' class='btn btnSendReply btn-default'
-							data-num='10'
-							style='width: 100%; height: 60px; margin-top: 20px; font-size: 20px; padding: 0px 0px;'>등록</button>
-					</div>
-				</div>
+				<p><b>제&nbsp;&nbsp;목 : </b> <span> ${dto.subject}</span></p>
+				<p><b>작성자 : </b> <span> ${dto.userId}</span></p>
+				<hr>
+				<p><b>사유선택 : </b> <span> 여러 사유에 해당되는 경우, 대표적인 사유 1개를 선택해 주세요</span></p>
+				
 				<div id="copy_complete" class="text-center"></div>
 			</div>
 		</div>
@@ -727,7 +706,7 @@ a {
 					<c:forEach var="file" items="${files}">
 					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
 					<td>
-					 <a href="<%=cp%>/friend/download?friendFileNum=${file.friendFileNum}">
+					 <a href="<%=cp%>/friend/download?friendFileNum=${file.friendFileNum}">${file.friendFileNum}
 					<i
 								class="far fa-arrow-alt-circle-down"></i></a></td>
 								<td>${file.originalFilename}</td>
@@ -819,16 +798,17 @@ a {
 								<tr>
 									<td></td>
 									<td class="m-tcol-c date">${dto.created}</td>
-
+<c:if test="${dto.userId ==sessionScope.member.userId}">
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
 
 									<td class="edit _rosRestrict" onclick="updateBoard();"><a
 										id="modifyFormLink" href="#" class="m-tcol-c">수정</a></td>
-
-
+</c:if>
+<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
 									<td class="delete _rosRestrict" onclick="deleteBoard();"><a
 										href="javascript:checkLogin('delete');" class="m-tcol-c">삭제</a></td>
+									</c:if>	
 								</tr>
 							</tbody>
 						</table>
@@ -849,7 +829,9 @@ a {
 														src="<%=cp%>/resource/images/commu/profileImg.png"
 														width="30"></td>
 													<td class="p-nick"><a href="#" class="m-tcol-c b"
-														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}(${dto.userId})</a></td>
+														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}
+														
+														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)</a></td>
 												</tr>
 											</tbody>
 										</table>
@@ -909,10 +891,11 @@ a {
 					${dto.content}</div>
 
 				<div class="h-35"></div>
+				<c:if test="${dto.notice != 1 }">
 				<div
 					style="border: 1px solid; background: beige; padding: 5px 10px;">기간
 					: ${dto.sDate} ~ ${dto.eDate}</div>
-
+				</c:if>
 				<div class="h-35"></div>
 				<div class="reply-box" id="cmtMenu">
 					<div class="fl reply_sort">
@@ -1071,11 +1054,13 @@ a {
 								${dto.userId==sessionScope.member.userId?"":"disabled='disabled'"}>모집중</button>
 						</c:if>
 					</c:if>
+					<c:if test="${dto.userId ==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="updateBoard();">수정</button> <%-- 					<c:if --%> <%-- 						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}"> --%>
+						onclick="updateBoard();">수정</button> </c:if>
+					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="deleteFriend();">삭제</button> <%-- 					</c:if> --%> <c:if
-						test="${dto.notice!=1}">
+						onclick="deleteFriend();">삭제</button></c:if>
+						<c:if test="${dto.notice!=1}">
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
 							목록</button>
@@ -1195,4 +1180,6 @@ a {
 
 			location.href=url;
 		}
+		
+		
 </script>
