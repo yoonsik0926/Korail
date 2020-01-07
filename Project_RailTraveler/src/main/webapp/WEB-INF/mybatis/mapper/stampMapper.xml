@@ -3,14 +3,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="stamp">
 	
-	<select id="listStamp" parameterType="String" resultType="com.railer.rt.mypage.Stamp">
-		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress,l.locNum, l.locName
+	<select id="listStamp" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
+		select stampNum, s.staNum, s.staName,ss.saleNum, m.userNum, m.userId,s.staAddress,l.locNum, l.locName,ss.sDate,ss.eDate
 		from stamp st
 		join station s on st.stanum = s.stanum
 		join sale ss on ss.salenum = st.salenum
 		join member2 m on ss.usernum = m.usernum
 		join location l on l.locNum = s.locNum
 		where m.userId = #{userId}
+		
+		<if test="again == 1">
+			and s.staNum = #{staNum} and ss.saleNum = #{saleNum}
+		</if>
+		
 	</select>
 	
 	<select id="readStamp" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
@@ -20,7 +25,7 @@
 		join sale ss on ss.salenum = st.salenum
 		join member2 m on ss.usernum = m.usernum
 		join location l on l.locNum = s.locNum
-		where stampNum = #{stampNum}
+		where s.staNum = #{staNum} and ss.saleNum = #{saleNum}
 	</select>
 	
 	<select id="stampDataCount" parameterType="map" resultType="Integer">	
@@ -37,5 +42,18 @@
 		from station s
 		join location l on s.locNum = l.locNum
 	</select>
+	
+	
+	<select id="saleList" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
+		select saleNum, s.userNum, userId,ticketNum, sDate, eDate, s.created
+		from sale s
+		join member2 m on s.userNum = m.userNum
+		where m.userId = #{userId}
+	</select>
+	
+	<insert id="insertStamp" parameterType="map">
+		insert into stamp(stampNum, staNum, saleNum)
+		values (STAMP_SEQ.NEXTVAL, #{staNum},#{saleNum})
+	</insert>
 	
 </mapper>

@@ -1,5 +1,9 @@
 package com.railer.rt.mypage;
 
+/**
+ * @author sist
+ *
+ */
 public class Stamp {
 	private int stampNum;
 	private int staNum;
@@ -10,6 +14,13 @@ public class Stamp {
 	private String staAddress;
 	private int locNum;
 	private String locName;
+	
+	//티켓
+	private String sDate;
+	private String eDate;
+	private String created;
+	private int ticketNum;
+	
 	public int getStampNum() {
 		return stampNum;
 	}
@@ -64,6 +75,31 @@ public class Stamp {
 	public void setLocName(String locName) {
 		this.locName = locName;
 	}
+	public String getsDate() {
+		return sDate;
+	}
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+	public String geteDate() {
+		return eDate;
+	}
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
+	}
+	public String getCreated() {
+		return created;
+	}
+	public void setCreated(String created) {
+		this.created = created;
+	}
+	public int getTicketNum() {
+		return ticketNum;
+	}
+	public void setTicketNum(int ticketNum) {
+		this.ticketNum = ticketNum;
+	}
+	
 	
 	
 	

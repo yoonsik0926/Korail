@@ -208,23 +208,6 @@ public class MypageController {
 		return ".four.mypage.ticket.ticket";
 	}
 
-	// 거리를 계산해주는 메소드
-	public double caldistance(double stalat, double stalng, double lat, double lng) {
-
-		double distance;
-		double radius = 6371; // 지구 반지름(km)
-		double toRadian = Math.PI / 180;
-
-		double dLat = (stalat - lat) * toRadian;
-		double dLon = (stalng - lng) * toRadian;
-
-		double squareRoot = Math.sqrt(Math.sin(dLat / 2) * Math.sin(dLat / 2)
-				+ Math.cos(stalat * toRadian) * Math.cos(lat * toRadian) * Math.sin(dLon / 2) * Math.sin(dLon / 2));
-		distance = 2 * radius * Math.asin(squareRoot);
-
-		return distance;
-	}
-
 	// 스탬프
 	@RequestMapping(value = "/stamp/stamp")
 	public String stamp(Model model, HttpServletRequest req, HttpSession session) throws Exception {
@@ -233,7 +216,11 @@ public class MypageController {
 		String userId = info.getUserId();
 
 		// 지도에 마크 찍을 스탬프 리스트
-		List<Stamp> stampList = stampSerivce.listStamp(userId);
+		Map<String, Object> map = new HashMap<>();
+		map.put("again", 0);
+		map.put("userId", userId);
+		
+		List<Stamp> stampList = stampSerivce.listStamp(map);
 
 		model.addAttribute("stampList", stampList);
 
@@ -264,7 +251,10 @@ public class MypageController {
 		String paging = myUtil.pagingMethod(current_page, total_page, "stampListPage");
 
 		// 지도에 마크 찍을 스탬프 리스트
-		List<Stamp> stampList = stampSerivce.listStamp(userId);
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("again", 0);
+		map2.put("userId", userId);
+		List<Stamp> stampList = stampSerivce.listStamp(map2);
 
 		model.addAttribute("stampList", stampList);
 		model.addAttribute("paging", paging);
@@ -278,17 +268,31 @@ public class MypageController {
 	}
 
 	@RequestMapping(value = "/stamp/calDistance")
-	@ResponseBody
-	public Map<String, Object> calDistance(@RequestParam String locLogitude, @RequestParam String locLatitude) {
+	public String calDistance(
+			Model model,
+			HttpSession session,
+			@RequestParam String locLogitude, 
+			@RequestParam String locLatitude) {
 		
-		Map<String, Object> model = new HashMap<>();
 		
-		String state = "true";
 		List<Station> matchList = new ArrayList<Station>();
+		List<Stamp> saleList = new ArrayList<>();
 		Station dto = null;
+		int result = 0;
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		String userId = info.getUserId();
 
 		
 		try {
+			//티켓 목록 리스트
+			Map<String, Object> map = new HashMap<>();
+			map.put("userId", userId);
+			
+			saleList = stampSerivce.listSale(map);
+			
+			
+			
 			// 현재 위치 비교를 위한 역 목록 리스트
 			List<Station> stationList = stampSerivce.listStation();
 			
@@ -308,23 +312,71 @@ public class MypageController {
 				distance = 2 * radius * Math.asin(squareRoot);
 				
 				if(distance < 5) {
-					dto = stationList.get(i);					
+					dto = stationList.get(i);
 					matchList.add(dto);
-					
 				}
 
 			}
+			
+			if(matchList != null) {
+				result = 1;
+			}
+			
+			
+			
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("matchList",matchList);
+		model.addAttribute("saleList",saleList);
+		model.addAttribute("result",result);
+		
+		model.addAttribute("subMenu", "6");
+
+		
+		return "/mypage/stamp/match";
+	}
+	
+	@RequestMapping(value="/stamp/insert", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertStamp(
+			@RequestParam int staNum,
+			@RequestParam int saleNum) {
+		
+		String state = "true";
+		Map<String, Object> map = new HashMap<>();
+		map.put("staNum", staNum);
+		map.put("saleNum", saleNum);
+		
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("staNum", staNum);
+		map2.put("saleNum", saleNum);
+		Stamp dto = null;
+		
+		try {
+			
+			dto = stampSerivce.readStamp(map2);
+			if(dto !=null) {
+				state="again";
+			} else {
+				
+			stampSerivce.insertStamp(map);
+			
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			state = "false";
 		}
 		
+		Map<String, Object> model = new HashMap<>();
 		model.put("state", state);
-		model.put("matchList", matchList);
-		
+
 		return model;
 	}
+
 
 	// 나의 여행 계획
 	@RequestMapping(value = "/plan/plan")

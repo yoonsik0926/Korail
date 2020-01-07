@@ -16,10 +16,10 @@ public class StampServiceImpl implements StampService{
 	private CommonDAO dao;
 	
 	@Override
-	public List<Stamp> listStamp(String userId) throws Exception {
+	public List<Stamp> listStamp(Map<String, Object> map) throws Exception {
 		List<Stamp> list = null;
 		try {
-			list = dao.selectList("stamp.listStamp",userId);
+			list = dao.selectList("stamp.listStamp",map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,6 +59,27 @@ public class StampServiceImpl implements StampService{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public List<Stamp> listSale(Map<String, Object> map) throws Exception {
+		List<Stamp> saleList = null;
+		try {
+			saleList = dao.selectList("stamp.saleList",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return saleList;
+	}
+
+	@Override
+	public void insertStamp(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("stamp.insertStamp",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -6,7 +6,7 @@
    String cp = request.getContextPath();
 %>
 
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ij53ss6vck&submodules=geocoder"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=py1da5jld2&submodules=geocoder"></script>
 <script type="text/javascript">
 function ajaxHTML(url, type, query, selector) {
 	$.ajax({
@@ -70,6 +70,8 @@ function modal(){
 	stampListPage(1);
 }
 
+
+
 </script>
 
 
@@ -83,7 +85,7 @@ function modal(){
      <div>
 	
 		<div style="width:80%; margin:0 auto; margin-top: 20px; text-align: right;">
-			<button id="stampBtn" class="btn btn-danger" type="button">스탬프 찍기</button>
+			<button id="matchBtn" class="btn btn-danger" type="button">스탬프 찍기</button>
 			<button id="stampListBtn" class="btn btn-success" type="button" onclick="modal();">스탬프 목록</button> 
 		</div>
 		<div id="map" style="width:80%;height:800px; margin: 0 auto; margin-top: 20px;"></div>
@@ -123,30 +125,10 @@ function modal(){
 	        <!-- 닫기(x) 버튼 -->
 	        <button type="button" class="close" data-dismiss="modal" style="margin:10px;">×</button>
 	        <!-- header title -->
-	        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;padding: 10px 20px;">스탬프 찍을 역을 선택하세요.</h4>
+	        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;padding: 10px 20px;">스탬프 적립</h4>
 	      </div>
 	      <!-- body -->
 	      <div class="modal-body" id="matchStation" style="text-align: center;">
-	      	<table
-				style="margin: 0px auto; text-align: center; font-size: 15px; width: 100%">
-			
-				<tr style="background: #283164; color: white; height: 50px; font-weight: 700">
-					<td width="80">선택</td>
-					<td width="80">역 이름</td>
-					<td width="80">지역</td>
-					<td width="350">위&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;치</td>
-				</tr>
-				<c:forEach var="dto" items="${matchList}">
-					<tr style="border-bottom: 1px solid #d4cbcb; height: 40px;">
-						<td><input type="radio" name="choice" value="${dto.staNum}"></td>
-						<td>${dto.staName}</td>
-						<td>${dto.locName}</td>
-						<td>${dto.staAddress}</td>
-					</tr>
-				</c:forEach>
-			
-			</table>
-			
 	      
 	      </div>
 	      <!-- Footer -->
@@ -234,20 +216,16 @@ function onSuccessGeolocation(position) {
     
 	var url = "<%=cp%>/stamp/calDistance";
 	var query = "locLogitude="+locLogitude+"&locLatitude="+locLatitude;
-    
-	var fn = function(data){
-		console.log(data.matchList[0].staName);
+	var selector = "#matchStation";
+
+	ajaxHTML(url, "get", query, selector);
 		
-		$("#matchModal").show();
-	}
-	
-	ajaxJSON(url,"get", query, fn);
-	
+
                                          
-/*     map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
+    /* map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
     map.setZoom(10); // 지도의 줌 레벨을 변경합니다.
 
-   infowindow.setContent('<div class="stationList" data-staNum="${dto.staNum}" data-staName="${dto.staName}" style="padding:20px;">' + '너 지금 여기니? '+ '</div>');
+   infowindow.setContent('<div style="padding:20px;">' + '너 지금 여기니? '+ '</div>');
 
    infowindow.open(map, location);
    
@@ -267,14 +245,18 @@ function onErrorGeolocation() {
     infowindow.open(map, center);
 }
 
-$("#stampBtn").on("click", function() {
-    if (navigator.geolocation) {
+$("#matchBtn").on("click", function() {
+    
+
+	
+	if (navigator.geolocation) {
         /**
          * navigator.geolocation 은 Chrome 50 버젼 이후로 HTTP 환경에서 사용이 Deprecate 되어 HTTPS 환경에서만 사용 가능 합니다.
          * http://localhost 에서는 사용이 가능하며, 테스트 목적으로, Chrome 의 바로가기를 만들어서 아래와 같이 설정하면 접속은 가능합니다.
          * chrome.exe --unsafely-treat-insecure-origin-as-secure="http://example.com"
          */
         navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+        $("#matchModal").modal('show');
     } else {
         var center = map.getCenter();
         infowindow.setContent('<div style="padding:20px;"><h5 style="margin-bottom:5px;color:#f00;">Geolocation not supported</h5></div>');
