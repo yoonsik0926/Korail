@@ -605,14 +605,25 @@ function getNumber(day) {
 		
 		$(".planListDetail"+i).sortable({
 			placeholder:"movingEnd",
-			stop: function( event, ui ) {
+			stop: function(event, ui) {
 		    	var day = ui.item.parent().attr("data-day");
+		    	var temp = new Array();
+		    	
 		    	ui.item.parent().find("li").each(function(index){
-		    		days[day-1][index] = $(this).attr("data-staNum");
+		    		console.log($(this).attr("data-index"));
+// 		    		temp[day-1][index] = $(this).attr("data-staNum");
 		    	});
 		    	
-			// ajax로 db작업(업데이트)
+// 		    	for(var j=0; j<5; j++) {
+// 		    		ui.item.data("data-originalIndex", j);
+// 		    	}
+// 		    	temp=days;
+// 		    	days.length=0;
+		    	
+		    	console.log(temp);
 		    	console.log(days);
+		    	
+			// ajax로 db작업(업데이트)
 		    }
 		});
 		
@@ -1077,12 +1088,12 @@ $(function() {
 			
 			for(var i in days[ilcha-1][index]) {
 				$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index][i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'"></li>')
-				console.log("시작");
-				console.log(days[ilcha-1][index][i]);
-				console.log("일자:"+ilcha);
-				console.log("역정보인덱스:"+index);
-				console.log("디테일:"+i);
-				console.log("끝");
+// 				console.log("시작");
+// 				console.log(days[ilcha-1][index][i]);
+// 				console.log("일자:"+ilcha);
+// 				console.log("역정보인덱스:"+index);
+// 				console.log("디테일:"+i);
+// 				console.log("끝");
 			}
 			
 		} else {
