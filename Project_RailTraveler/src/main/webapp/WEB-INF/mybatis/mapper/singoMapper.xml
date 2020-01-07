@@ -10,7 +10,9 @@
 		values(blame_seq.nextval, #{targetNo} ,#{targetType}, #{targetTitle} , #{userId} , #{targetUserId}, #{content} , #{targetUrl})
 	</insert>
 	
-	<select id="singo.findTargetId" parameterType="Integer" resultType="String">
-		select userid from tourreply where replynum = #{targetNo}
+	<select id="singo.findTargetId" parameterType="Integer" resultType="com.railer.rt.singo.Singo">
+		select userId targetUserId , content targetContent from tourreply where replynum = #{targetNo}
 	</select>
+
+
 </mapper>

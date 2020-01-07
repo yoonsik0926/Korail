@@ -59,18 +59,18 @@
 								</c:when>
 
 								<c:otherwise>
+									<c:if test="${sessionScope.member.userId != null}">
 									<a><span style="display: block;">
-											<button type='button' onclick="replySingo('${vo.replyNum}');" data-replyNum='${vo.replyNum}'
+											<button type='button' class="btn" onclick="replySingo('${vo.replyNum}');" data-replyNum='${vo.replyNum}'
 												data-page='${pageNo}'>신고</button>
 									</span></a>
+									</c:if>
 								</c:otherwise>
 
 							</c:choose></td>
 					</c:otherwise>
 
 				</c:choose>
-
-
 
 			</tr>
 

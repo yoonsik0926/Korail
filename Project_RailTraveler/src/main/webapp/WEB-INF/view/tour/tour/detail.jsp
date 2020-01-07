@@ -328,38 +328,56 @@ function replyLike(ob){
 
 };
 
+//취소 버튼 눌렀을 시 '기타' 지우기
+$(function(){
+	$('.cancelsingo').click(function(){
+		var f = document.singoForm;	
+		f.etcText.value="";		
+	});
+});
 
-
-//신고 버튼 눌렀을 시 
+//"신고" 버튼 눌렀을 시 
 function replySingo(replyNum) {
 	var userId = "${sessionScope.member.userId}";
 	  
-	/* if ( userId == "") {
+	if ( userId == "") {
 			$("#modaltext").text("로그인이 필요한 기능입니다.");			
 			$("#commonModal").modal();
 				return;
-		  }else{
-				$('#singoreplyNum').val(replyNum);
-				$("#singo").modal(); 
-		  } */
-		  
-	$("#singo").modal(); 
+		  }
+	
+	var url = "<%=cp%>/singo/readreply";
+	var query = "targetNo="+replyNum;
+	var fn = function(data){
+		var targetUserId  = data.dto.targetUserId;
+		var targetContent = data.dto.targetContent;
+
+		$('#targetUserId').text(targetUserId);
+		$('#targetContent').text(targetContent);		
+		$('#singoreplyNum').val(replyNum);
+
+		$("#singo").modal(); 
+
+	}; 
+	
+	ajaxJSON(url, "get", query, fn);
+	
 		
 }
 
+//모달창 내부에서 신고하기 버튼 눌렀을 때
 function singosubmit() {		
 	var targetNo = $('#singoreplyNum').val();
 	var content = $('#singoreason').val();
 	
 	if (content == 'etc'){
 		var f = document.singoForm;
-
-		 content = f.etcText.value;
+		 content = f.etcText.value;		 
 	}
 	
-	console.log(content);
+	f.etcText.value="";
+
 	var targetUrl = "<%= nowUrl%>";
-	
 	var url = "<%=cp%>/singo/insertSingo";
 	var query = "targetNo="+targetNo+"&content="+content+"&targetUrl="+targetUrl;
 	var fn = function(data){
@@ -373,7 +391,7 @@ function singosubmit() {
 
 	}; 
 	
-	//ajaxJSON(url, "get", query, fn);
+	ajaxJSON(url, "get", query, fn);
 	
 
 
@@ -778,15 +796,16 @@ $(function() {
       <!--Header-->
       <input type="hidden"  id="singoreplyNum" value="">
       <input type="hidden" id="singoreason" value="etc" >
-      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 12px 0px 12px 15px; border-bottom:1px solid #c4c4c4 ">
-        <p style="font-size:25px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
+
+      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 9px 0px 9px 15px; border-bottom:1px solid #c4c4c4 ">
+        <p style="font-size:22px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
       </div>
 
       <!--Body-->
       <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
 		<div style=" border-bottom:1px solid #c4c4c4">
-		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<span style="font-weight: 500">얄라리얄라 얄라숑</span> </p>
-		<p>작성자 :&nbsp;&nbsp;<span style="font-weight: 500">yoonsik09(김**)</span></p>
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<span id="targetContent" style="font-weight: 500">얄라리얄라 얄라숑</span> </p>
+		<p>작성자 :&nbsp;&nbsp;<span id="targetUserId" style="font-weight: 500">yoonsik09(김**)</span></p>
         </div>
         
         <div style="margin: 10px 0px;">
@@ -796,14 +815,14 @@ $(function() {
         			<p>신고사유:&nbsp;&nbsp;</p>
         			</td>
         			<td width="83%" valign="top">
-        			<span style="font-size: 14px; color: #a9a9a9;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
+        			<span style="font-size: 14px; color: #949494;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
         			</td>
         		</tr>
         		
         		<tr>
         		<td width="17%"></td>
         		<td width="83%">
-        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #bdbdbd; cursor: pointer;">| 더보기</a></P> 
+        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P> 
         		    <div id="adverInfo" style="display: none ">
         		   	 <ul style="font-size: 13px; color: #a9a9a9;font-weight: 500 ;margin: 10px 0px ; padding: 0px 0px 0px 20px; ">
       						<li>불법 사행성, 도박사이트를 홍보하는 경우</li>
@@ -811,7 +830,7 @@ $(function() {
       						<li>성매매, 장기매매 등의 신체 관련 거래 정보</li>
     				 </ul>
         		    </div>
-					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #bdbdbd; cursor: pointer;">| 더보기</a></P>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P>
 					<div id="19ageInfo" style="display: none ">
        		   	 		<ul style="font-size: 13px; color: #a9a9a9;font-weight: 500;margin: 10px 0px ; padding: 0px 0px 0px 20px;">
       						<li>음란물 또는 음란한 행위(노골적인 성행위 장면)를 묘사하는 이미지/동영상</li>
@@ -833,7 +852,7 @@ $(function() {
       	
       	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
       	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
-        	<a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">취소</a>
+        	<a type="button" class="btn  btn-info waves-effect cancelsingo" data-dismiss="modal">취소</a>
       	
       	</div>
         

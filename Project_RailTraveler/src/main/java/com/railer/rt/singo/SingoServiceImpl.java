@@ -39,14 +39,14 @@ public class SingoServiceImpl implements SingoService {
 	}
 
 	@Override
-	public String findTargetId(int targetNo) {
-		String targetId = "";
+	public Singo findTargetReply(int targetNo) {
+		Singo dto =null;
 		try {
-			targetId = dao.selectOne("singo.findTargetId", targetNo);
+			dto = dao.selectOne("singo.findTargetId", targetNo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return targetId;
+		return dto;
 	}
 
 	

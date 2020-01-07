@@ -10,6 +10,34 @@ public class Singo {
 	private String content;
 	private String targetUrl;
 	private String created;
+	private String userName;
+	
+	
+	//무슨 글이 신고당했는지 
+	private String targetContent;
+	private String targetUserName;
+	
+	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getTargetContent() {
+		return targetContent;
+	}
+	public void setTargetContent(String targetContent) {
+		this.targetContent = targetContent;
+	}
+	public String getTargetUserName() {
+		return targetUserName;
+	}
+	public void setTargetUserName(String targetUserName) {
+		this.targetUserName = targetUserName;
+	}
+
+	
 	
 	
 	public String getCreated() {

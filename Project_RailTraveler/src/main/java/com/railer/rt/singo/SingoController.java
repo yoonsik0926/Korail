@@ -25,11 +25,11 @@ public class SingoController {
 	private SingoService service;
 	
 	
-	@RequestMapping(value="/singo/plan")
+	@RequestMapping(value="/singo/tour")
 	public String plan(Model model) throws Exception {
 		model.addAttribute("subMenu", "0");
-		model.addAttribute("title", "플래너");
-		return ".four.singo.plan.plan";
+		model.addAttribute("title", "투어댓글");
+		return ".four.singo.tour.tour";
 	}
 	@RequestMapping(value="/singo/qna")
 	public String qna(Model model) throws Exception {
@@ -65,7 +65,7 @@ public class SingoController {
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		String state="true";
 			
-			String targetUserId = service.findTargetId(targetNo);
+		Singo vo= service.findTargetReply(targetNo);
 		
 		try {
 			Singo dto = new Singo();
@@ -74,7 +74,7 @@ public class SingoController {
 			dto.setTargetType(1);
 			dto.setTargetTitle("tour");
 			dto.setUserId(info.getUserId());
-			dto.setTargetUserId(targetUserId);
+			dto.setTargetUserId(vo.getTargetUserId());
 			dto.setTargetUrl(targetUrl);
 			dto.setContent(content);	
 
@@ -87,6 +87,35 @@ public class SingoController {
 		
 		Map<String, Object> model = new HashMap<>();
 		model.put("state", state);
+		return model;
+	}
+	
+	
+	
+	@RequestMapping(value="/singo/readreply")
+	@ResponseBody
+	public Map<String, Object> readreply(
+			@RequestParam int targetNo,
+			HttpSession session
+			) {
+		
+		String state="true";
+		Singo dto = null;
+		
+		try {
+			dto = service.findTargetReply(targetNo);
+			
+			if(dto ==null) {
+				state = "false-empty";
+			}
+									
+		} catch (Exception e) {
+			state="false";
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("state", state);
+		model.put("dto", dto);
 		return model;
 	}
 	
