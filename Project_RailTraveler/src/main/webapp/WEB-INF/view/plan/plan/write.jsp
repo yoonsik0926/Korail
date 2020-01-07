@@ -557,7 +557,6 @@ function getDaysLater1(sDate, days) {
 // 일수 선택 모달
 function selectTripDay() {
     $('#selectingDay').show();
-    
 };
 
 // 팝업 Close 기능
@@ -608,38 +607,92 @@ function getNumber(day) {
 			stop: function(event, ui) {
 		    	var day = ui.item.parent().attr("data-day");
 		    	var temp = new Array();
+		    	temp[day-1] = new Array();
 		    	
 		    	ui.item.parent().find("li").each(function(index){
-		    		console.log($(this).attr("data-index"));
-// 		    		temp[day-1][index] = $(this).attr("data-staNum");
+// 		    		console.log($(this).attr("data-index"));
+		    		var orindex = $(this).attr("data-index");
+		    		temp[day-1][index]=new Array();
+		    		temp[day-1][index] = days[day-1][orindex].slice();
+		    		
+// 		    		console.log(temp[day-1][index].length+", "+days[day-1][orindex].length);
+		    		
+		    		$(this).attr("data-index",index);
+		    		
 		    	});
-		    	
-// 		    	for(var j=0; j<5; j++) {
-// 		    		ui.item.data("data-originalIndex", j);
-// 		    	}
-// 		    	temp=days;
 // 		    	days.length=0;
+// 		    	days=temp.slice();
 		    	
-		    	console.log(temp);
-		    	console.log(days);
+// 		    	console.log(temp);
+// 		    	console.log(days);
 		    	
 			// ajax로 db작업(업데이트)
 		    }
 		});
 		
+// 		$(".planListDetail"+i).droppable({
+// 	        drop: function (event, ui) {
+// 	        	console.log("drop");
+// 	        }
+// 		});
+		
+		
+		//여기서 $("이것")에 .droppable를 했기 떄문에 밑의 out속성? 메소드? 이벤트? 에서 행해지는 함수의 인자의 대상이 "이것"이 된다.
 		$(".planListDetail"+i).droppable({
 	        out: function (event, ui) {
-	        	var $p=ui.helper.parent();
+	        	//event : droppable이 행해지는 동안(시작(클릭) 부터 끝(마우스를 뗌) 까지) 일어나는 모든 행위. 이벤트를 나타냄
+	        	//ui : droppable이 적용된 요소. 여기서는 클래스 명이 planListDetail1인 ul태그를 뜻함.
+	        	
+	        	//out : 드랍 작업이 끝났을 경우.
+	        	//var $p : ul태그를 뜻함.
 	        	var day = ui.helper.parent().attr("data-day");
-	        	ui.helper.remove();
- 		    	days[day-1].length=0;
+	        	console.log("날아간녀석의인덱스:"+ui.helper.attr("data-index"));
 
- 		    	var n=0;
- 		    	$p.find("li").each(function(index){
-		    		if($(this).attr("data-staNum")) {		    				 
-				    	days[day-1][n++] = $(this).attr("data-staNum");
-		    		}		
+// 	        	ui.helper.addClass('out');
+// 	        	ui.helper.hasClass("out");
+	        	
+	        	ui.helper.remove();
+	        	
+// 	        	console.log("=======");
+	        	//이 때, days는 복사하기 위한 원 데이터를 저장하고 있으므로 모든 작업이 끝나기 전까지 절.대. 수정. 삭제. 하지않는다.!!!
+	        	
+	        	//복사할 배열을 생성.
+ 		    	var temp = new Array();
+ 		    	//해당 일차에 대한 세부 배열 생성. (days 배열에서 해당 일차에 대한 역 리스트를 저장할 때 사용될 공간.)
+		    	temp[day-1] = new Array();
+ 		    	
+ 		    	//해당 일차에 대한 역 리스트를 돌면서 li의 data-index 및 배열을 재정의
+ 		    	//$p.find("li") : ul 태그의 밑의 li 태그
+ 		    	//.each(function(index) : 각각 li를 하나씩 탐색 ~~~하면서 하는 행위 function(index) index는 탐색하는 순서 인덱스를 뜻함. 첫번째 요소는 0부터
+ 		    			
+ 		    	// $.each() 메서드의 첫번째 매겨변수로 위에서 선언한 배열은 전달 $.each(arr, function (index, item) { 
+ 		    	// 두 번째 매개변수로는 콜백함수인데 콜백함수의 매개변수 중 
+ 		    	// 첫 번째 index는 배열의 인덱스 또는 객체의 키를 의미하고 
+ 		    	// 두 번째 매개 변수 item은 해당 인덱스나 키가 가진 값을 의미합니다.
+ 		    	
+ 		    	
+				// $('.list li').each(function (index, item) { 
+ 		    	// 인덱스는 말 그대로 인덱스 
+ 		    	// item 은 해당 선택자인 객체를 나타냅니다. $(item).addClass('li_0' + index); 
+ 		    	// item 과 this는 같아서 일반적으로 this를 많이 사용합니다. 
+ 		    	// $(this).addClass('li_0' + index); });
+ 		    	$(".activeGreen").find(".planListDetail"+i).find("li").each(function(index){
+//  		    	$p.find("li").each(function(index){
+ 		    		console.log(index);
+	 		    	// li의 원래 위치
+	 	 		    var orindex = $(this).attr("data-index");
+ 		    	
+	 		    	//temp배열의 해당 일차의 해당 역인덱스에 대한 배열을 생성해준다. (days배열에서 3차원 배열을 복사하기 위함)
+ 	 		 		temp[day-1][index]=new Array();
+		    		
+		    		console.log(day-1+","+orindex+","+days[day-1][orindex].length);
+	 		    	temp[day-1][index] = days[day-1][orindex].slice();
+		    		$(this).attr("data-index",index);
+		    		
 				});
+ 		    	days.length=0;
+ 		    	days = temp.slice();
+ 		    	
 // 	        	console.log(days[day-1]);
 // 	        	console.log(days);
 	        }
@@ -679,7 +732,7 @@ function getNumber(day) {
 		});
 */		
 	}
-	console.log(days);
+// 	console.log(days);
 	$('#selectingDay').hide();
 }
 
@@ -711,10 +764,17 @@ function ajaxJSON(url, type, query, fn) {
 
 //최종저장버튼 클릭시 모든 세부계획 저장
 $(function() {
-	$("body").on("click", ".finalSave", function() {
-		var userId
+	$("body").on("click", ".finalSave", function(){
+		if(! confirm("작성한 모든 계획을 저장하시겠습니까?")) {
+			return false;
+		}
+		var ticketDay=$("#selectDays").val();
+		var sDate=$("#selectedDay1").val();
+		
+		var url="<%=cp%>"
 	});
 });
+
 
 // 역 검색기능
 $(function(){
@@ -1371,12 +1431,12 @@ function saveDetail() {
 	
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
 	var staNum=$(".ddiring").parent().attr("data-staNum");
-	var index=$(".ddiring").parent().attr("data-index");
-	console.log(staNum+", "+index+", "+md);
-	days[ilcha-1][index].push(md);
+	var index2=$(".ddiring").parent().attr("data-index");
+// 	console.log(staNum+", "+index2+", "+md);
+	days[ilcha-1][index2].push(md);
 	
-	var mdNum=days[ilcha-1][index].length-1;
-	$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+mdNum+'"></li>')
+	var mdNum=days[ilcha-1][index2].length-1;
+	$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index2+'" data-mdNum="'+mdNum+'"></li>')
 	
 	// console.log(days[ilcha-1][index][mdNum].name);
 	
