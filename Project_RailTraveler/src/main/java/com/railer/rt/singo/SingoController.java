@@ -25,30 +25,13 @@ public class SingoController {
 	private SingoService service;
 	
 	
-	@RequestMapping(value="/singo/tour")
+	@RequestMapping(value="/singo/singo")
 	public String plan(Model model) throws Exception {
 		model.addAttribute("subMenu", "0");
 		model.addAttribute("title", "투어댓글");
-		return ".four.singo.tour.tour";
+		return ".singo.singo";
 	}
-	@RequestMapping(value="/singo/qna")
-	public String qna(Model model) throws Exception {
-		model.addAttribute("subMenu", "1");
-		model.addAttribute("title", "묻고 답하기");
-		return ".four.singo.qna.qna";
-	}
-	@RequestMapping(value="/singo/board")
-	public String board(Model model) throws Exception {
-		model.addAttribute("subMenu", "2");
-		model.addAttribute("title", "자유게시판");
-		return ".four.singo.board.board";
-	}
-	@RequestMapping(value="/singo/friend")
-	public String friend(Model model) throws Exception {
-		model.addAttribute("subMenu", "3");
-		model.addAttribute("title", "동행 구하기");
-		return ".four.singo.friend.friend";
-	}
+
 	
 	
 	//신고 테이블 추가

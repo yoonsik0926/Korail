@@ -90,15 +90,7 @@ System.out.print(cp);
                 </li>
                 
                 <c:if test="${sessionScope.member.userId=='admin'}">
-               	 <li class="dropdown">
-                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">신고 목록 <b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="<%=cp%>/singo/plan">플래너</a></li>
-                        <li><a href="<%=cp%>/singo/qna">묻고 답하기</a></li>
-                        <li><a href="<%=cp%>/singo/board">자유게시판</a></li>
-                        <li><a href="<%=cp%>/singo/friend">동행 구하기</a></li>
-                      </ul>
-                	</li>
+               	 <li><a href="<%=cp%>/singo/singo">신고목록</a></li>
                 </c:if>
                 
               </ul>
