@@ -51,17 +51,17 @@
 								
 			<tr height="35" style="border-bottom: 1px solid #cccccc;">
 			    <td colspan="2" align="left" style="padding-left: 5px;">
-			      	 이전글 :
+			      	 이전 이벤트 :
 			         <c:if test="${not empty preReadDto}">
-			              <a href="<%=cp%>/photo/article?${query}&num=${preReadDto.num}">${preReadDto.subject}</a>
+			              <a href="<%=cp%>/event/article?${query}&eventNum=${preReadDto.eventNum}">${preReadDto.name}</a>
 			        </c:if>
 			    </td>
 			</tr>
 				<tr height="35" style="border-bottom: 2px solid #444444;">
 				   	 <td colspan="2" align="left" style="padding-left: 5px;">
-				       다음글 :
+				       다음 이벤트 :
 				         <c:if test="${not empty nextReadDto}">
-				              <a href="<%=cp%>/photo/article?${query}&num=${nextReadDto.num}">${nextReadDto.subject}</a>
+				              <a href="<%=cp%>/event/article?${query}&eventNum=${nextReadDto.eventNum}">${nextReadDto.name}</a>
 				        </c:if>
 				    </td>
 				</tr>

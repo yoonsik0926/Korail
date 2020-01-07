@@ -27,7 +27,7 @@
 	
 			
 	<update id="updateevent" parameterType="com.railer.rt.event.Event">
-		UPDATE event SET name=#{name}, content=#{content},
+		UPDATE event SET name=#{name}, content=#{content}, imageFilename=#{imageFilename},
 	 		sDate=#{sdate}, eDate=#{edate}
 		WHERE eventNum = #{eventNum}
 	</update> 
@@ -84,23 +84,74 @@
 		SELECT eventNum, name, content, sDate, eDate, imageFilename 
 	 	from event 
 	 	WHERE eventNum = #{eventNum}
-	</select>
+	 </select>
 	
 	<!-- 이전글 -->
 	<select id="preReadevent" parameterType="map" resultType="com.railer.rt.event.Event">
 		SELECT eventNum, name
-		FROM event
-				
-		ORDER BY num ASC
+		FROM event						
+		 <choose>
+		 	<when test="mode=='current' and order==0">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+			      AND (eventNum &gt; #{eventNum})
+		 	</when>
+		 	<when test="mode=='current' and order==1">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+			      AND (TO_DATE(eDate, 'YYYY-MM-DD') &gt; TO_DATE(#{eDate}, 'YYYY-MM-DD'))
+		 	</when>
+		 	<when test="mode=='last' and order==0">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE		
+			      AND (eventNum &gt; #{eventNum})
+		 	</when>
+		 	<otherwise>
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE	
+			      AND (TO_DATE(eDate, 'YYYY-MM-DD') &gt; TO_DATE(#{eDate}, 'YYYY-MM-DD'))
+		 	</otherwise>
+		 </choose>
+
+		 <choose>
+		 	<when test="order==0">
+		 		ORDER BY eventNum ASC	
+		 	</when>
+		 	<otherwise>
+		 		ORDER BY ABS(TO_DATE(eDate, 'YYYY-MM-DD')-SYSDATE) DESC
+		 	</otherwise>
+		 </choose>
 		FETCH FIRST 1 ROWS ONLY
+		
 	</select>
 
 	<!-- 다음글 -->
 	<select id="nextReadevent" parameterType="map" resultType="com.railer.rt.event.Event">
 		SELECT eventNum, name
 		FROM event
+		 <choose>
+		 	<when test="mode=='current' and order==0">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+	        		AND (eventNum &lt; #{eventNum})
+		  	</when>
+		 	<when test="mode=='current' and order==1">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+	        		AND (TO_DATE(eDate, 'YYYY-MM-DD') &lt; TO_DATE(#{eDate}, 'YYYY-MM-DD'))
+		  	</when>
+		 	<when test="mode=='last' and order==0">
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE		
+			      AND (eventNum &lt; #{eventNum})
+		 	</when>
+		 	<otherwise>
+		 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &lt; SYSDATE	
+	        		AND (TO_DATE(eDate, 'YYYY-MM-DD') &lt; TO_DATE(#{eDate}, 'YYYY-MM-DD'))
+		 	</otherwise>
+		 </choose>
 				
-		ORDER BY num DESC
+		 <choose>
+		 	<when test="order==0">
+		 		ORDER BY eventNum DESC	
+		 	</when>
+		 	<otherwise>
+		 		ORDER BY ABS(TO_DATE(eDate, 'YYYY-MM-DD')-SYSDATE) ASC
+		 	</otherwise>
+		 </choose>
 		FETCH FIRST 1 ROWS ONLY
 	</select>
  	

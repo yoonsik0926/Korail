@@ -108,7 +108,7 @@ public class EventServiceImpl implements EventService {
 		Event dto=null;
 		
 		try{
-			dto=dao.selectOne("event.preReadEvent", map);
+			dto=dao.selectOne("event.preReadevent", map);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -121,7 +121,7 @@ public class EventServiceImpl implements EventService {
 		Event dto=null;
 		
 		try{
-			dto=dao.selectOne("event.nextReadEvent", map);
+			dto=dao.selectOne("event.nextReadevent", map);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

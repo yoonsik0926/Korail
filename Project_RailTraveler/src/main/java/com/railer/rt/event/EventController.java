@@ -56,11 +56,7 @@ public class EventController {
         map.put("order", order);
         map.put("condition", condition);
         map.put("keyword", keyword);
-        if(req.getRequestURI().indexOf("/event/current")!=-1) {
-        	map.put("mode", "current");
-        } else {
-        	map.put("mode", "last");
-        }
+        
                 
         dataCount = service.dataCount(map);
         if(dataCount != 0)
@@ -83,11 +79,9 @@ public class EventController {
             n++;
         }
 
-        String query = "order="+order;
+        String query = "order="+order+"&mode="+mode;
         String listUrl;
         
-        
-
         if(keyword.length()!=0) {
         	query += "&condition=" +condition + 
         	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
@@ -103,7 +97,6 @@ public class EventController {
 			model.addAttribute("search", "search");
         
         model.addAttribute("subMenu", mode.equals("current")?0:1);
-        model.addAttribute("mode", mode);
         
         model.addAttribute("list", list);
         model.addAttribute("page", current_page);
@@ -114,6 +107,7 @@ public class EventController {
 		model.addAttribute("condition", condition);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("order", order);
+		model.addAttribute("mode", mode);
 		
 		//이부분 추가했씁니다.
 		model.addAttribute("articleUrl", articleUrl);
@@ -194,34 +188,42 @@ public class EventController {
 			@RequestParam (defaultValue="1")String page,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
+			@RequestParam(defaultValue="0") int order,
+			@RequestParam String mode,
 			Model model) throws Exception {
 		
 		keyword = URLDecoder.decode(keyword, "utf-8");
 		
-		String query="page="+page;
+		String query="page="+page+"&order="+order+"&mode="+mode;
 		if(keyword.length()!=0) {
 			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
 		}
 
 		Event dto = service.readEvent(eventNum);
 		if (dto == null)
-			return "redirect:/event/current?"+query;
+			return "redirect:/event/"+mode+"?"+query;
 		
-		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("condition", condition);
 		map.put("keyword", keyword);
 		map.put("eventNum", eventNum);
+		map.put("order", order);
+		map.put("mode", mode);
+		map.put("eDate", dto.getEdate());
 		
 		Event preReadDto = service.preReadEvent(map);
 		Event nextReadDto = service.nextReadEvent(map);
 		
+		model.addAttribute("subMenu", mode.equals("current")?0:1);
 		model.addAttribute("dto", dto);
 		model.addAttribute("preReadDto", preReadDto);
 		model.addAttribute("nextReadDto", nextReadDto);
 		model.addAttribute("page", page);
 		model.addAttribute("query", query);
+		model.addAttribute("mode", mode);
+		model.addAttribute("order", order);
 				
 		return ".four.event.current.article";
 	}
