@@ -53,10 +53,15 @@ public class PlanServiceImpl implements PlanService {
 	}
 	
 	@Override
-	public void insertPlan(Plan dto) throws Exception {
+	public void insertPlan(Map<String, Object> map) throws Exception {
 		
 		try {
-			dao.insertData("plan.insertPlan",dto);
+			Plan dto=new Plan();
+			
+			int planSeq=dao.selectOne("plan.planSeq");
+			dto.setPlanNum(planSeq);
+			
+			dao.insertData("plan.insertTicketDay",map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -65,10 +70,15 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public void insertDetailPlan(Plan dto) throws Exception {
+	public void insertDetailPlan(Map<String, Object> map) throws Exception {
 		
 		try {
-			dao.insertData("plan.insertDetailPlan",dto);
+			Plan dto=new Plan();
+			
+			int detailPlanSeq=dao.selectOne("plan.detailPlanSeq");
+			dto.setDetailPlanNum(detailPlanSeq);
+			
+			dao.insertData("plan.insertPlans",dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -78,10 +88,11 @@ public class PlanServiceImpl implements PlanService {
 
 
 	@Override
-	public void insertMoreDetailPlan(Plan dto) throws Exception {
+	public void insertMoreDetailPlan(Map<String, Object> map) throws Exception {
 
 		try {
-			dao.insertData("plan.insertMoreDetailPlan",dto);
+			
+			dao.insertData("plan.insertDetailPlan",map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

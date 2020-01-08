@@ -1,9 +1,11 @@
 package com.railer.rt.plan;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.railer.rt.member.SessionInfo;
 
 @Controller("plan.planController")
 public class PlanController {
@@ -68,7 +68,7 @@ public class PlanController {
 	@RequestMapping(value="/plan/listCategory")
 	@ResponseBody
 	public Map<String, Object> listCategory(@RequestParam int cateNum,
-										   @RequestParam Map<String, Object> model) throws Exception {
+										    @RequestParam Map<String, Object> model) throws Exception {
 		Map<String, Object> map=new HashMap<>();
 		map.put("cateNum", cateNum);
 		List<Tour> listCate=service.listCategory(map);
@@ -78,26 +78,36 @@ public class PlanController {
 		return model;
 	}
 	
-	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.POST)
+	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.GET)
+	@ResponseBody
 	public Map<String, Object> insertTicketDay(Plan dto,
-											   HttpSession session) {
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		int ticketDay=dto.getTicketDay();
-		String sDate=dto.getsDate();
-		
-		try {
-			dto.setUserId(info.getUserId());
-			service.insertPlan(dto);
-//			service.insertDetailPlan(dto);
-//			service.insertMoreDetailPlan(dto);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Map<String, Object> model=new HashMap<>();
-		model.put("ticketDay", ticketDay);
-		model.put("sDate", sDate);
-		return model;
+											   HttpSession session,
+											   HttpServletRequest request) {
+//		SessionInfo info=(SessionInfo)session.getAttribute("member");
+//		int ticketDay=dto.getTicketDay();
+//		String sDate=dto.getsDate();
+//		int nthDay=dto.getNthDay();
+		String[] days=request.getParameterValues("days");
+		System.out.println("배열에 들어있는값 : "+Arrays.toString(days));
+		  for(String str : days){
+	            System.out.println(str);
+	        }
+		Map<String, Object> map=new HashMap<>();
+//		try {
+//			dto.setUserId(info.getUserId());
+//			service.insertPlan(map);
+//			service.insertDetailPlan(map);
+////			service.insertMoreDetailPlan(dto);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		
+//		
+//		map.put("nthDay", nthDay);
+//		map.put("ticketDay", ticketDay);
+//		map.put("sDate", sDate);
+		return map;
 	}
 	
 	@RequestMapping(value="/plan/planlist")

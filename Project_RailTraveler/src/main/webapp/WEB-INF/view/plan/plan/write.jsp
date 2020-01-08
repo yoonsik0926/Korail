@@ -612,16 +612,22 @@ function getNumber(day) {
 		    	ui.item.parent().find("li").each(function(index){
 // 		    		console.log($(this).attr("data-index"));
 		    		var orindex = $(this).attr("data-index");
-		    		temp[day-1][index]=new Array();
-		    		temp[day-1][index] = days[day-1][orindex].slice();
+					console.log(days[day-1][orindex].detailList.length);
+		    		var staNum = $(this).attr("data-staNum");
+		    		var oob={staNum:staNum};
+		    		temp[day-1].push(oob);
+		    		temp[day-1][index].detailList = new Array();
+		    		temp[day-1][index].detailList = days[day-1][orindex].detailList.slice();
+		    		temp[day-1][index].staNum = days[day-1][orindex].staNum;
 		    		
 // 		    		console.log(temp[day-1][index].length+", "+days[day-1][orindex].length);
 		    		
 		    		$(this).attr("data-index",index);
+		    		$(this).attr("data-staNum",staNum);
 		    		
 		    	});
-// 		    	days.length=0;
-// 		    	days=temp.slice();
+		    	days.length=0;
+		    	days=temp.slice();
 		    	
 // 		    	console.log(temp);
 // 		    	console.log(days);
@@ -683,10 +689,10 @@ function getNumber(day) {
 	 	 		    var orindex = $(this).attr("data-index");
  		    	
 	 		    	//temp배열의 해당 일차의 해당 역인덱스에 대한 배열을 생성해준다. (days배열에서 3차원 배열을 복사하기 위함)
- 	 		 		temp[day-1][index]=new Array();
+ 	 		 		temp[day-1][index].detailList=new Array();
 		    		
-		    		console.log(day-1+","+orindex+","+days[day-1][orindex].length);
-	 		    	temp[day-1][index] = days[day-1][orindex].slice();
+		    		console.log(day-1+","+orindex+","+days[day-1][orindex].detailList.length);
+	 		    	temp[day-1][index] = days[day-1][orindex].detailList.slice();
 		    		$(this).attr("data-index",index);
 		    		
 				});
@@ -740,6 +746,9 @@ $(document).ready(function(){
 	$('.plusStation').parent().hide();
 });
 
+// 배열을 ajax로 보내기 위해서 반드시 써줘야함.
+$.ajaxSettings.traditional = true;
+
 function ajaxJSON(url, type, query, fn) {
 	$.ajax({
 		type:type
@@ -768,10 +777,28 @@ $(function() {
 		if(! confirm("작성한 모든 계획을 저장하시겠습니까?")) {
 			return false;
 		}
+		// plan
 		var ticketDay=$("#selectDays").val();
 		var sDate=$("#selectedDay1").val();
 		
-		var url="<%=cp%>"
+// 		days.forEach(function(item,index) {
+// 			console.log(index+"일차");
+// 			days[index].forEach(function(item,index1) {
+// 				console.log(index1+"번째 역번호 : "+days[index][index1].staNum);
+// 				days[index][index1].detailList.forEach(function(item,index2) {
+// 					console.log(index2+"번째 세부계획 : "+days[index][index1].detailList[index2].name);
+					
+// 				});
+// 			});
+// 		});
+		
+		var url="<%=cp%>/plan/insertTicketDay";
+		var query= {"days":days};
+		
+		var fn=function(data) {
+			alert("세부계획이 저장되었습니다.");
+		};
+		ajaxJSON(url, "get", query, fn);
 	});
 });
 
@@ -879,7 +906,7 @@ $(function(){
 							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 						<button type="button" class="finalSave">최종저장</button>
 						<div id="userNameHere">
-							<span>${dto.userName}님 접속중...</span>
+							<span>${dto.userId}님 접속중...</span>
 						</div>
 					</div>
 				</div>
@@ -1060,11 +1087,12 @@ $(function() {
 			var staNum=$(this).prev().attr("data-staNum");
 			
 			for(var n=0; n<days[ilcha-1].length; n++ ){
-				if(days[ilcha-1][n]==staNum) {
+				if(days[ilcha-1][n].staNum==staNum) {
 					return false;
 				}
 			}
-			days[ilcha-1].push(staNum);
+			var ob={staNum:staNum};
+			days[ilcha-1].push(ob);
 			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"' data-index='"+(days[ilcha-1].length-1)+"'>"
 								   +$(this).prev().text()
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
@@ -1072,13 +1100,15 @@ $(function() {
 								   );
 // 			$(this).parent().parent().hide();
 // 			console.log(days[ilcha-1].length);
-			days[ilcha-1][days[ilcha-1].length-1]=new Array();
+			days[ilcha-1][days[ilcha-1].length-1].detailList=new Array();
 			
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
 			return;
 		}
 // 	console.log(days);
+console.log($(".pickedStation").attr("data-staNum"));
+console.log($("#planListForm").find("div[class*='planList']").attr("class").substring(8,9));
 	});
 });
 
@@ -1146,8 +1176,8 @@ $(function() {
 			var staNum=$(this).attr("class").replace(/[^0-9]/g,"");
 			var index=$(".ddiring").parent().attr("data-index");
 			
-			for(var i in days[ilcha-1][index]) {
-				$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index][i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'"></li>')
+			for(var i in days[ilcha-1][index].detailList) {
+				$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index].detailList[i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'"></li>')
 // 				console.log("시작");
 // 				console.log(days[ilcha-1][index][i]);
 // 				console.log("일자:"+ilcha);
@@ -1433,7 +1463,7 @@ function saveDetail() {
 	var staNum=$(".ddiring").parent().attr("data-staNum");
 	var index2=$(".ddiring").parent().attr("data-index");
 // 	console.log(staNum+", "+index2+", "+md);
-	days[ilcha-1][index2].push(md);
+	days[ilcha-1][index2].detailList.push(md);
 	
 	var mdNum=days[ilcha-1][index2].length-1;
 	$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index2+'" data-mdNum="'+mdNum+'"></li>')

@@ -3,6 +3,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="plan">
 	
+   <!-- planNum 시퀀스번호 -->
+   <select id="planSeq" resultType="Integer">
+   	SELECT plan_seq.NEXTVAL FROM dual;
+   </select>
+   
+   <!-- detailPlanNum 시퀀스번호 -->
+   <select id="detailPlanSeq" resultType="Integer">
+   	SELECT dp_seq.NEXTVAL FROM dual;
+   </select>
+   
    <!-- 검색한 역 리스트  -->
    <select id="listStation" resultType="com.railer.rt.plan.Station">
    	SELECT staNum, locNum, staName, staTel, staAddress, imageFilename
@@ -38,20 +48,20 @@
 	</select>
 	
 	<!-- 몇일차 여행인지 추가하기 -->
-	<insert id="insertTicketDay" parameterType="com.railer.rt.plan.Plan">
+	<insert id="insertTicketDay" parameterType="map">
 		INSERT INTO plan(planNum, userId, ticketDay, sDate)
-			VALUES(plan_seq.NEXTVAL, #{userId}, #{tickeyDay}, #{sDate})
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
-	<insert id="insertPlans" parameterType="com.railer.rt.plan.Plan">
+	<insert id="insertPlans" parameterType="map">
 		INSERT INTO detailPlan(detailPlanNum, planNum, staNum, nthDay)
-			VALUES(dp_seq.NEXTVAL, #{planNum}, #{staNum}, #{nthDay})
+			VALUES(#{detailPlanNum}, #{planNum}, #{staNum}, #{nthDay})
 	</insert>
 	
-	<!-- 세부계획 저장하기  -->
-	<insert id="insertDetailPlan" parameterType="com.railer.rt.plan.Plan">
+	<!-- 세부계획 내용 저장하기  -->
+	<insert id="insertDetailPlan" parameterType="map">
 		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
-			VALUES(mdp_seq.NEXTVAL,dp_seq.NEXTVAL,#{cateNum},#{name},#{tel},#{address},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR},#{memo},#{sTime},#{eTime},#{price})
+			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel},#{address},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR},#{memo},#{sTime},#{eTime},#{price})
 	</insert>
 </mapper>
