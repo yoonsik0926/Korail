@@ -29,7 +29,9 @@ function ajaxHTML(url, type, query, selector) {
 
 $(function(){
 	$("#aaaa").modal();
+		
 });
+
 
 function deleteStation(){
 	var q = "staNum=${dto.staNum}&locNum=${dto.locNum}&page=${page}";
@@ -107,7 +109,7 @@ function showTour(){
 		      <!-- header -->
 		      <div class="modal-header" style="padding: 5px 5px;">
 		        <!-- 닫기(x) 버튼 -->
-		        <button type="button" class="close" data-dismiss="modal" style="margin:10px;">×</button>
+		        <button onclick="closeModal();" type="button" class="close" data-dismiss="modal" style="margin:10px;">×</button>
 		        <!-- header title -->
 		        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;padding: 10px 20px;">${dto.staName}역</h4>
 		      </div>
