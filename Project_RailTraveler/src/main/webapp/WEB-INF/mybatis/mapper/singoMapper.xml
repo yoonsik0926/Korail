@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="singo">
+
+
+	<insert id="singo.insertSingo" parameterType="map">
+		insert into
+		blame(blameNo , targetNo , targetType, targetTitle , userId , targetUserId , content , targetUrl)
+		values(blame_seq.nextval, #{targetNo} ,#{targetType}, #{targetTitle} , #{userId} , #{targetUserId}, #{content} , #{targetUrl})
+	</insert>
+	
+	<select id="singo.findTargetId" parameterType="Integer" resultType="com.railer.rt.singo.Singo">
+		select userId targetUserId , content targetContent from tourreply where replynum = #{targetNo}
+	</select>
+
+
+</mapper>

@@ -141,12 +141,15 @@ public class TicketController {
 		Ticket dto = null;
 		
 		System.out.println(merchant_uid);
+		
 		//구매번호를 가져온다.
 		int saleNum = service.readSaleNum(merchant_uid);	
 		
 		//그 구매번호로 정보를 얻어온다.
 		dto = service.readPurchasedinfo(saleNum);
 		dto.setMerchant_uid(merchant_uid);
+		
+		//디비에 추가한다.
 		
 		model.addAttribute("dto", dto);
 

@@ -198,7 +198,7 @@
 	
 	<!--댓글 리스트-->
 	<select id="replylist" parameterType="map" resultType="com.railer.rt.tour.TourReply">
-	    SELECT nvl(answerCount,0) answerCount, nvl(count,0) likeCount,tr.replyNum , tr.tourNum, tr.userId, CONTENT, CREATED , tr.ANSWER ,decode(a.userid, null, 'no',a.userid) likeuserId 
+	    SELECT nvl(answerCount,0) answerCount, nvl(count,0) likeCount,tr.replyNum , tr.tourNum, tr.userId, CONTENT, CREATED , tr.ANSWER ,decode(a.userid, null, 'no',a.userid) likeuserId,tr.deleted,tr.deleteId 
         FROM tourreply tr
         left join (
         select * from tourreplylike
@@ -219,7 +219,7 @@
 	
 	<!-- 댓글의 답글 리스트 -->
 	<select id="listReplyAnswer" parameterType="Integer" resultType="com.railer.rt.tour.TourReply">
-		SELECT t.replyNum, t.tourNum, t.userId, userName, t.content, t.created, t.answer
+		SELECT t.replyNum, t.tourNum, t.userId, userName, t.content, t.created, t.answer ,t.deleted , t.deleteId
 		FROM tourreply t
 		JOIN member2 m ON t.userId = m.userId
 		WHERE answer = #{answer}
@@ -232,7 +232,7 @@
 	</select>
 	
 		<!-- 댓글 및 답글 삭제 -->
-	<delete id="deleteReply" parameterType="map" >
+<!-- 	<delete id="deleteReply" parameterType="map" >
 		
 		DELETE FROM tourreply WHERE 
 		
@@ -246,11 +246,17 @@
 		<if test="mode=='answer' ">
 			replyNum = #{replyNum}
 		</if>
-	</delete>
+	</delete> 
 	
 	<delete id="deleteReplyLike" parameterType="map">
 		delete from tourreplylike where replyNum =#{replyNum}
 	</delete>
+	
+	-->
+	<update id="deleteReply" parameterType="map">		
+		update tourreply set deleted =1, deleteid=#{userId} WHERE replyNum = #{replyNum}	
+	</update>
+	
 	<!--댓글 좋아요 처리-->
 	
 	<insert id="replyLike" parameterType="map">

@@ -51,12 +51,37 @@ public class PlanServiceImpl implements PlanService {
 		
 		return list;
 	}
+	
+	@Override
+	public void insertPlan(Plan dto) throws Exception {
+		
+		try {
+			dao.insertData("plan.insertPlan",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
 
 	@Override
 	public void insertDetailPlan(Plan dto) throws Exception {
 		
 		try {
 			dao.insertData("plan.insertDetailPlan",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+
+	@Override
+	public void insertMoreDetailPlan(Plan dto) throws Exception {
+
+		try {
+			dao.insertData("plan.insertMoreDetailPlan",dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

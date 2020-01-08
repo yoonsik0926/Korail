@@ -11,6 +11,9 @@ public class Station {
 	private String staName;
 	private String staTel;
 	private String staAddress;
+	private String longitude;
+	private String latitude;
+	
 	private String imageFilename;
 	private MultipartFile upload;
 	
@@ -117,6 +120,18 @@ public class Station {
 	}
 	public void setUpload(MultipartFile upload) {
 		this.upload = upload;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
 	}
 	
 	

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.railer.rt.member.SessionInfo;
 
 @Controller("plan.planController")
 public class PlanController {
@@ -43,7 +47,7 @@ public class PlanController {
 	// 지도에서 원하는 역 검색
 	@RequestMapping(value="/plan/searchStation")
 	@ResponseBody
-	public  Map<String, Object> searchStation(
+	public Map<String, Object> searchStation(
 								@RequestParam int locNum,
 								@RequestParam String keyword) throws Exception {
 		
@@ -74,17 +78,26 @@ public class PlanController {
 		return model;
 	}
 	
-	@RequestMapping(value="/plan/write", method=RequestMethod.POST)
-	public String detailPlanSubmit(Plan dto) throws Exception {
+	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.POST)
+	public Map<String, Object> insertTicketDay(Plan dto,
+											   HttpSession session) {
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		int ticketDay=dto.getTicketDay();
+		String sDate=dto.getsDate();
 		
 		try {
-			service.insertDetailPlan(dto);
+			dto.setUserId(info.getUserId());
+			service.insertPlan(dto);
+//			service.insertDetailPlan(dto);
+//			service.insertMoreDetailPlan(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
 		}
 		
-		return "/plan/plan/write";
+		Map<String, Object> model=new HashMap<>();
+		model.put("ticketDay", ticketDay);
+		model.put("sDate", sDate);
+		return model;
 	}
 	
 	@RequestMapping(value="/plan/planlist")

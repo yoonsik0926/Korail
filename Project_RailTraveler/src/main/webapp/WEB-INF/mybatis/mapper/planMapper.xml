@@ -38,15 +38,15 @@
 	</select>
 	
 	<!-- 몇일차 여행인지 추가하기 -->
-	<insert id="insertTicketDay">
+	<insert id="insertTicketDay" parameterType="com.railer.rt.plan.Plan">
 		INSERT INTO plan(planNum, userId, ticketDay, sDate)
 			VALUES(plan_seq.NEXTVAL, #{userId}, #{tickeyDay}, #{sDate})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
-	<insert id="insertPlans">
+	<insert id="insertPlans" parameterType="com.railer.rt.plan.Plan">
 		INSERT INTO detailPlan(detailPlanNum, planNum, staNum, nthDay)
-			VALUES()
+			VALUES(dp_seq.NEXTVAL, #{planNum}, #{staNum}, #{nthDay})
 	</insert>
 	
 	<!-- 세부계획 저장하기  -->

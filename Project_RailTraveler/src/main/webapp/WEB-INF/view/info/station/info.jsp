@@ -7,6 +7,7 @@
 %>
 
 <link rel="stylesheet" href="<%=cp%>/resource/css/info.css" type="text/css">
+
 <style type="text/css">
 .displaySta2{
 	display: inline; 
@@ -107,8 +108,7 @@ function showModal(ob) {
 		,url:url
 		,data:query
 		,success:function(data) {
-			
-			
+		
 			$("#please").html(data);
 			//$("#layerpop").modal();
 		
