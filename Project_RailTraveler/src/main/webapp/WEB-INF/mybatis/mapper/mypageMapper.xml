@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+
+	<sql id="where-list">
+		<choose>
+			<when test="keyword == '7days' ">
+			  	s.created >= SYSDATE - 7
+			</when>
+			<when test="keyword == '15days'">
+			   s.created >= SYSDATE - 15
+			</when>
+			<when test="keyword == '1month'">
+			   s.created >= add_months(SYSDATE,-1)
+			</when>
+			<when test="keyword == '3month'">
+			   s.created >= add_months(SYSDATE,-3)
+			</when>
+			<when test="keyword == '5month'">
+			   s.created >= add_months(SYSDATE,-5)
+			</when>
+			<otherwise>
+				 s.created >= SYSDATE
+			</otherwise>
+		</choose>
+	</sql>
+
+
+	<select id="myTicketList"  parameterType="map" resultType="com.railer.rt.mypage.Ticket">
+		select saleNum, s.userNum, userId, t.ticketNum, t.tName, t.year, t.division, s.sDate,s.eDate, s.created
+		from sale s
+		join ticket t on t.ticketNum = s.ticketNum
+		join member2 m on s.userNum = m.userNum
+		where userId = #{userId}
+		<if test="keyword!='all'">
+			AND <include refid="where-list"/>
+		</if>
+		ORDER BY saleNum
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+
+	<select id="ticketDataCount" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) from sale s
+		join ticket t on t.ticketNum = s.ticketNum
+		join member2 m on s.userNum = m.userNum
+		where m.userId = #{userId}
+		<if test="keyword!='all'">
+			AND <include refid="where-list"/>
+		</if>
+	</select>
+	
+	<select id="stampList" parameterType="map" resultType="com.railer.rt.mypage.Ticket">
+		select s.saleNum, s.userNum, userId, s.sDate,s.eDate, stampNum, p.staNum, st.staName
+		from sale s
+		join ticket t on t.ticketNum = s.ticketNum
+		join member2 m on s.userNum = m.userNum
+		join stamp p on p.saleNum = s.saleNum
+		join station st on p.staNum = st.staNum
+		where userId = #{userId} and s.saleNum = #{saleNum}
+	</select>
+	
+	<select id="stampDataCount" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) from sale s
+		join ticket t on t.ticketNum = s.ticketNum
+		join member2 m on s.userNum = m.userNum
+		join stamp p on p.saleNum = s.saleNum
+		join station st on p.staNum = st.staNum
+		where userId = #{userId} and s.saleNum = #{saleNum}
+	</select>
+
+
+
+</mapper>
