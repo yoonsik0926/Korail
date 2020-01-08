@@ -14,8 +14,15 @@ public class Friend {
 	private int hitCount;
 	private int notice;
 	private int enable;
+	private int validate;
 	
 	
+	public int getValidate() {
+		return validate;
+	}
+	public void setValidate(int validate) {
+		this.validate = validate;
+	}
 	private int friendFileNum;
 	private String saveFilename, originalFilename;
 	private long fileSize;

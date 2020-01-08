@@ -78,14 +78,11 @@ text-decoration: underline;
 			<!-- 검색 및 글쓰기 버튼 위치 -->
 			<thead>
 				<tr>
-					<td width="200" colspan="5"
-						style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
+					<td width="200" colspan="5" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 						<c:if test="${search=='search'}">
-							<span id="searchCount"
-								style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-								<span style="color: #ca4a0d;">${dataCount}건 </span> <img alt=""
-								src="/Project_RailTraveler/resource/images/close_icon.png"
-								onclick="reset()"
+							<span id="searchCount" style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+								<span style="color: #ca4a0d;">${dataCount}건 </span> 
+								<img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
 								style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
 							</span>
 						</c:if>
@@ -151,10 +148,6 @@ text-decoration: underline;
 						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
 					</tr>
 				</c:forEach>
-				<!-- 현재 날짜 계산 : 마감일이 지났는지 판단 위해 필요. -->
-				<jsp:useBean id="now" class="java.util.Date" />
-				<fmt:formatDate value="${now}" var="today" pattern="yyyy-MM-dd" />  
-							
 				<!-- 동행 게시글 리스트 출력 -->
 				<c:forEach var="dto" items="${list}">
 				
@@ -163,7 +156,7 @@ text-decoration: underline;
 						<c:if test="${dto.deleted==0}">
 						<td style="text-align: left; padding-left: 20px;">
 						
-						<a href="${articleUrl}&friendNum=${dto.friendNum}">${dto.subject}</a>
+						<a href="${articleUrl}&friendNum=${dto.friendNum}">${dto.subject} </a>
 							<span style="margin-left: 7px; font-size: 14px;"> <i
 								class="far fa-heart" style="margin-right: 2px; color: #969696;"></i>${dto.bookmarkCount}
 								<i class="far fa-comment-alt"
@@ -172,13 +165,12 @@ text-decoration: underline;
 								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
 								</span>
 
-							<fmt:parseDate value="${dto.eDate}" var="eDate" pattern="yyyy-MM-dd"/>
-						<c:if test="${dto.enable==1 || eDate < today}">
+						<c:if test="${dto.validate==1 || dto.enable==1}">
 								<span
 									style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #ccc; color: #FFFFFF; margin-left: 10px;">모집완료</span>
 							</c:if>
 							
-							<c:if test="${dto.enable != 1 && eDate >= today}">
+							<c:if test="${dto.validate!=1 && dto.enable!=1}">
 								<span
 									style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #f97509; color: #FFFFFF; margin-left: 10px;">모집중</span>
 							</c:if><br> <span style="background: #aaa;

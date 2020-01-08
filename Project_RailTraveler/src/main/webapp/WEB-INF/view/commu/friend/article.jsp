@@ -757,11 +757,11 @@ a {
 			</div>
 			<div class="fr">
 				<c:if test="${dto.notice!=1}">
-					<c:if test="${dto.enable==1}">
+					<c:if test="${dto.validate==1 || dto.enable==1}">
 						<button type="button" class="btn btn-default"
 							style="background: #aaa; color: white;" disabled='disabled'>모집완료</button>
 					</c:if>
-					<c:if test="${dto.enable!=1}">
+					<c:if test="${dto.validate!=1 && dto.enable!=1}">
 						<button type="button" class="btn btn-default"
 							onclick="updateEnable(${dto.friendNum});"
 							style="background: #f97509; color: white;"
@@ -1043,11 +1043,11 @@ a {
 		<table style="width: 100%; border-spacing: 0px;">
 			<tr height="45">
 				<td align="right"><c:if test="${dto.notice!=1}">
-						<c:if test="${dto.enable==1}">
+						<c:if test="${dto.validate==1 || dto.enable==1}">
 							<button type="button" class="btn btn-default"
 								style="background: #aaa; color: white;" disabled='disabled'>모집완료</button>
 						</c:if>
-						<c:if test="${dto.enable!=1}">
+						<c:if test="${dto.validate!=1 || dto.enable!=1}">
 							<button type="button" class="btn btn-default"
 								onclick="updateEnable(${dto.friendNum});"
 								style="background: #f97509; color: white;"
