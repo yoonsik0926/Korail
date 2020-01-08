@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+<!-- board테이블 - 자유게시판 -->
+
+	<!--현재 시퀀스 번호를 가져오는 쿼리 
+	return type : 정수형-->
+	<select id="seq" resultType="Integer">
+		SELECT board_seq.nextval FROM dual
+	</select>
+	
+	<!-- 자유게시판 게시물을 insert
+	parameter Type : BoardDTO-->
+	<insert id="insertBoard" parameterType="com.railer.rt.commu.board.Board">
+		INSERT INTO board(boardNum, userId, subject, content)
+		VALUES(#{boardNum}, #{userId}, #{subject}, #{content})
+	</insert>
+	
+	<!--자유게시판 첨부파일을 insert
+	parameter Type : Board DTO-->
+	<insert id="insertBoardFile" parameterType="com.railer.rt.commu.board.Board">
+        INSERT INTO boardFile(boardFileNum, boardNum, saveFilename,originalFilename,fileSize)
+        VALUES(FRIENDF_SEQ.nextval, #{boardNum},#{saveFilename},#{originalFilename},#{fileSize})
+	</insert>
+	
+	<!--검색 기능에 관련 된 where 조건에 관련된 sql
+	전체 / 내용 / 날짜 / 작성일 / 제목 / 작성자-->
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='all'">	
+				(INSTR(subject,#{keyword}) &gt; 0
+				OR
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition=='content'">
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
+			</when>
+			<when test="condition=='created'">
+				(TO_CHAR(f.created, 'YYYY-MM-DD'))=#{keyword}
+			</when>
+			<otherwise>
+				INSTR(${condition},#{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+
+	<!--공지사항 리스트를 가져오는 쿼리 
+	parameter Type : 없음
+	return type : Board dto-->
+	<select id="listBoardTop" resultType="com.railer.rt.commu.board.Board">
+       SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created
+      FROM board f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         and f.userId='admin'
+         and deleteId is null
+      </where>
+      ORDER BY f.boardNum DESC
+   </select>
+   
+	
+	<!--동행게시판 게시물 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM board f
+		JOIN member2 m2 ON f.userId=m2.userId 
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				<include refid="where-list" />
+			</if>
+			and deleteId is null
+		</where>
+	</select>
+	
+	<!--해당 범위 안의 동행게시판 게시물을 가져오는, 해당 페이지의 동행게시판 게시물 리스트
+	parameter Type : map
+	result Type : Board DTO-->
+	<select id="listBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
+      SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created, deleteId,
+            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+      FROM board f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) fileCount FROM boardFile
+         GROUP BY boardNum
+      ) ff On f.boardNum=ff.boardNum
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) replyCount FROM boardReply
+         GROUP BY boardNum
+      ) r On f.boardNum=r.boardNum
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
+         GROUP BY boardNum
+      ) fb On f.boardNum=fb.boardNum
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         and f.userid!='admin'
+      </where>
+      ORDER BY f.boardNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+   </select>
+	
+	<!--동행구하기 게시물 정보를 가져오기
+	parameter Type : 정수
+	result Type : Board DTO-->
+	<select id="readBoard" parameterType="map"  resultType="com.railer.rt.commu.board.Board">
+		SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created, NVL(fileCount,0) fileCount
+            ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
+      FROM board f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) fileCount FROM boardFile
+         GROUP BY boardNum
+      ) ff On f.boardNum=ff.boardNum
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) replyCount FROM boardReply
+         GROUP BY boardNum
+      ) r On f.boardNum=r.boardNum
+      LEFT OUTER JOIN (
+         SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
+         GROUP BY boardNum
+      ) fb On f.boardNum=fb.boardNum
+      LEFT OUTER JOIN (
+         SELECT boardNum, userid, COUNT(*) myBookMark FROM boardBookMark
+         where userid=#{userId} and boardNum=#{boardNum} group by boardNum, userid
+      ) fb1 On f.boardNum=fb1.boardNum
+      	WHERE f.boardNum=#{boardNum}
+	</select>
+	
+	<!--공지사항 해당 게시물에 대한 파일 리스트 정보 가져오기
+	parameter Type : 정수
+	result Type : Board DTO (uploads)-->
+	<select id="listFile" parameterType="Integer" resultType="com.railer.rt.commu.board.Board">
+   	SELECT boardFileNum, boardNum, saveFilename, originalFilename, fileSize
+   	FROM boardFile
+   	WHERE boardNum=#{boardNum}
+   </select>
+	
+	<!-- 해당 게시물에 대한 이전글 정보 가져오기
+	parameter Type : map
+	result Type : Board DTO-->
+	<select id="preReadBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
+      SELECT boardNum, subject,f.created 
+      FROM board f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         AND (boardNum &gt; #{boardNum})
+         AND f.userId !='admin'
+         AND deleteId is not null
+      </where>
+      ORDER BY boardNum ASC
+      FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!--해당 게시물에 대한 다음글 정보 가져오기
+	parameter Type : map
+	result Type : Board DTO-->
+	<select id="nextReadBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
+      SELECT boardNum, subject,f.created 
+      FROM board f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         AND (boardNum &lt; #{boardNum})
+         AND f.userId !='admin'
+         AND deleteId is not null
+      </where>
+      ORDER BY boardNum DESC
+      FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!--해당 공지사항의 조회수 증가
+	parameter Type : 공지사항번호-->
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE board SET
+			hitCount=hitCount+1
+		WHERE boardNum=#{boardNum}
+	</update>
+	
+	<!--해당 공지사항 파일에 대한 상세정보
+	parameter Type : 공지사항 파일번호
+	result Type : Board DTO-->
+	<select id="readFile" parameterType="Integer" resultType="com.railer.rt.commu.board.Board">
+   	SELECT boardFileNum, boardNum, saveFilename, originalFilename, fileSize
+   	FROM boardFile
+   	WHERE boardFileNum=#{boardFileNum}
+   </select>
+   
+   <!--공지사항 제목, 내용 수정
+	parameter Type : map
+	result Type : Notice DTO-->
+	<update id="updateBoard" parameterType="com.railer.rt.commu.board.Board">
+		UPDATE Board SET subject=#{subject},content=#{content}
+		WHERE boardNum=#{boardNum}
+	</update>
+	
+	<!--공지사항 삭제
+	parameter Type : 정수
+	result Type : Notice DTO-->
+	<update id="deleteBoard" parameterType="map">
+		update board set deleteID=#{userId} WHERE boardNum=#{boardNum}
+	</update>
+	
+	<!--동행게시판 게시물의 파일 삭제 (게시물 수정)
+	parameter Type : map-->
+	<delete id="deleteFile" parameterType="map">
+		DELETE FROM boardFile WHERE ${field}=#{num}
+	</delete>
+
+	<!-- 동행게시판 게시물을 insert
+	parameter Type : BoardDTO-->
+	<insert id="insertBoardBookmark" parameterType="map">
+		INSERT INTO boardBookmark(boardNum, userId)
+		VALUES(#{boardNum}, #{userId})
+	</insert>
+	
+	<!-- 동행게시판 게시물을 delete
+	parameter Type : BoardDTO-->
+	<delete id="deleteBoardBookmark" parameterType="map">
+		DELETE FROM boardBookmark
+		WHERE boardNum=#{boardNum} and userId=#{userId}
+	</delete>
+	
+	<!--게시물의 북마크 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="bookmarkCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM boardBookmark
+		where boardNum = #{boardNum}
+	</select>
+</mapper>

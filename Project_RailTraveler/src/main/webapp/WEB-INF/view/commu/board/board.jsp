@@ -5,16 +5,55 @@
 <%
 	String cp = request.getContextPath();
 %>
+
+<script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery-ui.min.js"></script>
+<script type="text/javascript"
+	src="<%=cp%>/resource/jquery/js/jquery.ui.datepicker-ko.js"></script>
+<link rel="stylesheet"
+	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
+	type="text/css">
+	
+	
 <script>
 function searchList() {
-	$("#searchCount").css("display","block");
+	var f = document.searchForm;
+	f.submit();
 }
 function reset() {
-	$("#searchCount").css("display","none");
-}
+	location.href="<%=cp%>/board/board";
+	}
+
+	function changeSelectBox() {
+		if ($("select[name=condition]").val() == 'created') {
+			$("input[name=keyword]").attr("id", "datepicker1");
+
+			$("#datepicker1").datepicker({
+				dateFormat : "yy" + "-" + "mm" + "-" + "dd",
+				altField : "#sDate",
+				showAnim : "slide",
+				changeYear : true //콤보박스에서 년 선택 가능
+				,
+				changeMonth : true
+			//콤보박스에서 월 선택 가능    
+			});
+		} else {
+			$("input[name=keyword]").attr("class", "boxTF");
+			$("#ui-datepicker-div").remove();
+
+		}
+	}
 </script>
 <style type="text/css">
-
+a{
+color:#666;
+font-weight:300;
+}
+a:hover{
+ font-weight:300;
+color:#666;
+text-decoration: underline;
+}
 </style>
 <div class="body-content-container">
 	<div class="page-three-title mt40">
@@ -31,23 +70,27 @@ function reset() {
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr>
-				<td width="200" colspan="5"
-					style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-<span id="searchCount" 					style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-												<span style="color: #ca4a0d;">3569건 </span> <img alt=""
-												src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
-												style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
-										</span>
+				<td width="200" colspan="5" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
+						<c:if test="${search=='search'}">
+							<span id="searchCount" style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+								<span style="color: #ca4a0d;">${dataCount}건 </span> 
+								<img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
+								style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+							</span>
+						</c:if>
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/board/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
-								style="height: 21px;"> 글쓰기
+								style="height: 21px;"> ${sessionScope.member.userId=='admin'?"공지작성":"글쓰기" }
 						</button>
-						<form name="searchForm" action="<%=cp%>/notice/list" method="post"
+						<!-- 검색 폼 -->
+						<form name="searchForm" action="<%=cp%>/board/board"
+							method="post"
 							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 							<select name="condition" class="boxTF"
-								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
+								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;"
+								onchange="changeSelectBox();">
 								<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
 								<option value="subject"
 									${condition=="subject"?"selected='selected'":""}>제목</option>
@@ -59,12 +102,13 @@ function reset() {
 									${condition=="created"?"selected='selected'":""}>등록일</option>
 							</select> <input type="text" name="keyword" value="${keyword}"
 								class="boxTF"
+								${condition=="created"?"id='datepicker1'":""}
 								style="display: inline-block; height: 100%; width: 58%;">
-							<img
-								src="<%=cp%>/resource/images/magnifying-glass.png" class=""
+							<img src="<%=cp%>/resource/images/magnifying-glass.png" class=""
 								onclick="searchList()"
-								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
-						</form></td>
+								style="padding: 6px; cursor: pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
+						</form>
+					</td>
 				</tr>
 				<tr class="lbo_li lbo_legend lbo_legend_like">
 					<th width="75" style="padding-left: 1.5%;">번호</th>
@@ -74,52 +118,70 @@ function reset() {
 					<th width="80"><span>조회수</span></th>
 				</tr>
 			</thead>
+			<!-- 공지사항 리스트 + 일반 자유게시판 게시물 리스트 -->
 			<tbody style="border-bottom: 2px solid black;">
-			<tr class="lbo_li lbo_notice li_bg0 lbo_like" style="    font-weight: 600;">
-				<td>
-					<div class="noticeBox">
-						<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
-							width="18" style="display: inline-block; float: left;"> <span
-							style="font-size: 14px; font-weight: 600; display: block;">공지</span>
-					</div>
-				</td>
-				<td colspan="2" style="text-align: left; padding-left: 20px;">※
-					자유게시판의 공지입니다 ※</td>
-				<td colspan="2" style="text-align: right;
-    padding-right: 20px;"><i>2018-10-23</i></td>
-			</tr>
-				<%
-					for (int i = 10; i >= 1; i--) {
-				%>
-				<tr onclick="javascript:location.href='<%=cp%>/board/article'">
-					<td><%=i%></td>
-					<td style="text-align: left; padding-left: 20px;">제목입니다22222222 <span style="margin-left: 7px;
+			<!-- 공지사항 리스트 출력 -->
+			<c:forEach var="dto" items="${noticeList}">
+					<tr class="lbo_li lbo_notice li_bg0 lbo_like"
+						style="font-weight: 600;"
+						onclick="javascript:location.href='${articleUrl}&boardNum=${dto.boardNum}'">
+						<td>
+							<div class="noticeBox">
+								<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+									width="18" style="display: inline-block; float: left;"> <span
+									style="font-size: 14px; font-weight: 600; display: block;">공지</span>
+							</div>
+						</td>
+						<td colspan="2" style="text-align: left; padding-left: 20px;">※
+							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if></td>
+						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
+					</tr>
+				</c:forEach>
+				<!-- 자유게시판 리스트 출력 -->
+				<c:forEach var="dto" items="${list}">
+					<tr>
+						<td>${dto.listNum}</td>
+					<c:if test="${empty dto.deleteId}">
+						<td style="text-align: left; padding-left: 20px;">
+						
+						<a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.subject} </a> <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>3 <i class="far fa-comment-alt" style="margin-right: 2px;
-    color: #969696;"></i>5</span></td>
-					<td>겨레리</td>
-					<td>2018-10-23</td>
-					<td>1</td>
+    color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;
+    color: #969696;"></i>${dto.replyCount}<c:if test="${dto.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${dto.fileCount}</c:if>
+								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
+								</span></td>
+					<td>${dto.userName}</td>
+						<td>${dto.created}</td>
+						<td>${dto.hitCount}</td>
+					</c:if>
+					<c:if test="${dto.deleteId eq 'admin'}">
+							<td style="color: #888;
+    height: 30px;
+    padding: 7px 0; text-align: center;"><div>관리자에 의해 삭제된 게시물입니다.</div></td><td colspan="3"></td>
+						</c:if>
+						<c:if test="${(not empty dto.deleteId) and dto.deleteId ne 'admin'}">
+							<td style="color: #888;
+    height: 30px;
+    padding: 7px 0; text-align: center;"><div>삭제된 게시물입니다.</div></td><td colspan="3"></td>
+						</c:if>
 				</tr>
-				<%
-					}
-				%>
+				</c:forEach>
 			</tbody>
 		</table>
 
 		<nav style="text-align: center;">
-			<ul class="pagination">
-				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-				</span></li>
-				<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-				</li>
-				<li><span>2</span></li>
-				<li><span>3</span></li>
-				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-				</span></li>
-			</ul>
+		${dataCount==0? "등록된 자료가 없습니다":paging}
+<!-- 			<ul class="pagination"> -->
+<!-- 				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span> -->
+<!-- 				</span></li> -->
+<!-- 				<li class="active"><span>1 <span class="sr-only">(current)</span></span> -->
+<!-- 				</li> -->
+<!-- 				<li><span>2</span></li> -->
+<!-- 				<li><span>3</span></li> -->
+<!-- 				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span> -->
+<!-- 				</span></li> -->
+<!-- 			</ul> -->
 		</nav>
-
 
 	</div>
 </div>
