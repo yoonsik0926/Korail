@@ -6,6 +6,71 @@
    String cp = request.getContextPath();
 %>
 	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
+
+<script type="text/javascript">
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function searchList() {
+	var f=document.searchForm;
+	f.submit();
+}
+
+
+//메뉴를 조절하는 에이작스
+$(function(){
+	
+	$("select[name=condition]").change(function(){
+			
+		var targetTitle = $(this).val();
+		
+		var url = "<%=cp%>/singo/singo?targetTitle="+targetTitle;
+		
+		location.href= url;
+});
+	});
+</script>
+
 <style type="text/css">
 
 .nonscroll::-webkit-scrollbar { 
@@ -95,9 +160,9 @@ a {
 			<div class="row" style="width: 100%; margin: 10px auto;">
 				<div class="col" style="font-size: 18px; font-weight: 600;">
 					<ul class="nav nav-tabs" style="width: 100%">
-						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+						<li class="nav-item active" style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
-							id="1st" onclick="fnMove('1');" >신고목록</a></li>
+							id="1st">신고목록</a></li>					
 
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
 							style="text-align: center" class="nav-link active"
@@ -120,16 +185,42 @@ a {
 
 				<td width="200" colspan="6" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 				
+				
 					<select name="condition" class="boxTF"
 								style="border-radius: 3px; width: 15%; height: 100%; border-left: 0;">
-								<option value="all" ${condition=="all"?"selected='selected'":""}>투어리스트</option>
-								<option value="subject"
+					<optgroup label="투어리스트">
+   	 					<option label="댓글" value="tourreply" ${targetTitle=="tourreply"?"selected='selected'":""}>댓글</option>
+ 					 </optgroup>
+ 					 
+ 					<optgroup label="묻고답하기">
+    				<option  value="qna" ${targetTitle=="qna"?"selected='selected'":""}>게시판</option>
+   					 <option value="qnareply" ${targetTitle=="qnareply"?"selected='selected'":""}>댓글</option>
+  					</optgroup>
+ 					 
+ 					<optgroup label="자유게시판">
+    				<option value="board" ${targetTitle=="board"?"selected='selected'":""}>게시판</option>
+   					 <option value="boardreply" ${targetTitle=="boardreply"?"selected='selected'":""}>댓글</option>
+  					</optgroup>
+  					
+  					 <optgroup label="동행구하기">
+    				<option value="friend" ${targetTitle=="friend"?"selected='selected'":""}>게시판</option>
+   					 <option value="friendreply"${targetTitle=="friendreply"?"selected='selected'":""}>댓글</option>
+  					</optgroup>
+					</select>
+				
+<%-- 				<select name="condition" class="boxTF"
+								style="border-radius: 3px; width: 15%; height: 100%; border-left: 0;">
+								<option value="tourreply" ${condition=="all"?"selected='selected'":""}>투어리스트</option>
+								<option value="qna"
 									${condition=="subject"?"selected='selected'":""}>묻고답하기</option>
-								<option value="content"
+								<option value="board"
 									${condition=="content"?"selected='selected'":""}>자유게시판</option>
-								<option value="userName"
+								<option value="friend"
 									${condition=="userName"?"selected='selected'":""}>동행구하기</option>							
-					</select> 
+					</select>  - --%>
+					
+					
+					
 				
 				
 				
@@ -137,72 +228,60 @@ a {
 					<span id="searchCount" 	style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
 					<span style="color: #ca4a0d;">3569건 </span> <img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
 					style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;"></span>
-						<form name="searchForm" action="<%=cp%>/notice/list" method="post"
+						<form name="searchForm" action="<%=cp%>/singo/singo" method="post"
 							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 							<select name="condition" class="boxTF"
 								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
 								<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
-								<option value="subject"
-									${condition=="subject"?"selected='selected'":""}>날짜</option>
-								<option value="content"
-									${condition=="content"?"selected='selected'":""}>내용</option>
-								<option value="userName"
-									${condition=="userName"?"selected='selected'":""}>신고자</option>
 								<option value="created"
-									${condition=="created"?"selected='selected'":""}>피신고자</option>
-							</select> <input type="text" name="keyword" value="${keyword}"
+									${condition=="created"?"selected='selected'":""}>날짜</option>
+								<option value="reason"
+									${condition=="reason"?"selected='selected'":""}>신고사유</option>
+								<option value="userId"
+									${condition=="userId"?"selected='selected'":""}>신고자Id</option>
+								<option value="targetUserId"
+									${condition=="targetUserId"?"selected='selected'":""}>피신고자Id</option>
+							</select>
+							
+							 <input id="keyword" type="text" name="keyword" value="${keyword}"
 								class="boxTF"
 								style="display: inline-block; height: 100%; width: 58%;">
 							<img
-								src="<%=cp%>/resource/images/magnifying-glass.png" class=""
-								onclick="searchList()"
+								src="<%=cp%>/resource/images/magnifying-glass.png" class="" onclick="searchList()"
 								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 						</form></td>
 				</tr>
 				<tr class="lbo_li lbo_legend lbo_legend_like">
-					<th width="70" style="padding-left: 1.5%;">번호</th>
-					<th width="120"><span>글쓴이ID</span></th>
-					<th><span style="padding-left: 10px;">신고게시물내용</span></th>
-					<th width="120"><span>신고자ID</span></th>
-					<th><span style="padding-left: 10px;">신고사유</span></th>										
-					<th width="100"><span>신고일</span></th>
+					<th width="60" style="padding-left: 1.5%;">번호</th>
+					<th width="110"><span>글쓴이ID</span></th>
+					<th width="350"><span style="padding-left: 10px;">신고게시물내용</span></th>
+					<th width="110" ><span>신고자ID</span></th>
+					<th width="350"><span style="padding-left: 10px;">신고사유</span></th>										
+					<th width="200"><span>신고일</span></th>
 
 				</tr>
 			</thead>
 			<tbody style="border-bottom: 2px solid black;">
-
+			<c:forEach var="dto" items="${singoList}">
 				<tr >
-					<td>1</td>
-					<td style="text-align: left; padding-left: 20px;">yoonsik0926</td>
-					<td>야이 개~~~~새꺄</td>
-					<td>youjin</td>
-					<td>비속어사용ㅡㅅㅡ</td>
-					<td>2020-01-07</td>
+					<td>${dto.blameNo}</td>
+					<td>${dto.targetUserId}</td>
+					<td>${dto.targetContent}</td>
+					<td>${dto.userId}</td>
+					<td>${dto.content}</td>
+					<td>${dto.created}</td>
 				</tr>
-				
-				<tr >
-					<td>1</td>
-					<td style="text-align: left; padding-left: 20px;">yoonsik0926</td>
-					<td>야이 개~~~~새꺄</td>
-					<td>youjin</td>
-					<td>비속어사용ㅡㅅㅡ</td>
-					<td>2020-01-07</td>
-				</tr>
+			</c:forEach>	
+			
 			</tbody>
 		</table>
 
-		<nav style="text-align: center;">
-			<ul class="pagination">
-				<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-				</span></li>
-				<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-				</li>
-				<li><span>2</span></li>
-				<li><span>3</span></li>
-				<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-				</span></li>
-			</ul>
-		</nav>
+			<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+		<tr height="35">
+			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging}
+			</td>
+		</tr>
+			</table>
 
 
 	</div>

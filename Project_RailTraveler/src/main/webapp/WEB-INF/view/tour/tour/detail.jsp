@@ -331,8 +331,9 @@ function replyLike(ob){
 //취소 버튼 눌렀을 시 '기타' 지우기
 $(function(){
 	$('.cancelsingo').click(function(){
-		var f = document.singoForm;	
-		f.etcText.value="";		
+		var f = document.singoForm;		
+		$('#etcText').val("");		
+		//f.etcText.value="";		
 	});
 });
 
@@ -369,9 +370,9 @@ function replySingo(replyNum) {
 function singosubmit() {		
 	var targetNo = $('#singoreplyNum').val();
 	var content = $('#singoreason').val();
+	var f = document.singoForm;
 	
-	if (content == 'etc'){
-		var f = document.singoForm;
+	if (content == 'etc'){		
 		 content = f.etcText.value;		 
 	}
 	

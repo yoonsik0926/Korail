@@ -1,5 +1,6 @@
 package com.railer.rt.singo;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -27,15 +28,17 @@ public class SingoServiceImpl implements SingoService {
 	}
 
 	@Override
-	public int singoCount(String targetId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public List<Singo> singoList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Singo> list =null;
+		
+		try {
+			list =dao.selectList("singo.singoList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return list;
 	}
 
 	@Override
@@ -47,6 +50,19 @@ public class SingoServiceImpl implements SingoService {
 			e.printStackTrace();
 		}
 		return dto;
+	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result =0;
+		
+		try {
+			result = dao.selectOne("singo.dataCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	

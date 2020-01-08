@@ -1,8 +1,11 @@
 package com.railer.rt.singo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +29,104 @@ public class SingoController {
 	
 	
 	@RequestMapping(value="/singo/singo")
-	public String plan(Model model) throws Exception {
+	public String singo(Model model,
+			@RequestParam(defaultValue="tourList") String mode,
+			@RequestParam(defaultValue="tourreply") String targetTitle,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			@RequestParam(value="page", defaultValue="1") int current_page,
+			HttpServletRequest req
+			) throws Exception {		
+		
+
+		String cp = req.getContextPath();		
+		int rows = 20;
+		int total_page = 0;
+		int dataCount = 0;
+		String numName = "";
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("mode", mode);
+		map.put("targetTitle", targetTitle);
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		if(targetTitle.equals("tourreply")) {
+			numName="replyNum";
+		}
+		else if (targetTitle.equals("friend")) {
+			numName="friendNum";
+		}
+		else if (targetTitle.equals("board")) {
+			numName="boardNum";
+		}
+		else if (targetTitle.equals("qna")) {
+			numName="qnaNum";
+		}
+		else if (targetTitle.equals("friendreply")) {
+			numName="friendreplyNum";
+		}
+		else if (targetTitle.equals("boardreply")) {
+			numName="boardreplyNum";
+		}
+		else if (targetTitle.equals("qnareply")) {
+			numName="qnareplyNum";
+		}
+		
+		
+		//reply일 때 content 게시판일때 subject 출력
+		if(targetTitle.contains("reply")) {
+			map.put("selected", "reply");
+		}else {
+			map.put("selected", "board");
+		}
+		
+		map.put("numName", numName);
+		
+		//데이터 갯수 구하기
+		dataCount = service.dataCount(map);
+		
+		if (dataCount != 0)
+			total_page = myUtil.pageCount(rows, dataCount);
+
+		if (total_page < current_page)
+			current_page = total_page;
+		
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("rows", rows);
+		
+		
+		//신고 목록을 가져온다~
+		List<Singo> singoList = new ArrayList<Singo>();		
+		singoList = service.singoList(map);
+		
+		
+		//신고 리스트 번호 재정의
+        int listNum, n = 0;
+        for(Singo dto : singoList) {
+            listNum = dataCount - (offset + n);
+            dto.setBlameNo(listNum);
+            n++;
+        }
+        
+        
+		
+		String listUrl = cp +"/singo/singo?mode="+mode+"&targetTitle="+targetTitle;	
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+
+		model.addAttribute("targetTitle", targetTitle);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("paging", paging);
+		model.addAttribute("singoList", singoList);
 		model.addAttribute("subMenu", "0");
 		model.addAttribute("title", "투어댓글");
+		
+		
 		return ".singo.singo";
 	}
 
@@ -55,7 +153,7 @@ public class SingoController {
 			
 			dto.setTargetNo(targetNo);
 			dto.setTargetType(1);
-			dto.setTargetTitle("tour");
+			dto.setTargetTitle("tourreply");
 			dto.setUserId(info.getUserId());
 			dto.setTargetUserId(vo.getTargetUserId());
 			dto.setTargetUrl(targetUrl);

@@ -2,7 +2,40 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="singo">
+	
+	
+	<sql id="where-list">
+		<choose>
+			<when test="condition == 'all' ">
+			   ( INSTR(b.userId, #{keyword}) &gt; 0
+		          OR 
+		         INSTR(b.targetUserId, #{keyword}) &gt; 0
+		          OR 
+		          INSTR(b.userId, #{keyword}) &gt; 0
+		          OR 
+		          INSTR(b.content, #{keyword}) &gt; 0
+		         ) 
+		          
+			</when>
+			<when test="condition == 'created'">
+			    ( TO_CHAR(b.created, 'YYYYMMDD') = #{keyword}
+		          OR TO_CHAR(b.created, 'YYYY-MM-DD') = #{keyword} )
+			</when>
+			
+			<when test="condition == 'reason'">
+			    ( INSTR(b.content, #{keyword}) &gt; 0)
+			</when>
+			
+			<when test="condition == 'userId'">
+			    ( INSTR(b.userId, #{keyword}) &gt; 0)
+			</when>
+			
+			<when test="condition == 'targetUserId'">
+			    ( INSTR(b.targetUserId, #{keyword}) &gt; 0)
+			</when>
 
+		</choose>
+	</sql>
 
 	<insert id="singo.insertSingo" parameterType="map">
 		insert into
@@ -13,6 +46,41 @@
 	<select id="singo.findTargetId" parameterType="Integer" resultType="com.railer.rt.singo.Singo">
 		select userId targetUserId , content targetContent from tourreply where replynum = #{targetNo}
 	</select>
+	
+	<select id="singo.dataCount" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) from blame b
+		
+		<where>
+			b.targetTitle = #{targetTitle}
+		
+			<if test="keyword!=null and keyword!='' ">
+				and
+				
+				<include refid="where-list"/>
+			</if>
+		</where>   
+	</select>
+	
+ 	<select id="singo.singoList" parameterType="map" resultType="com.railer.rt.singo.Singo" >
+ 		<choose>
+ 		<when test='selected=="reply"'>
+ 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.content targetContent,targeturl,b.created
+ 		</when>
+		
+ 		<when test='selected=="board"'>
+ 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.subject targetContent,targeturl,b.created
+ 		</when>
+ 		</choose>		
+		from blame b join ${targetTitle} x 
+		on b.targetNo = x.${numName}		
+		<where>
+		 	targetTitle = #{targetTitle}
+		 	
+			<if test="keyword!=null and keyword!='' ">
+				and <include refid="where-list"/>
+			</if>
+		</where>   
+	</select> 
 
 
 </mapper>

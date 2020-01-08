@@ -6,7 +6,9 @@ import java.util.Map;
 public interface SingoService {
 	
 	public void insertSingo(Singo dto);
-	public int singoCount(String targetId);
 	public List<Singo> singoList(Map<String,Object> map);
 	public Singo findTargetReply(int targetNo);
+	public int dataCount(Map<String,Object> map);
+	
+
 }
