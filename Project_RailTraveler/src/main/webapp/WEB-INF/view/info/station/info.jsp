@@ -102,32 +102,16 @@ function showModal(ob) {
 	
 	var url = "<%=cp%>/station/modal";
 	var query = "staNum="+staNum+"&page="+${page}+"&locNum="+${locNum};
+	var selector = "#stationInfo";
 	
-	$.ajax({
-		type:"get"
-		,url:url
-		,data:query
-		,success:function(data) {
-		
-			$("#please").html(data);
-			//$("#layerpop").modal();
-		
-		}
-	    ,beforeSend :function(jqXHR) {
-	    	jqXHR.setRequestHeader("AJAX", true);
-	    }
-	    ,error:function(jqXHR) {
-	    	if(jqXHR.status==403) {
-	    		location.href="<%=cp%>/member/login";
-	    		return false;
-	    	}
-	    	console.log(jqXHR.responseText);
-	    }
-	});
+	ajaxHTML(url, "get", query, selector);
 	
-	
+	$("#aaaa").modal('show');
+
 	
 }
+
+
 </script>
 
 <div class="body-content-container">
@@ -203,8 +187,44 @@ function showModal(ob) {
 		</nav>
 	</div>
 </div>	
-	<!-- modal -->
-	<div id="please">		
-			
-	</div>
 
+	
+	<!-- 모달 -->
+		<div class="modal " id="aaaa" tabindex="-1" role="dialog" aria-labelledby="layerpopLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <!-- header -->
+		      <div class="modal-header" style="padding: 5px 5px;">
+		        <!-- 닫기(x) 버튼 -->
+		       <button type="button" class="close" data-dismiss="modal" style="margin:10px;">×</button>
+		      	 <!-- header title -->
+	        <h4 class="modal-title" style="text-align: center;font-weight: 900;margin-top: 20px;margin-left: 25px;"></h4>
+		      </div>
+		      <!-- body -->
+		      <div class="modal-body" id="stationInfo" style="text-align: center;">
+		      
+		      </div>
+
+		      <!-- Footer -->
+		      <div class="modal-footer" style="text-align: center; margin: 20px 0;">
+		      	<c:if test="${sessionScope.member.userId!='admin'}">
+		        	<button type="button" class="btnTour" onclick="showTour();">관광정보 보러가기</button>
+		        </c:if>
+		        
+		        <c:if test="${sessionScope.member.userId=='admin'}">
+			        <div>
+						<table style="width: 100%;border-spacing: 0px;">
+							<tr height="45">
+								<td width="300" style="text-align: center; height: 80px;">    
+					        		<button type="button" class="btn btn-default" onclick="updateStation();">수정</button>    
+					        		<button type="button" class="btn btn-danger" onclick="deleteStation();">삭제</button>
+					    		</td>
+							</tr>
+						</table>
+					</div>
+		        </c:if>
+		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
