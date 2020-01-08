@@ -126,8 +126,15 @@ public class EventController {
 	
 	@RequestMapping(value="/event/update", method=RequestMethod.GET)
 	public String updateForm(
+			@RequestParam int eventNum,
 			Model model) throws Exception {
 		
+		Event dto = service.readEvent(eventNum);
+		if(dto==null) {
+			return "redirect:/event/current";
+		}
+		
+		model.addAttribute("dto", dto);
 		model.addAttribute("subMenu", "0");
 		model.addAttribute("mode", "update");
 		
@@ -198,6 +205,8 @@ public class EventController {
 		if(keyword.length()!=0) {
 			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
 		}
+		
+		service.updateHitCount(eventNum);
 
 		Event dto = service.readEvent(eventNum);
 		if (dto == null)

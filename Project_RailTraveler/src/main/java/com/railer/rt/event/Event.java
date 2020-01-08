@@ -10,6 +10,7 @@ public class Event {
 	private String edate;
 	private String imageFilename;
 	private MultipartFile upload;
+	private int hitCount;
 	
 	public int getEventNum() {
 		return eventNum;
@@ -59,5 +60,13 @@ public class Event {
 	public void setUpload(MultipartFile upload) {
 		this.upload = upload;
 	}
+	public int getHitCount() {
+		return hitCount;
+	}
+	public void setHitCount(int hitCount) {
+		this.hitCount = hitCount;
+	}
+	
+	
 		
 }

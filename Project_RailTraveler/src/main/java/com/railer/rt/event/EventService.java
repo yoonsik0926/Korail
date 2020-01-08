@@ -8,6 +8,7 @@ public interface EventService {
 	public void updateEvent(Event dto, String pathname) throws Exception;
 	public void deleteEvent(int num) throws Exception;
 	public Event readEvent(int num);
+	public void updateHitCount(int num) throws Exception;
 	public Event preReadEvent(Map<String, Object> map);
 	public Event nextReadEvent(Map<String, Object> map);
 	public List<Event> listEvent(Map<String, Object> map);

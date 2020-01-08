@@ -201,8 +201,9 @@ input[type=text], input[type=file] {
 						<button type="submit" class="btn btn-danger" onclick="sendBoard();" style="margin-left: 5px;"><img alt="" src="<%=cp%>/resource/images/check-mark.png" style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}</button>
 						
 						<c:if test="${mode =='update'}">
-							<input type="hidden" name="num" value="${dto.num}">
-							<input type="hidden" name="imagename" value="${dto.imagename}">
+							<input type="hidden" name="eventNum" value="${dto.eventNum}">
+			         	 <input type="hidden" name="imageFilename" value="${dto.imageFilename}">
+			        	 <input type="hidden" name="page" value="${page}">
 						</c:if>
 					</td>
 				</tr>

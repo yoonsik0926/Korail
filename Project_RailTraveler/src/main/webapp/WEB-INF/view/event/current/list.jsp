@@ -14,21 +14,9 @@
 .sect-eventlist li{ float:left; color:#333333; letter-spacing:-1px;}
 .sect-eventlist li a{ display:block;}
 .sect-eventlist li img{ display:block; width:240px; height:200px;}
-.sect-eventlist li em{ display:inline-block; font-size:15px; font-weight:500;}
-.sect-eventlist li strong{ display:block; width:100%; font-size:14px; font-weight:500;white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
 .sect-eventlist li p{ display:block; width:100%;white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
 .sect-eventlist li .date{ display:block; color:#717171; font-size:14px; letter-spacing:0px; }
 .sect-eventlist li .date span{ display:inline-block; margin-right:5px; font-weight:300;}
-
-.sect-eventlist li{ 
-    width: 300px;
-    margin: 10px 30px 20px 10px;
-    padding: 10px;
-    padding-bottom: 30px;}
-
-ul {
-   list-style: none;
-   }    
 
 .sect-eventlist .box-contents{ margin-top:10px; line-height:1.6;}
 .sect-eventlist .box-contents p{ white-space:nowrap;}
@@ -45,6 +33,22 @@ ul {
 .search-section .input-area{position:relative; width:100%; margin:0 auto; padding-right:50px; background:#e7e7e7; -webkit-box-sizing:border-box; box-sizing:border-box;}
 .search-section .input-area input{width:100%; height:51px; line-height:51px; padding-left:20px; border:0 none; background:transparent; font-size:14px; -webkit-box-sizing:border-box; box-sizing:border-box; }
 .search-section .input-area .btn-event-search{position:absolute; right:15px; top:50%; width:23px; height:22px; margin-top:-11px; background-image:url(/Project_RailTraveler/resource/img/search.jpg); background-repeat:no-repeat;}
+
+.sect-eventlist li{ 
+    width: 300px;
+    margin: 10px 30px 20px 10px;
+    padding: 10px;
+    padding-bottom: 30px;}
+
+ul {
+   list-style: none;
+   }
+   
+.evt-name {
+	font-weight: bold;
+	font-size: 14px;
+	color: #2275C4;
+}      
 
 </style>
 
@@ -174,15 +178,14 @@ ul {
     	         	<li>
 	                   	<div class="box-image">
 	                        
-	                            <span class="thumb-image">
-	                              <img src="<%=cp%>/uploads/event/${dto.imageFilename}" width="180"
-				                   height="180"
+	                            <span class="thumb-image" style="cursor:pointer">
+	                              <img src="<%=cp%>/uploads/event/${dto.imageFilename}"
 	                              
 	                              onclick="javascript:article('${dto.eventNum}');"/>
 	                            </span>
 	                    </div>
 	                    <div class="box-contents">
-                           <em class="txt-lightblue">${dto.name}</em>
+                           <p class="evt-name">${dto.name}</p>
                             
 	                        <p class="date">
 	                            <span>기간: </span>${dto.sdate} ~ ${dto.edate}
@@ -191,8 +194,8 @@ ul {
                      <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
                      	<tr height="45">
 						    <td width="300" align="left" >
-						        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update';">수정</button>
-						        <button type="button" class="btn" onclick="deleteEvent('${dto.eventNum}');">삭제</button>
+							    <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update?eventNum=${dto.eventNum}&page=${page}';">수정</button>
+							     <button type="button" class="btn" onclick="deleteEvent('${dto.eventNum}');">삭제</button>
 						    </td>
 						
 						</tr>

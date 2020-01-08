@@ -81,7 +81,7 @@
 	 </delete>
 	 
 	 <select id="readevent" parameterType="Integer" resultType="com.railer.rt.event.Event">
-		SELECT eventNum, name, content, sDate, eDate, imageFilename 
+		SELECT eventNum, name, content, sDate, eDate, imageFilename, hitCount 
 	 	from event 
 	 	WHERE eventNum = #{eventNum}
 	 </select>
@@ -154,5 +154,9 @@
 		 </choose>
 		FETCH FIRST 1 ROWS ONLY
 	</select>
+	
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE event SET hitCount=hitCount+1 WHERE eventNum = #{eventNum}
+	</update>
  	
 </mapper>

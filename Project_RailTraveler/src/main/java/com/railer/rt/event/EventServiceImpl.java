@@ -128,4 +128,16 @@ public class EventServiceImpl implements EventService {
 		
 		return dto;
 	}
+
+	@Override
+	public void updateHitCount(int num) throws Exception {
+		try{
+			// 조회수 증가
+			dao.updateData("event.updateHitCount", num);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

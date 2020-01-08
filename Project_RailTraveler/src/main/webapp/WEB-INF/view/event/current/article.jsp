@@ -33,7 +33,7 @@
 			<tr height="35" style="border-bottom: 1px solid #cccccc;">
 			    
 			    <td width="50%" align="right" style="padding-right: 5px; background: #fafafa;">
-			        <span>기간: </span>${dto.sdate} ~ ${dto.edate}
+			        <span>기간: </span>${dto.sdate} ~ ${dto.edate} &nbsp; view ${dto.hitCount}
 			    </td>
 			</tr>
 			
