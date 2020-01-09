@@ -36,6 +36,27 @@
 
 		</choose>
 	</sql>
+	
+	<sql id="where-singoCountlist">
+		<choose>
+			<when test="condition == 'all' ">
+			   ( INSTR(targetUserId,#{keyword}) &gt; 0
+		          OR 
+		         INSTR(userName, #{keyword}) &gt; 0
+		         ) 		          
+			</when>
+			<when test="condition == 'userId'">
+			    ( INSTR(targetUserId,#{keyword}) &gt; 0)
+			</when>
+			
+			<when test="condition == 'userName'">
+			    ( INSTR(userName, #{keyword}) &gt; 0)
+			</when>
+			
+
+	
+		</choose>
+	</sql>
 
 	<insert id="singo.insertSingo" parameterType="map">
 		insert into
@@ -80,7 +101,36 @@
 				and <include refid="where-list"/>
 			</if>
 		</where>   
+			OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select> 
+	
+	<select id="singo.singoCountList" parameterType="map" resultType="com.railer.rt.singo.SingoManagment">
+		select username , targetUserId ,singoCount
+		from member2 m2 join (
+		select targetUserId, nvl(count(*),0) singoCount from blame 
+		group by targetUserId) x on m2.userid = x.targetUserId
+		<where>
+			<if test="keyword!=null and keyword!='' ">
+				<include refid="where-singoCountlist"/>
+			</if>
+		</where>
+		order by singoCount desc
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+	
+	<select id="singo.singoCount" parameterType="map" resultType="Integer">
+	select nvl(count(*),0) singoListCount from(
+	select username , targetUserId ,singoCount
+		from member2 m2 join (
+		select targetUserId, nvl(count(*),0) singoCount from blame 
+		group by targetUserId) x on m2.userid = x.targetUserId
+		<where>
+			<if test="keyword!=null and keyword!='' ">
+				<include refid="where-singoCountlist"/>
+			</if>
+		</where>
+		order by singoCount desc
 
-
+)
+</select>
 </mapper>

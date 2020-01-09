@@ -22,7 +22,9 @@
                     	<span class='deleteReplyAnswer' style='cursor: pointer;' data-replyNum='${vo.replyNum}' data-answer='${vo.answer}'>삭제</span>
                     </c:if>
                     <c:if test="${sessionScope.member.userId!=vo.userId && sessionScope.member.userId!='admin'}">
-                    	<span class="notifyReply">신고</span>
+                    	<span style="cursor: pointer;" class="notifyReply" onclick="replySingo('${vo.replyNum}');"
+                    	data-replyNum='${vo.replyNum}'
+						data-page='${pageNo}'>신고</span>
                     </c:if>
             		</c:when>          	
             	</c:choose>

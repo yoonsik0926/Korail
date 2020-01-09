@@ -65,5 +65,32 @@ public class SingoServiceImpl implements SingoService {
 		return result;
 	}
 
+	@Override
+	public List<SingoManagment> singoCountList(Map<String, Object> map) {
+		 List<SingoManagment> list = null;
+		
+		try {
+			list =dao.selectList("singo.singoCountList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return list;
+	}
+
+	@Override
+	public int singoListCount(Map<String, Object> map) {
+				int result =0;
+		
+		try {
+			result = dao.selectOne("singo.singoCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 	
 }

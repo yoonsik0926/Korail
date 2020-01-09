@@ -30,15 +30,14 @@ public class SingoController {
 	
 	@RequestMapping(value="/singo/singo")
 	public String singo(Model model,
-			@RequestParam(defaultValue="tourList") String mode,
 			@RequestParam(defaultValue="tourreply") String targetTitle,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
 			@RequestParam(value="page", defaultValue="1") int current_page,
 			HttpServletRequest req
 			) throws Exception {		
-		
 
+		
 		String cp = req.getContextPath();		
 		int rows = 20;
 		int total_page = 0;
@@ -46,7 +45,6 @@ public class SingoController {
 		String numName = "";
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("mode", mode);
 		map.put("targetTitle", targetTitle);
 		map.put("condition", condition);
 		map.put("keyword", keyword);
@@ -115,10 +113,10 @@ public class SingoController {
         
         
 		
-		String listUrl = cp +"/singo/singo?mode="+mode+"&targetTitle="+targetTitle;	
+		String listUrl = cp +"/singo/singo?targetTitle="+targetTitle;	
 		String paging = myUtil.paging(current_page, total_page, listUrl);
 		
-
+		model.addAttribute("condition", condition);
 		model.addAttribute("targetTitle", targetTitle);
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("paging", paging);
@@ -128,6 +126,67 @@ public class SingoController {
 		
 		
 		return ".singo.singo";
+	}
+	
+	@RequestMapping(value="/singo/userManagment")
+	public String userManagment(
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			@RequestParam(value="page", defaultValue="1") int current_page,
+			HttpServletRequest req,
+			Model model
+			) throws Exception {		
+
+		String cp = req.getContextPath();		
+		int rows = 20;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		
+		//데이터 갯수 구하기
+				dataCount = service.singoListCount(map);
+				
+				if (dataCount != 0)
+					total_page = myUtil.pageCount(rows, dataCount);
+
+				if (total_page < current_page)
+					current_page = total_page;
+				
+				int offset = (current_page - 1) * rows;
+				if (offset < 0)
+					offset = 0;
+				
+				map.put("offset", offset);
+				map.put("rows", rows);
+				
+				
+				
+				
+				List<SingoManagment> singoCountList = new ArrayList<SingoManagment>();			
+				singoCountList = service.singoCountList(map);
+		
+
+				//신고 리스트 번호 재정의
+		        int listNum, n = 0;
+		        for(SingoManagment dto : singoCountList) {
+		            listNum = dataCount - (offset + n);
+		            dto.setSingoNum(listNum);
+		            n++;
+		        }
+		        
+				String listUrl = cp +"/singo/userManagment";
+				String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		     model.addAttribute("paging", paging);
+		     model.addAttribute("singoCountList", singoCountList);
+		
+				return "/singo/userManagment";
 	}
 
 	

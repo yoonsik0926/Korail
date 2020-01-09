@@ -1,3 +1,5 @@
+
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -53,6 +55,9 @@ function ajaxHTML(url, type, query, selector) {
 
 function searchList() {
 	var f=document.searchForm;
+	var targetTitle =$("select[name=category]").val();
+
+ 	f.action = "<%=cp%>/singo/singo?targetTitle="+targetTitle; 
 	f.submit();
 }
 
@@ -60,7 +65,7 @@ function searchList() {
 //메뉴를 조절하는 에이작스
 $(function(){
 	
-	$("select[name=condition]").change(function(){
+	$("select[name=category]").change(function(){
 			
 		var targetTitle = $(this).val();
 		
@@ -69,6 +74,44 @@ $(function(){
 		location.href= url;
 });
 	});
+	
+$(function(){
+$("ul.tabs li").click(function(){
+	tab = $(this).attr("data-tab");
+
+	
+	$("ul.tabs li").each(function(){
+		$(this).removeClass("active");
+	});
+	
+	$("#tab-"+tab).addClass("active");
+	
+	if(tab ==1){
+		
+		$('#singoForm').css("display", "none");
+		$('#usermanagment').css("display", "block");
+		
+		var url = "<%=cp%>/singo/userManagment";
+		var query ="";
+		var selector ="#usermanagment";
+		
+		ajaxHTML(url, "get", query, selector);
+		
+		
+
+	}else{
+		
+		var url = "<%=cp%>/singo/singo";
+		location.href= url;
+		
+		$('#usermanagment').css("display", "none");
+		$('#singoForm').css("display", "block");		
+	}
+
+
+});
+
+});
 </script>
 
 <style type="text/css">
@@ -159,14 +202,17 @@ a {
 		<div class="container" style="margin:20px auto; margin-bottom:50px; width: 93%">
 			<div class="row" style="width: 100%; margin: 10px auto;">
 				<div class="col" style="font-size: 18px; font-weight: 600;">
-					<ul class="nav nav-tabs" style="width: 100%">
-						<li class="nav-item active" style="width: 130px; margin: 0 auto;"><a
-							style="text-align: center" class="nav-link active"
-							id="1st">신고목록</a></li>					
+					<ul class="nav nav-tabs tabs" style="width: 100%; cursor: pointer;">
+						
+						<li class="nav-item active" style="width: 130px; margin: 0 auto;"
+						id="tab-0" data-tab="0"><a
+							style="text-align: center;" class="nav-link active"
+							id="1st" >신고목록</a></li>					
 
-						<li class="nav-item " style="width: 130px; margin: 0 auto;"><a
+						<li class="nav-item " style="width: 130px; margin: 0 auto;"
+						id="tab-1" data-tab="1"><a
 							style="text-align: center" class="nav-link active"
-							id="2st" onclick="fnMove('2');">유저관리</a></li>
+							id="2st">유저관리</a></li>
 
 					</ul>
 				</div>
@@ -176,8 +222,8 @@ a {
 
 
 
-		<div id="sir_lbo" class="sir_lbo" style="padding: 0; margin: 0; font-size: 1.025em;">
-		<div style="padding-top: 5px;"></div>
+		<div id="singoForm"  class="sir_lbo" style="padding: 0; margin: 0; font-size: 1.025em; display: block">
+
 		
 		<table class="table table-hover tb-board" style="padding: 0; margin: 0; font-size: 1.025em; text-align: center;">
 			<thead style="text-align: center">
@@ -186,7 +232,7 @@ a {
 				<td width="200" colspan="6" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 				
 				
-					<select name="condition" class="boxTF"
+					<select name="category" class="boxTF"
 								style="border-radius: 3px; width: 15%; height: 100%; border-left: 0;">
 					<optgroup label="투어리스트">
    	 					<option label="댓글" value="tourreply" ${targetTitle=="tourreply"?"selected='selected'":""}>댓글</option>
@@ -208,23 +254,7 @@ a {
   					</optgroup>
 					</select>
 				
-<%-- 				<select name="condition" class="boxTF"
-								style="border-radius: 3px; width: 15%; height: 100%; border-left: 0;">
-								<option value="tourreply" ${condition=="all"?"selected='selected'":""}>투어리스트</option>
-								<option value="qna"
-									${condition=="subject"?"selected='selected'":""}>묻고답하기</option>
-								<option value="board"
-									${condition=="content"?"selected='selected'":""}>자유게시판</option>
-								<option value="friend"
-									${condition=="userName"?"selected='selected'":""}>동행구하기</option>							
-					</select>  - --%>
-					
-					
-					
-				
-				
-				
-				
+	
 					<span id="searchCount" 	style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
 					<span style="color: #ca4a0d;">3569건 </span> <img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
 					style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;"></span>
@@ -275,16 +305,23 @@ a {
 			
 			</tbody>
 		</table>
-
-			<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+				<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">
 			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging}
 			</td>
 		</tr>
 			</table>
-
-
 	</div>
+	
+	
+	<div id="usermanagment" style="display: none; width:90%; margin: 0px auto;">
+
+	
+	
+	
+	
+	</div>
+
 </div>
 
 
