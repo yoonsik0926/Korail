@@ -312,6 +312,10 @@ public class BoardController {
 				int dataCount=0;
 				
 				try {
+					
+					dto.setUserId(info.getUserId());
+					service.insertBoardReply(dto);
+					
 					Map<String, Object> map=new HashMap<>();
 					map.put("boardNum", dto.getBoardNum());
 					 
@@ -319,10 +323,7 @@ public class BoardController {
 					total_page = util.pageCount(rows, dataCount);
 					if(current_page>total_page)
 						current_page=total_page;
-					 
 					
-					dto.setUserId(info.getUserId());
-					service.insertBoardReply(dto);
 				} catch (Exception e) { 
 					state="false";
 				} 

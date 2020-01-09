@@ -158,7 +158,7 @@
          </if>
          AND (boardNum &gt; #{boardNum})
          AND f.userId !='admin'
-         AND deleteId is not null
+         AND deleteId is null
       </where>
       ORDER BY boardNum ASC
       FETCH FIRST 1 ROWS ONLY
@@ -177,7 +177,7 @@
          </if>
          AND (boardNum &lt; #{boardNum})
          AND f.userId !='admin'
-         AND deleteId is not null
+         AND deleteId is null
       </where>
       ORDER BY boardNum DESC
       FETCH FIRST 1 ROWS ONLY

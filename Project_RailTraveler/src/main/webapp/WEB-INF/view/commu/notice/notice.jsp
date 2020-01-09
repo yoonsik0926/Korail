@@ -46,12 +46,13 @@ console.log("${search}");
 												style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
 											</span>
 												</c:if>
+						<c:if test="${'admin'==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/notice/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> 글쓰기
-						</button>
+						</button></c:if>
 						<form name="searchForm" action="<%=cp%>/notice/notice" method="post"
 							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 							<select name="condition" class="boxTF"

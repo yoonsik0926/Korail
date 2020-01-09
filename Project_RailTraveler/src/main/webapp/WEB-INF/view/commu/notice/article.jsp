@@ -2,6 +2,7 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
 %>
@@ -193,8 +194,7 @@ a#MOVE_TOP_BTN {
 </div>
 
 
-
-<!-- Small modal -->
+<!-- 첨부파일 관리 모달 -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
 	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
@@ -202,26 +202,47 @@ a#MOVE_TOP_BTN {
 			<h3
 				style="margin: 0; padding: 10px; color: white; background: #141832f2; text-align: center; font-weight: 900;">첨부파일</h3>
 			<div style="padding: 10px;">
-				<table id="fileDownTb">
-					<tr>
-						<th>다운</th>
-						<th>파일명</th>
-						<th>파일크기</th>
+				<table id="fileDownTb" style="
+    width: 100%;
+">
+					<tbody><tr style="border-bottom: 1px solid;    height: 35px;">
+						<th style="
+    width: 10%;
+">다운</th>
+						<th style="    text-align: center;
+    width: 50%;
+">파일명</th>
+						<th style="
+    width: 10%;
+">파일크기</th>
 					</tr>
 					<c:forEach var="file" items="${files}">
-					<tr><td>
-						<a href="#"><i
-								class="far fa-arrow-alt-circle-down"></i></a></td><td>
-								<span>${file.originalFilename}</span></td><td><fmt:formatNumber
-							value="${file.fileSize/1024}" pattern="0.00" />KByte
-							</td></tr>
+					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
+					<td>
+					 <a href="<%=cp%>/notice/download?noticeFileNum=${file.noticeFileNum}">${file.noticeFileNum}
+					<i
+								class="far fa-arrow-alt-circle-down"></i></a></td>
+								<td>${file.originalFilename}</td>
+								
+								<td>
+					(<fmt:formatNumber
+							value="${file.fileSize/1024}" pattern="0.00" />KByte)</td>
+					</tr>
+						
 				</c:forEach>
 					<tr>
-						<td><a
-							href="<%=cp%>/notice/zipDownload?noticeNum=${dto.noticeNum}">
+						<td colspan="3"><a class="btn"
+							href="<%=cp%>/notice/zipDownload?noticeNum=${dto.noticeNum}" style="    width: 100%;
+    height: 45px;
+    padding: 10px;
+    font-size: 15px;
+    background: #eee;">
 								zip 파일로 받기</a></td>
 					</tr>
-				</table>
+					
+				</tbody></table>
+					
+					
 			</div>
 		</div>
 	</div>
@@ -237,104 +258,252 @@ a#MOVE_TOP_BTN {
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-bottom: 10px;"></div>
+
+		<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
+			<div class="fl">
+			<c:if test="${not empty preReadDto}">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/notice/article?${query}&noticeNum=${preReadDto.noticeNum}';">
+					이전글</button></c:if>
+					<c:if test="${not empty nextReadDto}">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/notice/article?${query}&noticeNum=${nextReadDto.noticeNum}';">
+					다음글</button></c:if>
+			</div>
+			<div class="fr">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/notice/notice?${query}';">
+					목록</button>
+			</div>
+			<div class="cb"></div>
+		</div>
+
+		<div style="border: 1px solid rgba(139, 139, 139, 0.3); clear: both;">
+			<div class="inBox" style="margin: 14px; clear: both;">
+				<div class="tit-box">
+					<div class="fl" style="width: 470px; margin-top: 4px;">
+						<table role="presentation" border=0>
+							<tbody>
+								<tr valign="top">
+									<td><span class="b m-tcol-c" style="font-weight: 900;">${dto.subject}</span></td>
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+									<td nowrap="" class="m-tcol-c"><a
+										href="https://cafe.naver.com/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay="
+										onclick="targetChangeForMacSafari('/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay=');return false;"
+										class="m-tcol-c">동행구하기 게시판</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="fr">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td></td>
+									<td class="m-tcol-c date">${dto.created}</td>
+<c:if test="${dto.userId ==sessionScope.member.userId}">
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+
+									<td class="edit _rosRestrict" onclick="updateBoard();"><a
+										id="modifyFormLink" href="#" class="m-tcol-c">수정</a></td>
+</c:if>
+<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
+									<td nowrap="" class="m-tcol-c filter-30">|</td>
+									<td class="delete _rosRestrict" onclick="deleteBoard();"><a
+										href="javascript:checkLogin('delete');" class="m-tcol-c">삭제</a></td>
+									</c:if>	
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+				</div>
+				<div class="board-box-line-dashed"></div>
+				<div class="etc-box">
+					<div class="fl">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td class="m-tcol-c b nick">
+										<table role="presentation" cellspacing="0">
+											<tbody>
+												<tr>
+													<td class="pc2w"><img alt=""
+														src="<%=cp%>/resource/images/commu/profileImg.png"
+														width="30"></td>
+													<td class="p-nick"><a href="#" class="m-tcol-c b"
+														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}
+														
+														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)</a></td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+									<td class="m-tcol-c step">
+									<c:if test="${dto.userId=='admin'}">
+									<span class="filter-50">관리자</span>
+									</c:if>
+									<c:if test="${dto.userId!='admin'}">
+									<span class="filter-50">회원</span>
+									</c:if>
+										<span><img class="levelico"
+											src="https://cafe.pstatic.net/levelicon/1/3_110.gif"
+											border="0"></span></td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="fr">
+						<table role="presentation" cellspacing="0" cellpadding="0"
+							border="0">
+							<tbody>
+								<tr>
+									<td valign="top" class="url" align="right"><span
+										class="filter-50"><a id="linkUrl"
+											href="https://cafe.naver.com/ite/653777" target="_top"
+											class="m-tcol-c url-txt">https://cafe.naver.com/ite/653777</a></span>
+										<span><a href="#" onclick="return false;"
+											class="_copyUrl url-btn" data-clipboard-action="copy"
+											data-clipboard-target="#linkUrl"><img
+												src="https://cafe.pstatic.net/cafe4/btn-copy-add.gif"
+												width="41" height="15" alt="주소복사" class="copy"></a></span></td>
+								</tr>
+								<tr>
+									<td id="sendPost_653777" class="m-tcol-c" align="right"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+				</div>
+				<c:if test="${not empty files}">
+					<div class="atch_file_area">
+
+						<a class="fr" onclick="modalOn();" style="cursor: pointer;">
+							첨부파일 <span class="m-tcol-p" style="margin-right: 2px;">(<em>${dto.fileCount}</em>)
+						</span><i class="far fa-caret-square-up"></i>
+						</a>
+						<div class="cb"></div>
+					</div>
+				</c:if>
+
+				<div class="h-10"></div>
+				<div class="tbody m-tcol-c" id="tbody"
+					style="width: 744px; padding-left: 43px; padding-right: 43px; margin-right: 0px;">
+					${dto.content}</div>
+
+				<div class="h-35"></div>
+				<div class="reply-box" id="cmtMenu">
+					<div class="fl reply_sort">
+						<table role="presentation" cellspacing="0" cellpadding="0"
+							border="0">
+							<tbody>
+								<tr style="vertical-align: top">
+									<td><span class="b m-tcol-c reply ">조회수 </span><span
+										class="b m-tcol-c reply">${dto.hitCount}</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="fr cafe_spi">
+						<table role="presentation">
+							<tbody>
+								<tr>
+									<td>
+										<div id="spiButton" data-style="type_c" class="naver-splugin"
+											data-url="https://cafe.naver.com/ite/653777"
+											data-title="답변이 어떻게 달리는지 확인 하는 게시물" data-likeserviceid="CAFE"
+											data-likecontentsid="11672934_ite_653777"
+											data-option="{textClass: 'm-tcol-c', align: 'right', onLoginRedirect: parent.openLoginLayer}"
+											data-cafe-source-type="111"
+											data-cafe-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
+											data-blog-source-type="111"
+											data-blog-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
+											data-blog-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=blog"
+											data-cafe-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=cafe"
+											data-me-display="off"
+											data-oninitialize="splugin_oninitialize();"
+											splugin-id="2779035978"></div>
+									</td>
+									<td><i class="far fa-share-square btnSendBoardLike"
+										onclick="snsShare();"
+										style="font-size: 20px; display: block; margin: 0 auto; color: #555555; cursor: pointer;"></i></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="cb"></div>
+
+				</div>
+
+			</div>
+			<!-- 인라인 -->
+		</div>
 		<table style="width: 100%; border-spacing: 0px;">
 			<tr height="45">
-				<td width="300" align="left">
+				<td align="right">
+					<c:if test="${dto.userId ==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="javascript:location.href='<%=cp%>/notice/notice?${query}';">목록</button>
-				</td>
-
-				<td align="right"><c:if
-						test="${sessionScope.member.userId==dto.userId}">
-						<button type="button" class="btn btn-default"
-							onclick="updateBoard();">수정</button>
-					</c:if> <c:if
-						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
-						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();">삭제</button>
-					</c:if>
-					<button type="button" class="btn btn-danger" onclick="declare();">
-						<i class="far fa-bell" style="color: white"></i>신고
-					</button></td>
-			</tr>
-		</table>
-		<table
-			style="width: 100%; margin: 0px auto 0px; border-spacing: 0px; border-collapse: collapse; border-top: 2px solid #000; border-bottom: 2px solid #000;">
-			<tr style="border-bottom: 1px solid #cccccc;">
-				<td colspan="3" style="padding: 15px 0;">
-					<h3 style="margin: 10px 0 2px; font-size: 25px; float: left;">${dto.subject}</h3>
-					<span
-					style="display: inline-block; float: right; color: gray; margin: 10px 10px 0 0;">${dto.created}</span>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" style="padding: 20px 5px;" valign="top" height="200">
-					${dto.content}</td>
-			</tr>
-			<tr class="tb-row" style="border-bottom: 0;">
-				<td colspan="3" height="40" align="center">
-					<button type="button" class="btn btnSendBoardLike btn-default"
-						title="공유하기"
-						style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
-						onclick="snsShare();">
-						<i class="far fa-share-square"
-							style="font-size: 20px; display: block; margin: 0 auto; color: #555555;"></i><span
-							id="boardLikeCount">공유</span>
-					</button>
-				</td>
-			</tr>
-			<tr class="tb-row">
-				<td colspan="3" align="left" style="padding-left: 5px; color: blue;">
-					<c:if test="${not empty files}">
-						<a onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일
-							(${dto.fileCount})</a>
-					</c:if>
-				</td>
-			</tr>
-			<tfoot>
-				<tr class="tb-row">
-					<td align="left" style="padding-left: 5px;" width="100">이전글<i
-						class="fas fa-caret-up" style="margin: 5px;"></i> :
-					</td>
-					<c:if test="${empty preReadDto}">
-						<td colspan="2"><span style="color: #bbb;">이전글이 존재하지
-								않습니다.</span></td>
-					</c:if>
-					<c:if test="${not empty preReadDto}">
-						<td><a
-							href="<%=cp%>/notice/article?${query}&noticeNum=${preReadDto.noticeNum}"
-							style="color: #737373;">${preReadDto.subject}</a></td>
-						<td width="90">${preReadDto.created}</td>
-					</c:if>
-				</tr>
-
-				<tr class="tb-row">
-					<td align="left" style="padding-left: 5px;" width="100">다음글<i
-						class="fas fa-caret-up" style="margin: 5px;"></i> :
-					</td>
-					<c:if test="${empty nextReadDto}">
-						<td colspan="2"><span style="color: #bbb;">다음글이 존재하지
-								않습니다.</span></td>
-					</c:if>
-					<c:if test="${not empty nextReadDto}">
-						<td><a
-							href="<%=cp%>/notice/article?${query}&noticeNum=${nextReadDto.noticeNum}"
-							style="color: #737373;">${nextReadDto.subject}</a></td>
-						<td width="90">${nextReadDto.created}</td>
-					</c:if>
-				</tr>
-			</tfoot>
-		</table>
-		<table
-			style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-			<tr height="45">
-				<td width="300" align="left">
+						onclick="updateBoard();">수정</button> </c:if>
+					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="javascript:location.href='<%=cp%>/bbs/list?${query}';">목록</button>
-				</td>
+						onclick="deleteBoard();">삭제</button></c:if>
+						<button type="button" class="btn btn-default"
+							onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+							목록</button>
+					</td>
 			</tr>
 		</table>
+<div class="h-35"></div>
+		
+		<c:if test="${dto.userId eq 'admin' and not empty noticeList}">
+
+			<table id='noticeListTb'
+				style="width: 100%; margin: 50px auto 10px; border-spacing: 0px; border-collapse: collapse; border-bottom: 2px dotted #000;">
+				<tr style="border-bottom: 2px dotted black; border-top: 0;">
+					<td colspan="3"><div class="noticeBox">
+							<img alt="" src="<%=cp%>/resource/images/noticeIcon.png"
+								width="20" style="display: inline-block; float: left;"> <span
+								style="font-size: 20px; font-weight: 600; display: block;">공지
+								목록</span>
+						</div></td>
+				</tr>
+				<c:forEach var="notice" items="${noticeList}">
+					<tr
+						${dto.boardNum== notice.boardNum? "style='background
+					:#f1f4ff'":""}
+						onclick="javascript:location.href='<%=cp%>/board/article?${query}&boardNum=${notice.boardNum}'">
+						<td colspan="2" style="text-align: left; padding-left: 20px;"><i
+							class="fas fa-caret-right"></i> ${notice.subject}</td>
+						<td width="170" style="text-align: right; padding-right: 13px;"><i>${notice.created}</i></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
+		<c:if test="${dto.userId eq 'admin'}">
+			<table style="width: 100%; border-spacing: 0px;">
+				<tr height="45">
+					<td width="300" align="left">
+						<button type="button" class="btn btn-default"
+							onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+							목록</button>
+					</td>
+
+					<td align="right">
+						<button type="button" class="btn btn-default"
+							onclick="javascript:location.href='<%=cp%>/board/created';"
+							style="float: right; margin-left: 6px;">
+							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
+								style="height: 21px;"> 글쓰기
+						</button>
+				</tr>
+			</table>
+		</c:if>
 	</div>
+
+
 </div>
 
 <script>

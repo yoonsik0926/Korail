@@ -105,13 +105,13 @@
 							<tr>
 						<td><textarea
 								class='boxTA'
-								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;'></textarea>
+								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;' ${empty sessionScope.member.userId?'placeholder="로그인이 필요한 서비스 입니다.&#13;&#10;클릭시 로그인 창으로 이동합니다."':'placeholder="모두가 함께 만들어 가는 깨끗한 공간입니다. &#13;&#10;훈훈한 댓글 부탁드립니다^^"' }></textarea>
 							<div
 								style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
 								
 								<button type='button' class='btn btn-default'
-									data-num='${vo.boardReplyNum}' data-pageNo="${pageNo}" 
-									style='width: 100%; height: 90px; padding: 2px 1px;'  onclick="insertReply(${vo.boardReplyNum});">등록</button>
+									data-num='${vo.boardReplyNum}' data-page="${pageNo}" 
+									style='width: 100%; height: 90px; padding: 2px 1px;'  onclick="insertReply(${vo.boardReplyNum},${pageNo});">등록</button>
 
 							</div></td>
 					</tr>
@@ -131,8 +131,8 @@
 <script>
 //댓글 삭제
 $(function(){
-	$("body").on("click", ".deleteReply", function(){
-		if(! confirm("게시물을 삭제하시겠습니까 ? ")) {
+	$("body").off().on("click", ".deleteReply", function(){
+		if(! confirm("댓글게시물을 삭제하시겠습니까 ? ")) {
 		    return false;
 		}
 		
@@ -141,7 +141,7 @@ $(function(){
 		
 		var url="<%=cp%>/board/deleteReply";
 		var query="boardReplyNum="+replyNum+"&mode=reply&pageNo="+page;
-		
+		console.log(query);
 		var fn = function(data){
 			// var state=data.state;
 			alert("삭제완료!");
@@ -154,8 +154,8 @@ $(function(){
 
 //댓글별 답글 삭제
 $(function(){
-	$("body").on("click", ".deleteReplyAnswer", function(){
-		if(! confirm("게시물을 삭제하시겠습니까 ? "))
+	$("body").off().on("click", ".deleteReplyAnswer", function(){
+		if(! confirm("답댓글게시물을 삭제하시겠습니까 ? "))
 		    return;
 		
 		var replyNum=$(this).attr("data-replyNum");
@@ -164,7 +164,6 @@ $(function(){
 		
 		var url="<%=cp%>/board/deleteReply";
 		var query="boardReplyNum="+replyNum+"&mode=answer&pageNo="+pageNo;
-		
 		var fn = function(data){
 			listPage(pageNo);
 		};
@@ -172,5 +171,11 @@ $(function(){
 		ajaxJSON(url, "post", query, fn);
 	});
 });
-						
+		
+$('textarea').click(function(){
+	<c:if test="${empty sessionScope.member.userId}">
+			location.href="<%=cp%>/member/login";
+	</c:if>
+});
+	
 </script>
