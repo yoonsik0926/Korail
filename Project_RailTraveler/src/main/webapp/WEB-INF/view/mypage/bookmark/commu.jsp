@@ -10,23 +10,94 @@
 
 
 <script type="text/javascript">
+//버튼
 $(function(){
-	$("#tab-${group}").addClass("active");
+	$("#nav-item-${commuNum}").addClass("active");
 	
-	$("ul.tabs li").click(function(){
-		tab = $(this).attr("data-tab");
+	$("ul.nav-tabs li").click(function(){
+		commuNum = $(this).attr("data-tab");
 		
-		$("ul.tabs li").each(function(){
+		$("ul.nav-tabs li").each(function(){
 			$(this).removeClass("active");
 		});
 		
-		$("#tab-"+tab).addClass("active");
+		$("#nav-item-"+commuNum).addClass("active");
 		
-		var url = "<%=cp%>
-	/bookmark/bookmark?group=" + tab;
-			location.href = url;
-		});
+		var url = "<%=cp%>/station/info?locNum="+locNum;
+		location.href=url;
 	});
+});
+
+
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function searchList() {
+	var f = document.searchForm;
+	
+	f.submit();
+	
+}
+
+function resetList() {
+	var q = "condition='all'&query=''";
+	var url = "<%=cp%>/bookmark/commu?"+q;
+	
+	location.href= url;
+}
+
+function commuListPage(page){
+
+	var query = "page="+page+"&condition="+${condition}+"&keyword="+${keyword}+"&commuNum="+commuNum;
+	var url = "<%=cp%>/bookmark/commu";
+	var selector = "#listCommu";
+	
+	
+	ajaxHTML(url, "get", query, selector);
+}
+
+
+
 </script>
 
 <div class="body-content-container">
@@ -38,39 +109,39 @@ $(function(){
 	</div>
 
 	<div>
-		<div style="clear: both;">
-			<ul class="tabs">
-				<li id="tab-0" data-tab="0">전체</li>
-				<%-- <c:forEach var="vo" items="${groupCategory}">
-					<li id="tab-${vo.categoryNum}" data-tab="${vo.categoryNum}">
-					${vo.category}</li>
-				</c:forEach> --%>
-				<li id="tab-1" data-tab="1">묻고 답하기</li>
-				<li id="tab-2" data-tab="2">자유 게시판</li>
-				<li id="tab-3" data-tab="3">동행 구하기</li>
-			</ul>
+	
+		<div class="container">
+		<div class="row">
+			<div class="col" style="font-size: 18px; font-weight: 600;margin: 0 10px;">
+				<ul class="nav nav-tabs tabs">
+					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">묻고답하기</a></li>
+					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">자유게시판</a></li>
+					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">동행구하기</a></li>
+				</ul>
+			</div>
 		</div>
-
+		</div>
 
 		<div id="sir_lbo" class="sir_lbo"
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<div style="padding-top: 5px;"></div>
 
+		<div id="listCommu">
 			<table class="table table-hover tb-board"
 				style="padding: 0; margin: 0; font-size: 1.025em;">
 				<thead>
 					<tr>
 						<td width="200" colspan="5"
 							style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
-							<span id="searchCount"
-							style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-								<span style="color: #ca4a0d;">3569건 </span> <img alt=""
-								src="/Project_RailTraveler/resource/images/close_icon.png"
-								onclick="reset()"
+ 							<c:if test="${search=='search'}">
+							<span id="searchCount" style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+								<span style="color: #ca4a0d;">${dataCount}건 </span> 
+								<img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="resetList()"
 								style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
-						</span>
-
-							<form name="searchForm" action="<%=cp%>/notice/list"
+							</span>
+							</c:if>
+						
+							<form name="searchForm" action="<%=cp%>/bookmark/commu"
 								method="post"
 								style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 								<select name="condition" class="boxTF"
@@ -81,16 +152,18 @@ $(function(){
 										${condition=="subject"?"selected='selected'":""}>제목</option>
 									<option value="content"
 										${condition=="content"?"selected='selected'":""}>내용</option>
-									<option value="userName"
+									<option value="writer"
 										${condition=="userName"?"selected='selected'":""}>작성자</option>
 									<option value="created"
-										${condition=="created"?"selected='selected'":""}>등록일</option>
+										${condition=="created"?"selected='selected'":""}>작성일</option>
 								</select> <input type="text" name="keyword" value="${keyword}"
 									class="boxTF"
 									style="display: inline-block; height: 100%; width: 58%;">
-								<img src="<%=cp%>/resource/images/magnifying-glass.png" class=""
-									onclick="searchList()"
+								<img src="<%=cp%>/resource/images/magnifying-glass.png" class="searchBtn"
+									onclick="searchList();"
 									style="padding: 6px; cursor: pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
+								
+								
 							</form>
 						</td>
 					</tr>
@@ -102,21 +175,16 @@ $(function(){
 						<th width="80"><span>조회수</span></th>
 					</tr>
 				</thead>
-				<tbody style="border-bottom: 2px solid black;">
-	
-					<%
-						for (int i = 10; i >= 1; i--) {
-					%>
-					<tr onclick="javascript:location.href='<%=cp%>/board/article'">
-						<td><%=i%></td>
-						<td style="text-align: left; padding-left: 20px;">제목입니다22222222</td>
-						<td>겨레리</td>
-						<td>2018-10-23</td>
-						<td>1</td>
-					</tr>
-					<%
-						}
-					%>
+				<tbody style="border-bottom: 2px solid black;" id="commuList">
+					<c:forEach var="vo" items="${list}">
+						<tr onclick="javascript:location.href='<%=cp%>/friend/article?friendNum=${vo.friendNum}&page=1'">
+							<td>${vo.listNum}</td>
+							<td style="text-align: left; padding-left: 20px;">${vo.subject}</td>
+							<td>${vo.writer}</td>
+							<td>${vo.created}</td>
+							<td>${vo.hitCount}</td>
+						</tr>
+					</c:forEach>
 
 				</tbody>
 			</table>
@@ -124,19 +192,13 @@ $(function(){
 			<div>
 				<nav style="text-align: center;">
 					<ul class="pagination">
-						<li class="disabled"><span> <span aria-hidden="true">&laquo;</span>
-						</span></li>
-						<li class="active"><span>1 <span class="sr-only">(current)</span></span>
-						</li>
-						<li><span>2</span></li>
-						<li><span>3</span></li>
-						<li class="disabled"><span> <span aria-hidden="true">&raquo;</span>
-						</span></li>
+						<li>${dataCount==0?"북마크한 게시물이 없습니다.":paging}</li>
 					</ul>
 				</nav>
 			</div>
-
-
+		
+		</div>
+		
 
 
 

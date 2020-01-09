@@ -26,7 +26,7 @@
 		</choose>
 	</sql>
 
-
+	<!-- ticket 정보 list -->
 	<select id="myTicketList"  parameterType="map" resultType="com.railer.rt.mypage.Ticket">
 		select saleNum, s.userNum, userId, t.ticketNum, t.tName, t.year, t.division, s.sDate,s.eDate, s.created
 		from sale s
@@ -50,6 +50,7 @@
 		</if>
 	</select>
 	
+	<!-- stamp list -->
 	<select id="stampList" parameterType="map" resultType="com.railer.rt.mypage.Ticket">
 		select s.saleNum, s.userNum, userId, s.sDate,s.eDate, stampNum, p.staNum, st.staName
 		from sale s
@@ -68,7 +69,102 @@
 		join station st on p.staNum = st.staNum
 		where userId = #{userId} and s.saleNum = #{saleNum}
 	</select>
-
-
+	
+	<!-- 커뮤니티에서 북마크한 글 리스트 -->
+	<sql id="where-list2">
+		<choose>
+			<when test="condition=='all'">	
+				(INSTR(subject,#{keyword}) &gt; 0
+				OR
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 
+				OR
+				(TO_CHAR(created, 'YYYY-MM-DD'))=#{keyword}
+				OR
+				INSTR(c.userId,#{keyword}) &gt; 0
+				)
+			</when>
+			<when test="condition=='subject'">	
+				(INSTR(subject,#{keyword}) &gt; 0
+			</when>
+			<when test="condition=='content'">
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
+			</when>
+			<when test="condition=='created'">
+				(TO_CHAR(created, 'YYYY-MM-DD'))=#{keyword}
+			</when>
+			<when test="condition=='writer'">
+				INSTR(c.userId,#{keyword}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${condition},#{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="commuList" parameterType="map" resultType="com.railer.rt.mypage.Commu">
+		<if test="commuName='qna'">
+      		select q.qnaNum, q.userId, c.userId writer, subject, hitCount, to_char(created,'YYYY-MM-DD') created
+			from qnaBookmark q
+			join qna c on q.qnaNum = c.qnaNum
+			where q.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+	        ORDER BY q.qnaNum DESC
+	      	OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+      	</if>
+      	<if test="commuName='board'">
+      		select b.boardNum, b.userId, c.userId writer, subject, hitCount, to_char(created,'YYYY-MM-DD') created
+			from boardBookmark b
+			join board c on b.boardNum = c.boardNum
+			where b.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+	        ORDER BY b.boardNum DESC
+	      	OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+      	</if>
+		<if test="commuName='friend'">
+			select f.friendNum, f.userId, c.userId writer, subject, hitCount, to_char(created,'YYYY-MM-DD') created
+			from friendBookmark f
+			join friend c on f.friendNum = c.friendNum
+			where f.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+	        ORDER BY f.friendNum DESC
+	      	OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+      	</if>
+	</select>
+	
+	<select id="commuDataCount" parameterType="map" resultType="Integer">
+		<if test="commuName='qna'">
+			select nvl(count(*),0) from qnaBookmark q
+			join qna c on q.qnaNum = c.qnaNum
+			where q.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+        </if>
+        <if test="commuName='board'">
+			select nvl(count(*),0) from boardBookmark b
+			join board c on b.boardNum = c.boardNum
+			where b.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+        </if>
+		<if test="commuName='friend'">
+			select nvl(count(*),0) from friendBookmark f
+			join friend c on f.friendNum = c.friendNum
+			where f.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+	           and <include refid="where-list2"/>
+	        </if>
+        </if>
+        
+        
+	</select>
+	
 
 </mapper>

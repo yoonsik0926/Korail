@@ -37,6 +37,9 @@ public class MypageController {
 
 	@Autowired
 	private TicketService ticketService;
+	
+	@Autowired
+	private CommuService commuService;
 
 	// 관광 정보 북마크
 	@RequestMapping(value = "/bookmark/tour")
@@ -192,15 +195,94 @@ public class MypageController {
 		return ".four.mypage.bookmark.recommend";
 	}
 
+	
 	// 커뮤니티 북마크
 	@RequestMapping(value = "/bookmark/commu")
-	public String bookmarkCommu(Model model) {
+	public String bookmarkCommu(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "condition", defaultValue = "all") String condition,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			@RequestParam(defaultValue="1") int commuNum,
+			HttpSession session,
+			HttpServletRequest req, 
+			Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+		String commuName ="";
+		
+		if(commuNum == 1) {
+			commuName = "qna";
+		} else if(commuNum == 2) {
+			commuName = "board";
+		} else {
+			commuName = "friend";
+		}
+		
+		int dataCount = 0;
+		int rows = 10;
+		int total_page = 0;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		map.put("commuName", commuName);
+		
+		dataCount = commuService.commuDataCount(map);
+		
+		if (dataCount != 0) {
+			total_page = myUtil.pageCount(rows, dataCount);
+		}
+
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+
+		map.put("offset", offset);
+		map.put("rows", rows);
+
+		List<Commu> list = commuService.commuList(map);
+
+		int listNum, n = 0;
+		for (Commu dto : list) {
+			listNum = dataCount - (offset + n);
+			dto.setListNum(listNum);
+			n++;
+		}
+
+		String query = "";
+		
+		if(keyword.length()!=0) {
+			query = "condition="+condition+"&keyword="+keyword;
+			model.addAttribute("search", "search");
+		}
+			
+
+		String paging = myUtil.pagingMethod(current_page, total_page, "commuListPage");
+		
+		model.addAttribute("condition",condition);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("page",current_page);
+		model.addAttribute("total_page",total_page);
+		model.addAttribute("paging",paging);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("list",list);
+		model.addAttribute("query",query);
+		model.addAttribute("commuNum",commuNum);
+		
 
 		model.addAttribute("subMenu", "4");
 		model.addAttribute("subItems", "2");
 
 		return ".four.mypage.bookmark.commu";
 	}
+	
+	
 
 	// 나의 티켓
 	@RequestMapping(value = "/ticket/ticket")

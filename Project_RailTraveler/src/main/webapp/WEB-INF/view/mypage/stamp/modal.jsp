@@ -10,6 +10,7 @@
 	style="margin: 0px auto; text-align: center; font-size: 15px; width: 100%">
 
 	<tr style="background: #283164; color: white; height: 50px; font-weight: 700">
+		<td width="80">구매 번호</td>
 		<td width="100">시작 날짜</td>
 		<td width="100">종료 날짜</td>
 		<td width="80">역 이름</td>
@@ -18,6 +19,7 @@
 	</tr>
 	<c:forEach var="dto" items="${stampList}">
 		<tr style="border-bottom: 1px solid #d4cbcb; height: 40px;">
+			<td>${dto.saleNum}</td>
 			<td>${dto.sDate}</td>
 			<td>${dto.eDate}</td>
 			<td>${dto.staName}</td>

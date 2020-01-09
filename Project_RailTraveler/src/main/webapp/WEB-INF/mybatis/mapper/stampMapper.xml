@@ -15,7 +15,7 @@
 		<if test="again == 1">
 			and s.staNum = #{staNum} and ss.saleNum = #{saleNum}
 		</if>
-		
+		order by ss.saleNum
 	</select>
 	
 	<select id="readStamp" parameterType="map" resultType="com.railer.rt.mypage.Stamp">
@@ -48,7 +48,7 @@
 		select saleNum, s.userNum, userId,ticketNum, sDate, eDate, s.created
 		from sale s
 		join member2 m on s.userNum = m.userNum
-		where m.userId = #{userId}
+		where m.userId = #{userId} and sDate >= SYSDATE
 	</select>
 	
 	<insert id="insertStamp" parameterType="map">
