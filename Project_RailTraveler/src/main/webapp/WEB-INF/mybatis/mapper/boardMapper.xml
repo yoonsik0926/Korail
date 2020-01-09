@@ -21,7 +21,7 @@
 	parameter Type : Board DTO-->
 	<insert id="insertBoardFile" parameterType="com.railer.rt.commu.board.Board">
         INSERT INTO boardFile(boardFileNum, boardNum, saveFilename,originalFilename,fileSize)
-        VALUES(FRIENDF_SEQ.nextval, #{boardNum},#{saveFilename},#{originalFilename},#{fileSize})
+        VALUES(BOARDF_SEQ.nextval, #{boardNum},#{saveFilename},#{originalFilename},#{fileSize})
 	</insert>
 	
 	<!--검색 기능에 관련 된 where 조건에 관련된 sql
@@ -243,4 +243,64 @@
 		FROM boardBookmark
 		where boardNum = #{boardNum}
 	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertReply" parameterType="com.railer.rt.commu.board.BoardReply">
+			<if test="answer==0">
+		INSERT INTO BoardREPLY(boardReplyNum, userId, boardNum, content)
+			VALUES (BOARDREPLY_SEQ.NEXTVAL, #{userId}, #{boardNum}, #{content})
+			</if>
+			<if test="answer!=0">
+			INSERT INTO BoardREPLY(boardReplyNum, userId, boardNum, content, answer)
+			VALUES (BOARDREPLY_SEQ.NEXTVAL, #{userId}, #{boardNum}, #{content}, #{answer, jdbcType=INTEGER})
+			</if>
+	</insert>
+	
+	<!--게시물의 댓글수를 반환
+	parameter Type : Integer
+	return type : Integer-->
+	<select id="replyCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM BoardREPLY
+		where boardNum = #{boardNum}
+	</select>
+	
+	<!-- 댓글 리스트 -->
+	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.board.BoardReply">
+select boardReplyNum, userId, userName, boardNum, content, created, NVL(answer,0) answer, 
+NVL(answerCount, 0) answerCount, deleteId
+from(
+select boardReplyNum, fr.userId, userName, fr.boardNum, content, fr.created, fr.answer,
+ NVL(answerCount, 0) answerCount, deleteId	from boardReply fr
+	JOIN MEMBER2 m2 on m2.userId = fr.userId
+	LEFT OUTER JOIN (
+			SELECT  answer, COUNT(*) answerCount
+			FROM boardReply WHERE  answer!=0 GROUP BY  answer
+		) a ON fr.boardReplyNum = a.answer
+	WHERE fr.boardNum=#{boardNum}
+   	ORDER BY boardReplyNum DESC) 
+  	START WITH answer =0
+	CONNECT BY PRIOR boardReplyNum =answer
+ 	OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+	
+	<!-- 업데이트. 댓글 및 답글 삭제 -->
+	<update id="deleteReply" parameterType="map">
+		update BoardReply set deleteID=#{userId} WHERE boardReplyNum=#{boardReplyNum}
+	</update>
+	
+	<!-- 진짜. 댓글 및 답글 삭제 -->
+	<delete id="deleteReply2" parameterType="map">
+		DELETE FROM BoardReply WHERE 
+		<if test="mode=='reply' ">
+			boardReplyNum IN (
+				SELECT boardReplyNum FROM BoardReply
+					START WITH boardReplyNum=#{boardReplyNum}
+					CONNECT BY PRIOR boardReplyNum = answer         
+			)
+		</if>
+		<if test="mode=='answer' ">
+			boardReplyNum = #{boardReplyNum}
+		</if>
+	</delete>
 </mapper>

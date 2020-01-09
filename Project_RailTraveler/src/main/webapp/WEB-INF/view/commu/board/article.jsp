@@ -131,8 +131,6 @@ $(function(){
 		var boardNum="${dto.boardNum}";
 		var $tb = $(this).closest("table");
 		var content=$tb.find("textarea").val().trim();
-		var $secret=$(this).parent().find("input[name=secret]");
-		var secret=$secret.is(":checked")?1:0;
 		if(! content) {
 			alert("내용을 입력해주세요");
 			$tb.find("textarea").focus();
@@ -141,15 +139,16 @@ $(function(){
 		console.log(content);
 		content = encodeURIComponent(content);
 		var url="<%=cp%>/board/insertReply";
-		var query="boardNum="+boardNum+"&content="+content+"&answer=0&secret="+secret;
-		console.log(query);
+		var query="boardNum="+boardNum+"&content="+content+"&answer=0";
 		var fn = function(data){
 			$tb.find("textarea").val("");
 			
 			
 			var state=data.state;
 			if(state=="true") {
-				listPage(1);
+				listPage(data.total_page);
+
+				console.log(data.total_page);
 			} else if(state=="false") {
 				alert("댓글을 추가 하지 못했습니다.");
 			}
@@ -178,9 +177,7 @@ function insertReply(num){
 	var cs = ".replyForm"+num;
 	var $tb = $(cs);
 	var content=$tb.find("textarea").val().trim();
-	var secret_id = "#inputCK"+num;
-	var $secret=$(secret_id);
-	var secret=$secret.is(":checked")?1:0;
+	var pageNo=$(this).attr("data-pageNo");
 	if(! content) {
 		alert("내용을 입력해주세요");
 		$tb.find("textarea").focus();
@@ -188,14 +185,14 @@ function insertReply(num){
 	}
 	content = encodeURIComponent(content);
 	var url="<%=cp%>/board/insertReply";
-	var query="boardNum="+boardNum+"&content="+content+"&answer="+num+"&secret="+secret;
+	var query="boardNum="+boardNum+"&content="+content+"&answer="+num+"&pageNo="+pageNo;
 	
 	var fn = function(data){
 		displayReplyForm(num);
 		
 		var state=data.state;
 		if(state=="true") {
-			listPage(1);
+			listPage(pageNo);
 		} else if(state=="false") {
 			alert("댓글을 추가 하지 못했습니다.");
 		}
@@ -206,10 +203,12 @@ function insertReply(num){
 
 //페이징 처리
 $(function(){
-// 	<c:if test="${not empty pageNo}">
-// 		listPage(${pageNo});
-// 	</c:if>
+	<c:if test="${not empty pageNo}">
+		listPage(${pageNo});
+	</c:if>
+	<c:if test="${empty pageNo}">
 	listPage(1);
+</c:if>
 });
 
 function listPage(page) {
@@ -744,10 +743,10 @@ a {
 		<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
 			<div class="fl">
 				<button type="button" class="btn btn-default"
-					onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+					onclick="javascript:location.href='<%=cp%>/board/article?${query}&boardNum=${preReadDto.boardNum}';">
 					이전글</button>
 				<button type="button" class="btn btn-default"
-					onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+					onclick="javascript:location.href='<%=cp%>/board/article?${query}&boardNum=${nextReadDto.boardNum}';">
 					다음글</button>
 			</div>
 			<div class="fr">
@@ -874,12 +873,6 @@ a {
 					${dto.content}</div>
 
 				<div class="h-35"></div>
-				<c:if test="${not dto.userId eq 'admin'}">
-				<div
-					style="border: 1px solid; background: beige; padding: 5px 10px;">기간
-					: ${dto.sDate} ~ ${dto.eDate}</div>
-				</c:if>
-				<div class="h-35"></div>
 				<div class="reply-box" id="cmtMenu">
 					<div class="fl reply_sort">
 						<table role="presentation" cellspacing="0" cellpadding="0"
@@ -965,11 +958,6 @@ a {
 
 
 
-
-
-
-
-
 				<div class="box-reply2 bg-color u_cbox" id="eNvhT"
 					style="display: block;">
 					<!-- 댓글 리스트  -->
@@ -986,11 +974,9 @@ a {
 								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;'></textarea>
 							<div
 								style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
-								<input type="checkbox" name="secret" value="0"><label
-									style="margin: 0 0 0px 3px;">비밀글</label>
 								<button type='button' class='btn btnSendReply btn-default'
-									data-num='10'
-									style='width: 100%; height: 80px; padding: 2px 1px;'>등록</button>
+									data-num='${dto.boardNum}'
+									style='width: 100%; height: 90px; padding: 2px 1px;'>등록</button>
 
 							</div></td>
 					</tr>
@@ -1032,11 +1018,10 @@ a {
 					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
 						onclick="deleteBoard();">삭제</button></c:if>
-						<c:if test="${not dto.userId eq 'admin'}">
 						<button type="button" class="btn btn-default"
 							onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
 							목록</button>
-					</c:if></td>
+					</td>
 			</tr>
 		</table>
 <div class="h-35"></div>
