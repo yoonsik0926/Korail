@@ -1,6 +1,5 @@
 package com.railer.rt.plan;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,17 +82,46 @@ public class PlanController {
 	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> insertTicketDay(Plan dto,
+											   @RequestParam String days,
 											   HttpSession session,
 											   HttpServletRequest request) {
 //		SessionInfo info=(SessionInfo)session.getAttribute("member");
 //		int ticketDay=dto.getTicketDay();
 //		String sDate=dto.getsDate();
 //		int nthDay=dto.getNthDay();
-		String[] days=request.getParameterValues("days");
-		System.out.println("배열에 들어있는값 : "+Arrays.toString(days));
-		  for(String str : days){
-	            System.out.println(str);
-	        }
+		
+		System.out.println(days);
+		
+		JSONArray jarr=new JSONArray(days);
+		for(int i=0; i< jarr.length(); i++) {
+			JSONArray jarr2=new JSONArray(jarr.get(i).toString());
+			if(jarr2.length()==0) continue;
+	
+			JSONObject job=jarr2.getJSONObject(0);
+			System.out.println(job.get("staNum"));
+		}
+		
+		
+		
+		
+        
+//	    List<Map<String, Object>> resendList = new ArrayList<Map<String, Object>>();
+//	        
+//	    for(int i=0; i<array.size(); i++){
+//	        
+//	        //JSONArray 형태의 값을 가져와 JSONObject 로 풀어준다.    
+//	        JSONObject obj = (JSONObject)array.get(i);
+//	                
+//	        Map<String, Object> resendMap = new HashMap<String, Object>();
+//	            
+//	        resendMap.put("memberId", obj.get("memberId"));
+//	        resendMap.put("memberIdSeq", obj.get("memberIdSeq"));
+//	        resendMap.put("resendToken", obj.get("resendToken"));
+//	        resendMap.put("serverId", obj.get("serverId"));
+//	            
+//	        resendList.add(resendMap);
+//	    }
+
 		Map<String, Object> map=new HashMap<>();
 //		try {
 //			dto.setUserId(info.getUserId());

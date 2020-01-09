@@ -603,7 +603,7 @@ function getNumber(day) {
 								);
 		
 		$(".planListDetail"+i).sortable({
-			placeholder:"movingEnd",
+// 			placeholder:"movingEnd",
 			stop: function(event, ui) {
 		    	var day = ui.item.parent().attr("data-day");
 		    	var temp = new Array();
@@ -652,12 +652,15 @@ function getNumber(day) {
 	        	//out : 드랍 작업이 끝났을 경우.
 	        	//var $p : ul태그를 뜻함.
 	        	var day = ui.helper.parent().attr("data-day");
+	        	var $ul=ui.helper.parent();
 	        	console.log("날아간녀석의인덱스:"+ui.helper.attr("data-index"));
-
+// 				console.log(ui.helper.find("div[class='pickedStation']").attr("data-staNum"));
 // 	        	ui.helper.addClass('out');
 // 	        	ui.helper.hasClass("out");
 	        	
 	        	ui.helper.remove();
+	        	console.log($ul.html());
+	        	
 	        	
 // 	        	console.log("=======");
 	        	//이 때, days는 복사하기 위한 원 데이터를 저장하고 있으므로 모든 작업이 끝나기 전까지 절.대. 수정. 삭제. 하지않는다.!!!
@@ -676,31 +679,46 @@ function getNumber(day) {
  		    	// 첫 번째 index는 배열의 인덱스 또는 객체의 키를 의미하고 
  		    	// 두 번째 매개 변수 item은 해당 인덱스나 키가 가진 값을 의미합니다.
  		    	
- 		    	
+//  		    	$(".activeGreen").next().html($(".activeGreen").next().html());
 				// $('.list li').each(function (index, item) { 
  		    	// 인덱스는 말 그대로 인덱스 
  		    	// item 은 해당 선택자인 객체를 나타냅니다. $(item).addClass('li_0' + index); 
  		    	// item 과 this는 같아서 일반적으로 this를 많이 사용합니다. 
  		    	// $(this).addClass('li_0' + index); });
- 		    	$(".activeGreen").find(".planListDetail"+i).find("li").each(function(index){
+				var i=0;
+ 		    	$ul.find("li").each(function(index){
 //  		    	$p.find("li").each(function(index){
- 		    		console.log(index);
-	 		    	// li의 원래 위치
+//  		    		console.log($(".activeGreen").next().html());
+					if($(this).css("visibility")=="hidden") {
+						
+					} else {
+						
+					
+					
+					
+// 	 		    	li의 원래 위치
 	 	 		    var orindex = $(this).attr("data-index");
+	 	 		  	var staNum = $(this).attr("data-staNum");
+		    		var oob={staNum:staNum};
+		    		temp[day-1].push(oob);
+		    		temp[day-1][i].detailList = new Array();
+		    		temp[day-1][i].detailList = days[day-1][orindex].detailList.slice();
+		    		temp[day-1][i].staNum = days[day-1][orindex].staNum;
+		    		
+		    		$(this).attr("data-index",i);
+		    		$(this).attr("data-staNum",staNum);
  		    	
-	 		    	//temp배열의 해당 일차의 해당 역인덱스에 대한 배열을 생성해준다. (days배열에서 3차원 배열을 복사하기 위함)
- 	 		 		temp[day-1][index].detailList=new Array();
-		    		
-		    		console.log(day-1+","+orindex+","+days[day-1][orindex].detailList.length);
-	 		    	temp[day-1][index] = days[day-1][orindex].detailList.slice();
-		    		$(this).attr("data-index",index);
-		    		
+// 	 		    	temp배열의 해당 일차의 해당 역인덱스에 대한 배열을 생성해준다. (days배열에서 3차원 배열을 복사하기 위함)
+// 	 		    	temp[day-1][i].detailList = days[day-1][orindex].detailList.slice();
+		    		i++;
+					}
 				});
  		    	days.length=0;
  		    	days = temp.slice();
  		    	
 // 	        	console.log(days[day-1]);
 // 	        	console.log(days);
+
 	        }
 		    
 		});
@@ -747,7 +765,7 @@ $(document).ready(function(){
 });
 
 // 배열을 ajax로 보내기 위해서 반드시 써줘야함.
-$.ajaxSettings.traditional = true;
+// $.ajaxSettings.traditional = true;
 
 function ajaxJSON(url, type, query, fn) {
 	$.ajax({
@@ -755,6 +773,7 @@ function ajaxJSON(url, type, query, fn) {
 		,url:url
 		,data:query
 		,dataType:"json"
+		// ,traditional:true
 		,success:function(data) {
 			fn(data);
 		}
@@ -791,9 +810,11 @@ $(function() {
 // 				});
 // 			});
 // 		});
-		
+
+		var jsonData=JSON.stringify(days);
+		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
-		var query= {"days":days};
+		var query= {"days":jsonData};
 		
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
@@ -1174,7 +1195,7 @@ $(function() {
 
 			var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
 			var staNum=$(this).attr("class").replace(/[^0-9]/g,"");
-			var index=$(".ddiring").parent().attr("data-index");
+			var index=$(this).parent().attr("data-index");
 			
 			for(var i in days[ilcha-1][index].detailList) {
 				$(".mdList").append('<li><input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index].detailList[i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'"></li>')
