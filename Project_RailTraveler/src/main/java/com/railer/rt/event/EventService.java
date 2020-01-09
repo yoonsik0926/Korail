@@ -13,4 +13,6 @@ public interface EventService {
 	public Event nextReadEvent(Map<String, Object> map);
 	public List<Event> listEvent(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
+	public void insertEventLike(Map<String, Object> map) throws Exception;
+	public int eventLikeCount(int num);
 } 

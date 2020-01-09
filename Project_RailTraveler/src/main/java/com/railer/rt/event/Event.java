@@ -11,6 +11,7 @@ public class Event {
 	private String imageFilename;
 	private MultipartFile upload;
 	private int hitCount;
+	private int eventLikeCount;
 	
 	public int getEventNum() {
 		return eventNum;
@@ -65,6 +66,12 @@ public class Event {
 	}
 	public void setHitCount(int hitCount) {
 		this.hitCount = hitCount;
+	}
+	public int getEventLikeCount() {
+		return eventLikeCount;
+	}
+	public void setEventLikeCount(int eventLikeCount) {
+		this.eventLikeCount = eventLikeCount;
 	}
 	
 	

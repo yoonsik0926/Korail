@@ -15,8 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.MyUtil;
+import com.railer.rt.member.SessionInfo;
 
 @Controller("event.eventController")
 public class EventController {
@@ -236,4 +238,34 @@ public class EventController {
 				
 		return ".four.event.current.article";
 	}
+	
+		// 게시글 좋아요 추가 :  : AJAX-JSON
+		@RequestMapping(value="/event/insertEventLike", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> insertEventLike(
+				@RequestParam int eventNum,
+				HttpSession session
+				) {
+			String state="true";
+			int eventLikeCount=0;
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			
+			Map<String, Object> paramMap=new HashMap<>();
+			paramMap.put("eventNum", eventNum);
+			paramMap.put("userId", info.getUserId());
+			
+			try {
+				service.insertEventLike(paramMap);
+			} catch (Exception e) {
+				state="false";
+			}
+				
+			eventLikeCount = service.eventLikeCount(eventNum);
+			
+			Map<String, Object> model=new HashMap<>();
+			model.put("state", state);
+			model.put("eventLikeCount", eventLikeCount);
+			
+			return model;
+		}
 }

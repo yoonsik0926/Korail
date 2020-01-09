@@ -169,10 +169,10 @@ ul {
 						</form>
                      </div>
                                 
-			 <div class="sect-eventlist highlight" style=" display: block; padding-top: 150px;
-		    width: 100%; min-height: 350px; ">
+			 <div class="sect-eventlist" style=" display: block; padding-top: 150px;
+		    width: 100%; min-height: 350px;">
 		    		    
-		    <div style="width: 1200px; margin: auto; padding-left: 70px">
+		    <div style="width: 1200px; margin: auto; padding-left: 70px;">
     	    	<ul>
 				  <c:forEach var="dto" items="${list}">
     	         	<li>

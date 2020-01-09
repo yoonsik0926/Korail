@@ -140,4 +140,25 @@ public class EventServiceImpl implements EventService {
 			throw e;
 		}
 	}
+
+	@Override
+	public void insertEventLike(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("event.insertEventLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public int eventLikeCount(int num) {
+		int result=0;
+		try {
+			result=dao.selectOne("event.eventLikeCount", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

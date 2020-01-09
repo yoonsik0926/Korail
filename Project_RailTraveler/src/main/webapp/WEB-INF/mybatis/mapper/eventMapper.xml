@@ -158,5 +158,15 @@
 	<update id="updateHitCount" parameterType="Integer">
 		UPDATE event SET hitCount=hitCount+1 WHERE eventNum = #{eventNum}
 	</update>
+	
+	<!-- 게시 글 좋아요  추가 -->
+	<insert id="insertEventLike" parameterType="map">
+		INSERT INTO eventLike(eventNum, userId) VALUES (#{eventNum}, #{userId})
+	</insert>
+      
+	<!-- 게시글 좋아요 개수 -->
+	<select id="eventLikeCount" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(*) FROM eventLike WHERE eventNum=#{eventNum}
+	</select>
  	
 </mapper>
