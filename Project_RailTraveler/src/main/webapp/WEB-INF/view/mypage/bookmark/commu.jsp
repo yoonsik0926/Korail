@@ -15,62 +15,20 @@ $(function(){
 	$("#nav-item-${commuNum}").addClass("active");
 	
 	$("ul.nav-tabs li").click(function(){
-		commuNum = $(this).attr("data-tab");
+		tab = $(this).attr("data-tab");
 		
 		$("ul.nav-tabs li").each(function(){
 			$(this).removeClass("active");
 		});
 		
-		$("#nav-item-"+commuNum).addClass("active");
+		$("#nav-item-"+tab).addClass("active");
 		
-		var url = "<%=cp%>/station/info?locNum="+locNum;
+		var url = "<%=cp%>/bookmark/commu?commuNum="+tab;
 		location.href=url;
+
 	});
 });
 
-
-function ajaxJSON(url, type, query, fn) {
-	$.ajax({
-		type:type
-		,url:url
-		,data:query
-		,dataType:"json"
-		,success:function(data) {
-			fn(data);
-		}
-		,beforeSend:function(jqXHR) {
-	        jqXHR.setRequestHeader("AJAX", true);
-	    }
-	    ,error:function(jqXHR) {
-	    	if(jqXHR.status==403) {
-	    		login();
-	    		return false;
-	    	}
-	    	console.log(jqXHR.responseText);
-	    }
-	});
-}
-
-function ajaxHTML(url, type, query, selector) {
-	$.ajax({
-		type:type
-		,url:url
-		,data:query
-		,success:function(data) {
-			$(selector).html(data);
-		}
-		,beforeSend:function(jqXHR) {
-	        jqXHR.setRequestHeader("AJAX", true);
-	    }
-	    ,error:function(jqXHR) {
-	    	if(jqXHR.status==403) {
-	    		login();
-	    		return false;
-	    	}
-	    	console.log(jqXHR.responseText);
-	    }
-	});
-}
 
 function searchList() {
 	var f = document.searchForm;
@@ -80,21 +38,12 @@ function searchList() {
 }
 
 function resetList() {
-	var q = "condition='all'&query=''";
+	var q = "commuNum="+${commuNum}+"&page=1";
 	var url = "<%=cp%>/bookmark/commu?"+q;
 	
 	location.href= url;
 }
 
-function commuListPage(page){
-
-	var query = "page="+page+"&condition="+${condition}+"&keyword="+${keyword}+"&commuNum="+commuNum;
-	var url = "<%=cp%>/bookmark/commu";
-	var selector = "#listCommu";
-	
-	
-	ajaxHTML(url, "get", query, selector);
-}
 
 
 
@@ -113,10 +62,10 @@ function commuListPage(page){
 		<div class="container">
 		<div class="row">
 			<div class="col" style="font-size: 18px; font-weight: 600;margin: 0 10px;">
-				<ul class="nav nav-tabs tabs">
-					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">묻고답하기</a></li>
-					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">자유게시판</a></li>
-					<li id="nav-item-${commuNum}" data-tab="${commuNum}"><a class="nav-link" href="#">동행구하기</a></li>
+				<ul class="nav nav-tabs">
+					<li id="nav-item-1" data-tab="1"><a class="nav-link" href="#">묻고답하기</a></li>
+					<li id="nav-item-2" data-tab="2"><a class="nav-link" href="#">자유게시판</a></li>
+					<li id="nav-item-3" data-tab="3"><a class="nav-link" href="#">동행구하기</a></li>
 				</ul>
 			</div>
 		</div>
@@ -141,7 +90,7 @@ function commuListPage(page){
 							</span>
 							</c:if>
 						
-							<form name="searchForm" action="<%=cp%>/bookmark/commu"
+							<form name="searchForm" action="<%=cp%>/bookmark/commu?${query}&commuNum=${commuNum}&page=${page}"
 								method="post"
 								style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 								<select name="condition" class="boxTF"
@@ -177,9 +126,44 @@ function commuListPage(page){
 				</thead>
 				<tbody style="border-bottom: 2px solid black;" id="commuList">
 					<c:forEach var="vo" items="${list}">
-						<tr onclick="javascript:location.href='<%=cp%>/friend/article?friendNum=${vo.friendNum}&page=1'">
+						<tr onclick="javascript:location.href='${articleUrl}${commuNum==1? vo.qnaNum:commuNum==2? vo.boardNum:vo.friendNum}'">
 							<td>${vo.listNum}</td>
-							<td style="text-align: left; padding-left: 20px;">${vo.subject}</td>
+							<c:if test="${commuNum==1}">
+								<td style="text-align: left; padding-left: 20px;">${vo.subject}</td>
+							</c:if>
+							
+							<c:if test="${commuNum==2}">
+								<td style="text-align: left; padding-left: 20px;">${vo.subject}
+									<span style="margin-left: 7px; font-size: 14px;"> <i
+										class="far fa-heart" style="margin-right: 2px; color: #969696;"></i>${vo.bookmarkCount}
+										<i class="far fa-comment-alt"
+										style="margin-right: 2px; color: #969696; margin-left: 5px;"></i>${vo.replyCount}
+										<c:if test="${vo.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${vo.fileCount}</c:if>
+									</span>
+								</td>
+							</c:if>
+							
+							<c:if test="${commuNum==3}">
+								<td style="text-align: left; padding-left: 20px;">${vo.subject}
+									<span style="margin-left: 7px; font-size: 14px;"> <i
+										class="far fa-heart" style="margin-right: 2px; color: #969696;"></i>${vo.bookmarkCount}
+										<i class="far fa-comment-alt"
+										style="margin-right: 2px; color: #969696; margin-left: 5px;"></i>${vo.replyCount}
+										<c:if test="${vo.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${vo.fileCount}</c:if>
+									</span>
+									<c:if test="${vo.validate==1 || vo.enable==1}">
+										<span
+											style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #ccc; color: #FFFFFF; margin-left: 10px;">모집완료</span>
+									</c:if>
+									
+									<c:if test="${vo.validate!=1 && vo.enable!=1}">
+										<span
+											style="border-radius: 5px; font-size: 13px; font-weight: 900; display: inline-block; padding: 1px 3px; background: #f97509; color: #FFFFFF; margin-left: 10px;">모집중</span>
+									</c:if>
+									<span style="background: #aaa;color: white;border-radius: 5px;padding: 2px 5px;font-size: 12px;">
+									기간 : ${vo.sDate}  ~  ${vo.eDate}</span>
+								</td>
+							</c:if>
 							<td>${vo.writer}</td>
 							<td>${vo.created}</td>
 							<td>${vo.hitCount}</td>

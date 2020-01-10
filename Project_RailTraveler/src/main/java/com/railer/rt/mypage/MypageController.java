@@ -207,6 +207,8 @@ public class MypageController {
 			HttpServletRequest req, 
 			Model model) throws Exception {
 		
+		String cp = req.getContextPath();
+		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		String userId = info.getUserId();
 		String commuName ="";
@@ -227,9 +229,11 @@ public class MypageController {
 		map.put("userId", userId);
 		map.put("condition", condition);
 		map.put("keyword", keyword);
-		map.put("commuName", commuName);
+		map.put("commuName", commuName);		
+		
 		
 		dataCount = commuService.commuDataCount(map);
+
 		
 		if (dataCount != 0) {
 			total_page = myUtil.pageCount(rows, dataCount);
@@ -256,14 +260,36 @@ public class MypageController {
 		}
 
 		String query = "";
+		String listUrl = cp + "/bookmark/commu?commuNum="+commuNum;
+		String articleUrl = "";
 		
+		if(commuNum == 1) {
+			articleUrl = cp +"/qna/article?page="+current_page+"&qnaNum=";
+		} else if(commuNum == 2) {
+			articleUrl = cp +"/board/article?page="+current_page+"&boardNum=";
+		} else {
+			articleUrl = cp +"/friend/article?page="+current_page+"&friendNum=";
+		}
+		
+
 		if(keyword.length()!=0) {
-			query = "condition="+condition+"&keyword="+keyword;
+			query = "&condition="+condition+"&keyword="+keyword;
 			model.addAttribute("search", "search");
 		}
-			
+		
+		if(query.length()!=0) {
+			if(commuNum == 1) {
+				articleUrl = cp +"/qna/article?page="+current_page+"&"+query+"&qnaNum=";
+			} else if(commuNum == 2) {
+				articleUrl = cp +"/board/article?page="+current_page+"&"+query+"&boardNum=";
+			} else {
+				articleUrl = cp +"/friend/article?page="+current_page+"&"+query+"&friendNum=";
+			}
+			listUrl += query;
+		}
 
-		String paging = myUtil.pagingMethod(current_page, total_page, "commuListPage");
+
+		String paging = myUtil.paging(current_page, total_page,listUrl);
 		
 		model.addAttribute("condition",condition);
 		model.addAttribute("keyword",keyword);
@@ -274,7 +300,7 @@ public class MypageController {
 		model.addAttribute("list",list);
 		model.addAttribute("query",query);
 		model.addAttribute("commuNum",commuNum);
-		
+		model.addAttribute("articleUrl",articleUrl);
 
 		model.addAttribute("subMenu", "4");
 		model.addAttribute("subItems", "2");
@@ -559,13 +585,131 @@ public class MypageController {
 		return ".four.mypage.plan.plan";
 	}
 
+	
+	
 	// 내가 쓴 게시물
-	@RequestMapping(value = "/bbs/mybbs")
-	public String myBbs(Model model) {
+	@RequestMapping(value="/bbs/mybbs")
+	public String myBbs(
+			@RequestParam(defaultValue="1") int commuNum,
+			Model model) {
+		
+		
+		model.addAttribute("commuNum",commuNum);
+		
+		
+		model.addAttribute("subMenu", "8");
+		
+		return ".four.mypage.bbs.mybbs";
+	}
+	
+	@RequestMapping(value = "/bbs/list")
+	public String myBbsList(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "condition", defaultValue = "all") String condition,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			@RequestParam(defaultValue="1") int commuNum,
+			HttpSession session,
+			HttpServletRequest req, 
+			Model model) throws Exception {
 
+		String cp = req.getContextPath();
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+		String commuName ="";
+		
+		if(commuNum == 1) {
+			commuName = "qna";
+		} else if(commuNum == 2) {
+			commuName = "board";
+		} else {
+			commuName = "friend";
+		}
+		
+		int dataCount = 0;
+		int rows = 1;
+		int total_page = 0;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		map.put("commuName", commuName);		
+		
+		
+		dataCount = commuService.myCommuDataCount(map);
+
+		
+		if (dataCount != 0) {
+			total_page = myUtil.pageCount(rows, dataCount);
+		}
+
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+
+		map.put("offset", offset);
+		map.put("rows", rows);
+
+		List<Commu> list = commuService.myCommuList(map);
+
+		int listNum, n = 0;
+		for (Commu dto : list) {
+			listNum = dataCount - (offset + n);
+			dto.setListNum(listNum);
+			n++;
+		}
+
+		String query = "";
+		
+		String articleUrl = "";
+		
+		if(commuNum == 1) {
+			articleUrl = cp +"/qna/article?page="+current_page+"&qnaNum=";
+		} else if(commuNum == 2) {
+			articleUrl = cp +"/board/article?page="+current_page+"&boardNum=";
+		} else {
+			articleUrl = cp +"/friend/article?page="+current_page+"&friendNum=";
+		}
+		
+
+		if(keyword.length()!=0) {
+			query = "&condition="+condition+"&keyword="+keyword;
+			model.addAttribute("search", "search");
+		}
+		
+		if(query.length()!=0) {
+			if(commuNum == 1) {
+				articleUrl = cp +"/qna/article?page="+current_page+"&"+query+"&qnaNum=";
+			} else if(commuNum == 2) {
+				articleUrl = cp +"/board/article?page="+current_page+"&"+query+"&boardNum=";
+			} else {
+				articleUrl = cp +"/friend/article?page="+current_page+"&"+query+"&friendNum=";
+			}
+		}
+		
+		// AJAX 용 페이징
+		String paging = myUtil.pagingMethod(current_page, total_page, "listMybbsPage");
+		
+		model.addAttribute("condition",condition);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("page",current_page);
+		model.addAttribute("total_page",total_page);
+		model.addAttribute("paging",paging);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("list",list);
+		model.addAttribute("query",query);
+		model.addAttribute("commuNum",commuNum);
+		model.addAttribute("articleUrl",articleUrl);
+
+		
 		model.addAttribute("subMenu", "8");
 
-		return ".four.mypage.bbs.mybbs";
+		return "/mypage/bbs/list";
 	}
 
 }

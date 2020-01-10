@@ -27,13 +27,36 @@ public class CommuServiceImpl implements CommuService{
 
 	@Override
 	public int commuDataCount(Map<String, Object> map) throws Exception {
-		int friendDataCount = 0 ;
+		int friendDataCount = -100 ;
 		try {
 			friendDataCount = dao.selectOne("mypage.commuDataCount",map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return friendDataCount;
+	}
+
+	@Override
+	public List<Commu> myCommuList(Map<String, Object> map) throws Exception {
+		List<Commu> list = null;
+		try {
+			list = dao.selectList("mypage.listMyCommu",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int myCommuDataCount(Map<String, Object> map) throws Exception {
+		int dataCount = 0;
+		try {
+			dataCount = dao.selectOne("mypage.myCommuDataCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataCount;
 	}
 
 

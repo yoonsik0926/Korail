@@ -15,6 +15,15 @@ public class Commu {
 	private String hitCount;
 	private String created;
 	
+	private String sDate;
+	private String eDate;
+	private int enable;
+	private int validate;
+	
+	private int fileCount;
+	private int replyCount;
+	private int bookmarkCount;
+	
 
 	
 	public int getListNum() {
@@ -77,6 +86,49 @@ public class Commu {
 	public void setBoardNum(int boardNum) {
 		this.boardNum = boardNum;
 	}
+	public String getsDate() {
+		return sDate;
+	}
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+	public String geteDate() {
+		return eDate;
+	}
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
+	}
+	public int getEnable() {
+		return enable;
+	}
+	public void setEnable(int enable) {
+		this.enable = enable;
+	}
+	public int getValidate() {
+		return validate;
+	}
+	public void setValidate(int validate) {
+		this.validate = validate;
+	}
+	public int getFileCount() {
+		return fileCount;
+	}
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
+	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	public int getBookmarkCount() {
+		return bookmarkCount;
+	}
+	public void setBookmarkCount(int bookmarkCount) {
+		this.bookmarkCount = bookmarkCount;
+	}
+	
 	
 	
 	
