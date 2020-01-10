@@ -30,6 +30,7 @@ public class SingoController {
 	
 	@RequestMapping(value="/singo/singo")
 	public String singo(Model model,
+			@RequestParam(defaultValue="singo") String mode,
 			@RequestParam(defaultValue="tourreply") String targetTitle,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
@@ -110,10 +111,8 @@ public class SingoController {
             dto.setBlameNo(listNum);
             n++;
         }
-        
-        
-		
-		String listUrl = cp +"/singo/singo?targetTitle="+targetTitle;	
+
+		String listUrl = cp +"/singo/singo?mode=singo&targetTitle="+targetTitle;	
 		String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		model.addAttribute("condition", condition);
@@ -123,13 +122,14 @@ public class SingoController {
 		model.addAttribute("singoList", singoList);
 		model.addAttribute("subMenu", "0");
 		model.addAttribute("title", "투어댓글");
-		
+	     model.addAttribute("mode", mode);
 		
 		return ".singo.singo";
 	}
 	
 	@RequestMapping(value="/singo/userManagment")
 	public String userManagment(
+			@RequestParam String mode,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
 			@RequestParam(value="page", defaultValue="1") int current_page,
@@ -180,13 +180,14 @@ public class SingoController {
 		            n++;
 		        }
 		        
-				String listUrl = cp +"/singo/userManagment";
+				String listUrl = cp +"/singo/userManagment?mode=userManagment";
 				String paging = myUtil.paging(current_page, total_page, listUrl);
-		
+
 		     model.addAttribute("paging", paging);
 		     model.addAttribute("singoCountList", singoCountList);
-		
-				return "/singo/userManagment";
+		     model.addAttribute("mode", mode);
+		     model.addAttribute("condition", condition);
+				return ".singo.singo";
 	}
 
 	
@@ -259,4 +260,30 @@ public class SingoController {
 		return model;
 	}
 	
-}
+
+
+
+		
+		@RequestMapping(value="/singo/restrictUserId")
+		@ResponseBody
+		public Map<String, Object> restrictUserId(
+				@RequestParam String targetUserId,
+				HttpSession session
+				) {
+				
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String state="true";
+				
+			//어드민이 아니면 막기
+
+			try {
+				service.restrictId(targetUserId);
+			} catch (Exception e) {
+				state= "false";
+			}
+			
+			Map<String, Object> model = new HashMap<>();
+			model.put("state", state);
+			return model;
+		}
+	}

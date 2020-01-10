@@ -92,5 +92,16 @@ public class SingoServiceImpl implements SingoService {
 		return result;
 	}
 
+	@Override
+	public void restrictId(String targetUserId) {
+		
+		try {
+			dao.updateData("singo.restrictUserId", targetUserId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+
 	
 }

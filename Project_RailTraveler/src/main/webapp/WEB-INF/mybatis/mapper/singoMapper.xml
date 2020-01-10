@@ -35,6 +35,8 @@
 			</when>
 
 		</choose>
+		
+
 	</sql>
 	
 	<sql id="where-singoCountlist">
@@ -133,4 +135,9 @@
 
 )
 </select>
+
+	<!--5회 이상 사용자 정지 매기기-->
+	<update id="singo.restrictUserId" parameterType="String">
+		update member2 set enabled = 0 where userId = #{targetUserId}
+	</update>
 </mapper>

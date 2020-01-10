@@ -53,12 +53,20 @@ function ajaxHTML(url, type, query, selector) {
 	});
 }
 
-function searchList() {
+function searchList(option) {
+	if(option == 'singo'){
 	var f=document.searchForm;
 	var targetTitle =$("select[name=category]").val();
-
- 	f.action = "<%=cp%>/singo/singo?targetTitle="+targetTitle; 
+ 	f.action = "<%=cp%>/singo/singo?mode=singo&targetTitle="+targetTitle; 
 	f.submit();
+	}
+	else if(option =='userManagment'){
+		var f=document.userListForm;
+		var targetTitle =$("select[name=userListsearch]").val();
+	 	f.action = "<%=cp%>/singo/userManagment?mode=userManagment"; 
+		f.submit();
+	}
+	
 }
 
 
@@ -69,49 +77,57 @@ $(function(){
 			
 		var targetTitle = $(this).val();
 		
-		var url = "<%=cp%>/singo/singo?targetTitle="+targetTitle;
+		var url = "<%=cp%>/singo/singo?targetTitle="+targetTitle+"&mode=singo";
 		
 		location.href= url;
 });
 	});
 	
 $(function(){
-$("ul.tabs li").click(function(){
-	tab = $(this).attr("data-tab");
+	$("ul.tabs li").on("click",function(){
+		tab = $(this).attr("data-tab");
+		
+		$("ul.tabs li").each(function(){
+			$(this).removeClass("active");
+		});
+		
+		$("#tab-"+tab).addClass("active");
+		
+		
+		if(tab ==1){		
+			var url = "<%=cp%>/singo/userManagment?mode=userManagment"
+			location.href=url;	
+		}else{		
+			var url = "<%=cp%>/singo/singo?mode=singo";
+			location.href= url;		
+		}
 
-	
-	$("ul.tabs li").each(function(){
-		$(this).removeClass("active");
 	});
 	
-	$("#tab-"+tab).addClass("active");
 	
-	if(tab ==1){
-		
-		$('#singoForm').css("display", "none");
-		$('#usermanagment').css("display", "block");
-		
-		var url = "<%=cp%>/singo/userManagment";
-		var query ="";
-		var selector ="#usermanagment";
-		
-		ajaxHTML(url, "get", query, selector);
-		
-		
 
-	}else{
+
+});
+
+function restrictId(targetUserId) {
+	var result = confirm("해당 아이디 사용 정지시키겠습니까?");
+	
+	if(result){
+		var url = "<%=cp%>/singo/restrictUserId";
+		var query = "targetUserId="+targetUserId;
 		
-		var url = "<%=cp%>/singo/singo";
-		location.href= url;
+		var fn = function(data) {
+			if(data.state=='true'){
+				alert("사용 정지 완료")
+			}else{
+				alert("사용자 아이디 정지 실패!!")
+			}
+		}
 		
-		$('#usermanagment').css("display", "none");
-		$('#singoForm').css("display", "block");		
+		ajaxJSON(url, "get", query, fn);
+
 	}
-
-
-});
-
-});
+}
 </script>
 
 <style type="text/css">
@@ -204,14 +220,14 @@ a {
 				<div class="col" style="font-size: 18px; font-weight: 600;">
 					<ul class="nav nav-tabs tabs" style="width: 100%; cursor: pointer;">
 						
-						<li class="nav-item active" style="width: 130px; margin: 0 auto;"
+						<li class="nav-item " style="width: 130px; margin: 0 auto; "
 						id="tab-0" data-tab="0"><a
-							style="text-align: center;" class="nav-link active"
+							style="text-align: center;" class="nav-link "
 							id="1st" >신고목록</a></li>					
 
 						<li class="nav-item " style="width: 130px; margin: 0 auto;"
 						id="tab-1" data-tab="1"><a
-							style="text-align: center" class="nav-link active"
+							style="text-align: center" class="nav-link "
 							id="2st">유저관리</a></li>
 
 					</ul>
@@ -220,8 +236,9 @@ a {
 		
 
 
-
-
+	<c:choose>
+	<c:when test="${mode=='singo'}">
+	
 		<div id="singoForm"  class="sir_lbo" style="padding: 0; margin: 0; font-size: 1.025em; display: block">
 
 		
@@ -277,7 +294,7 @@ a {
 								class="boxTF"
 								style="display: inline-block; height: 100%; width: 58%;">
 							<img
-								src="<%=cp%>/resource/images/magnifying-glass.png" class="" onclick="searchList()"
+								src="<%=cp%>/resource/images/magnifying-glass.png" class="" onclick="searchList('singo')"
 								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 						</form></td>
 				</tr>
@@ -305,23 +322,101 @@ a {
 			
 			</tbody>
 		</table>
-				<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+		
+		<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 		<tr height="35">
 			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging}
 			</td>
 		</tr>
 			</table>
 	</div>
-	
-	
-	<div id="usermanagment" style="display: none; width:90%; margin: 0px auto;">
+	</c:when>
+	<c:when test="${mode=='userManagment'}">
+	<div id="usermanagment" style="display: block; width:90%; margin: 0px auto;">
 
-	
-	
+	<table class="table table-hover tb-board" style="padding: 0; margin: 0; font-size: 1.025em; text-align: center;">
+			<thead style="text-align: center">
+				<tr>
+
+				<td width="200" colspan="6" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
+				
+					<span id="singoCount" 	style="display: none; float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+					<span style="color: #ca4a0d;">3569건 </span> <img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="reset()"
+					style="background: #dadada; width: 20px; padding: 3px; cursor:pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;"></span>
+						<form name="userListForm" action="<%=cp%>/singo/userManagment" method="post"
+							style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
+						
+							<select name="condition" class="boxTF"
+								style="border-radius: 3px; width: 30%; height: 100%; border-left: 0;">
+								<option value="all" ${condition=="all"?"selected='selected'":""}>모두</option>
+								<option value="userId"
+									${condition=="userId"?"selected='selected'":""}>유저아이디</option>
+								<option value="userName"
+									${condition=="userName"?"selected='selected'":""}>유저이름</option>
+								
+							</select>
+							
+							 <input id="" type="text" name="keyword" value="${keyword}"
+								class="boxTF"
+								style="display: inline-block; height: 100%; width: 58%;">
+							<img
+								src="<%=cp%>/resource/images/magnifying-glass.png" class="" onclick="searchList('userManagment')"
+								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
+						</form></td>
+				</tr>
+				<tr class="lbo_li lbo_legend lbo_legend_like">
+					<th width="60" >번호</th>
+					<th width="100"><span >이름</span></th>
+					<th width="100"><span >아이디</span></th>
+					<th width="60" ><span >총 신고횟수</span></th>
+					<th width="100" ><span >비고</span></th>
+					<th width="50"><span>/</span></th>
+					
+
+
+				</tr>
+			</thead>
+			<tbody style="border-bottom: 2px solid black;">
+				<c:forEach var="vo" items="${singoCountList}">
+				<tr >
+					<td>${vo.singoNum}</td>
+					<td>${vo.userName}</td>
+					<td>${vo.targetUserId }</td>
+					<td>${vo.singoCount}회</td>
+
+					<c:choose>
+					<c:when test="${vo.singoCount>=3}">
+					<td>
+						<span style="color: red; font-weight: 700">아이디 정지 대상입니다.</span>
+					</td>
+					<td><button class="btn" onclick="restrictId('${vo.targetUserId}');">아이디 정지</button></td>
+					</c:when>
+					<c:otherwise>
+					<td>
+						<span>경고 대상입니다.</span>
+					</td>
+					<td><button class="btn">경고창 발송</button></td>
+					</c:otherwise>
+					</c:choose>
+
+
+				</tr>
+			</c:forEach>
+			
+			</tbody>
+		</table>
+	<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+		<tr height="35">
+			<td align="center">${dataCount==0?"등록된 게시물이 없습니다.":paging}
+			</td>
+		</tr>
+			</table>
+			
 	
 	
 	</div>
-
+	</c:when>
+	</c:choose>
 </div>
 
 

@@ -11,5 +11,5 @@ public interface SingoService {
 	public int dataCount(Map<String,Object> map);
 	public List<SingoManagment> singoCountList(Map<String, Object> map);
 	public int singoListCount(Map<String,Object> map);
-
+	public void restrictId(String targetUserId);
 }
