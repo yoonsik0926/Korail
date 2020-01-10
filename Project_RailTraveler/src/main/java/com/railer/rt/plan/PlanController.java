@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.railer.rt.member.SessionInfo;
+
 @Controller("plan.planController")
 public class PlanController {
 	
@@ -79,18 +81,20 @@ public class PlanController {
 		return model;
 	}
 	
+	// 세부계획 DB에 추가
 	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> insertTicketDay(Plan dto,
 											   @RequestParam String days,
 											   HttpSession session,
 											   HttpServletRequest request) {
-//		SessionInfo info=(SessionInfo)session.getAttribute("member");
-//		int ticketDay=dto.getTicketDay();
-//		String sDate=dto.getsDate();
-//		int nthDay=dto.getNthDay();
 		
-		System.out.println(days);
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		int ticketDay=dto.getTicketDay();
+		String sDate=dto.getsDate();
+		int nthDay=dto.getNthDay();
+		
+//		System.out.println(days);
 		
 		JSONArray jarr=new JSONArray(days);
 		for(int i=0; i< jarr.length(); i++) {
@@ -100,43 +104,22 @@ public class PlanController {
 			JSONObject job=jarr2.getJSONObject(0);
 			System.out.println(job.get("staNum"));
 		}
-		
-		
-		
-		
-        
-//	    List<Map<String, Object>> resendList = new ArrayList<Map<String, Object>>();
-//	        
-//	    for(int i=0; i<array.size(); i++){
-//	        
-//	        //JSONArray 형태의 값을 가져와 JSONObject 로 풀어준다.    
-//	        JSONObject obj = (JSONObject)array.get(i);
-//	                
-//	        Map<String, Object> resendMap = new HashMap<String, Object>();
-//	            
-//	        resendMap.put("memberId", obj.get("memberId"));
-//	        resendMap.put("memberIdSeq", obj.get("memberIdSeq"));
-//	        resendMap.put("resendToken", obj.get("resendToken"));
-//	        resendMap.put("serverId", obj.get("serverId"));
-//	            
-//	        resendList.add(resendMap);
-//	    }
 
 		Map<String, Object> map=new HashMap<>();
-//		try {
-//			dto.setUserId(info.getUserId());
-//			service.insertPlan(map);
-//			service.insertDetailPlan(map);
-////			service.insertMoreDetailPlan(dto);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		
-//		
-//		map.put("nthDay", nthDay);
-//		map.put("ticketDay", ticketDay);
-//		map.put("sDate", sDate);
+		try {
+			dto.setUserId(info.getUserId());
+			service.insertPlan(map);
+			service.insertDetailPlan(map);
+			service.insertMoreDetailPlan(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		map.put("nthDay", nthDay);
+		map.put("ticketDay", ticketDay);
+		map.put("sDate", sDate);
 		return map;
 	}
 	

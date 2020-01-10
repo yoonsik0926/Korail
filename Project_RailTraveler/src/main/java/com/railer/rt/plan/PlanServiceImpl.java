@@ -75,10 +75,10 @@ public class PlanServiceImpl implements PlanService {
 		try {
 			Plan dto=new Plan();
 			
-			int detailPlanSeq=dao.selectOne("plan.detailPlanSeq");
+			int detailPlanSeq=dao.selectOne("plan.detailPlanSeq", map);
 			dto.setDetailPlanNum(detailPlanSeq);
 			
-			dao.insertData("plan.insertPlans",dto);
+			dao.insertData("plan.insertPlans",map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

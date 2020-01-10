@@ -5,12 +5,12 @@
 	
    <!-- planNum 시퀀스번호 -->
    <select id="planSeq" resultType="Integer">
-   	SELECT plan_seq.NEXTVAL FROM dual;
+   	SELECT plan_seq.NEXTVAL FROM dual
    </select>
    
    <!-- detailPlanNum 시퀀스번호 -->
    <select id="detailPlanSeq" resultType="Integer">
-   	SELECT dp_seq.NEXTVAL FROM dual;
+   	SELECT dp_seq.NEXTVAL FROM dual
    </select>
    
    <!-- 검색한 역 리스트  -->
