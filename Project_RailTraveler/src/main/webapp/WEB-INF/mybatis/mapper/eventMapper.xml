@@ -81,9 +81,14 @@
 	 </delete>
 	 
 	 <select id="readevent" parameterType="Integer" resultType="com.railer.rt.event.Event">
-		SELECT eventNum, name, content, sDate, eDate, imageFilename, hitCount 
-	 	from event 
-	 	WHERE eventNum = #{eventNum}
+		SELECT b.eventNum, name, content, sDate, eDate, imageFilename, hitCount,
+		NVL(eventLikeCount, 0) eventLikeCount
+	 	from event b
+	 	LEFT OUTER JOIN (
+			SELECT eventNum, COUNT(*) eventLikeCount FROM eventLike
+			GROUP BY eventNum
+		) bc ON b.eventNum = bc.eventNum
+	 	WHERE b.eventNum = #{eventNum}
 	 </select>
 	
 	<!-- 이전글 -->

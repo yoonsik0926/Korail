@@ -48,6 +48,11 @@ ul {
 	font-weight: bold;
 	font-size: 14px;
 	color: #2275C4;
+}
+
+.listcount {
+ font-size: 15px;
+ display: inline-block;
 }      
 
 </style>
@@ -168,11 +173,16 @@ ul {
 								style="padding: 6px; cursor:pointer; opacity: 0.6; height: 100%; float: left; border-left: 1px solid #cccccc;">
 						</form>
                      </div>
-                                
-			 <div class="sect-eventlist" style=" display: block; padding-top: 150px;
-		    width: 100%; min-height: 350px;">
-		    		    
-		    <div style="width: 1200px; margin: auto; padding-left: 70px;">
+                
+		    <div class="sect-eventlist" style="width: 1200px; margin: auto; padding-top: 100px; padding-left: 100px;
+		    		display: block; min-height: 350px; width: 100%">
+		    		
+		    		<div style="padding-left: 60px">
+		    			<p class="listcount">전체이벤트가 </p>
+		    			<p class="listcount" style="color: red; font-weight:bold;">${dataCount}건</p>
+		    			<p class="listcount">이 있습니다.</p>
+		    		</div>
+		    		
     	    	<ul>
 				  <c:forEach var="dto" items="${list}">
     	         	<li>
@@ -184,31 +194,27 @@ ul {
 	                              onclick="javascript:article('${dto.eventNum}');"/>
 	                            </span>
 	                    </div>
-	                    <div class="box-contents">
+	                 <div class="box-contents">
                            <p class="evt-name">${dto.name}</p>
                             
 	                        <p class="date">
 	                            <span>기간: </span>${dto.sdate} ~ ${dto.edate}
 	                        </p>
-                     <c:if test="${sessionScope.member.userId=='admin'}">
-                     <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
-                     	<tr height="45">
-						    <td width="300" align="left" >
-							    <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update?eventNum=${dto.eventNum}&page=${page}';">수정</button>
-							     <button type="button" class="btn" onclick="deleteEvent('${dto.eventNum}');">삭제</button>
-						    </td>
-						
-						</tr>
-						</table>
-					 </c:if>
-					 </div>	
-				
-					</li>
+	                     <c:if test="${sessionScope.member.userId=='admin'}">
+		                     <table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
+		                     	<tr height="45">
+								    <td width="300" align="left" >
+								        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/update?eventNum=${dto.eventNum}&page=${page}';">수정</button>
+								        <button type="button" class="btn" onclick="deleteEvent('${dto.eventNum}');">삭제</button>
+								    </td>
+								</tr>
+							</table>
+						 </c:if>
+					  </div>	
+				   </li>
                  </c:forEach> 
-                             			
-    	    </ul>	
-    	</div>
-    </div>
+              </ul>	
+    	   </div>
     
     <table style="width: 100%; margin-bottom: 30px; border-spacing: 0px;">
 		   <tr height="35">
@@ -226,5 +232,4 @@ ul {
 		      </c:if>
 		      </td>
 		   </tr>
-		</table>
- 
+	</table>

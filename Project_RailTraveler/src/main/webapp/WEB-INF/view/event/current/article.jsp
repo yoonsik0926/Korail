@@ -39,7 +39,7 @@ $(function(){
 		
 		var userId = "${sessionScope.member.userId}";
 		
-		  if ( userId == "") {
+		  if (userId == "") {
 			  $("#likealarm").modal();
 			return;
 		  }
@@ -105,7 +105,7 @@ $(function(){
 			<tr>
 				<td colspan="2" height="40" style="padding-bottom: 15px;" align="center">
 					<button type="button" class="btn btnSendEventLike"
-						title="좋아요"
+						title="추천하기"
 						style="background: none; padding: 6px 8px; width: 60px; height: 60px; 
 						  border-color: #cccccc; border-radius: 50%; margin-bottom: 5px;">
 						<i id="eventLikeIcon" class="fas fa-heart"
@@ -137,7 +137,6 @@ $(function(){
 				        </c:if>
 				    </td>
 				</tr>
-						
 			</table>
 						
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
@@ -147,9 +146,9 @@ $(function(){
 			    </td>
 			</tr>
 			</table>
-    </div>
+   		 </div>
     
-</div>
+	</div>
 
 	<div class="modal fade  bd-example-modal-sm" id="likealarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	  aria-hidden="true" >
@@ -180,7 +179,3 @@ $(function(){
 			    </div>
 		  </div>
 	</div>
-
-
-		
-
