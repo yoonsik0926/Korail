@@ -16,6 +16,7 @@
 	
 	
 <script>
+
 function searchList() {
 	var f = document.searchForm;
 	f.submit();
@@ -133,7 +134,7 @@ text-decoration: underline;
 							</div>
 						</td>
 						<td colspan="2" style="text-align: left; padding-left: 20px;">※
-							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if></td>
+							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" style="width: 17px;" src="<%=cp%>/resource/images/commu/new1.png"> </c:if></td>
 						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
 					</tr>
 				</c:forEach>
@@ -148,7 +149,8 @@ text-decoration: underline;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
     color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;
     color: #969696;"></i>${dto.replyCount}<c:if test="${dto.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${dto.fileCount}</c:if>
-								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
+								<c:if test="${dto.gap<=1}"><img alt="" 
+								src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
 								</span></td>
 					<td>${dto.userName}</td>
 						<td>${dto.created}</td>

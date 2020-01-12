@@ -55,6 +55,13 @@ function ajaxHTML(url, type, query, selector) {
 //게시글 공감 여부
 $(function(){
 	$(".btnSendFriendLike").click(function(){
+		<c:if test="${empty sessionScope.member.userId}">
+		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			location.href="<%=cp%>/member/login";
+		else{
+			return;
+		}
+		</c:if>
 		var cs = document.getElementById("boardLikeIcon");
 		if( cs.className =="far fa-heart"){
 			if(! confirm("북마크 하시겠습니까 ? ")) {
@@ -157,7 +164,7 @@ $(function(){
 			
 			var state=data.state;
 			if(state=="true") {
-				listPage(1);
+				listPage(data.total_page);
 			} else if(state=="false") {
 				alert("댓글을 추가 하지 못했습니다.");
 			}
@@ -181,7 +188,7 @@ function displayReplyForm(num){
 			
 		}
 };
-function insertReply(num){
+function insertReply(num,pageNo){
 	var friendNum="${dto.friendNum}";
 	var cs = ".replyForm"+num;
 	var $tb = $(cs);
@@ -196,14 +203,14 @@ function insertReply(num){
 	}
 	content = encodeURIComponent(content);
 	var url="<%=cp%>/friend/insertReply";
-	var query="friendNum="+friendNum+"&content="+content+"&answer="+num+"&secret="+secret;
+	var query="friendNum="+friendNum+"&content="+content+"&answer="+num+"&secret="+secret+"&pageNo="+pageNo;
 	
 	var fn = function(data){
 		displayReplyForm(num);
 		
 		var state=data.state;
 		if(state=="true") {
-			listPage(1);
+			listPage(data.pageNo);
 		} else if(state=="false") {
 			alert("댓글을 추가 하지 못했습니다.");
 		}
@@ -212,6 +219,52 @@ function insertReply(num){
 	ajaxJSON(url, "post", query, fn);
 };
 
+//_btnReply
+function displayReplyUpdateForm(num, content){
+	console.log(content);
+	var cs = ".replyUpdateForm"+num;	//수정창
+	var ct = ".replyContent"+num;	//댓글 내용
+	var $cs = $(cs);
+	var $ct = $(ct);
+	
+	var test_cs=".btnUpdateReply"+num;
+		if($(cs).is(":visible")){
+			$cs.find("textarea").val(content);
+			$(cs).css("display","none");
+			$(ct).css("display","block");
+			$(test_cs).text("수정");
+		}else{
+			$(cs).css("display","block");
+			$(ct).css("display","none");
+			$cs.find("textarea").focus();
+			$(test_cs).text("수정취소");
+			
+		}
+};
+
+function updateReply(friendReplyNum,pageNo){
+	var cs = ".replyUpdateForm"+friendReplyNum;
+	var $tb = $(cs);
+	var content=$tb.find("textarea").val().trim();
+	if(! content) {
+		alert("내용을 입력해주세요");
+		$tb.find("textarea").focus();
+		return false;
+	}
+	content = encodeURIComponent(content);
+	var url="<%=cp%>/friend/updateReply";
+	var query="friendReplyNum="+friendReplyNum+"&content="+content+"&pageNo="+pageNo;
+	var fn = function(data){
+		var state=data.state;
+		if(state=="true") {
+			listPage(data.pageNo);
+		} else if(state=="false") {
+			alert("댓글을 수정 하지 못했습니다.");
+		}
+	};
+	
+	ajaxJSON(url, "post", query, fn);
+};
 //페이징 처리
 $(function(){
 // 	<c:if test="${not empty pageNo}">
@@ -227,7 +280,20 @@ function listPage(page) {
 	
 	ajaxHTML(url, "get", query, selector);
 }
-	
+
+function copy_trackback() {
+	var trb = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/friend/article?friendNum=${dto.friendNum }";
+	var browse = navigator.userAgent.toLowerCase(); 
+    
+    if( (navigator.appName == 'Netscape' && browse.indexOf('trident') != -1) || (browse.indexOf("msie") != -1)) {
+    	if(confirm("이 글의 트랙백 주소를 클립보드에 복사하시겠습니까?")){
+			window.clipboardData.setData("Text", trb);
+    		alert("복사완료!");
+    	}
+    }else{
+    	temp = prompt("이 글의 트랙백 주소입니다. Ctrl+C를 눌러 클립보드로 복사하세요", trb);
+    }
+}	
 </script>
 <style type="text/css">
 tfoot td {
@@ -658,31 +724,84 @@ a {
 	</div>
 </div>
 
-<!-- 신고하기 모달 -->
-<div id="declarationModal" role="dialog" tabindex="-1"
-	aria-labelledby="mySmallModalLabel" aria-hidden="true"
-	data-backdrop="true" data-keyboard="true"
-	class="modal1 modal_post_social" style="display: none;">
-	<div class="modal-dialog"
-		style="width: 35%; position: absolute; right: 30%; top: 25%;">
-		<div class="modal-content"
-			style="background: aliceblue;
-    text-align: center;
-    padding: 0;">
-			<div class="declare_title">
-				<span style="font-weight: 800; background: #eee;">신고하기</span>
-			</div>
-				<div>
-				<p><b>제&nbsp;&nbsp;목 : </b> <span> ${dto.subject}</span></p>
-				<p><b>작성자 : </b> <span> ${dto.userId}</span></p>
-				<hr>
-				<p><b>사유선택 : </b> <span> 여러 사유에 해당되는 경우, 대표적인 사유 1개를 선택해 주세요</span></p>
-				
-				<div id="copy_complete" class="text-center"></div>
-			</div>
-		</div>
-	</div>
+<!--Modal: 신고 모달-->
+<form name="singoForm" method="post" action="">
+<div class="modal fade  bd-example-modal-sm" id="singo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 560px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <input type="hidden"  id="singoreplyNum" value="">
+      <input type="hidden" id="singoreason" value="etc" >
+
+      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 9px 0px 9px 15px; border-bottom:1px solid #c4c4c4 ">
+        <p style="font-size:22px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
+		<div style=" border-bottom:1px solid #c4c4c4">
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<span id="targetContent" style="font-weight: 500">얄라리얄라 얄라숑</span> </p>
+		<p>작성자 :&nbsp;&nbsp;<span id="targetUserId" style="font-weight: 500">yoonsik09(김**)</span></p>
+        </div>
+        
+        <div style="margin: 10px 0px;">
+        	<table style="width: 100%; ">
+        		<tr>
+        			<td width="17%" valign="top">
+        			<p>신고사유:&nbsp;&nbsp;</p>
+        			</td>
+        			<td width="83%" valign="top">
+        			<span style="font-size: 14px; color: #949494;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
+        			</td>
+        		</tr>
+        		
+        		<tr>
+        		<td width="17%"></td>
+        		<td width="83%">
+        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P> 
+        		    <div id="adverInfo" style="display: none ">
+        		   	 <ul style="font-size: 13px; color: #a9a9a9;font-weight: 500 ;margin: 10px 0px ; padding: 0px 0px 0px 20px; ">
+      						<li>불법 사행성, 도박사이트를 홍보하는 경우</li>
+      						<li>개인정보, 이미테이션, 성인의약품, 마약, 대포폰 등 불법 제품 및 정보를 홍보, 판매하는 경우</li>
+      						<li>성매매, 장기매매 등의 신체 관련 거래 정보</li>
+    				 </ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P>
+					<div id="19ageInfo" style="display: none ">
+       		   	 		<ul style="font-size: 13px; color: #a9a9a9;font-weight: 500;margin: 10px 0px ; padding: 0px 0px 0px 20px;">
+      						<li>음란물 또는 음란한 행위(노골적인 성행위 장면)를 묘사하는 이미지/동영상</li>
+      						<li>살해/상해/폭력 등 잔인한 장면을 묘사하는 이미지/동영상</li>
+      						<li>중고 속옷 판매, 가출 유도 등의 청소년 유해 정보 공유</li>
+    				 	</ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="명예훼손/사생활 침해 및 저작권침해 등">명예훼손/사생활 침해 및 저작권침해 등</P>
+					<P style="font-weight: 500"><input type="radio" name="chk_info" id="etc" value="etc">기타</P>
+					
+					<div id="etcTextarea" style="display: none">
+						<textarea id="etcText" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
+					</div>					
+        		</td>
+
+        		</tr>
+        	</table>
+      	</div>
+      	
+      	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
+      	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
+        	<a type="button" class="btn  btn-info waves-effect cancelsingo" data-dismiss="modal">취소</a>
+      	
+      	</div>
+        
+        </div>
+
+
+    </div>
+  </div>
 </div>
+</form>
+<!--Modal: 신고모달-->
 
 <!-- 첨부파일 관리 모달 -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
@@ -788,8 +907,7 @@ a {
 									<td><span class="b m-tcol-c" style="font-weight: 900;">${dto.subject}</span></td>
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
 									<td nowrap="" class="m-tcol-c"><a
-										href="https://cafe.naver.com/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay="
-										onclick="targetChangeForMacSafari('/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay=');return false;"
+										href="<%=cp%>/friend/friend?${query}"
 										class="m-tcol-c">동행구하기 게시판</a></td>
 								</tr>
 							</tbody>
@@ -860,18 +978,19 @@ a {
 							<tbody>
 								<tr>
 									<td valign="top" class="url" align="right"><span
-										class="filter-50"><a id="linkUrl"
-											href="https://cafe.naver.com/ite/653777" target="_top"
-											class="m-tcol-c url-txt">https://cafe.naver.com/ite/653777</a></span>
+										class="filter-50"><a
+											href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/friend/article?friendNum=${dto.friendNum }" target="_top"
+											class="m-tcol-c url-txt"><%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/friend/article?friendNum=${dto.friendNum }</a></span>
+											
 										<span><a href="#" onclick="return false;"
 											class="_copyUrl url-btn" data-clipboard-action="copy"
 											data-clipboard-target="#linkUrl"><img
 												src="https://cafe.pstatic.net/cafe4/btn-copy-add.gif"
-												width="41" height="15" alt="주소복사" class="copy"></a></span></td>
-								</tr>
-								<tr>
-									<td id="sendPost_653777" class="m-tcol-c" align="right"></td>
-								</tr>
+												width="41" height="15" alt="주소복사" class="copy" onclick="copy_trackback(); return false;"
+></a></span>
+												
+												</td></tr>
+								
 							</tbody>
 						</table>
 					</div>
@@ -916,7 +1035,7 @@ a {
 									</a></td>
 									<td class="m-tcol-c filter-30">|</td>
 									<td class="_sortList" style="padding: 0;">
-										<div style="position: relative; _top: 3px;">
+										<div style="position: relative; top: -3px;">
 											<a href="#" class="b m-tcol-c"><span>등록순</span><span
 												style="display: none">최신순</span><i class="fas fa-caret-down"
 												style="margin: 5px;"></i> </a>
@@ -929,7 +1048,9 @@ a {
 
 									<td class="m-tcol-c filter-30">|</td>
 									<td id=><a href="#"
-										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="    color: tomato">좋아요<i
+										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="   top: -3px;
+    color: tomato;
+    position: relative;">좋아요<i
 											class="fas fa-caret-down" style="margin: 5px;"></i></a>
 										<div class="u_likeit_list_module _reactionModule"
 											style="visibility: visible;">
@@ -1003,7 +1124,7 @@ a {
 							<tr>
 						<td><textarea
 								class='boxTA'
-								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;'></textarea>
+								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;' ${empty sessionScope.member.userId?'placeholder="로그인이 필요한 서비스 입니다.&#13;&#10;클릭시 로그인 창으로 이동합니다."':'placeholder="모두가 함께 만들어 가는 깨끗한 공간입니다. &#13;&#10;훈훈한 댓글 부탁드립니다^^"' }></textarea>
 							<div
 								style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
 								<input type="checkbox" name="secret" value="0"><label
@@ -1050,7 +1171,7 @@ a {
 							<button type="button" class="btn btn-default"
 								style="background: #aaa; color: white;" disabled='disabled'>모집완료</button>
 						</c:if>
-						<c:if test="${dto.validate!=1 || dto.enable!=1}">
+						<c:if test="${dto.validate!=1 and dto.enable!=1}">
 							<button type="button" class="btn btn-default"
 								onclick="updateEnable(${dto.friendNum});"
 								style="background: #f97509; color: white;"

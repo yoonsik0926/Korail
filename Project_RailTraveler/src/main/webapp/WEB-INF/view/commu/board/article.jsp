@@ -5,6 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
+	StringBuffer sb = request.getRequestURL();
+	String url = sb.toString();
+	String uri = request.getRequestURI();
+	String path = request.getServletPath();
 %>
 <link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
 <script src="<%=cp%>/resource/js/commu.js"></script>
@@ -55,6 +59,15 @@ function ajaxHTML(url, type, query, selector) {
 //게시글 공감 여부
 $(function(){
 	$(".btnSendBoardLike").click(function(){
+		<c:if test="${empty sessionScope.member.userId}">
+			if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?")){
+				location.href="<%=cp%>/member/login";
+				return;
+			}
+			else{
+				return;
+			}
+		</c:if>
 		var cs = document.getElementById("boardLikeIcon");
 		if( cs.className =="far fa-heart"){
 			if(! confirm("북마크 하시겠습니까 ? ")) {
@@ -167,7 +180,30 @@ function displayReplyForm(num){
 			$(test_cs).text("답글");
 		}else{
 			$(cs).css("display","block");
+			$cs.find("textarea").focus();
 			$(test_cs).text("답글취소");
+			
+		}
+};
+//_btnReply
+function displayReplyUpdateForm(num, content){
+	console.log(content);
+	var cs = ".replyUpdateForm"+num;	//수정창
+	var ct = ".replyContent"+num;	//댓글 내용
+	var $cs = $(cs);
+	var $ct = $(ct);
+	
+	var test_cs=".btnUpdateReply"+num;
+		if($(cs).is(":visible")){
+			$cs.find("textarea").val(content);
+			$(cs).css("display","none");
+			$(ct).css("display","block");
+			$(test_cs).text("수정");
+		}else{
+			$(cs).css("display","block");
+			$(ct).css("display","none");
+			$cs.find("textarea").focus();
+			$(test_cs).text("수정취소");
 			
 		}
 };
@@ -199,6 +235,30 @@ function insertReply(num,pageNo){
 	ajaxJSON(url, "post", query, fn);
 };
 
+function updateReply(boardReplyNum,pageNo){
+	var cs = ".replyUpdateForm"+boardReplyNum;
+	var $tb = $(cs);
+	var content=$tb.find("textarea").val().trim();
+	if(! content) {
+		alert("내용을 입력해주세요");
+		$tb.find("textarea").focus();
+		return false;
+	}
+	content = encodeURIComponent(content);
+	var url="<%=cp%>/board/updateReply";
+	var query="boardReplyNum="+boardReplyNum+"&content="+content+"&pageNo="+pageNo;
+	var fn = function(data){
+		var state=data.state;
+		if(state=="true") {
+			listPage(data.pageNo);
+		} else if(state=="false") {
+			alert("댓글을 수정 하지 못했습니다.");
+		}
+	};
+	
+	ajaxJSON(url, "post", query, fn);
+};
+
 //페이징 처리
 $(function(){
 	<c:if test="${not empty pageNo}">
@@ -217,8 +277,26 @@ function listPage(page) {
 	ajaxHTML(url, "get", query, selector);
 }
 	
+	
+function copy_trackback() {
+	var trb = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/board/article?boardNum=${dto.boardNum }";
+	var browse = navigator.userAgent.toLowerCase(); 
+    
+    if( (navigator.appName == 'Netscape' && browse.indexOf('trident') != -1) || (browse.indexOf("msie") != -1)) {
+    	if(confirm("이 글의 트랙백 주소를 클립보드에 복사하시겠습니까?")){
+			window.clipboardData.setData("Text", trb);
+    		alert("복사완료!");
+    	}
+    }else{
+    	temp = prompt("이 글의 트랙백 주소입니다. Ctrl+C를 눌러 클립보드로 복사하세요", trb);
+    }
+}	
+
 </script>
 <style type="text/css">
+::-webkit-scrollbar {
+	display:none;
+}
 tfoot td {
 	padding: 6px 10px;
 }
@@ -730,7 +808,7 @@ a {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 동행 구하기</span>
+			<span style="padding: 10px 0px; display: block;">자유게시판</span>
 		</h3>
 	</div>
 
@@ -767,9 +845,7 @@ a {
 									<td><span class="b m-tcol-c" style="font-weight: 900;">${dto.subject}</span></td>
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
 									<td nowrap="" class="m-tcol-c"><a
-										href="https://cafe.naver.com/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay="
-										onclick="targetChangeForMacSafari('/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay=');return false;"
-										class="m-tcol-c">동행구하기 게시판</a></td>
+										href="<%=cp%>/board/board?${query}">자유게시판</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -781,14 +857,14 @@ a {
 									<td></td>
 									<td class="m-tcol-c date">${dto.created}</td>
 <c:if test="${dto.userId ==sessionScope.member.userId}">
-									<td nowrap="" class="m-tcol-c filter-30">|</td>
+									<td class="m-tcol-c filter-30">|</td>
 
-									<td class="edit _rosRestrict" onclick="updateBoard();"><a
+									<td class="" onclick="updateBoard();"><a
 										id="modifyFormLink" href="#" class="m-tcol-c">수정</a></td>
 </c:if>
 <c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
-									<td class="delete _rosRestrict" onclick="deleteBoard();"><a
+									<td class="" onclick="deleteBoard();"><a
 										href="javascript:checkLogin('delete');" class="m-tcol-c">삭제</a></td>
 									</c:if>	
 								</tr>
@@ -800,18 +876,17 @@ a {
 				<div class="board-box-line-dashed"></div>
 				<div class="etc-box">
 					<div class="fl">
-						<table role="presentation">
+						<table>
 							<tbody>
 								<tr>
 									<td class="m-tcol-c b nick">
-										<table role="presentation" cellspacing="0">
+										<table>
 											<tbody>
 												<tr>
 													<td class="pc2w"><img alt=""
 														src="<%=cp%>/resource/images/commu/profileImg.png"
 														width="30"></td>
-													<td class="p-nick"><a href="#" class="m-tcol-c b"
-														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}
+													<td class="p-nick"><a href="#">${dto.userName}
 														
 														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)</a></td>
 												</tr>
@@ -839,18 +914,19 @@ a {
 							<tbody>
 								<tr>
 									<td valign="top" class="url" align="right"><span
-										class="filter-50"><a id="linkUrl"
-											href="https://cafe.naver.com/ite/653777" target="_top"
-											class="m-tcol-c url-txt">https://cafe.naver.com/ite/653777</a></span>
+										class="filter-50"><a
+											href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/board/article?boardNum=${dto.boardNum }" target="_top"
+											class="m-tcol-c url-txt"><%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/board/article?boardNum=${dto.boardNum }</a></span>
+											
 										<span><a href="#" onclick="return false;"
 											class="_copyUrl url-btn" data-clipboard-action="copy"
 											data-clipboard-target="#linkUrl"><img
 												src="https://cafe.pstatic.net/cafe4/btn-copy-add.gif"
-												width="41" height="15" alt="주소복사" class="copy"></a></span></td>
-								</tr>
-								<tr>
-									<td id="sendPost_653777" class="m-tcol-c" align="right"></td>
-								</tr>
+												width="41" height="15" alt="주소복사" class="copy" onclick="copy_trackback(); return false;"
+></a></span>
+												
+												</td></tr>
+								
 							</tbody>
 						</table>
 					</div>
@@ -889,10 +965,12 @@ a {
 									</a></td>
 									<td class="m-tcol-c filter-30">|</td>
 									<td class="_sortList" style="padding: 0;">
-										<div style="position: relative; _top: 3px;">
-											<a href="#" class="b m-tcol-c"><span>등록순</span><span
+										<div style="position: relative; top: -3px;">
+<!-- 											<a href="#" class="b m-tcol-c"> -->
+											<span>등록순</span><span
 												style="display: none">최신순</span><i class="fas fa-caret-down"
-												style="margin: 5px;"></i> </a>
+												style="margin: 5px;"></i> 
+<!-- 												</a> -->
 										</div>
 									</td>
 									<td class="m-tcol-c filter-30">|</td>
@@ -902,7 +980,9 @@ a {
 
 									<td class="m-tcol-c filter-30">|</td>
 									<td id=><a href="#"
-										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="    color: tomato">좋아요<i
+										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="top: -3px;
+    color: tomato;
+    position: relative;">좋아요<i
 											class="fas fa-caret-down" style="margin: 5px;"></i></a>
 										<div class="u_likeit_list_module _reactionModule"
 											style="visibility: visible;">

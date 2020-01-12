@@ -30,6 +30,7 @@ public interface FriendService {
 	
 	
 	public void insertFriendReply(FriendReply dto) throws Exception;
+	public void updateFriendReply(FriendReply dto) throws Exception;
 	public int replyCount(Map<String, Object> map) throws Exception;
 	public List<FriendReply> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;

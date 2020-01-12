@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.FileManager;
 import com.railer.rt.common.MyUtil;
+import com.railer.rt.commu.board.BoardReply;
 import com.railer.rt.member.SessionInfo;
 //import com.sp.customer.notice.Notice;
 
@@ -175,7 +176,7 @@ public class FriendController {
 	}
 
 	@RequestMapping(value = "/friend/article", method = RequestMethod.GET)
-	public String article(@RequestParam int friendNum, @RequestParam String page,
+	public String article(@RequestParam int friendNum, @RequestParam(value="page", defaultValue="1") int page,
 			@RequestParam(defaultValue = "all") String condition, @RequestParam(defaultValue = "") String keyword,
 			@CookieValue(defaultValue = "0") int cnum, HttpServletResponse resp, Model model, HttpSession session) throws Exception {
 
@@ -399,23 +400,79 @@ public class FriendController {
 		@ResponseBody
 		public Map<String, Object> insertReply(
 				FriendReply dto,
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
 				HttpSession session
 				) {
 			SessionInfo info=(SessionInfo)session.getAttribute("member");
 			String state="true";
+			int rows=5;
+			int total_page=0;
+			int dataCount=0;
 			
 			try {
+				
 				dto.setUserId(info.getUserId());
 				service.insertFriendReply(dto);
+				
+				Map<String, Object> map=new HashMap<>();
+				map.put("friendNum", dto.getFriendNum());
+				 
+				dataCount=service.replyCount(map);
+				total_page = util.pageCount(rows, dataCount);
+				if(current_page>total_page)
+					current_page=total_page;
+				
 			} catch (Exception e) { 
 				state="false";
 			} 
 			   
 			Map<String, Object> model = new HashMap<>();
 			model.put("state", state);
+			model.put("total_page", total_page);
+			model.put("pageNo", current_page);
 			return model;
 		} 
 		 
+
+		// 댓글 및 댓글의 답글 등록 : AJAX-JSON
+		@RequestMapping(value="/friend/updateReply", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> updateReply(
+				FriendReply dto, 
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				HttpSession session
+				) {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String state="true";
+
+			int rows=5;
+			int total_page=0;
+			int dataCount=0;
+			
+			try {
+				
+				dto.setUserId(info.getUserId());
+				service.updateFriendReply(dto);
+				
+				Map<String, Object> map=new HashMap<>();
+				map.put("friendNum", dto.getFriendNum());
+				 
+				dataCount=service.replyCount(map);
+				total_page = util.pageCount(rows, dataCount);
+				if(current_page>total_page)
+					current_page=total_page;
+				
+			} catch (Exception e) { 
+				state="false";
+			} 
+			   
+			Map<String, Object> model = new HashMap<>();
+			model.put("state", state);
+			model.put("total_page", total_page);
+			model.put("pageNo", current_page);
+			return model;
+		} 	
+		
 		// 댓글 및 댓글의 답글 삭제 : AJAX-JSON
 		@RequestMapping(value="/friend/deleteReply", method=RequestMethod.POST)
 		@ResponseBody

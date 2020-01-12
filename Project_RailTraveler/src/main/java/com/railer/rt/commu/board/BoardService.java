@@ -29,6 +29,7 @@ public interface BoardService {
 	
 	
 	public void insertBoardReply(BoardReply dto) throws Exception;
+	public void updateBoardReply(BoardReply dto) throws Exception;
 	public int replyCount(Map<String, Object> map) throws Exception;
 	public List<BoardReply> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;

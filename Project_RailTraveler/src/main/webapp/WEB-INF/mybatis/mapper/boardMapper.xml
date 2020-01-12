@@ -256,6 +256,11 @@
 			</if>
 	</insert>
 	
+	<!-- 댓글 대댓글 내용 수정  -->
+	<update id="updateReply" parameterType="com.railer.rt.commu.board.BoardReply">
+		update BoardReply set content=#{content} WHERE boardReplyNum=#{boardReplyNum}
+	</update>
+	
 	<!--게시물의 댓글수를 반환
 	parameter Type : Integer
 	return type : Integer-->

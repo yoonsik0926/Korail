@@ -273,6 +273,18 @@ public class BoardServiceImpl implements BoardService {
 			throw e;
 		}
 	}
+	/**
+	 * 댓글 수정
+	 */
+	@Override
+	public void updateBoardReply(BoardReply dto) throws Exception {
+		try {
+			dao.updateData("board.updateReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
 	@Override
 	public void deleteReply(Map<String, Object> map) throws Exception{

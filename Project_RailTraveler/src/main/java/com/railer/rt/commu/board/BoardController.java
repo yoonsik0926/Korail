@@ -170,7 +170,7 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/board/article", method = RequestMethod.GET)
-	public String article(@RequestParam int boardNum, @RequestParam String page,
+	public String article(@RequestParam int boardNum, @RequestParam(defaultValue = "1") String page,
 			@RequestParam(defaultValue = "all") String condition, @RequestParam(defaultValue = "") String keyword,
 			@CookieValue(defaultValue = "0") int cnum, HttpServletResponse resp, Model model, HttpSession session) throws Exception {
  
@@ -335,6 +335,46 @@ public class BoardController {
 				return model;
 			} 
 			 
+			
+			// 댓글 및 댓글의 답글 등록 : AJAX-JSON
+			@RequestMapping(value="/board/updateReply", method=RequestMethod.POST)
+			@ResponseBody
+			public Map<String, Object> updateReply(
+					BoardReply dto, 
+					@RequestParam(value="pageNo", defaultValue="1") int current_page,
+					HttpSession session
+					) {
+				SessionInfo info=(SessionInfo)session.getAttribute("member");
+				String state="true";
+
+				int rows=5;
+				int total_page=0;
+				int dataCount=0;
+				
+				try {
+					
+					dto.setUserId(info.getUserId());
+					service.updateBoardReply(dto);
+					
+					Map<String, Object> map=new HashMap<>();
+					map.put("boardNum", dto.getBoardNum());
+					 
+					dataCount=service.replyCount(map);
+					total_page = util.pageCount(rows, dataCount);
+					if(current_page>total_page)
+						current_page=total_page;
+					
+				} catch (Exception e) { 
+					state="false";
+				} 
+				   
+				Map<String, Object> model = new HashMap<>();
+				model.put("state", state);
+				model.put("total_page", total_page);
+				model.put("pageNo", current_page);
+				return model;
+			} 						
+						
 			// 댓글 및 댓글의 답글 삭제 : AJAX-JSON
 			@RequestMapping(value="/board/deleteReply", method=RequestMethod.POST)
 			@ResponseBody

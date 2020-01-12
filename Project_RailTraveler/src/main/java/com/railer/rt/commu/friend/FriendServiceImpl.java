@@ -283,7 +283,19 @@ public class FriendServiceImpl implements FriendService {
 			throw e;
 		}
 	}
-
+	/**
+	 * 댓글 등록
+	 */
+	@Override
+	public void updateFriendReply(FriendReply dto) throws Exception {
+		try {
+			dao.updateData("friend.updateReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 	@Override
 	public void deleteReply(Map<String, Object> map) throws Exception{
 		try {

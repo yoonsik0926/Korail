@@ -6,7 +6,8 @@
 <%
 	String cp = request.getContextPath();
 %>
-
+<link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
+<script src="<%=cp%>/resource/js/commu.js"></script>
 <meta property="og:url"
 	content="http://172.16.100.193:8080/Project_RailTraveler/notice/article?page=1&noticeNum=52" />
 <meta property="og:type" content="website" />
@@ -290,7 +291,7 @@ a#MOVE_TOP_BTN {
 									<td nowrap="" class="m-tcol-c"><a
 										href="https://cafe.naver.com/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay="
 										onclick="targetChangeForMacSafari('/ArticleList.nhn?search.clubid=11672934&amp;search.menuid=3&amp;search.boardtype=L&amp;userDisplay=');return false;"
-										class="m-tcol-c">동행구하기 게시판</a></td>
+										class="m-tcol-c">공지게시판</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -304,13 +305,13 @@ a#MOVE_TOP_BTN {
 <c:if test="${dto.userId ==sessionScope.member.userId}">
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
 
-									<td class="edit _rosRestrict" onclick="updateBoard();"><a
+									<td class="edit _rosRestrict" onclick="updateNotice();"><a
 										id="modifyFormLink" href="#" class="m-tcol-c">수정</a></td>
 </c:if>
 <c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 									<td nowrap="" class="m-tcol-c filter-30">|</td>
-									<td class="delete _rosRestrict" onclick="deleteBoard();"><a
-										href="javascript:checkLogin('delete');" class="m-tcol-c">삭제</a></td>
+									<td class="delete _rosRestrict" onclick="deleteNotice();"><a
+										 class="m-tcol-c">삭제</a></td>
 									</c:if>	
 								</tr>
 							</tbody>
@@ -360,15 +361,18 @@ a#MOVE_TOP_BTN {
 							<tbody>
 								<tr>
 									<td valign="top" class="url" align="right"><span
-										class="filter-50"><a id="linkUrl"
-											href="https://cafe.naver.com/ite/653777" target="_top"
-											class="m-tcol-c url-txt">https://cafe.naver.com/ite/653777</a></span>
+										class="filter-50"><a
+											href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/notice/article?friendNum=${dto.noticeNum }" target="_top"
+											class="m-tcol-c url-txt"><%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/notice/article?friendNum=${dto.noticeNum }</a></span>
+											
 										<span><a href="#" onclick="return false;"
 											class="_copyUrl url-btn" data-clipboard-action="copy"
 											data-clipboard-target="#linkUrl"><img
 												src="https://cafe.pstatic.net/cafe4/btn-copy-add.gif"
-												width="41" height="15" alt="주소복사" class="copy"></a></span></td>
-								</tr>
+												width="41" height="15" alt="주소복사" class="copy" onclick="copy_trackback(); return false;"
+></a></span>
+												
+												</td></tr>
 								<tr>
 									<td id="sendPost_653777" class="m-tcol-c" align="right"></td>
 								</tr>
@@ -446,12 +450,12 @@ a#MOVE_TOP_BTN {
 				<td align="right">
 					<c:if test="${dto.userId ==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="updateBoard();">수정</button> </c:if>
+						onclick="updateNotice();">수정</button> </c:if>
 					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-						onclick="deleteBoard();">삭제</button></c:if>
+						onclick="deleteNotice();">삭제</button></c:if>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+							onclick="javascript:location.href='<%=cp%>/notice/notice?${query}';">
 							목록</button>
 					</td>
 			</tr>
@@ -472,9 +476,9 @@ a#MOVE_TOP_BTN {
 				</tr>
 				<c:forEach var="notice" items="${noticeList}">
 					<tr
-						${dto.boardNum== notice.boardNum? "style='background
+						${dto.noticeNum== notice.noticeNum? "style='background
 					:#f1f4ff'":""}
-						onclick="javascript:location.href='<%=cp%>/board/article?${query}&boardNum=${notice.boardNum}'">
+						onclick="javascript:location.href='<%=cp%>/notice/article?${query}&noticeNum=${notice.noticeNum}'">
 						<td colspan="2" style="text-align: left; padding-left: 20px;"><i
 							class="fas fa-caret-right"></i> ${notice.subject}</td>
 						<td width="170" style="text-align: right; padding-right: 13px;"><i>${notice.created}</i></td>
@@ -487,13 +491,13 @@ a#MOVE_TOP_BTN {
 				<tr height="45">
 					<td width="300" align="left">
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/board/board?${query}';">
+							onclick="javascript:location.href='<%=cp%>/notice/notice?${query}';">
 							목록</button>
 					</td>
 
 					<td align="right">
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/board/created';"
+							onclick="javascript:location.href='<%=cp%>/notice/created';"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> 글쓰기

@@ -265,7 +265,10 @@
 			VALUES (FRIENDREPLY_SEQ.NEXTVAL, #{userId}, #{friendNum}, #{content}, #{answer, jdbcType=INTEGER}, #{secret})
 			</if>
 	</insert>
-	
+	<!-- 댓글 대댓글 내용 수정  -->
+	<update id="updateReply" parameterType="com.railer.rt.commu.friend.FriendReply">
+		update FriendReply set content=#{content} WHERE friendReplyNum=#{friendReplyNum}
+	</update>
 	<!--게시물의 댓글수를 반환
 	parameter Type : Integer
 	return type : Integer-->

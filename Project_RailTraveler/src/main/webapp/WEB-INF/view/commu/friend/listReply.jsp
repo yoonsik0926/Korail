@@ -75,19 +75,21 @@
 									<span class="dsc_comm"><a
 										class="m-tcol-c btnReReply${vo.friendReplyNum}" style="cursor: pointer;    font-size: 10px;" onclick="displayReplyForm(${vo.friendReplyNum});">답글</a></span>
 										</c:if>
-										<c:if test="${vo.userId ==sessionScope.member.userId}">	
-									<p class="btn_edit m-tcol-c">
-										<a href="#" class="filter-70 m-tcol-c _btnEdit" style="color: #999;
+										<p class="btn_edit m-tcol-c">
+						<c:if test="${vo.userId ==sessionScope.member.userId}">
+										<a class="filter-70 m-tcol-c _btnEdit btnUpdateReply${vo.friendReplyNum}" style="color: #999;
     cursor: pointer;
-    font-size: 11px;">수정</a><span
-											class="filter-30 m-tcol-c" style="">|</span><a href="#"
-											class="filter-70 m-tcol-c _btnDelete ${vo.answer==0? 'deleteReply':'deleteReplyAnswer'}" 
+    font-size: 11px;" onclick="displayReplyUpdateForm(${vo.friendReplyNum},'${vo.content}');">수정</a><span
+											class="filter-30 m-tcol-c" style="">|</span></c:if>
+											<c:if
+							test="${vo.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
+											<a href="#"
+											class="filter-70 m-tcol-c _btnDelete deleteReply" 
 											data-replyNum = "${vo.friendReplyNum}"
 											data-pageNo="${pageNo}" style="color: #999;
     cursor: pointer;
-    font-size: 11px;">삭제</a>
+    font-size: 11px;">삭제</a></c:if>
 									</p>
-									</c:if>
 									<c:if test="${vo.userId !=sessionScope.member.userId and 'admin'!=sessionScope.member.userId}">
 									<p class="btn_edit m-tcol-c">
 									<a><span style="cursor: pointer;color: #999;
@@ -97,9 +99,22 @@
 									<div class="cb"></div>
 								</div>
 								<p class="comm m-tcol-c" style="padding-left: 27px;">
-									<span class="comm_body" style="color: #999;
-    font-size: 14px;">${vo.content}</span>
-								</p>
+						<span class="comm_body replyContent${vo.friendReplyNum}" style="color: #999; font-size: 14px;">${vo.content}</span>
+					<span class="replyUpdateForm${vo.friendReplyNum}" style="display: none;">
+						<textarea class='boxTA'
+							style='width: 92%; height: 100px; float: left; resize: none; -ms-overflow-style: none;'
+							 ${empty sessionScope.member.userId?'placeholder="로그인이 필요한 서비스 입니다.&#13;&#10;클릭시 로그인 창으로 이동합니다."':'placeholder="모두가 함께 만들어 가는 깨끗한 공간입니다. &#13;&#10;훈훈한 댓글 부탁드립니다^^"' }>${vo.content}</textarea>
+						<span
+							style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
+
+							<button type='button' class='btn btn-default'
+								data-num='${vo.friendReplyNum}' data-page="${pageNo}"
+								style='width: 100%; height: 70px; padding: 2px 1px;'
+								onclick="updateReply(${vo.friendReplyNum},${pageNo});">수정</button>
+
+						</span>
+					</span>
+					</p>
 							</div>
 							</c:otherwise>
 						</c:choose>
@@ -119,14 +134,14 @@
 							<tr>
 						<td><textarea
 								class='boxTA'
-								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;'></textarea>
+								style='width: 92%; height: 100px; float: left; resize: none; overflow-y: scroll;' ${empty sessionScope.member.userId?'placeholder="로그인이 필요한 서비스 입니다.&#13;&#10;클릭시 로그인 창으로 이동합니다."':'placeholder="모두가 함께 만들어 가는 깨끗한 공간입니다. &#13;&#10;훈훈한 댓글 부탁드립니다^^"' }></textarea>
 							<div
 								style='padding: 0 10px; width: 8%; height: 50px; float: left; font-size: 15px;'>
 								<input type="checkbox" id="inputCK${vo.friendReplyNum}" name="secret" value="0"><label
 									style="margin: 0 0 0px 3px;">비밀글</label>
 								<button type='button' class='btn btn-default'
 									data-num='${vo.friendReplyNum}'
-									style='width: 100%; height: 80px; padding: 2px 1px;'  onclick="insertReply(${vo.friendReplyNum});">등록</button>
+									style='width: 100%; height: 80px; padding: 2px 1px;'  onclick="insertReply(${vo.friendReplyNum},${pageNo});">등록</button>
 
 							</div></td>
 					</tr>
@@ -140,37 +155,34 @@
 					</ul>
 					<div style="clear: both; height: 0pt; font: 0pt/0pt arial;"></div>
 					<div style="" class="cc_paginate cmt"
-						id="cmt_paginate">${paging }</div>
+						id="cmt_paginate">${paging}</div>
 						
 						
 <script>
-//댓글 삭제
+//댓글 및 답글 삭제
 $(function(){
-	$("body").on("click", ".deleteReply", function(){
-		if(! confirm("게시물을 삭제하시겠습니까 ? ")) {
-		    return false;
-		}
+// 	$("body").off().on("click", ".deleteReply", function(){
+// 		if(! confirm("댓글게시물을 삭제하시겠습니까 ? ")) {
+// 		    return false;
+// 		}
 		
-		var replyNum=$(this).attr("data-replyNum");
-		var page=$(this).attr("data-pageNo");
+// 		var replyNum=$(this).attr("data-replyNum");
+// 		var page=$(this).attr("data-pageNo");
 		
-		var url="<%=cp%>/friend/deleteReply";
-		var query="friendReplyNum="+replyNum+"&mode=reply";
+<%-- 		var url="<%=cp%>/board/deleteReply"; --%>
+// 		var query="boardReplyNum="+replyNum+"&mode=reply&pageNo="+page;
+// 		console.log(query);
+// 		var fn = function(data){
+// 			alert("삭제완료!");
+// 			listPage(page);
+// 		};
 		
-		var fn = function(data){
-			// var state=data.state;
-			alert("삭제완료!");
-			listPage(page);
-		};
-		
-		ajaxJSON(url, "post", query, fn);
-	});
-});		                              
+// 		ajaxJSON(url, "post", query, fn);
+// 	});
 
 //댓글별 답글 삭제
-$(function(){
-	$("body").on("click", ".deleteReplyAnswer", function(){
-		if(! confirm("게시물을 삭제하시겠습니까 ? "))
+	$("body").off().on("click", ".deleteReply", function(){
+		if(! confirm("댓글게시물을 삭제하시겠습니까 ? "))
 		    return;
 		
 		var replyNum=$(this).attr("data-replyNum");
@@ -179,13 +191,17 @@ $(function(){
 		
 		var url="<%=cp%>/friend/deleteReply";
 		var query="friendReplyNum="+replyNum+"&mode=answer&pageNo="+pageNo;
-		
 		var fn = function(data){
-			listPage(data.pageNo);
+			listPage(pageNo);
 		};
 		
 		ajaxJSON(url, "post", query, fn);
 	});
 });
-						
+		
+$('textarea').click(function(){
+	<c:if test="${empty sessionScope.member.userId}">
+			location.href="<%=cp%>/member/login";
+	</c:if>
+});				
 </script>
