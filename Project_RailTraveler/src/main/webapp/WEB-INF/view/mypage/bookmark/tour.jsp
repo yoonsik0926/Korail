@@ -117,6 +117,7 @@ $(function(){
 		var fn = function(data){
 			//var state=data.state;
 			tourlistPage(page);
+			location.reload();
 		};
 		
 		ajaxJSON(url, "post", query, fn);
