@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qna">
+<!-- qna테이블 - qna게시판 -->
+
+	<!--현재 시퀀스 번호를 가져오는 쿼리 
+	return type : 정수형-->
+	<select id="seq" resultType="Integer">
+		SELECT qna_seq.nextval FROM dual
+	</select>
+	
+	<!-- qna 게시물을 insert
+	parameter Type : QnaDTO-->
+	<insert id="insertQna" parameterType="com.railer.rt.commu.qna.Qna">
+		INSERT INTO qna(qnaNum, userId, subject, content, answer, category)
+		VALUES(#{qnaNum}, #{userId}, #{subject}, #{content}, #{answer, jdbcType=INTEGER},#{category})
+	</insert>
+	
+	<!--qna 첨부파일을 insert
+	parameter Type : Qna DTO-->
+	<insert id="insertQnaFile" parameterType="com.railer.rt.commu.qna.Qna">
+        INSERT INTO qnaFile(qnaFileNum, qnaNum, saveFilename,originalFilename,fileSize)
+        VALUES(QNAF_SEQ.nextval, #{qnaNum},#{saveFilename},#{originalFilename},#{fileSize})
+	</insert>
+	
+	<!--검색 기능에 관련 된 where 조건에 관련된 sql
+	전체 / 내용 / 날짜 / 작성일 / 제목 / 작성자-->
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='all'">	
+				(INSTR(subject,#{keyword}) &gt; 0
+				OR
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition=='content'">
+				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
+			</when>
+			<when test="condition=='created'">
+				(TO_CHAR(f.created, 'YYYY-MM-DD'))=#{keyword}
+			</when>
+			<otherwise>
+				INSTR(${condition},#{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!--공지사항 리스트를 가져오는 쿼리 
+	parameter Type : 없음
+	return type : Qna dto-->
+	<select id="listQnaTop" resultType="com.railer.rt.commu.qna.Qna">
+       SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         and f.userId='admin'
+         and deleteId is null
+      </where>
+      ORDER BY f.qnaNum DESC
+   </select>
+   
+	
+	<!--동행게시판 게시물 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM qna f
+		JOIN member2 m2 ON f.userId=m2.userId 
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				<include refid="where-list" />
+			</if>
+			<if test="category!='all'">
+            and category=#{category}
+         	</if>
+<!-- 			and deleteId is null -->
+		</where>
+	</select>
+	
+	<!--해당 범위 안의 동행게시판 게시물을 가져오는, 해당 페이지의 동행게시판 게시물 리스트
+	parameter Type : map
+	result Type : Qna DTO-->
+	<select id="listQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
+      SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, deleteId, answer, f.enable, category,
+            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
+         GROUP BY qnaNum
+      ) ff On f.qnaNum=ff.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
+         GROUP BY qnaNum
+      ) r On f.qnaNum=r.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
+         GROUP BY qnaNum
+      ) fb On f.qnaNum=fb.qnaNum
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         <if test="category!='all'">
+            and category=#{category}
+         </if>
+         and f.userid!='admin'
+      </where>
+      ORDER BY f.qnaNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+   </select>
+	
+	<!--동행구하기 게시물 정보를 가져오기
+	parameter Type : 정수
+	result Type : Qna DTO-->
+	<select id="readQna" parameterType="map"  resultType="com.railer.rt.commu.qna.Qna">
+		SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, answer, f.enable, category,
+		 NVL(fileCount,0) fileCount
+            ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
+         GROUP BY qnaNum
+      ) ff On f.qnaNum=ff.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
+         GROUP BY qnaNum
+      ) r On f.qnaNum=r.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
+         GROUP BY qnaNum
+      ) fb On f.qnaNum=fb.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, userid, COUNT(*) myBookMark FROM qnaBookMark
+         where userid=#{userId} and qnaNum=#{qnaNum} group by qnaNum, userid
+      ) fb1 On f.qnaNum=fb1.qnaNum
+      	WHERE f.qnaNum=#{qnaNum}
+	</select>
+	
+	<!--공지사항 해당 게시물에 대한 파일 리스트 정보 가져오기
+	parameter Type : 정수
+	result Type : Qna DTO (uploads)-->
+	<select id="listFile" parameterType="Integer" resultType="com.railer.rt.commu.qna.Qna">
+   	SELECT qnaFileNum, qnaNum, saveFilename, originalFilename, fileSize
+   	FROM qnaFile
+   	WHERE qnaNum=#{qnaNum}
+   </select>
+	
+	<!-- 해당 게시물에 대한 이전글 정보 가져오기
+	parameter Type : map
+	result Type : Qna DTO-->
+	<select id="preReadQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
+      SELECT qnaNum, subject,f.created 
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         <if test="category!='all'">
+            and category=#{category}
+         </if>
+         AND (qnaNum &gt; #{qnaNum})
+         AND f.userId !='admin'
+         AND deleteId is null
+      </where>
+      ORDER BY qnaNum ASC
+      FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!--해당 게시물에 대한 다음글 정보 가져오기
+	parameter Type : map
+	result Type : Qna DTO-->
+	<select id="nextReadQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
+      SELECT qnaNum, subject,f.created 
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         <if test="category!='all'">
+            and category=#{category}
+         </if>
+         AND (qnaNum &lt; #{qnaNum})
+         AND f.userId !='admin'
+         AND deleteId is null
+      </where>
+      ORDER BY qnaNum DESC
+      FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!--해당 공지사항의 조회수 증가
+	parameter Type : 공지사항번호-->
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE qna SET
+			hitCount=hitCount+1
+		WHERE qnaNum=#{qnaNum}
+	</update>
+	
+	<!--해당 공지사항 파일에 대한 상세정보
+	parameter Type : 공지사항 파일번호
+	result Type : Qna DTO-->
+	<select id="readFile" parameterType="Integer" resultType="com.railer.rt.commu.qna.Qna">
+   	SELECT qnaFileNum, qnaNum, saveFilename, originalFilename, fileSize
+   	FROM qnaFile
+   	WHERE qnaFileNum=#{qnaFileNum}
+   </select>
+   
+   <!--공지사항 제목, 내용 수정
+	parameter Type : map
+	result Type : Notice DTO-->
+	<update id="updateQna" parameterType="com.railer.rt.commu.qna.Qna">
+		UPDATE Qna SET subject=#{subject},content=#{content},category=#{category}
+		WHERE qnaNum=#{qnaNum}
+	</update>
+	
+	<!--공지사항 삭제
+	parameter Type : 정수
+	result Type : Notice DTO-->
+	<update id="deleteQna" parameterType="map">
+		update qna set deleteID=#{userId} WHERE qnaNum=#{qnaNum}
+	</update>
+	
+	<!--동행게시판 게시물의 파일 삭제 (게시물 수정)
+	parameter Type : map-->
+	<delete id="deleteFile" parameterType="map">
+		DELETE FROM qnaFile WHERE ${field}=#{num}
+	</delete>
+
+	<!-- 동행게시판 게시물을 insert
+	parameter Type : QnaDTO-->
+	<insert id="insertQnaBookmark" parameterType="map">
+		INSERT INTO qnaBookmark(qnaNum, userId)
+		VALUES(#{qnaNum}, #{userId})
+	</insert>
+	
+	<!-- 동행게시판 게시물을 delete
+	parameter Type : QnaDTO-->
+	<delete id="deleteQnaBookmark" parameterType="map">
+		DELETE FROM qnaBookmark
+		WHERE qnaNum=#{qnaNum} and userId=#{userId}
+	</delete>
+	
+	<!--게시물의 북마크 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="bookmarkCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM qnaBookmark
+		where qnaNum = #{qnaNum}
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertReply" parameterType="com.railer.rt.commu.qna.QnaReply">
+		INSERT INTO QnaREPLY(qnaReplyNum, userId, qnaNum, content)
+			VALUES (QNAREPLY_SEQ.NEXTVAL, #{userId}, #{qnaNum}, #{content})
+	</insert>
+	
+	<!-- 댓글 대댓글 내용 수정  -->
+	<update id="updateReply" parameterType="com.railer.rt.commu.qna.QnaReply">
+		update QnaReply set content=#{content} WHERE qnaReplyNum=#{qnaReplyNum}
+	</update>
+	
+	<!--게시물의 댓글수를 반환
+	parameter Type : Integer
+	return type : Integer-->
+	<select id="replyCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM QnaREPLY
+		where qnaNum = #{qnaNum}
+	</select>
+	
+	<!-- 댓글 리스트 -->
+	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.qna.QnaReply">
+select qnaReplyNum, fr.userId, userName, qnaNum, content, fr.created, deleteId
+from qnaReply fr
+	JOIN MEMBER2 m2 on m2.userId = fr.userId
+	WHERE fr.qnaNum=#{qnaNum}
+   	ORDER BY qnaReplyNum DESC
+ 	OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+	
+	<!-- 업데이트. 댓글 및 답글 삭제 -->
+	<update id="deleteReply" parameterType="map">
+		update QnaReply set deleteID=#{userId} WHERE qnaReplyNum=#{qnaReplyNum}
+	</update>
+	
+	<!-- 진짜. 댓글 및 답글 삭제 -->
+	<delete id="deleteReply2" parameterType="map">
+		DELETE FROM QnaReply WHERE 
+		<if test="mode=='reply' ">
+			qnaReplyNum IN (
+				SELECT qnaReplyNum FROM QnaReply
+					START WITH qnaReplyNum=#{qnaReplyNum}
+					CONNECT BY PRIOR qnaReplyNum = answer         
+			)
+		</if>
+		<if test="mode=='answer' ">
+			qnaReplyNum = #{qnaReplyNum}
+		</if>
+	</delete>
+</mapper>
