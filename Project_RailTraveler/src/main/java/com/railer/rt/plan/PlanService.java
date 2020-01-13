@@ -8,6 +8,4 @@ public interface PlanService {
 	public int dataCount(Map<String, Object> map);
 	public List<Tour> listCategory(Map<String, Object> map);
 	public void insertPlan(Map<String, Object> map) throws Exception;
-	public void insertDetailPlan(Map<String, Object> map) throws Exception;
-	public void insertMoreDetailPlan(Map<String, Object> map) throws Exception;
 }

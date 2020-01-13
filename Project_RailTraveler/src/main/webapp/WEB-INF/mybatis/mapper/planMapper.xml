@@ -48,19 +48,19 @@
 	</select>
 	
 	<!-- 몇일차 여행인지 추가하기 -->
-	<insert id="insertTicketDay" parameterType="map">
+	<insert id="insertPlan" parameterType="map">
 		INSERT INTO plan(planNum, userId, ticketDay, sDate)
 			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
-	<insert id="insertPlans" parameterType="map">
+	<insert id="insertDetailPlan" parameterType="map">
 		INSERT INTO detailPlan(detailPlanNum, planNum, staNum, nthDay)
 			VALUES(#{detailPlanNum}, #{planNum}, #{staNum}, #{nthDay})
 	</insert>
 	
 	<!-- 세부계획 내용 저장하기  -->
-	<insert id="insertDetailPlan" parameterType="map">
+	<insert id="insertMoreDetailPlan" parameterType="map">
 		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
 			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel},#{address},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR},#{memo},#{sTime},#{eTime},#{price})
 	</insert>

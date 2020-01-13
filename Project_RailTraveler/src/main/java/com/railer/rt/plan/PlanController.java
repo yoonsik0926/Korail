@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,42 +82,25 @@ public class PlanController {
 	// 세부계획 DB에 추가
 	@RequestMapping(value="/plan/insertTicketDay", method=RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> insertTicketDay(Plan dto,
+	public Map<String, Object> insertTicketDay(
 											   @RequestParam String days,
+											   @RequestParam String sDate,
 											   HttpSession session,
 											   HttpServletRequest request) {
 		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		int ticketDay=dto.getTicketDay();
-		String sDate=dto.getsDate();
-		int nthDay=dto.getNthDay();
-		
-//		System.out.println(days);
-		
-		JSONArray jarr=new JSONArray(days);
-		for(int i=0; i< jarr.length(); i++) {
-			JSONArray jarr2=new JSONArray(jarr.get(i).toString());
-			if(jarr2.length()==0) continue;
-	
-			JSONObject job=jarr2.getJSONObject(0);
-			System.out.println(job.get("staNum"));
-		}
 
 		Map<String, Object> map=new HashMap<>();
+		map.put("userId", info.getUserId());
+		map.put("days",days);
+		map.put("sDate",sDate);
+		
 		try {
-			dto.setUserId(info.getUserId());
 			service.insertPlan(map);
-			service.insertDetailPlan(map);
-			service.insertMoreDetailPlan(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		
-		
-		map.put("nthDay", nthDay);
-		map.put("ticketDay", ticketDay);
-		map.put("sDate", sDate);
 		return map;
 	}
 	

@@ -615,7 +615,7 @@ function getNumber(day) {
 		    	
 		    	ui.item.parent().find("li").each(function(index){
 // 		    		var orindex = $(this).attr("data-index");
-		    		var oriStaNum = $(this).attr("data-staNum");
+		    		oriStaNum = $(this).attr("data-staNum");
 		    		var oob={oriStaNum:oriStaNum};
 		    		temp[day-1].push(oob);
 		    		temp[day-1][index].detailList = new Array();
@@ -623,18 +623,19 @@ function getNumber(day) {
 		    		temp[day-1][index].detailList = days[day-1][startIndex].detailList.slice();
 		    		
 		    		$(this).attr("data-index",index);
-		    		$(this).attr("data-staNum",startIndex);
-		    		
+		    		$(this).attr("data-staNum",oriStaNum);
 		    	});
 		    	days.length=0;
-		    	days=temp.slice();
+		    	days=JSON.parse(JSON.stringify(temp));
+				console.log(days);
 		    }
 		});
 		
 		$(".planListDetail"+i).droppable({
 			out: function(event, ui){
-				ab=days[day-1].splice(startIndex);
+				ab=days.splice(startIndex);
 				console.log(ab);
+				console.log
 			}
 		});
 		
@@ -676,28 +677,17 @@ function ajaxJSON(url, type, query, fn) {
 //최종저장버튼 클릭시 모든 세부계획 저장
 $(function() {
 	$("body").on("click", ".finalSave", function(){
+		var title;
 		if(! confirm("작성한 모든 계획을 저장하시겠습니까?")) {
 			return false;
 		}
-		// plan
-		var ticketDay=$("#selectDays").val();
-		var sDate=$("#selectedDay1").val();
+		title=prompt("제목을 작성해주세요.","");			
+		var sDate=$("#datepicker").val();
 		
-// 		days.forEach(function(item,index) {
-// 			console.log(index+"일차");
-// 			days[index].forEach(function(item,index1) {
-// 				console.log(index1+"번째 역번호 : "+days[index][index1].staNum);
-// 				days[index][index1].detailList.forEach(function(item,index2) {
-// 					console.log(index2+"번째 세부계획 : "+days[index][index1].detailList[index2].name);
-					
-// 				});
-// 			});
-// 		});
-
 		var jsonData=JSON.stringify(days);
 		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
-		var query= {"days":jsonData};
+		var query= {"days":jsonData, "sDate":sDate, "name":name};
 		
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
@@ -1315,7 +1305,16 @@ function saveDetail() {
 	var f=document.detailPlanForm;
 	
 	var md={
-		name:f.name.value	
+		cateNum:f.cateNum.value,
+		name:f.name.value,
+		tel:f.tel.value,
+		address:f.address.value,
+		longitude:"37.556515",
+		latitude:"126.919482",
+		memo:f.memo.value,
+		sTime:f.sTime.value,
+		eTime:f.eTime.value,
+		price:f.price.value
 	}
 	
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
@@ -1331,6 +1330,12 @@ function saveDetail() {
 	
 }
 
+// mdList에서 세부계획 클릭시 수정하는 모달로 이동
+$(function() {
+	$("body").on("click", ".inputThing.moreDetail", function() {
+		alert("들어감");
+	});
+});
 
 </script>
 </body>

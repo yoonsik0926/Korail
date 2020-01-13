@@ -10,6 +10,7 @@ public class Plan {
 	private int detailPlanNum;
 	private int staNum;
 	private int nthDay; // 몇일차의 세부계획인지
+
 	
 	// MoreDetailPlan(세부계획 속 내용)
 	private int mdpNum;
@@ -23,7 +24,7 @@ public class Plan {
 	private String sTime;
 	private String eTime;
 	private String price; // 예상가격
-	
+
 	
 	public int getPlanNum() {
 		return planNum;
