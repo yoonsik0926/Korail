@@ -14,6 +14,14 @@
 	href="<%=cp%>/resource/jquery/css/smoothness/jquery-ui.min.css"
 	type="text/css">
 <script>
+function insertFormBtn() {
+	<c:if test="${empty sessionScope.member.userId}">
+	alert("로그인이 필요한 기능입니다. 로그인페이지로 이동합니다.");
+		location.href="<%=cp%>/member/login";
+		return;
+	</c:if>
+	location.href='<%=cp%>/friend/created';
+}
 function searchList() {
 	var f = document.searchForm;
 	console.log(f.condition.value);
@@ -87,7 +95,7 @@ text-decoration: underline;
 							</span>
 						</c:if>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/friend/created';"
+							onclick="insertFormBtn();"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> ${sessionScope.member.userId=='admin'?"공지작성":"글쓰기" }
@@ -144,7 +152,7 @@ text-decoration: underline;
 							</div>
 						</td>
 						<td colspan="2" style="text-align: left; padding-left: 20px;">※
-							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if></td>
+							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if></td>
 						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
 					</tr>
 				</c:forEach>
@@ -162,7 +170,7 @@ text-decoration: underline;
 								<i class="far fa-comment-alt"
 								style="margin-right: 2px; color: #969696; margin-left: 5px;"></i>${dto.replyCount}
 								<c:if test="${dto.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${dto.fileCount}</c:if>
-								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
+								<c:if test="${dto.gap<=1}"><img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
 								</span>
 
 						<c:if test="${dto.validate==1 || dto.enable==1}">

@@ -42,12 +42,31 @@ $(function () {
 // 인서트 전 유효성 검사
     function check() {
         var f = document.friendForm;
+    	str = f.subject.value;
+        if(!str || str=="<p>&nbsp;</p>") {
+            alert("제목을 입력하세요. ");
+            f.subject.focus();
+            return false;
+        }
+        
     	str = f.content.value;
         if(!str || str=="<p>&nbsp;</p>") {
             alert("내용을 입력하세요. ");
             f.content.focus();
             return false;
         }
+        
+        if( !f.datepicker1.value) {
+            alert("기간을 입력하세요. ");
+            f.datepicker1.focus();
+            return false;
+        }
+        if( !f.datepicker2.value) {
+            alert("기간을 입력하세요. ");
+            f.datepicker2.focus();
+            return false;
+        }
+        
 		f.datepicker1.name='sDate';
 		f.datepicker2.name='eDate';
    		f.action="<%=cp%>/friend/${mode}";
@@ -137,35 +156,7 @@ function deleteFile(num) {
 	ajaxJSON(url, "post", query, fn);
 	
 }
-$(function () {
-	
-	$(".btnSendReply").click(function(){
-		var friendNum="${dto.friendNum}";
-		var $tb = $(this).closest("table");
-		var content=$tb.find("textarea").val().trim();
-		if(! content) {
-			alert("내용을 입력해주세요");
-			$tb.find("textarea").focus();
-			return false;
-		}
-		content = encodeURIComponent(content);
-		var url="<%=cp%>/friend/insertReply";
-		var query="friendNum="+friendNum+"&content="+content+"&answer=0&content="+content;
-		
-		var fn = function(data){
-			$tb.find("textarea").val("");
-			
-			var state=data.state;
-			if(state=="true") {
-				listPage(1);
-			} else if(state=="false") {
-				alert("댓글을 추가 하지 못했습니다.");
-			}
-		};
-		
-		ajaxJSON(url, "post", query, fn);
-	});
-});
+
 </script>
 <style type="text/css">
 .tb-row {

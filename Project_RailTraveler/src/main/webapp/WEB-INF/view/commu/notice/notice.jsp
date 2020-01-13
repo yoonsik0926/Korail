@@ -10,6 +10,9 @@
 .sir_lbo .lbo_notice {
     background: #f7f9ff;
 }
+a {
+    color: #666;
+}
 </style>
 <script>
 function searchList() {
@@ -95,13 +98,12 @@ console.log("${search}");
 					<a href="${articleUrl}&noticeNum=${dto.noticeNum}">${dto.subject}</a><span style="
     font-size: 14px; color: #969696
     ;"> 
-    <i class="far fa-image" style="display: inline-block; margin-left: 5px;"></i>
     <c:if test="${dto.fileCount!=0}">
 					<a href="<%=cp%>/notice/zipDownload?noticeNum=${dto.noticeNum}">
 						<i class="far fa-save" style="display: inline-block; margin-left: 5px;"></i></a>
 					</c:if>
     <c:if test="${dto.gap<1}">
-						<img alt="" src="<%=cp%>/resource/images/new.gif"> </c:if>
+						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
     </span></td>
 					<td width="120">${dto.created}</td>
 				</tr>

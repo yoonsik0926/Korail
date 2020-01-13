@@ -92,7 +92,7 @@
 									</p>
 									<c:if test="${vo.userId !=sessionScope.member.userId and 'admin'!=sessionScope.member.userId}">
 									<p class="btn_edit m-tcol-c">
-									<a><span style="cursor: pointer;color: #999;
+									<a onclick="replySingo('${vo.friendReplyNum}','${pageNo}','${vo.userId}')"><span style="cursor: pointer;color: #999;
     cursor: pointer;
     font-size: 11px;">신고</span></a>
 									</p></c:if>

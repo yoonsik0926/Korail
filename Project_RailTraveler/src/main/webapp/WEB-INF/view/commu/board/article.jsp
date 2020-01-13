@@ -9,6 +9,7 @@
 	String url = sb.toString();
 	String uri = request.getRequestURI();
 	String path = request.getServletPath();
+	String nowUrl =request.getRequestURL().toString();
 %>
 <link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
 <script src="<%=cp%>/resource/js/commu.js"></script>
@@ -291,6 +292,158 @@ function copy_trackback() {
     	temp = prompt("이 글의 트랙백 주소입니다. Ctrl+C를 눌러 클립보드로 복사하세요", trb);
     }
 }	
+
+//***************신고관련
+//***************신고관련
+//***************신고관련
+//***************신고관련
+//***************신고관련
+
+
+//취소 버튼 눌렀을 시 '기타' 지우기
+$(function(){
+	$('.cancelsingo').click(function(){
+		var f = document.singoForm;		
+		$('#etcText').val("");		
+		//f.etcText.value="";		
+	});
+});
+
+//게시글에서 "신고" 버튼 눌렀을 시 
+function articleSingo() {
+	var num = '${dto.boardNum}';
+	var userId = "${sessionScope.member.userId}";
+	  
+	if ( userId == "") {
+		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			location.href="<%=cp%>/member/login";
+		else{
+			return;
+		}
+	}
+		var targetUserId  = '${dto.userId}';
+		var targetContent = '${dto.subject}';
+		var targetUrl = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/board/article?boardNum=${dto.boardNum }";
+		
+		$('#targetType').val('0');
+		$('#targetUserId').val(targetUserId);
+		$('#targetContent').val(targetContent);		
+		$('#targetTitle').val("board");		
+		$('#targetNum').val(num);
+		$('#targetUrl').val(targetUrl);
+
+		$("#singo").modal(); 
+	
+}
+
+//댓글에서 "신고" 버튼 눌렀을 시 
+function replySingo(num,pageNo,t_userId) {
+	var userId = "${sessionScope.member.userId}";
+	  
+	if ( userId == "") {
+		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			location.href="<%=cp%>/member/login";
+		else{
+			return;
+		}
+	}
+		var targetUserId  = t_userId;
+		var $targetContent  = ".replyContent"+num;
+		var targetContent  = $($targetContent).text();
+		
+		var targetUrl = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/board/article?boardNum=${dto.boardNum }&pageNo="+pageNo;
+		
+		$('#targetType').val('1');
+		$('#targetUserId').val(targetUserId);
+		$('#targetContent').val(targetContent);			
+		$('#targetTitle').val("boardReply");		
+		$('#targetNum').val(num);
+		$('#targetUrl').val(targetUrl);
+
+		$("#singo").modal(); 
+	
+}
+
+//모달창 내부에서 신고하기 버튼 눌렀을 때
+function singosubmit() {	
+	var f = document.singoForm;
+	var content = $('#singoreason').val();
+	if (content == 'etc'){		
+		 content = f.content.value;		 
+	}
+	var url = "<%=cp%>/singo/insertSingo2";
+	var query = "targetNo="+f.targetNo.value+"&targetType="+f.targetType.value+"&targetTitle="+f.targetTitle.value
+					+"&targetUserId="+f.targetUserId.value+"&content="+content+"&targetUrl="+f.targetUrl.value;
+	console.log(f.targetUrl.value);
+	var fn = function(data){
+		
+			if(data.state=="true"){
+				alert("신고 접수 성공");
+				$("#singo").modal('hide');
+			}else{
+				alert("신고 접수 실패");
+			}
+	}; 
+	
+	ajaxJSON(url, "get", query, fn);
+}
+
+
+
+//신고 모달을 관리하는 스크립트
+$(function() {
+	
+	//첫번째 더보기 클릭시 보이기/숨기기
+	$('#adverClick').click(function(){
+		if($("#adverInfo").css("display") == "none"){   
+	        $('#adverInfo').css("display", "block");   
+	    } else {  
+	        $('#adverInfo').css("display", "none");   
+	    } 
+	});
+	
+	//두번째 더보기 클릭시 보이기/숨기기
+	$('#19ageClick').click(function(){
+		if($("#19ageInfo").css("display") == "none"){   
+	        $('#19ageInfo').css("display", "block");   
+	    } else {  
+	        $('#19ageInfo').css("display", "none");   
+	    } 
+	});
+	
+	//라디오 박스 중 기타를 선택했을 시
+	$("input:radio[id=etc]").click(function(){		
+		if($("#etcTextarea").css("display") == "none"){   
+	        $('#etcTextarea').css("display", "block");   
+	    } else {  
+	        $('#etcTextarea').css("display", "none");   
+	    } 
+		
+	});
+	
+	//기타를 선택하지 않은 나머지를 선택했을시
+	$("input:radio[class=notEtc]").click(function(){		
+		 $('#etcTextarea').css("display", "none");  		
+	});
+	
+	//content 값 보내기	
+	$("input:radio[name=chk_info]").click(function(){		
+		var val = $(this).val();
+		var content;
+		
+		if(val != 'etc'){
+			content =$(this).val();	
+			$('#singoreason').val(content);
+		}else{
+			$('#singoreason').val('etc');
+		}
+		
+	});
+	
+	
+	
+	
+})
 
 </script>
 <style type="text/css">
@@ -674,7 +827,91 @@ a {
 }
 </style>
 
+<!--Modal: 신고 모달-->
+<form name="singoForm" method="post" action="">
+<div class="modal fade  bd-example-modal-sm" id="singo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 560px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+<!--       $('#targetType').val('0'); -->
+<!-- 		$('#targetUserId').text(targetUserId); -->
+<!-- 		$('#targetContent').text(targetContent);		 -->
+<!-- 		$('#targetNum').val(num); -->
+<!-- 		$('#targetUrl').val(targetUrl); -->
+      <input type="hidden"  id="targetType" name="targetType">
+      <input type="hidden"  id="targetTitle" name="targetTitle">
+      <input type="hidden"  id="targetNum" name="targetNo">
+      <input type="hidden"  id="targetUrl" name="targetUrl">
+      <input type="hidden" id="singoreason" value="etc" >
 
+      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 9px 0px 9px 15px; border-bottom:1px solid #c4c4c4 ">
+        <p style="font-size:22px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
+		<div style=" border-bottom:1px solid #c4c4c4">
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<input id="targetContent"  style="font-weight: 500; cursor: auto;border: none;" value="얄라리얄라 얄라숑" readonly="readonly"></p>
+		<p>작성자 :&nbsp;&nbsp;<input id="targetUserId" name="targetUserId" style="font-weight: 500; cursor: auto;border: none;" value="yoonsik09(김**)" readonly="readonly"></p>
+        </div>
+        
+        <div style="margin: 10px 0px;">
+        	<table style="width: 100%; ">
+        		<tr>
+        			<td width="17%" valign="top">
+        			<p>신고사유:&nbsp;&nbsp;</p>
+        			</td>
+        			<td width="83%" valign="top">
+        			<span style="font-size: 14px; color: #949494;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
+        			</td>
+        		</tr>
+        		
+        		<tr>
+        		<td width="17%"></td>
+        		<td width="83%">
+        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P> 
+        		    <div id="adverInfo" style="display: none ">
+        		   	 <ul style="font-size: 13px; color: #a9a9a9;font-weight: 500 ;margin: 10px 0px ; padding: 0px 0px 0px 20px; ">
+      						<li>불법 사행성, 도박사이트를 홍보하는 경우</li>
+      						<li>개인정보, 이미테이션, 성인의약품, 마약, 대포폰 등 불법 제품 및 정보를 홍보, 판매하는 경우</li>
+      						<li>성매매, 장기매매 등의 신체 관련 거래 정보</li>
+    				 </ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P>
+					<div id="19ageInfo" style="display: none ">
+       		   	 		<ul style="font-size: 13px; color: #a9a9a9;font-weight: 500;margin: 10px 0px ; padding: 0px 0px 0px 20px;">
+      						<li>음란물 또는 음란한 행위(노골적인 성행위 장면)를 묘사하는 이미지/동영상</li>
+      						<li>살해/상해/폭력 등 잔인한 장면을 묘사하는 이미지/동영상</li>
+      						<li>중고 속옷 판매, 가출 유도 등의 청소년 유해 정보 공유</li>
+    				 	</ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="명예훼손/사생활 침해 및 저작권침해 등">명예훼손/사생활 침해 및 저작권침해 등</P>
+					<P style="font-weight: 500"><input type="radio" name="chk_info" id="etc" value="etc">기타</P>
+					
+					<div id="etcTextarea" style="display: none">
+						<textarea id="etcText" name="content" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
+					</div>					
+        		</td>
+
+        		</tr>
+        	</table>
+      	</div>
+      	
+      	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
+      	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
+        	<a type="button" class="btn  btn-info waves-effect cancelsingo" data-dismiss="modal">취소</a>
+      	</div>
+        
+        </div>
+
+
+    </div>
+  </div>
+</div>
+</form>
+<!--Modal: 신고모달-->
 
 
 <!-- SNS 공유하기 모달 -->
@@ -725,32 +962,6 @@ a {
 	</div>
 </div>
 
-<!-- 신고하기 모달 -->
-<div id="declarationModal" role="dialog" tabindex="-1"
-	aria-labelledby="mySmallModalLabel" aria-hidden="true"
-	data-backdrop="true" data-keyboard="true"
-	class="modal1 modal_post_social" style="display: none;">
-	<div class="modal-dialog"
-		style="width: 35%; position: absolute; right: 30%; top: 25%;">
-		<div class="modal-content"
-			style="background: aliceblue;
-    text-align: center;
-    padding: 0;">
-			<div class="declare_title">
-				<span style="font-weight: 800; background: #eee;">신고하기</span>
-			</div>
-				<div>
-				<p><b>제&nbsp;&nbsp;목 : </b> <span> ${dto.subject}</span></p>
-				<p><b>작성자 : </b> <span> ${dto.userId}</span></p>
-				<hr>
-				<p><b>사유선택 : </b> <span> 여러 사유에 해당되는 경우, 대표적인 사유 1개를 선택해 주세요</span></p>
-				
-				<div id="copy_complete" class="text-center"></div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <!-- 첨부파일 관리 모달 -->
 <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
 	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -776,7 +987,7 @@ a {
 					<c:forEach var="file" items="${files}">
 					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
 					<td>
-					 <a href="<%=cp%>/board/download?boardFileNum=${file.boardFileNum}">${file.boardFileNum}
+					 <a href="<%=cp%>/board/download?boardFileNum=${file.boardFileNum}">
 					<i
 								class="far fa-arrow-alt-circle-down"></i></a></td>
 								<td>${file.originalFilename}</td>
@@ -1025,7 +1236,7 @@ a {
 										style="font-size: 20px; display: block; margin: 0 auto; color: #555555; cursor: pointer;"></i><span
 										class="blind"></span></td>
 									<td class="m-tcol-c filter-30">|</td>
-									<td onclick="declare();" style="cursor: pointer;">신고</td>
+									<td onclick="articleSingo();" style="cursor: pointer;">신고</td>
 								</tr>
 							</tbody>
 						</table>

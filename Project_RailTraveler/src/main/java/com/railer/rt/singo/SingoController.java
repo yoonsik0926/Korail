@@ -231,7 +231,30 @@ public class SingoController {
 		return model;
 	}
 	
-	
+	//신고 테이블 추가
+		@RequestMapping(value="/singo/insertSingo2")
+		@ResponseBody
+		public Map<String, Object> insertSingo2(
+				Singo dto,
+				HttpSession session
+				) {
+
+				
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String state="true";
+			
+			try {
+				dto.setUserId(info.getUserId());
+				service.insertSingo(dto);
+				
+			} catch (Exception e) {
+				state="false";
+			}
+			
+			Map<String, Object> model = new HashMap<>();
+			model.put("state", state);
+			return model;
+		}
 	
 	@RequestMapping(value="/singo/readreply")
 	@ResponseBody

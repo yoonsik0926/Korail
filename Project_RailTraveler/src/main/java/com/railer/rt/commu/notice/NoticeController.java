@@ -209,48 +209,65 @@ public class NoticeController {
 		return ".four.commu.notice.article";
 	}
 	
-	@RequestMapping("/notice/download")
-	public void down(@RequestParam int fileNum, HttpServletResponse resp, HttpSession session) throws Exception {
-
+	@RequestMapping(value="/notice/download")
+	public void download(
+			@RequestParam int noticeFileNum,
+			HttpServletResponse resp,
+			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "notice";
 
-		Notice dto = service.readFile(fileNum);
-		boolean b = false;
-
-		if (dto != null) {
-			b = fileManager.doFileDownload(dto.getSaveFilename(), dto.getOriginalFilename(), pathname, resp);
+		boolean b = false; 
+		
+		Notice dto = service.readFile(noticeFileNum);
+		if(dto!=null) {
+			String saveFilename = dto.getSaveFilename();
+			String originalFilename = dto.getOriginalFilename();
+			  
+			b = fileManager.doFileDownload(saveFilename, originalFilename, pathname, resp);
 		}
-
+		
 		if (!b) {
-			resp.setContentType("text/html;charset=utf-8");
-			PrintWriter out = resp.getWriter();
-			out.println("<script>alert('파일 다운로드가 실패했습니다...');history.back();</script>");
+			try {
+				resp.setContentType("text/html; charset=utf-8");
+				PrintWriter out = resp.getWriter();
+				out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+			} catch (Exception e) {
+			}
 		}
 	}
-	
-	
-	@RequestMapping(value = "/notice/zipDownload")
-	public void zip(@RequestParam int noticeNum, HttpServletResponse resp, HttpSession session) throws Exception {
+
+	@RequestMapping(value="/notice/zipDownload")
+	public void zipdownload(
+			@RequestParam int noticeNum,
+			HttpServletResponse resp,
+			HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "notice";
 
 		boolean b = false;
-		List<Notice> list = service.listFile(noticeNum);
-		if (list.size() > 0) {
-			String[] sources = new String[list.size()];
-			String[] originals = new String[list.size()];
-			String zipFilename = "rt-notice-"+noticeNum + ".zip";
-			for (int idx = 0; idx < list.size(); idx++) {
-				sources[idx] = pathname+File.separator+list.get(idx).getSaveFilename();
-				originals[idx] = File.separator+list.get(idx).getOriginalFilename();
+		
+		List<Notice> listFile = service.listFile(noticeNum);
+		if(listFile.size()>0) {
+			String []sources = new String[listFile.size()];
+			String []originals = new String[listFile.size()];
+			String zipFilename = noticeNum+".zip";
+			
+			for(int idx = 0; idx<listFile.size(); idx++) {
+				sources[idx] = pathname+File.separator+listFile.get(idx).getSaveFilename();
+				originals[idx] = File.separator+listFile.get(idx).getOriginalFilename();
 			}
-			b=fileManager.doZipFileDownload(sources, originals, zipFilename, resp);
+			
+			b = fileManager.doZipFileDownload(sources, originals, zipFilename, resp);
 		}
+		
 		if (!b) {
-			resp.setContentType("text/html;charset=utf-8");
-			PrintWriter out = resp.getWriter();
-			out.println("<script>alert('파일 다운로드가 실패했습니다...');history.back();</script>");
+			try {
+				resp.setContentType("text/html; charset=utf-8");
+				PrintWriter out = resp.getWriter();
+				out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+			} catch (Exception e) {
+			}
 		}
 	}
 	@RequestMapping(value = "/notice/delete", method = RequestMethod.GET)
@@ -274,25 +291,34 @@ public class NoticeController {
 		return "redirect:/notice/notice?"+query;
 	}
 	
-	@RequestMapping(value = "/notice/update", method = RequestMethod.GET)
-	public String updateForm(@RequestParam int noticeNum, HttpSession session, @RequestParam String page, Model model) throws Exception {
+	@RequestMapping(value="/notice/update", method=RequestMethod.GET)
+	public String updateForm(
+			@RequestParam int noticeNum,
+			@RequestParam String page,
+			HttpSession session,
+			Model model) throws Exception {
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		Notice dto = service.readNotice(noticeNum);
+
+		List<Notice> listFile=service.listFile(noticeNum);
 		
-		if(dto==null|| ! dto.getUserId().equals(info.getUserId())) {
+		if(dto==null) {
 			return "redirect:/notice/notice?page="+page;
 		}
-		List<Notice> listFile = service.listFile(noticeNum);
-		
-		model.addAttribute("dto", dto);
-		model.addAttribute("page", page);
+
+		if(! info.getUserId().equals(dto.getUserId())) {
+			return "redirect:/notice/notice?page="+page;
+		}
 		model.addAttribute("listFile", listFile);
+		model.addAttribute("dto", dto);
 		model.addAttribute("mode", "update");
-		
-		return ".notice.created";
+		model.addAttribute("page", page);
+		model.addAttribute("subMenu", "1");
+		return ".four.commu.notice.created";
 	}
 
+	
 	@RequestMapping(value = "/notice/update", method = RequestMethod.POST)
 	public String updateSubmit(Notice dto, @RequestParam String page, HttpServletRequest req, HttpSession session) throws Exception {
 		String root = session.getServletContext().getRealPath("/");

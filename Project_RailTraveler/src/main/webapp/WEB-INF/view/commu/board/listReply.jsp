@@ -29,8 +29,8 @@
 													width="25">
 											</div></td>
 										<td class="p-nick"><a href="#"
-											class="m-tcol-c _rosRestrict _nickUI"
-											style="font-size: 12px; font-weight: 600;">${vo.userName}
+											class="m-tcol-c _rosRestrict _nickUI "
+											style="font-size: 12px; font-weight: 600;"><span class="replyUserId${vo.boardReplyNum}">${vo.userName}</span>
 												(<c:out
 													value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)
 
@@ -68,7 +68,7 @@
 						<c:if
 							test="${vo.userId !=sessionScope.member.userId and 'admin'!=sessionScope.member.userId}">
 							<p class="btn_edit m-tcol-c">
-								<a><span
+								<a onclick="replySingo('${vo.boardReplyNum}','${pageNo}','${vo.userId}')"><span
 									style="cursor: pointer; color: #999; cursor: pointer; font-size: 11px;"  
 									>신고</span></a>
 							</p>
@@ -185,5 +185,6 @@ $('textarea').click(function(){
 			location.href="<%=cp%>/member/login";
 	</c:if>
 });
+	
 	
 </script>

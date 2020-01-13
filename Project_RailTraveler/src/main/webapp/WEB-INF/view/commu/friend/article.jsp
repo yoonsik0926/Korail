@@ -293,7 +293,158 @@ function copy_trackback() {
     }else{
     	temp = prompt("이 글의 트랙백 주소입니다. Ctrl+C를 눌러 클립보드로 복사하세요", trb);
     }
-}	
+}
+
+
+//***************신고관련
+//***************신고관련
+//***************신고관련
+
+
+//취소 버튼 눌렀을 시 '기타' 지우기
+$(function(){
+	$('.cancelsingo').click(function(){
+		var f = document.singoForm;		
+		$('#etcText').val("");		
+		//f.etcText.value="";		
+	});
+});
+
+//게시글에서 "신고" 버튼 눌렀을 시 
+function articleSingo() {
+	var num = '${dto.friendNum}';
+	var userId = "${sessionScope.member.userId}";
+	  
+	if ( userId == "") {
+		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			location.href="<%=cp%>/member/login";
+		else{
+			return;
+		}
+	}
+		var targetUserId  = '${dto.userId}';
+		var targetContent = '${dto.subject}';
+		var targetUrl = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/friend/article?friendNum=${dto.friendNum }";
+		
+		$('#targetType').val('0');
+		$('#targetUserId').val(targetUserId);
+		$('#targetContent').val(targetContent);		
+		$('#targetTitle').val("friend");		
+		$('#targetNum').val(num);
+		$('#targetUrl').val(targetUrl);
+
+		$("#singo").modal(); 
+	
+}
+
+//댓글에서 "신고" 버튼 눌렀을 시 
+function replySingo(num,pageNo,t_userId) {
+	var userId = "${sessionScope.member.userId}";
+	  
+	if ( userId == "") {
+		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			location.href="<%=cp%>/member/login";
+		else{
+			return;
+		}
+	}
+		var targetUserId  = t_userId;
+		var $targetContent  = ".replyContent"+num;
+		var targetContent  = $($targetContent).text();
+		
+		var targetUrl = "<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=cp %>/friend/article?friendNum=${dto.friendNum }&pageNo="+pageNo;
+		
+		$('#targetType').val('1');
+		$('#targetUserId').val(targetUserId);
+		$('#targetContent').val(targetContent);			
+		$('#targetTitle').val("friendReply");		
+		$('#targetNum').val(num);
+		$('#targetUrl').val(targetUrl);
+
+		$("#singo").modal(); 
+	
+}
+
+//모달창 내부에서 신고하기 버튼 눌렀을 때
+function singosubmit() {	
+	var f = document.singoForm;
+	var content = $('#singoreason').val();
+	if (content == 'etc'){		
+		 content = f.content.value;		 
+	}
+	var url = "<%=cp%>/singo/insertSingo2";
+	var query = "targetNo="+f.targetNo.value+"&targetType="+f.targetType.value+"&targetTitle="+f.targetTitle.value
+					+"&targetUserId="+f.targetUserId.value+"&content="+content+"&targetUrl="+f.targetUrl.value;
+	console.log(f.targetUrl.value);
+	var fn = function(data){
+		
+			if(data.state=="true"){
+				alert("신고 접수 성공");
+				$("#singo").modal('hide');
+			}else{
+				alert("신고 접수 실패");
+			}
+	}; 
+	
+	ajaxJSON(url, "get", query, fn);
+}
+
+
+
+//신고 모달을 관리하는 스크립트
+$(function() {
+	
+	//첫번째 더보기 클릭시 보이기/숨기기
+	$('#adverClick').click(function(){
+		if($("#adverInfo").css("display") == "none"){   
+	        $('#adverInfo').css("display", "block");   
+	    } else {  
+	        $('#adverInfo').css("display", "none");   
+	    } 
+	});
+	
+	//두번째 더보기 클릭시 보이기/숨기기
+	$('#19ageClick').click(function(){
+		if($("#19ageInfo").css("display") == "none"){   
+	        $('#19ageInfo').css("display", "block");   
+	    } else {  
+	        $('#19ageInfo').css("display", "none");   
+	    } 
+	});
+	
+	//라디오 박스 중 기타를 선택했을 시
+	$("input:radio[id=etc]").click(function(){		
+		if($("#etcTextarea").css("display") == "none"){   
+	        $('#etcTextarea').css("display", "block");   
+	    } else {  
+	        $('#etcTextarea').css("display", "none");   
+	    } 
+		
+	});
+	
+	//기타를 선택하지 않은 나머지를 선택했을시
+	$("input:radio[class=notEtc]").click(function(){		
+		 $('#etcTextarea').css("display", "none");  		
+	});
+	
+	//content 값 보내기	
+	$("input:radio[name=chk_info]").click(function(){		
+		var val = $(this).val();
+		var content;
+		
+		if(val != 'etc'){
+			content =$(this).val();	
+			$('#singoreason').val(content);
+		}else{
+			$('#singoreason').val('etc');
+		}
+		
+	});
+	
+	
+	
+	
+})
 </script>
 <style type="text/css">
 tfoot td {
@@ -732,7 +883,15 @@ a {
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
-      <input type="hidden"  id="singoreplyNum" value="">
+<!--       $('#targetType').val('0'); -->
+<!-- 		$('#targetUserId').text(targetUserId); -->
+<!-- 		$('#targetContent').text(targetContent);		 -->
+<!-- 		$('#targetNum').val(num); -->
+<!-- 		$('#targetUrl').val(targetUrl); -->
+      <input type="hidden"  id="targetType" name="targetType">
+      <input type="hidden"  id="targetTitle" name="targetTitle">
+      <input type="hidden"  id="targetNum" name="targetNo">
+      <input type="hidden"  id="targetUrl" name="targetUrl">
       <input type="hidden" id="singoreason" value="etc" >
 
       <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 9px 0px 9px 15px; border-bottom:1px solid #c4c4c4 ">
@@ -742,8 +901,8 @@ a {
       <!--Body-->
       <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
 		<div style=" border-bottom:1px solid #c4c4c4">
-		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<span id="targetContent" style="font-weight: 500">얄라리얄라 얄라숑</span> </p>
-		<p>작성자 :&nbsp;&nbsp;<span id="targetUserId" style="font-weight: 500">yoonsik09(김**)</span></p>
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<input id="targetContent"  style="font-weight: 500; cursor: auto;border: none;" value="얄라리얄라 얄라숑" readonly="readonly"></p>
+		<p>작성자 :&nbsp;&nbsp;<input id="targetUserId" name="targetUserId" style="font-weight: 500; cursor: auto;border: none;" value="yoonsik09(김**)" readonly="readonly"></p>
         </div>
         
         <div style="margin: 10px 0px;">
@@ -780,7 +939,7 @@ a {
 					<P style="font-weight: 500"><input type="radio" name="chk_info" id="etc" value="etc">기타</P>
 					
 					<div id="etcTextarea" style="display: none">
-						<textarea id="etcText" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
+						<textarea id="etcText" name="content" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
 					</div>					
         		</td>
 
@@ -791,7 +950,6 @@ a {
       	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
       	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
         	<a type="button" class="btn  btn-info waves-effect cancelsingo" data-dismiss="modal">취소</a>
-      	
       	</div>
         
         </div>
@@ -1093,7 +1251,7 @@ a {
 										style="font-size: 20px; display: block; margin: 0 auto; color: #555555; cursor: pointer;"></i><span
 										class="blind"></span></td>
 									<td class="m-tcol-c filter-30">|</td>
-									<td onclick="declare();" style="cursor: pointer;">신고</td>
+									<td  onclick="articleSingo();" style="cursor: pointer;">신고</td>
 								</tr>
 							</tbody>
 						</table>

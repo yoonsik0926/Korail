@@ -44,6 +44,15 @@ function reset() {
 
 		}
 	}
+	
+function insertFormBtn() {
+	<c:if test="${empty sessionScope.member.userId}">
+	alert("로그인이 필요한 기능입니다. 로그인페이지로 이동합니다.");
+		location.href="<%=cp%>/member/login";
+		return;
+	</c:if>
+	location.href='<%=cp%>/board/created';
+}
 </script>
 <style type="text/css">
 a{
@@ -80,7 +89,7 @@ text-decoration: underline;
 							</span>
 						</c:if>
 						<button type="button" class="btn btn-default"
-							onclick="javascript:location.href='<%=cp%>/board/created';"
+							onclick="insertFormBtn();"
 							style="float: right; margin-left: 6px;">
 							<img alt="" src="<%=cp%>/resource/images/editIcon.png"
 								style="height: 21px;"> ${sessionScope.member.userId=='admin'?"공지작성":"글쓰기" }
