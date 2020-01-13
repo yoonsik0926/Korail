@@ -604,22 +604,26 @@ function getNumber(day) {
 		
 		$(".planListDetail"+i).sortable({
 			placeholder:"movingEnd",
-			stop: function(event, ui) {
+			start: function(event,ui) {
+				startIndex=ui.item.index();
+				console.log(startIndex);
+			},
+			update: function(event, ui) {
 		    	var day = ui.item.parent().attr("data-day");
 		    	var temp = new Array();
 		    	temp[day-1] = new Array();
 		    	
 		    	ui.item.parent().find("li").each(function(index){
-		    		var orindex = $(this).attr("data-index");
+// 		    		var orindex = $(this).attr("data-index");
 		    		var oriStaNum = $(this).attr("data-staNum");
 		    		var oob={oriStaNum:oriStaNum};
 		    		temp[day-1].push(oob);
 		    		temp[day-1][index].detailList = new Array();
-		    		temp[day-1][index].oriStaNum = days[day-1][orindex].oriStaNum;
-		    		temp[day-1][index].detailList = days[day-1][orindex].detailList.slice();
+		    		temp[day-1][index].oriStaNum = days[day-1][startIndex].oriStaNum;
+		    		temp[day-1][index].detailList = days[day-1][startIndex].detailList.slice();
 		    		
 		    		$(this).attr("data-index",index);
-		    		$(this).attr("data-staNum",oriStaNum);
+		    		$(this).attr("data-staNum",startIndex);
 		    		
 		    	});
 		    	days.length=0;
@@ -627,9 +631,13 @@ function getNumber(day) {
 		    }
 		});
 		
-		$(".planListDetail"+i).draggable({
-			
+		$(".planListDetail"+i).droppable({
+			out: function(event, ui){
+				ab=days[day-1].splice(startIndex);
+				console.log(ab);
+			}
 		});
+		
 	}
 
 	$('#selectingDay').hide();
@@ -997,58 +1005,13 @@ $(function() {
 // 			$(this).parent().parent().hide();
 // 			console.log(days[ilcha-1].length);
 			days[ilcha-1][days[ilcha-1].length-1].detailList=new Array();
-			
+			$(this).prevAll("button[class='close']").click();
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
 			return;
 		}
-// 	console.log(days);
-// console.log($(".pickedStation").attr("data-staNum"));
-// console.log($("#planListForm").find("div[class*='planList']").attr("class").substring(8,9));
 	});
 });
-
-/*
-// 위에 append하는곳에 넣었음
-$(function() {
-	$("body").on('click',".insertStaPlan", function() {
-		
-		$("#planListForm ul").sortable({
-			items:$(".pickedStation"),
-			placeholder:"movingEnd",
-		    stop: function( event, ui ) {
-		    	var day = ui.item.parent().attr("data-day");
-		    	ui.item.parent().find("li").each(function(index){
-		    		days[day-1][index] = $(this).attr("data-staNum");
-		    	});
-		    	
-			// ajax로 db작업(업데이트)
-		    	
-		    }
-		});	
-	
-
-		$("#planListForm ul").droppable({
-	        out: function (event, ui) {
-	        	var $p=ui.helper.parent();
-	        	var day = ui.helper.parent().attr("data-day");
-	        	ui.helper.remove();
- 		    	days[day-1].length=0;
-
- 		    	var n=0;
- 		    	$p.find("li").each(function(index){
-		    		if($(this).attr("data-staNum")) {		    				 
-				    	days[day-1][n++] = $(this).attr("data-staNum");
-		    		}		
-				});
-// 	        	console.log(days[day-1]);
-// 	        	console.log(days);
-	        }
-		    
-		});
-	});	
-});
-*/
 
 // 세부계획 디테일 모달
 $(function() {
@@ -1200,7 +1163,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
             image: markerImage
         });
 
-        var closeOverlay = function() {
+        closeOverlay = function() {
         	customOverlay.setMap(null);
         };
         var $plusStation=$('<div class="plusStation" />');
