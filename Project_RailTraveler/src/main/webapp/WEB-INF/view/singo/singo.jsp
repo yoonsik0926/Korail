@@ -109,16 +109,30 @@ $(function(){
 
 });
 
-function restrictId(targetUserId) {
-	var result = confirm("해당 아이디 사용 정지시키겠습니까?");
+
+function restrictId(targetUserId, userState) {
+	
+	
+	if(userState =='unabled'){
+		var result = confirm("해당 아이디 사용 정지시키겠습니까?");
+	}else{
+		var result = confirm("해당 아이디의 비활성화를 푸시겠습니까?");
+	}
+
+
 	
 	if(result){
 		var url = "<%=cp%>/singo/restrictUserId";
-		var query = "targetUserId="+targetUserId;
+		var query = "targetUserId="+targetUserId+"&userState="+userState;
 		
 		var fn = function(data) {
 			if(data.state=='true'){
-				alert("사용 정지 완료")
+				if (userState =='unabled') {
+					alert("아이디 비활성화 완료")
+				}else{
+					alert("아이디 활성화 완료")
+				}
+				
 			}else{
 				alert("사용자 아이디 정지 실패!!")
 			}
@@ -313,7 +327,7 @@ a {
 				<tr >
 					<td>${dto.blameNo}</td>
 					<td>${dto.targetUserId}</td>
-					<td>${dto.targetContent}</td>
+					<td><a href="${dto.targetUrl}">${dto.targetContent}</a></td>
 					<td>${dto.userId}</td>
 					<td>${dto.content}</td>
 					<td>${dto.created}</td>
@@ -368,10 +382,11 @@ a {
 					<th width="60" >번호</th>
 					<th width="100"><span >이름</span></th>
 					<th width="100"><span >아이디</span></th>
-					<th width="60" ><span >총 신고횟수</span></th>
+					<th width="80" ><span >총 신고횟수</span></th>
 					<th width="100" ><span >비고</span></th>
+					<th width="60" ><span >상태</span></th>
 					<th width="50"><span>/</span></th>
-					
+
 
 
 				</tr>
@@ -383,21 +398,42 @@ a {
 					<td>${vo.userName}</td>
 					<td>${vo.targetUserId }</td>
 					<td>${vo.singoCount}회</td>
-
-					<c:choose>
-					<c:when test="${vo.singoCount>=3}">
+					
+										<c:choose>
+					<c:when test="${vo.singoCount>=5}">
 					<td>
-						<span style="color: red; font-weight: 700">아이디 정지 대상입니다.</span>
+						<span style="color: red; font-weight: 700"> 아이디 정지 대상입니다.</span>
 					</td>
-					<td><button class="btn" onclick="restrictId('${vo.targetUserId}');">아이디 정지</button></td>
+
 					</c:when>
 					<c:otherwise>
 					<td>
 						<span>경고 대상입니다.</span>
 					</td>
-					<td><button class="btn">경고창 발송</button></td>
 					</c:otherwise>
 					</c:choose>
+					
+					<c:choose>
+					<c:when test="${vo.enabled==1}">
+					<td>
+						<span style="color: blue; font-weight: 700">활성화</span>
+					</td>
+					<td>
+						<button class="btn"  onclick="restrictId('${vo.targetUserId}','unabled');">비활성화 적용</button>
+					</td>
+					</c:when>
+					<c:otherwise>
+					<td>
+						<span style="color: red; font-weight: 700">비활성화</span>
+					</td>
+					<td>
+					<button class="btn" onclick="restrictId('${vo.targetUserId}','enabled');">비활성화 풀기</button>
+					</td>
+					</c:otherwise>
+					</c:choose>
+					
+					
+
 
 
 				</tr>

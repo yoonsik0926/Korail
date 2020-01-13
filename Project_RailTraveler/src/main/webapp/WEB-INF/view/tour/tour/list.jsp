@@ -510,7 +510,7 @@ a {
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
-      <div class="modal-header d-flex justify-content-center" style="background-color : #808080; padding: 5px 5px;">
+      <div class="modal-header d-flex justify-content-center" style="padding: 5px 5px;">
         <h5  class="heading" style="font-size:25px; font-weight: 700; margin: 5px 5px;">Rail Traveler</h5>
       </div>
 
@@ -520,14 +520,14 @@ a {
 
         <p id="modaltext" style="font-size: 15px; font-weight:500; margin-top: 10px; margin-left: 10px;">회원에게만 제공되는 서비스입니다!</p>
 		<p id="modaltext" style="margin-top: 20px;">
-		<span style="display: block; cursor: pointer; font-weight:700;font-size: 13px"><a href="<%=cp%>/member/login">로그인</a></span>
-		<span style="display: block; cursor: pointer; font-weight:700;font-size: 13px"><a href="<%=cp%>/member/member">회원가입</a></span>
+	
 		</p>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center" >
-        
+        <a type="button" href="<%=cp%>/member/login" class="btn  btn-info waves-effect" >로그인</a>
+        <a type="button" href="<%=cp%>/member/member" class="btn  btn-info waves-effect" >회원가입</a>
         <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
       </div>
     </div>

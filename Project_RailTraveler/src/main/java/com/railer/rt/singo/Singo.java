@@ -11,6 +11,7 @@ public class Singo {
 	private String targetUrl;
 	private String created;
 	private String userName;
+
 	
 	
 	//무슨 글이 신고당했는지 
@@ -18,6 +19,9 @@ public class Singo {
 	private String targetUserName;
 	
 	
+	
+	
+
 	public String getUserName() {
 		return userName;
 	}

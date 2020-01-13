@@ -193,7 +193,8 @@ $(function(){
 		var userId = "${sessionScope.member.userId}";
 		
 		if(userId==""){
-			alert("회원가입 하라궁~");
+			$("#modaltext").text("로그인이 필요한 기능입니다.");			
+			$("#commonModal").modal();
 			return;
 		}
 		
@@ -378,10 +379,11 @@ function singosubmit() {
 	
 	f.etcText.value="";
 
-	var targetUrl = "<%= nowUrl%>";
+	var targetUrl =	"${targetUrl}";
 	var url = "<%=cp%>/singo/insertSingo";
-	var query = "targetNo="+targetNo+"&content="+content+"&targetUrl="+targetUrl;
+	var query = {'targetNo':targetNo , 'content':content , 'targetUrl':targetUrl};
 	var fn = function(data){
+		
 		
 			if(data.state=="true"){
 				alert("신고 접수 성공");
@@ -397,6 +399,13 @@ function singosubmit() {
 
 
 }
+$(function() {
+	$('#replytextarea').click(function(){
+		<c:if test="${empty sessionScope.member.userId}">
+				location.href="<%=cp%>/member/login";
+		</c:if>
+	});
+});
 
 </script>
 
@@ -591,7 +600,7 @@ function singosubmit() {
 						<td align='left'><span style='font-weight: bold;'>댓글을 달아보세요!</span></td>
 					</tr>
 					<tr>
-						<td style='padding: 5px 5px 0px;'><textarea class='boxTA'
+						<td style='padding: 5px 5px 0px;'><textarea ${empty sessionScope.member.userId?'placeholder="로그인이 필요한 서비스 입니다.&#13;&#10;클릭시 로그인 창으로 이동합니다."':'placeholder="모두가 함께 만들어 가는 깨끗한 공간입니다. &#13;&#10;훈훈한 댓글 부탁드립니다^^"' }id="replytextarea" class='boxTA'
 								style='width: 100%; height: 70px;'></textarea></td>
 					</tr>
 					<tr>

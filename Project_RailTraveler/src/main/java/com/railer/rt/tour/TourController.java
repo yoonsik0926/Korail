@@ -127,9 +127,12 @@ public class TourController {
 		
 	
 		String listUrl = cp +"/tour/sudo?cateNum="+cateNum;				
-		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle=sudo";		
-        String paging = myUtil.paging(current_page, total_page, listUrl);
-		      
+		String articleUrl = cp+"/tour/detail?cateNum="+cateNum+"&page="+current_page+"&subTitle="+locName;
+
+				
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+	      
 		List<Tour> tourCategoryList = service.tourCategoryList();
 		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("hitContentList", hitContentList);
@@ -141,6 +144,7 @@ public class TourController {
 		model.addAttribute("subMenu", locNum);
 		model.addAttribute("title", title);
 		model.addAttribute("subTitle", locName);
+		/*model.addAttribute("tarketUrl", tarketUrl);*/
 		
 		model.addAttribute("q", q);
 		
@@ -262,9 +266,10 @@ public class TourController {
 			Model model,
 			HttpServletRequest req
 			) throws Exception {
-		
+		String cp = req.getContextPath();	
 		Tour vo = service.readDetailTour(tourNum);
 		
+
 		
 		//쿠키를 이용하여 중복되지 않게 카운트 추가
 
@@ -321,10 +326,14 @@ public class TourController {
         	bloglist.add(dto);
         }
         
+		String targetUrl = req.getScheme()+"://"+req.getServerName()+":"+req.getServerPort()+cp+"/tour/detail?cateNum="+cateNum+"&page="+page+
+		"&subTitle="+subTitle+"&tourNum="+tourNum;
+        
         
         model.addAttribute("imagelist", imagelist);
         model.addAttribute("bloglist", bloglist);
 		model.addAttribute("vo",vo);
+		model.addAttribute("targetUrl", targetUrl);
 		return ".four.tour.tour.detail";
 	}
 	

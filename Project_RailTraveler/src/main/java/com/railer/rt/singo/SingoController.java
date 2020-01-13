@@ -202,7 +202,8 @@ public class SingoController {
 			HttpSession session
 			) {
 
-			
+
+		
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		String state="true";
 			
@@ -291,16 +292,22 @@ public class SingoController {
 		@ResponseBody
 		public Map<String, Object> restrictUserId(
 				@RequestParam String targetUserId,
+				@RequestParam String userState,
 				HttpSession session
 				) {
 				
 			SessionInfo info=(SessionInfo)session.getAttribute("member");
 			String state="true";
-				
-			//어드민이 아니면 막기
+			
 
+
+			//활성/비활성화 관리
+			Map<String, Object> map = new HashMap<>();
+			map.put("targetUserId", targetUserId);
+			map.put("userState", userState);
+			
 			try {
-				service.restrictId(targetUserId);
+				service.restrictId(map);
 			} catch (Exception e) {
 				state= "false";
 			}

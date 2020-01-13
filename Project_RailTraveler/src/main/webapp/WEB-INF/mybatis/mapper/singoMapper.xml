@@ -63,7 +63,8 @@
 	<insert id="singo.insertSingo" parameterType="map">
 		insert into
 		blame(blameNo , targetNo , targetType, targetTitle , userId , targetUserId , content , targetUrl)
-		values(blame_seq.nextval, #{targetNo} ,#{targetType}, #{targetTitle} , #{userId} , #{targetUserId}, #{content} , #{targetUrl})
+		values(blame_seq.nextval, #{targetNo} ,#{targetType}, #{targetTitle} , #{userId} , #{targetUserId}, #{content} , 
+		 <![CDATA[#{targetUrl}]]>)
 	</insert>
 	
 	<select id="singo.findTargetId" parameterType="Integer" resultType="com.railer.rt.singo.Singo">
@@ -87,7 +88,7 @@
  	<select id="singo.singoList" parameterType="map" resultType="com.railer.rt.singo.Singo" >
  		<choose>
  		<when test='selected=="reply"'>
- 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.content targetContent,targeturl,b.created
+ 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.content targetContent,targetUrl,b.created
  		</when>
 		
  		<when test='selected=="board"'>
@@ -107,7 +108,7 @@
 	</select> 
 	
 	<select id="singo.singoCountList" parameterType="map" resultType="com.railer.rt.singo.SingoManagment">
-		select username , targetUserId ,singoCount
+		select username , targetUserId ,singoCount, m2.enabled enabled
 		from member2 m2 join (
 		select targetUserId, nvl(count(*),0) singoCount from blame 
 		group by targetUserId) x on m2.userid = x.targetUserId
@@ -137,7 +138,16 @@
 </select>
 
 	<!--5회 이상 사용자 정지 매기기-->
-	<update id="singo.restrictUserId" parameterType="String">
+	<update id="singo.restrictUserId" parameterType="map">
+	<choose>
+	<when test='userState=="unabled"'>
 		update member2 set enabled = 0 where userId = #{targetUserId}
+	</when>
+	<otherwise>
+		update member2 set enabled = 1 where userId = #{targetUserId}
+	</otherwise>
+	</choose>
 	</update>
+	
+
 </mapper>

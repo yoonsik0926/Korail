@@ -7,11 +7,20 @@ public class SingoManagment {
 	private int singoCount;
 	private int singoNum;
 	private int singoListCount;
+	private int enabled;
+	
+	
 	
 	
 	
 	
 
+	public int getEnabled() {
+		return enabled;
+	}
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
+	}
 	public int getSingoNum() {
 		return singoNum;
 	}
