@@ -193,7 +193,7 @@ $(function() {
         
     });                    
     
-    //초기값을 오늘 날짜로 설정
+
     $('[data-toggle="datepicker"]').datepicker('setDate', '-19Y');           
 });
 
@@ -275,7 +275,7 @@ input, select, .btnSearch {
 				      <div class="input-group-addon"><i class="far fa-id-badge" style="color:#334393; font-weight: 900;"></i></div>
 				      <input type="text" class="form-control" type="text" name="userId" id="userId"
 									value="${dto.userId}" onchange="userIdCheck();"
-									placeholder="&nbsp;UserId">
+									placeholder="&nbsp;UserId"  ${mode=='update'? "readonly='readonly'":""}>
 				    </div>
 				  </div>
 
@@ -306,7 +306,7 @@ input, select, .btnSearch {
 				      <div class="input-group-addon"><i class="fas fa-user" style="color:#334393;"></i></div>
 				      <input type="text" class="form-control" type="text" name="userName" id="userName"
 									value="${dto.userName}"
-									placeholder="&nbsp;Name">
+									placeholder="&nbsp;Name" ${mode=='update'? "readonly='readonly'":""}>
 				    </div>
 				  </div>
 				  
@@ -316,9 +316,7 @@ input, select, .btnSearch {
 				  	<div class="input-group">
 				      <div class="input-group-addon"><i class="fas fa-birthday-cake" style="color:#334393;"></i></div>
 				      <input type="text" class="form-control" type="text" name="birth"
-									value="${dto.birth}"
-									readonly="readonly"
-									placeholder="&nbsp;Birth">
+									value="${dto.birth}" placeholder="&nbsp;Birth">
 				    </div>
 				  </div>
 				  

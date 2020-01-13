@@ -110,11 +110,13 @@ input{
 	    //input을 datepicker로 선언
 	    $('form input[name=birth]').datepicker({
 	    	dateFormat:"yy"+"-"+"mm"+"-"+"dd",
-	    	todayHighlight: true
+	    	todayHighlight: true,
+	    	changeYear: true,
+	    	changeMonth: true
 	    });                    
 	    
 	    //초기값을 오늘 날짜로 설정
-	    $('[data-toggle="datepicker"]').datepicker('setDate', 'today');           
+	    $('[data-toggle="datepicker"]').datepicker('setDate', '2000-01-01');           
 	});	
 	
 
