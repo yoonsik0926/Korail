@@ -43,11 +43,11 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public List<Tour> listCategory(Map<String, Object> map) {
+	public List<Tour> listCategory() {
 		List<Tour> list=null;
 		
 		try {
-			list=dao.selectList("plan.listCategory", map);
+			list=dao.selectList("plan.listCategory");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,6 +131,44 @@ public class PlanServiceImpl implements PlanService {
 			throw e;
 		}
 		
+	}
+
+	@Override
+	public List<Tour> listDetailCate(Map<String, Object> map) {
+		List<Tour> list=null;
+		
+		try {
+			list=dao.selectList("plan.listDetailCategory",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int placeDataCount(Map<String, Object> map) {
+		int result=0;
+		
+		try {
+			result=dao.selectOne("plan.placeDataCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Tour> listTour(Map<String, Object> map) {
+		List<Tour> list=null;
+		
+		try {
+			list=dao.selectList("plan.listTour",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

@@ -718,6 +718,24 @@ $(function(){
 	});
 });
 
+// 세부계획에서 장소 검색
+$(function() {
+	$("body").on("click",".findTourThing", function() {
+		var tourNum=$("input[name='tourNum']").val();
+		var name=$("input[name='name']").val();
+		var tel=$("input[name='tel']").val();
+		var address=$("input[name='address']").val();
+		var tourKeyword=$("input[name='tourKeyword']").val();
+		
+		var url="<%=cp%>/plan/searchPlace";
+		var query={"name":name,"tel":tel, "address":address, "tourKeyword":tourKeyword};
+		
+		var fn=function(data) {
+			alert("엥 들어갔어 이게?");
+		};
+		ajaxJSON(url, "post", query, fn);
+	});
+});
 </script>
 </head>
 
@@ -800,7 +818,7 @@ $(function(){
 							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 						<button type="button" class="finalSave">최종저장</button>
 						<div id="userNameHere">
-							<span>${dto.userId}님 접속중...</span>
+							<span>${dto.userName}님 접속중...</span>
 						</div>
 					</div>
 				</div>
@@ -854,19 +872,14 @@ $(function(){
                            <br>
                               <span>카테고리</span>
 	                              <select class="selBox tourCategory" id="tourCategory" name="cateNum">
-	                                 <option value="1" ${cateNum=="1" ? "selected='selected'":""}>명소</option>
-	<%--                                  <option value="2" ${cateNum=="2" ? "selected='selected'":""}>맛집</option> --%>
-	<%--                                  <option value="3" ${cateNum=="3" ? "selected='selected'":""}>숙박</option> --%>
+	                                 <option value="">:::대분류:::</option>
+	                                 <c:forEach var="fb" items="${listCategory}">
+	                                 	<option value="${fb.cateNum}" ${fb.cateNum==dto.detailcateNum ? "selected='selected'":""}>${fb.cateName}</option>
+	                                 </c:forEach>
 	                              </select>
                            	  <span>세부 카테고리</span>
 	                              <select class="selBox detailTourCategory" id="detailTourCategory" name="detailCateNum">
-	                                 <option value="1" ${detailCateNum=="1" ? "selected='selected'":""}>자연</option>
-	<%--                                  <option value="2" ${detailCateNum=="2" ? "selected='selected'":""}>역사</option> --%>
-	<%--                                  <option value="3" ${detailCateNum=="3" ? "selected='selected'":""}>쇼핑</option> --%>
-	<%--                                  <option value="4" ${detailCateNum=="4" ? "selected='selected'":""}>레저/스포츠</option> --%>
-	<%--                                  <option value="5" ${detailCateNum=="5" ? "selected='selected'":""}>문화시설</option> --%>
-	<%--                                  <option value="19" ${detailCateNum=="19" ? "selected='selected'":""}>휴양/관광</option> --%>
-	<%--                                  <option value="20" ${detailCateNum=="20" ? "selected='selected'":""}>축제/공연</option> --%>
+	                                 <option value="">:::소분류:::</option>
 	                              </select>
 	                              	<div style="display: block;">
 							        	<input class="inputThing resultSearchingTour" name="name" placeholder="이름">
@@ -874,6 +887,7 @@ $(function(){
 							        </div>
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" style="display: block;">
+							      	<input class="inputThing" type="hidden" name="tourNum" placeholder="투어넘" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" style="display: block;">
 							      	<input class="inputThing" type="text" name="memo" placeholder="메모" style="display: block;" value="재밌겠당">
@@ -897,7 +911,7 @@ $(function(){
 						</div>
 						<div class="modal-content searchDetail">
 							<div class="modal-body searchDetail">
- 								<input type="text" id="tourSearch" name="tourKeyword"
+ 								<input type="text" id="tourSearch" name="tourKeyword" value="${tourKeyword}"
  									style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;"
 									placeholder="검색할 내용을 입력하세요">
 								<button class="btn findTourThing"><i class="fas fa-search" style="max-width: 100%;"></i></button>
@@ -911,9 +925,11 @@ $(function(){
 											<td width="240">주소</td>
 										</tr>
 										<tr style="font-size: 14px;" align="center">
-											<td onclick="insertTourSearch();" style="cursor: pointer;">국립 오서산자연휴양림</td>
-											<td>041-936-5465</td>
-											<td>충청남도 보령시 청라면 오서산길 531</td>
+											<c:forEach var="tl" items="${listTour}">
+												<td onclick="insertTourSearch();" style="cursor: pointer;">${tl.name}</td>
+												<td>${tl.tel}</td>
+												<td>${tl.address}</td>
+											</c:forEach>	
 										</tr>
 									</table>
 								</div>
@@ -1320,7 +1336,7 @@ function saveDetail() {
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
 	var staNum=$(".ddiring").parent().attr("data-staNum");
 	var index2=$(".ddiring").parent().attr("data-index");
-// 	console.log(staNum+", "+index2+", "+md);
+	// 	console.log(staNum+", "+index2+", "+md);
 	days[ilcha-1][index2].detailList.push(md);
 	
 	var mdNum=days[ilcha-1][index2].length-1;
@@ -1337,6 +1353,32 @@ $(function() {
 	});
 });
 
+
+// 카테고리, 세부카테고리 셀렉트박스
+$(function() {
+	$("select[name='cateNum']").change(function() {
+		$("#detailTourCategory").empty();
+		$("#detailTourCategory").append("<option value=''>:::소분류:::</option>")
+		
+		var cateNum=$(this).val();
+		if(! cateNum) {
+			return false;
+		}
+// 		console.log(cateNum);
+		var url="<%=cp%>/plan/listDetailTourCate";
+		var query="cateNum="+cateNum;
+		var fn=function(data) {
+			var listDetailCate=data.listDetailCate;
+			for(var i=0; i<listDetailCate.length; i++) {
+// 				console.log(listDetailCate[i].detailcateName);
+				$("#detailTourCategory").append("<option value='"+listDetailCate[i].detailcateNum+"'>"+listDetailCate[i].detailcateName+"</option>");
+			}
+		};
+		
+	ajaxJSON(url, "post", query, fn);
+	});
+	
+});
 </script>
 </body>
 </html>
