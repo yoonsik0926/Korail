@@ -56,7 +56,7 @@ function test(ob){
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 나의 여행 플랜</span>
+			<span style="padding: 10px 0px; display: block;"> 친구의 여행 플랜</span>
 		</h3>
 	</div>
 
@@ -87,7 +87,7 @@ function test(ob){
 		<div style="margin-top: 10px;">
 
 			<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
-				<div class="thumbnail">
+				<div class="thumbnail" onclick="javascript:location.href='<%=cp%>/friendPlan/detail'">
 					<img style="height: 200px; width: 300px" src="<%=cp%>/resource/img/friendPlan.PNG">
 					<div class="caption">
 						<div style="margin-top: 10px">
@@ -98,17 +98,50 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>  여행 일자: </td>
+									<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
+									<td style=" text-align: left;" colspan="2">이유진</td>
+								</tr>
+								<tr style="height: 30px;">
+									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
 									<td style=" text-align: left;" colspan="2">2019-12-16 ~ 2019-12-20</td>
 								</tr>
 								<tr style="height: 30px;">
-									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>  경유역: </td>
+									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
 									<td style=" text-align: left;" colspan="2">강릉역  서울역  용산역  춘천역  대전역</td>
 								</tr>
-								<tr style="height: 30px;">
+<!-- 								<tr style="height: 30px;">
 									<td style="text-align: right;" colspan="2">
 										<button type="button" class="btn btn-default" style="margin-top: 5px;">자세히</button>
 									</td>
+								</tr> -->
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
+				<div class="thumbnail" onclick="javascript:location.href='<%=cp%>/friendPlan/detail'">
+					<img style="height: 200px; width: 300px" src="<%=cp%>/resource/img/friendPlan.PNG">
+					<div class="caption">
+						<div style="margin-top: 10px">
+							<table style="width:100%; margin-top:10px;">
+								<tr style="height: 40px;">
+									<td style="font-size: 18px; font-weight: 900; width: 80%;" colspan="2">겨울 느낌 뿜뿜 여행</td>
+								</tr>
+							</table>
+							<table style="width:100%; margin-top:10px;">
+								<tr style="height: 30px;">
+									<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
+									<td style=" text-align: left;" colspan="2">이유진</td>
+								</tr>
+								<tr style="height: 30px;">
+									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
+									<td style=" text-align: left;" colspan="2">2019-12-16 ~ 2019-12-20</td>
+								</tr>
+								<tr style="height: 30px;">
+									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
+									<td style=" text-align: left;" colspan="2">강릉역  서울역  용산역  춘천역  대전역</td>
 								</tr>
 							</table>
 						</div>
@@ -117,7 +150,7 @@ function test(ob){
 			</div>
 			
 			<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
-				<div class="thumbnail">
+				<div class="thumbnail" onclick="javascript:location.href='<%=cp%>/friendPlan/detail'">
 					<img style="height: 200px; width: 300px" src="<%=cp%>/resource/img/friendPlan.PNG">
 					<div class="caption">
 						<div style="margin-top: 10px">
@@ -128,17 +161,16 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>  여행 일자: </td>
+									<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
+									<td style=" text-align: left;" colspan="2">이유진</td>
+								</tr>
+								<tr style="height: 30px;">
+									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
 									<td style=" text-align: left;" colspan="2">2019-12-16 ~ 2019-12-20</td>
 								</tr>
 								<tr style="height: 30px;">
-									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>  경유역: </td>
+									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
 									<td style=" text-align: left;" colspan="2">강릉역  서울역  용산역  춘천역  대전역</td>
-								</tr>
-								<tr style="height: 30px;">
-									<td style="text-align: right;" colspan="2">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;">자세히</button>
-									</td>
 								</tr>
 							</table>
 						</div>
@@ -147,7 +179,7 @@ function test(ob){
 			</div>
 			
 			<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
-				<div class="thumbnail">
+				<div class="thumbnail" onclick="javascript:location.href='<%=cp%>/friendPlan/detail'">
 					<img style="height: 200px; width: 300px" src="<%=cp%>/resource/img/friendPlan.PNG">
 					<div class="caption">
 						<div style="margin-top: 10px">
@@ -158,47 +190,16 @@ function test(ob){
 							</table>
 							<table style="width:100%; margin-top:10px;">
 								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>  여행 일자: </td>
+									<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
+									<td style=" text-align: left;" colspan="2">이유진</td>
+								</tr>
+								<tr style="height: 30px;">
+									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
 									<td style=" text-align: left;" colspan="2">2019-12-16 ~ 2019-12-20</td>
 								</tr>
 								<tr style="height: 30px;">
-									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>  경유역: </td>
+									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
 									<td style=" text-align: left;" colspan="2">강릉역  서울역  용산역  춘천역  대전역</td>
-								</tr>
-								<tr style="height: 30px;">
-									<td style="text-align: right;" colspan="2">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;">자세히</button>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
-				<div class="thumbnail">
-					<img style="height: 200px; width: 300px" src="<%=cp%>/resource/img/friendPlan.PNG">
-					<div class="caption">
-						<div style="margin-top: 10px">
-							<table style="width:100%; margin-top:10px;">
-								<tr style="height: 40px;">
-									<td style="font-size: 18px; font-weight: 900; width: 80%;" colspan="2">겨울 느낌 뿜뿜 여행</td>
-								</tr>
-							</table>
-							<table style="width:100%; margin-top:10px;">
-								<tr style="height: 30px;">
-									<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>  여행 일자: </td>
-									<td style=" text-align: left;" colspan="2">2019-12-16 ~ 2019-12-20</td>
-								</tr>
-								<tr style="height: 30px;">
-									<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>  경유역: </td>
-									<td style=" text-align: left;" colspan="2">강릉역  서울역  용산역  춘천역  대전역</td>
-								</tr>
-								<tr style="height: 30px;">
-									<td style="text-align: right;" colspan="2">
-										<button type="button" class="btn btn-default" style="margin-top: 5px;">자세히</button>
-									</td>
 								</tr>
 							</table>
 						</div>

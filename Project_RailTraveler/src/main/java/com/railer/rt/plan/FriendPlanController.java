@@ -16,4 +16,12 @@ public class FriendPlanController {
 	}
 	
 	
+	@RequestMapping(value="/friendPlan/detail")
+	public String detail(Model model) throws Exception {
+		
+		model.addAttribute("subMenu", "1");
+		model.addAttribute("title", "친구의 여행 플랜");
+		return ".four.plan.friendPlan.detail";
+	}
+	
 }

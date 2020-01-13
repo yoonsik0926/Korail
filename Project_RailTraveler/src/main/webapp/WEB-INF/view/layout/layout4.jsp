@@ -40,7 +40,7 @@
 
 	<link href="<%=cp%>/resource/css/gsdk.css" rel="stylesheet" /> 
 	<link href="<%=cp%>/resource/css/layout.css" rel="stylesheet" /> 
-	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" />
+	<link href="<%=cp%>/resource/css/commu.css" rel="stylesheet" /> 
 	
 	<style type="text/css">
 	a.list-group-item {
