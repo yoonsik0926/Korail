@@ -17,6 +17,6 @@ $(function(){
 <h3><span style="font-family: Webdings">2</span> 플래너 </h3>
 <div class="list-group">
     <a href="<%=cp%>/plan/write" class="list-group-item">나의 여행 플랜</a>
-    <a href="<%=cp%>/plan/planlist" class="list-group-item">친구의 여행 플랜</a>
+    <a href="<%=cp%>/friendPlan/planlist" class="list-group-item">친구의 여행 플랜</a>
     <a href="<%=cp%>/plan/recommand" class="list-group-item">추천 코스</a>
 </div> 

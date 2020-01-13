@@ -77,7 +77,7 @@ System.out.print(cp);
                       <ul class="dropdown-menu">
                         <li><a href="<%=cp%>/plan/write">나의 여행 플랜</a></li>
                         <li class="divider"></li>
-                        <li><a href="<%=cp%>/plan/planlist">친구의 여행 플랜</a></li>
+                        <li><a href="<%=cp%>/friendPlan/planlist">친구의 여행 플랜</a></li>
                         <li><a href="<%=cp%>/plan/recommand">추천 코스</a></li>
                       </ul>
                 </li>
