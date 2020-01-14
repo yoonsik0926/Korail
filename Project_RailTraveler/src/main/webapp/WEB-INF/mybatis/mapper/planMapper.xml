@@ -76,13 +76,12 @@
 		SELECT tourNum, staNum, detailcateNum, name, tel, address
 		FROM tour
 		<where>
-			<if test="keyword!=null and keyword!=''">
-				INSTR(name, #{keyword}) &gt; 0
-			</if>
-			<if test="tourNum!=0">
-				AND t.tourNum=#{tourNum}
-			</if>
+		detailcateNum=#{detailcateNum}
+		AND INSTR(name, #{keyword}) &gt; 0
 		</where>
+		
+      ORDER BY tourNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 	</select>
 	
 	<!-- 검색한 장소 개수 -->
@@ -90,9 +89,8 @@
 		SELECT NVL(COUNT(*), 0)
 		FROM tour t
 		<where>
-			<if test="tourNum!=0">
-				t.tourNum=#{tourNum}
-			</if>
-		</where>      
+		detailcateNum=#{detailcateNum}
+		AND INSTR(name, #{keyword}) &gt; 0
+		</where>     
 	</select>
 </mapper>

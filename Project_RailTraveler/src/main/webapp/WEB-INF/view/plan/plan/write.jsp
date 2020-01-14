@@ -490,6 +490,11 @@ div.timeSelect {
 	width: 100%;
 	height: 80px;
 }
+
+.insertTourSearch {
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
 </style>
 <script type="text/javascript">
 
@@ -719,23 +724,36 @@ $(function(){
 });
 
 // 세부계획에서 장소 검색
-$(function() {
-	$("body").on("click",".findTourThing", function() {
-		var tourNum=$("input[name='tourNum']").val();
-		var name=$("input[name='name']").val();
-		var tel=$("input[name='tel']").val();
-		var address=$("input[name='address']").val();
+
+	function findTourThing(page){
+		var detailcateNum=$("#detailTourCategory").val();
 		var tourKeyword=$("input[name='tourKeyword']").val();
 		
-		var url="<%=cp%>/plan/searchPlace";
-		var query={"name":name,"tel":tel, "address":address, "tourKeyword":tourKeyword};
 		
+		
+		var url="<%=cp%>/plan/searchPlace";
+		var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page};
+	
 		var fn=function(data) {
-			alert("엥 들어갔어 이게?");
+			$("#listTour").empty();
+			for (var i = 0; i < data.list.length; i++) {
+				var tel=(data.list[i].tel==null? "":data.list[i].tel);
+				$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
+									 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 35px;'>"+data.list[i].name+"</td>"
+									 +"		<td style='text-overflow:ellipsis; overflow:hidden; width:100px;'>"+tel+"</td>"
+									 +"		<td style='text-overflow:ellipsis; overflow:hidden; width:240px;'>"+data.list[i].address+"</td>"
+									 +"</tr>"
+									 );
+				
+			}
+			$("#listTourPaging").html("<div style='font-size: 14px;' align='center'>"
+					 			  	  +data.paging
+					 			  	  +"</div>"
+			);
 		};
 		ajaxJSON(url, "post", query, fn);
-	});
-});
+	};
+
 </script>
 </head>
 
@@ -914,25 +932,26 @@ $(function() {
  								<input type="text" id="tourSearch" name="tourKeyword" value="${tourKeyword}"
  									style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;"
 									placeholder="검색할 내용을 입력하세요">
-								<button class="btn findTourThing"><i class="fas fa-search" style="max-width: 100%;"></i></button>
+								<button class="btn findTourThing" onclick="findTourThing(1);"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 								
 								<!-- 검색결과가 출력되는 곳 -->
 								<div class="searchTourList">
 									<table>
+									<thead>
 										<tr align="center" bgcolor="#eeeeee" height="35" style="font-size: 14px; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;">
-											<td width="200">이름</td>
-											<td width="100">전화번호</td>
-											<td width="240">주소</td>
+											<td style="width: 200px; height: 35px;">이름</td>
+											<td style="width: 100px; height: 35px;">전화번호</td>
+											<td style="width: 240px; height: 35px;">주소</td>
 										</tr>
+									</thead>
+									<tbody id="listTour">
 										<tr style="font-size: 14px;" align="center">
-											<c:forEach var="tl" items="${listTour}">
-												<td onclick="insertTourSearch();" style="cursor: pointer;">${tl.name}</td>
-												<td>${tl.tel}</td>
-												<td>${tl.address}</td>
-											</c:forEach>	
+												<td>데이터가 없습니다.</td>
 										</tr>
+									</tbody>
 									</table>
 								</div>
+							<div id="listTourPaging"></div>
 							</div>
 							
 							<div class="modal-footer searchDetail">
@@ -1308,13 +1327,20 @@ function drawMap(searchList) {
 }
 
 // 모달 검색창에서 이름 누르면 추가되는 곳
-function insertTourSearch() {
-// 	console.log($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
-	$("form[name='detailPlanForm']").find("input[name='name']").val($(".searchTourList").find("tr:eq(1)>td:eq(0)").html());
-	$("input[name='tel']").val($(".searchTourList").find("tr:eq(1)>td:eq(1)").html());
-	$("input[name='address']").val($(".searchTourList").find("tr:eq(1)>td:eq(2)").html());
-	$(".closePlease").click();
-}
+$(function() {
+	$("body").on("click", ".insertTourSearch", function(){
+		var name=$(this).text();
+		var tel=$(this).next().text();
+		var address=$(this).next().next().text();
+		
+		$("input[name='name']").val(name);
+		$("input[name='tel']").val(tel);
+		$("input[name='address']").val(address);
+		
+		$(".closePlease").click();
+	});
+});
+
 
 // 세부계획 저장버튼 누르면 mdList에 저장
 function saveDetail() {

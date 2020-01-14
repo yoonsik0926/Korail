@@ -1,5 +1,6 @@
 package com.railer.rt.plan;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.railer.rt.common.MyUtil;
 import com.railer.rt.member.SessionInfo;
 
 @Controller("plan.planController")
@@ -23,8 +25,8 @@ public class PlanController {
 	@Autowired
 	PlanServiceImpl service;
 	
-//	@Autowired
-//	private MyUtil myUtil;
+	@Autowired
+	private MyUtil myUtil;
 	
 	// 첫 로딩시 모든 마커 출력
 	@RequestMapping(value="/plan/write")
@@ -107,21 +109,58 @@ public class PlanController {
 	}
 	
 	// 세부계획 모달에서 장소 검색
-	@RequestMapping(value="/plan/searchPlace", method=RequestMethod.POST)
+	@RequestMapping(value="/plan/searchPlace")
 	@ResponseBody
-	public Map<String, Object> searchPlace(@RequestParam int tourNum,
-										   @RequestParam String tourKeyword) throws Exception {
+	public Map<String, Object> searchPlace(@RequestParam(value="page", defaultValue="1") int current_page,
+							  @RequestParam int detailcateNum,
+							  @RequestParam String keyword,
+							  HttpServletRequest req,
+							  Model model) throws Exception {
 		
+		
+		int rows = 6; // 한 화면에 보여주는 게시물 수
+		int total_page = 0;
+		int dataCount = 0;
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) { // GET 방식인 경우
+			keyword = URLDecoder.decode(keyword, "utf-8");
+		}
+		
+		// 전체 페이지 수
 		Map<String, Object> map=new HashMap<>();
-		map.put("tourNum", tourNum);
-		map.put("tourKeyword", tourKeyword);
+		map.put("detailcateNum", detailcateNum);
+		map.put("keyword", keyword);
 		
+		dataCount=service.placeDataCount(map);
+		if(dataCount!=0) {
+			total_page=myUtil.pageCount(rows,dataCount);
+		}
+		
+		if(total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int offset=(current_page-1)*rows;
+		if(offset <0) {
+			offset=0;
+		}
+		map.put("offset", offset);
+        map.put("rows", rows);
+        
+        // 여행지 리스트
 		List<Tour> list=service.listTour(map);
+//		for(Tour dto : list) {
+//			dto.setAddress(dto.getContent().replaceAll("\n", "<br>"));
+//		}
+
+		String paging=myUtil.pagingMethod(current_page, total_page, "findTourThing");
+		Map<String, Object> model1 = new HashMap<>();
+		model1.put("total_page", total_page);
+		model1.put("paging", paging);
 		
-		Map<String, Object> model=new HashMap<>();
-		model.put("listTour", list);
+		model1.put("list",list);
 		
-		return model;
+		return model1;
 	}
 	
 	@RequestMapping(value="/plan/planlist")
