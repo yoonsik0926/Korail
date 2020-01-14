@@ -173,5 +173,74 @@
 	<select id="eventLikeCount" parameterType="Integer" resultType="Integer">
 		SELECT COUNT(*) FROM eventLike WHERE eventNum=#{eventNum}
 	</select>
- 	
+	
+	<!-- 슬라이드 조회순 보여주기 -->
+	<select id="rankEvent" parameterType="map" resultType="com.railer.rt.event.Event">
+ 		SELECT hitCount, imageFilename
+			FROM
+			 (
+			  SELECT hitCount, imageFilename
+			  FROM event
+			  ORDER BY hitCount DESC
+			 )
+			where rownum <![CDATA[<=]]>3
+	</select>
+	
+	<!-- 댓글 -->
+	<insert id="insertReply" parameterType="com.railer.rt.event.Reply">
+		INSERT INTO eventReply(replyNum, eventNum, userId, content, answer)
+			VALUES (eventReply_seq.NEXTVAL, #{eventNum}, #{userId}, #{content}, #{answer})
+	</insert>
+
+	<select id="replyCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM eventReply
+		WHERE eventNum=#{eventNum} AND answer=0
+	</select>
+
+	<!-- 댓글리스트 -->
+	<select id="listReply" parameterType="map" resultType="com.railer.rt.event.Reply">
+		SELECT r.replyNum, r.userId, userName, eventNum, content, r.created, 
+		       NVL(answerCount, 0) answerCount
+		FROM eventReply r
+		JOIN member2 m ON r.userId = m.userId
+		LEFT OUTER JOIN (
+			SELECT answer, COUNT(*) answerCount
+			FROM eventReply WHERE answer!=0 GROUP BY answer
+		) a ON r.replyNum = a.answer
+		
+		WHERE eventNum=#{eventNum} AND r.answer=0
+		ORDER BY r.replyNum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+		
+	<!-- 댓글 및 답글 삭제 -->
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM eventReply WHERE 
+		<if test="mode=='reply' ">
+			replyNum IN (
+				SELECT replyNum FROM eventReply
+					START WITH replyNum=#{replyNum}
+					CONNECT BY PRIOR replyNum = answer         
+			)
+		</if>
+		<if test="mode=='answer' ">
+			replyNum = #{replyNum}
+		</if>
+	</delete>
+	
+	<!-- 댓글의 답글 리스트 -->
+	<select id="listReplyAnswer" parameterType="Integer" resultType="com.railer.rt.event.Reply">
+		SELECT replyNum, eventNum, r.userId, userName, content, r.created, answer
+		FROM eventReply r
+		JOIN member2 m ON r.userId = m.userId
+		WHERE answer = #{answer}
+		ORDER BY replyNum DESC
+	</select>
+	
+	<!-- 댓글의 답글 개수 -->
+	<select id="replyAnswerCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM eventReply WHERE answer = #{answer}
+	</select>
+			
 </mapper>

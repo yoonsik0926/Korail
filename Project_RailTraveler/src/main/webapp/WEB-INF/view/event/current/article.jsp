@@ -30,6 +30,41 @@ function ajaxJSON(url, type, query, fn) {
 	});
 }
 
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+//페이징 처리
+$(function(){
+	listPage(1);
+});
+
+function listPage(page) {
+	var url = "<%=cp%>/event/listReply";
+	var query = "eventNum=${dto.eventNum}&pageNo="+page;
+	var selector = "#listReply";
+	
+	ajaxHTML(url, "get", query, selector);
+}
+
+
 //게시글 공감 여부
 $(function(){
 	$(".btnSendEventLike").click(function(){
@@ -61,6 +96,160 @@ $(function(){
 		ajaxJSON(url, "post", query, fn);
 	});
 });
+
+//리플 등록
+$(function(){
+	$(".btnSendReply").click(function(){
+		var eventNum="${dto.eventNum}";
+		var $tb = $(this).closest("table");
+		var content=$tb.find("textarea").val().trim();
+		if(! content) {
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		var url="<%=cp%>/event/insertReply";
+		var query="eventNum="+eventNum+"&content="+content+"&answer=0";
+		
+		var fn = function(data){
+			$tb.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
+
+// 댓글 삭제
+$(function(){
+	$("body").on("click", ".deleteReply", function(){
+		if(! confirm("게시물을 삭제하시겠습니까 ? ")) {
+		    return false;
+		}
+		
+		var replyNum=$(this).attr("data-replyNum");
+		var page=$(this).attr("data-pageNo");
+		
+		var url="<%=cp%>/event/deleteReply";
+		var query="replyNum="+replyNum+"&mode=reply";
+		
+		var fn = function(data){
+			// var state=data.state;
+			listPage(page);
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
+// 댓글별 답글 리스트
+function listReplyAnswer(answer) {
+	var url="<%=cp%>/event/listReplyAnswer";
+	var query = {answer:answer};
+	var selector = "#listReplyAnswer"+answer;
+	
+	ajaxHTML(url, "get", query, selector);
+}
+
+// 댓글별 답글 개수
+function countReplyAnswer(answer) {
+	var url = "<%=cp%>/event/countReplyAnswer";
+	var query = {answer:answer};
+	
+	var fn = function(data){
+		var count=data.count;
+		var vid="#answerCount"+answer;
+		$(vid).html(count);
+	};
+	
+	ajaxJSON(url, "post", query, fn);
+}
+
+// 답글 버튼(댓글별 답글 등록폼 및 답글리스트)
+$(function(){
+	$("body").on("click", ".btnReplyAnswerLayout", function(){
+		var $trReplyAnswer = $(this).closest("tr").next();
+		// var $trReplyAnswer = $(this).parent().parent().next();
+		// var $answerList = $trReplyAnswer.children().children().eq(0);
+		
+		var isVisible = $trReplyAnswer.is(':visible');
+		var replyNum = $(this).attr("data-replyNum");
+			
+		if(isVisible) {
+			$trReplyAnswer.hide();
+		} else {
+			$trReplyAnswer.show();
+            
+			// 답글 리스트
+			listReplyAnswer(replyNum);
+			
+			// 답글 개수
+			countReplyAnswer(replyNum);
+		}
+	});
+	
+});
+
+// 댓글별 답글 등록
+$(function(){
+	$("body").on("click", ".btnSendReplyAnswer", function(){
+		var eventNum="${dto.eventNum}";
+		var replyNum = $(this).attr("data-replyNum");
+		var $td = $(this).closest("td");
+		var content=$td.find("textarea").val().trim();
+		if(! content) {
+			$td.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		var url="<%=cp%>/event/insertReply";
+		var query="eventNum="+eventNum+"&content="+content+"&answer="+replyNum;
+		
+		var fn = function(data){
+			$td.find("textarea").val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listReplyAnswer(replyNum);
+				countReplyAnswer(replyNum);
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+		
+	});
+});
+
+// 댓글별 답글 삭제
+$(function(){
+	$("body").on("click", ".deleteReplyAnswer", function(){
+		if(! confirm("게시물을 삭제하시겠습니까 ? "))
+		    return;
+		
+		var replyNum=$(this).attr("data-replyNum");
+		var answer=$(this).attr("data-answer");
+		
+		var url="<%=cp%>/event/deleteReply";
+		var query="replyNum="+replyNum+"&mode=answer";
+		
+		var fn = function(data){
+			listReplyAnswer(answer);
+			countReplyAnswer(answer);
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
+
 
 </script>
 
@@ -138,6 +327,30 @@ $(function(){
 				    </td>
 				</tr>
 			</table>
+			
+			<div>
+			<table style='width: 100%; margin: 15px auto 0px; border-spacing: 0px;'>
+				<tr height='30'> 
+					 <td align='left' >
+					 	<span style='font-weight: bold;' >댓글쓰기</span><span> - 이벤트에 대한 의견을 공유해주세요 </span>
+					 </td>
+				</tr>
+				<tr>
+				   	<td style='padding:5px 5px 0px;'>
+						<textarea class='boxTA' style='width:99%; height: 70px;'></textarea>
+				    </td>
+				</tr>
+				<tr>
+				   <td align='right'>
+				        <button type='button' class='btn btnSendReply' data-num='10' style='padding:10px 20px;'>댓글 등록</button>
+				    </td>
+				 </tr>
+			</table>
+			     
+			<div id="listReply"></div>
+	    
+	    </div>
+			
 						
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">

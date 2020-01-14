@@ -73,6 +73,7 @@ public class EventController {
 		map.put("rows", rows);
 
         List<Event> list = service.listEvent(map);
+        List<Event> rankEvent = service.rankEvent(map);
         
         int listNum, n = 0;
         for(Event dto : list) {
@@ -101,6 +102,7 @@ public class EventController {
         model.addAttribute("subMenu", mode.equals("current")?0:1);
         
         model.addAttribute("list", list);
+        model.addAttribute("rankEvent", rankEvent);
         model.addAttribute("page", current_page);
         model.addAttribute("total_page", total_page);
         model.addAttribute("dataCount", dataCount);
@@ -115,7 +117,8 @@ public class EventController {
 		model.addAttribute("articleUrl", articleUrl);
 		return ".four.event.current.list";
 	}
-	
+		
+		
 	@RequestMapping(value="/event/created", method=RequestMethod.GET)
 	public String createdForm(
 			Model model) throws Exception {
@@ -266,6 +269,120 @@ public class EventController {
 			model.put("state", state);
 			model.put("eventLikeCount", eventLikeCount);
 			
+			return model;
+		}
+		
+		// 댓글 리스트 : AJAX-TEXT
+		@RequestMapping(value="/event/listReply")
+		public String listReply(
+				@RequestParam int eventNum,
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				Model model
+				) throws Exception {
+			
+			int rows=5;
+			int total_page=0;
+			int dataCount=0;
+			
+			Map<String, Object> map=new HashMap<>();
+			map.put("eventNum", eventNum);
+			
+			dataCount=service.replyCount(map);
+			total_page = myUtil.pageCount(rows, dataCount);
+			if(current_page>total_page)
+				current_page=total_page;
+			
+	        int offset = (current_page-1) * rows;
+			if(offset < 0) offset = 0;
+	        map.put("offset", offset);
+	        map.put("rows", rows);
+			List<Reply> listReply=service.listReply(map);
+			
+			for(Reply dto : listReply) {
+				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			}
+			
+			// AJAX 용 페이징
+			String paging=myUtil.pagingMethod(current_page, total_page, "listPage");
+			
+			// 포워딩할 jsp로 넘길 데이터
+			model.addAttribute("listReply", listReply);
+			model.addAttribute("pageNo", current_page);
+			model.addAttribute("replyCount", dataCount);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			
+			return "event/listReply";
+		}
+		
+		// 댓글 및 댓글의 답글 등록 : AJAX-JSON
+		@RequestMapping(value="/event/insertReply", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> insertReply(
+				Reply dto,
+				HttpSession session
+				) {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String state="true";
+			
+			try {
+				dto.setUserId(info.getUserId());
+				service.insertReply(dto);
+			} catch (Exception e) {
+				state="false";
+			}
+			
+			Map<String, Object> model = new HashMap<>();
+			model.put("state", state);
+			return model;
+		}
+		
+		// 댓글 및 댓글의 답글 삭제 : AJAX-JSON
+		@RequestMapping(value="/event/deleteReply", method=RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> deleteReply(
+				@RequestParam Map<String, Object> paramMap
+				) {
+			
+			String state="true";
+			try {
+				service.deleteReply(paramMap);
+			} catch (Exception e) {
+				state="false";
+			}
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("state", state);
+			return map;
+		}
+		
+		 // 댓글의 답글 리스트 : AJAX-TEXT
+		@RequestMapping(value="/event/listReplyAnswer")
+		public String listReplyAnswer(
+				@RequestParam int answer,
+				Model model
+				) throws Exception {
+			
+			List<Reply> listReplyAnswer=service.listReplyAnswer(answer);
+			for(Reply dto : listReplyAnswer) {
+				dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+			}
+			
+			model.addAttribute("listReplyAnswer", listReplyAnswer);
+			return "event/listReplyAnswer";
+		}
+		
+		// 댓글의 답글 개수 : AJAX-JSON
+		@RequestMapping(value="/event/countReplyAnswer")
+		@ResponseBody
+		public Map<String, Object> countReplyAnswer(
+				@RequestParam(value="answer") int answer
+				) {
+			
+			int count=service.replyAnswerCount(answer);
+			
+			Map<String, Object> model=new HashMap<>();
+			model.put("count", count);
 			return model;
 		}
 }
