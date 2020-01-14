@@ -33,7 +33,70 @@
 
 <!--지도 정보를 가져오는 API 스크립트-->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=134ec7b5b1389d0316b7c1bed3033f48"></script>
+<script type="text/javascript">
+	function sendLinkFacebook() {
+		var facebook_share_url = "https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}";
+		window.open(facebook_share_url, 'Share on Facebook',
+				'scrollbars=no, width=500, height=500');
+	}
+	function sendLinkTwitter() {
+		var twitter_share_text = "{{ post.title }}";
+		var twitter_share_url = "{{ request.build_absolute_uri }}";
+		window.open("https://twitter.com/share?text=" + twitter_share_text
+				+ "&url=" + twitter_share_url, 'Share on Twitter',
+				'scrollbars=no, width=500, height=500');
+	}
+	function sendLinkNaver() {
+		var raw_url = "{{ request.build_absolute_uri }}";
+		var raw_title = "{{ post.title }}"
+		var naver_root_url = "http://share.naver.com/web/shareView.nhn?url="
+		var naver_share_url = naver_root_url + encodeURI(raw_url) + "&title="
+				+ encodeURI(raw_title);
+		window.open(naver_share_url, 'Share on Naver',
+				'scrollbars=no, width=500, height=500');
+	}
+	$(function() {
+		$(window).scroll(function() {
+			if ($(this).scrollTop() > 500) {
+				$('#MOVE_TOP_BTN').fadeIn();
+			} else {
+				$('#MOVE_TOP_BTN').fadeOut();
+			}
+		});
 
+		$("#MOVE_TOP_BTN").click(function() {
+			$('html, body').animate({
+				scrollTop : 0
+			}, 400);
+			return false;
+		});
+	});
+	function modalOn() {
+		$('#myModal').modal('toggle');
+	}
+	function clickLikeBtn() {
+		var cs = document.getElementById("boardLikeIcon");
+		if (cs.className == 'far fa-heart') {
+			cs.className = 'fas fa-heart';
+		} else {
+			cs.className = 'far fa-heart';
+		}
+	}
+	function clickReLikeBtn() {
+		var cs = document.getElementById("boardReLikeIcon");
+		if (cs.className == 'far fa-heart') {
+			cs.className = 'fas fa-heart';
+		} else {
+			cs.className = 'far fa-heart';
+		}
+	}
+	
+	function snsShare() {
+// 		$('#cocoaModal').css("display","block");
+	}
+
+	// http://www.libertypage.net/myblog/post/18/
+</script>
 
 
 
@@ -437,6 +500,122 @@ $(function() {
 
 }
 
+
+/* SNS 공유하기 모달 */
+.modal_post_social .modal-content {
+    padding: 8px 0;
+}
+.text-basic, .text-basic a {
+    color: #212121;
+}
+
+.modal_post_social .social-btn {
+    overflow: hidden;
+}
+.social-btn ul {
+    list-style: outside none none;
+    padding: 0;
+}
+.modal_post_social li:first-child, .modal_post_social li:nth-child(5) {
+    margin-left: 5px;
+}
+.modal_post_social li {
+    float: left;
+    width: 68px;
+    margin-top: 10px;
+}
+.modal_post_social li a {
+    text-align: center;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1;
+    display: block;
+    width: 68px;
+    height: 80px;
+    background: url(//vendor-cdn.imweb.me/images/site/social_icon3.png?487487) no-repeat;
+    background-size: 56px;
+    padding-top: 63px;
+}
+.modal_post_social li.kakao a {
+    background-position: 7px 0;
+}
+.modal_post_social li.story a {
+    background-position: 7px -325px;
+    letter-spacing: -1px;
+}
+
+.modal_post_social li.line a {
+    background-position: 7px -81px;
+}
+.modal_post_social li.band a {
+    background-position: 7px -406px;
+}
+.modal_post_social li.naver a {
+    background-position: 7px -648px;
+}
+.modal_post_social li.face a {
+    background-position: 7px -163px;
+}
+.modal_post_social li.twitter a {
+    background-position: 7px -244px;
+}
+.modal_post_social li.googleplus a {
+    background-position: 7px -568px;
+}
+.modal_post_social .url-copy {
+    clear: both;
+    padding: 0 8px;
+    margin-top: 20px;
+}
+.holder {
+    position: relative;
+}
+.modal_post_social .url-copy .form-control {
+    border: 1px solid rgba(155, 155, 155, 0.4);
+    box-shadow: none;
+    color: #212121;
+    /* padding-right: 65px; */
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #eee;
+    opacity: 1;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.modal_post_social .url-copy button {
+    border-radius: 0;
+    color: #000;
+    border: 1px solid rgba(155, 155, 155, 0.4);
+    font-size: 13px;
+    padding: 7px 16px;
+    height: 34px;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    background: #fff;
+    letter-spacing: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
 </style>
 
 
@@ -687,46 +866,32 @@ $(function() {
 
 
 <!--Modal: 공유기능 모달-->
-<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
+<div class="modal fade in modal_post_social" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" data-backdrop="true" data-keyboard="true">
   <div class="modal-dialog cascading-modal" role="document">
 
-    <!--Content-->
-    <div class="modal-content">
-
-      <!--Header-->
-      <div class="modal-header light-blue darken-3 white-text">
-        <h4 class="title"><i class="fas fa-users"></i> 공유해 보세요!</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
-      </div>
 
       <!--Body-->
-      <div class="modal-body mb-0 text-center">
+		<ul style="list-style: none; margin-top: 70px;">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li role="" class="kakao"><a href="javascript:;" onclick="shareKakaotalk();">카카오톡</a></li>
+	<!-- 	<li role="" class="story"><a href="javascript:;" onclick="kakaoStory();">카카오스토리</a></li> -->
+		<li role="" class="naver"><a href="javascript:;" onclick="share();">네이버</a></li>
+		<li role="" class="band"><a href="javascript:;" onclick="shareNaverBand();">밴드</a></li>
+<!-- 	<li role="" class="face"><a href="javascript:;" onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
+		<li role="" class="twitter"><a href="javascript:;" onclick="SNS.setSnsApi('twitter')">트위터</a></li>
+		<li role="" class="googleplus"><a href="javascript:;" onclick="SNS.setSnsApi('googleplus')">Google+</a></li> -->
+		</ul>
+		 </div>
+</div>
 
-     
-        <!--Twitter-->
-        <a href="javascript:sendLinkTwitter()" type="button" class="btn-floating btn-tw" style="font-size: 30px;"><i class="fab fa-twitter"></i></a>
-        
-        <!--Google +-->
-        <a href="javascript:sendLinkFacebook()" type="button" class="btn-floating btn-gplus" style="font-size: 30px;"><i class="fab fa-google-plus-g"></i></a>
-        
-        <!--Instagram-->
-        <a type="button" class="btn-floating btn-ins" style="font-size: 30px;"><i class="fab fa-instagram"></i></a>
-        
-        <!--Comments-->
-        <a onclick="shareKakaotalk();" type="button" class="btn-floating btn-comm " style="font-size: 30px;"><i class="fas fa-comments"></i></a>
-        
-        <!--Email-->
-        <a href="javascript:sendLinkNaver()" type="button" class="btn-floating btn-email" style="font-size: 30px;"><i class="fas fa-envelope"></i></a>
 
-      </div>
-
-    </div>
     <!--/.Content-->
 
-  </div>
-</div>
+
+
 <!--Modal: 공유기능 모달-->
 
 
@@ -954,6 +1119,10 @@ function sharebox() {
 
 
 
+
+
+
+
 <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 <script type="text/javascript">
@@ -979,8 +1148,8 @@ function sharebox() {
                 {
                       title:"게시글 확인"    // 버튼 제목
                     , link : {
-                        mobileWebUrl:"<%=nowUrl%>"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
-                      , webUrl:"<%=nowUrl%>" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                        mobileWebUrl:"${targetUrl}"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                      , webUrl:"${targetUrl}" // PC버전 카카오톡에서 사용하는 웹 링크 URL
                     }
                 }
             ]
@@ -994,4 +1163,57 @@ function sharebox() {
                     'scrollbars=no, width=500, height=500');
     } 
 </script>
+
+
+<script> 
+
+	
+function shareNaverBlog(url, title) {
+
+	var link = StringTool.format( 'https://share.naver.com/web/shareView.nhn?url={0}&title={1}', url, title );
+	window.open( link, 'share', 'width=500, height=500' ); 
+}
+
+
+function share() {
+	var targetUrl ="${targetUrl}";
+	var url = targetUrl.replace('http://localhost', 'http://211.238.142.60');
+   	
+		url = encodeURI(encodeURIComponent(url));
+    
+    var title = encodeURI("${vo.name}");
+    var shareURL = "https://share.naver.com/web/shareView.nhn?url=" + url + "&title=" + title;
+    
+    window.open( shareURL, 'share', 'width=500, height=500' );
+
+  }
+
+	
+function shareNaverBand() { 
+
+	
+	var targetUrl ="${targetUrl}";
+	var url = targetUrl.replace('http://localhost', 'http://211.238.142.60');
+   	
+	url = encodeURI(encodeURIComponent(url));
+    
+    var title = encodeURI("${vo.name}");
+    var shareURL = "http://band.us/plugin/share?url=" + url + "&title=" + title;
+    
+    window.open( shareURL, 'share', 'width=500, height=500' );
+	
+	}
+
+
+function format() { 
+	var args = Array.prototype.slice.call (arguments, 1);
+	return arguments[0].replace (/\{(\d+)\}/g, 
+			function (match, index){ return args[index];
+			});
+	}
+
+</script>
+
+
+
 
