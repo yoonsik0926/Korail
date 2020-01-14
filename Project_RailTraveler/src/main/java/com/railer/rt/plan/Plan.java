@@ -5,6 +5,7 @@ public class Plan {
 	private int ticketDay; // 티켓이 몇일차짜리 인지
 	private String userId;
 	private String sDate; // 내일로 여행 시작날짜
+	private String title;
 	
 	// DetailPlan(세부계획)
 	private int detailPlanNum;
@@ -133,6 +134,12 @@ public class Plan {
 	}
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	

@@ -55,8 +55,8 @@
 	
 	<!-- 몇일차 여행인지 추가하기 -->
 	<insert id="insertPlan" parameterType="map">
-		INSERT INTO plan(planNum, userId, ticketDay, sDate)
-			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate})
+		INSERT INTO plan(planNum, userId, ticketDay, sDate, title)
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
@@ -76,10 +76,9 @@
 		SELECT tourNum, staNum, detailcateNum, name, tel, address
 		FROM tour
 		<where>
-		detailcateNum=#{detailcateNum}
+		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
 		AND INSTR(name, #{keyword}) &gt; 0
 		</where>
-		
       ORDER BY tourNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 	</select>
@@ -89,7 +88,7 @@
 		SELECT NVL(COUNT(*), 0)
 		FROM tour t
 		<where>
-		detailcateNum=#{detailcateNum}
+		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
 		AND INSTR(name, #{keyword}) &gt; 0
 		</where>     
 	</select>

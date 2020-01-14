@@ -89,6 +89,7 @@ public class PlanController {
 	@ResponseBody
 	public Map<String, Object> insertTicketDay(@RequestParam String days,
 											   @RequestParam String sDate,
+											   @RequestParam String title,
 											   HttpSession session,
 											   HttpServletRequest request) {
 		
@@ -98,6 +99,7 @@ public class PlanController {
 		map.put("userId", info.getUserId());
 		map.put("days",days);
 		map.put("sDate",sDate);
+		map.put("title", title);
 		
 		try {
 			service.insertPlan(map);
@@ -112,10 +114,11 @@ public class PlanController {
 	@RequestMapping(value="/plan/searchPlace")
 	@ResponseBody
 	public Map<String, Object> searchPlace(@RequestParam(value="page", defaultValue="1") int current_page,
-							  @RequestParam int detailcateNum,
-							  @RequestParam String keyword,
-							  HttpServletRequest req,
-							  Model model) throws Exception {
+										   @RequestParam int detailcateNum,
+										   @RequestParam int staNum,
+										   @RequestParam String keyword,
+										   HttpServletRequest req,
+										   Model model) throws Exception {
 		
 		
 		int rows = 6; // 한 화면에 보여주는 게시물 수
@@ -128,6 +131,7 @@ public class PlanController {
 		
 		// 전체 페이지 수
 		Map<String, Object> map=new HashMap<>();
+		map.put("staNum", staNum);
 		map.put("detailcateNum", detailcateNum);
 		map.put("keyword", keyword);
 		

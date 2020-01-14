@@ -497,25 +497,36 @@ div.timeSelect {
 }
 </style>
 <script type="text/javascript">
+$(function () {
+	<c:if test="${empty sessionScope.member.userId}">
+		alert("로그인하러간다용숑숑!");
+		location.href='<%=cp%>/member/login';
+	</c:if>
+});
+
 
 // 여행 출발일자 선택하기
 $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
 
-		var pandocki=$("#planListForm").children().attr("class")!="planList1";
-	
+// 		var pandocki=$("#planListForm").children().length();
+
 		$("#datepicker").datepicker({
 			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
 			altField:"#selectedDay1",
 			showAnim: "slide"
 		});
 		
-		
 		$("body").on("change", "#datepicker", function(){
 // 			console.log($("#planListForm").children().eq(0).attr("class")!="planList1");
-			console.log(! pandocki);
-// 			if(! pandocki) {
+// 			console.log(pandocki);
+// 			if(pandocki=0) {
 // 				alert("몇일차인지 먼저 선택해주세요.");
 // 			} 
+			var pandocki=$("#planListForm").find("div[class*='planList']");
+			if(! pandocki) {
+				alert("먼저 일차를 선택해주세요.");
+				return false;
+			}
 			
 		    var tempDate=$("#selectedDay1").val();
 		       
@@ -692,7 +703,7 @@ $(function() {
 		var jsonData=JSON.stringify(days);
 		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
-		var query= {"days":jsonData, "sDate":sDate, "name":name};
+		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title};
 		
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
@@ -728,11 +739,11 @@ $(function(){
 	function findTourThing(page){
 		var detailcateNum=$("#detailTourCategory").val();
 		var tourKeyword=$("input[name='tourKeyword']").val();
-		
+		var staNum=$(".ddiring").parent().attr("data-staNum");
 		
 		
 		var url="<%=cp%>/plan/searchPlace";
-		var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page};
+		var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
 	
 		var fn=function(data) {
 			$("#listTour").empty();
@@ -740,8 +751,8 @@ $(function(){
 				var tel=(data.list[i].tel==null? "":data.list[i].tel);
 				$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
 									 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 35px;'>"+data.list[i].name+"</td>"
-									 +"		<td style='text-overflow:ellipsis; overflow:hidden; width:100px;'>"+tel+"</td>"
-									 +"		<td style='text-overflow:ellipsis; overflow:hidden; width:240px;'>"+data.list[i].address+"</td>"
+									 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:100px;'>"+tel+"</td>"
+									 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:240px;'>"+data.list[i].address+"</td>"
 									 +"</tr>"
 									 );
 				
@@ -749,7 +760,7 @@ $(function(){
 			$("#listTourPaging").html("<div style='font-size: 14px;' align='center'>"
 					 			  	  +data.paging
 					 			  	  +"</div>"
-			);
+									 );
 		};
 		ajaxJSON(url, "post", query, fn);
 	};
@@ -836,7 +847,12 @@ $(function(){
 							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 						<button type="button" class="finalSave">최종저장</button>
 						<div id="userNameHere">
-							<span>${dto.userName}님 접속중...</span>
+							<c:if test="${not empty sessionScope.member.userId}">
+								<span>${sessionScope.member.userName}(${sessionScope.member.userId})님 접속중...</span>
+							</c:if>
+							<c:if test="${empty sessionScope.member.userId}">
+								<span><b onclick="javascript:location.href='<%=cp%>/member/login'" style="cursor: pointer;">로그인</b> 하러가기</span>
+							</c:if>
 						</div>
 					</div>
 				</div>
@@ -975,7 +991,7 @@ function fnImgPop(url){
   	OpenWindow.document.write("<style>body{margin:2px; padding:0px;}</style><img src='"+url+"' width='"+win_width+"', height='"+win_height+"'>");
 }
 
-
+// 계획짜기 버튼을 눌렀을 때 mdList(세부계획 리스트) 등장
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
 // 		console.log(detailPlan=$('.detailPlanning').parent().parent().next().attr("class"));
@@ -983,6 +999,11 @@ $(function() {
 		if($(this).parent().siblings().hasClass("activeGreen")) {
 			alert("이미 선택된 일차가 있습니다.");
 			return;
+		}
+		// 계획하기를 클릭했을때 mdList가 사라지지 않은 상태면 자동으로 사라지게하기
+		var plusButton=$("#planListForm").find("[class*='ddiring']");
+		if(plusButton) {
+			$(this).parent().next().find("div[class*='ddiring']").click();
 		}
 		
     	if($(this).parent().next().css("display")=="none") {
@@ -995,7 +1016,10 @@ $(function() {
         	$(this).prev().prev().find("input[name=selectedDay]").removeClass("activeGreen");
 //         	$(this).parent().parent().next().toggleClass("activeGreen");
         }
+    	
+    	
     });
+    
 });
 
 
@@ -1098,7 +1122,7 @@ $("#endNow").change(function() {
 	
 	if(timeGap<0) {
 		alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-		return;
+		return false;
 	}
 	
 	if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(0)").index()) {
@@ -1346,6 +1370,9 @@ $(function() {
 function saveDetail() {
 	var f=document.detailPlanForm;
 	
+	var sTime=f.sTime.value;
+	var eTime=f.eTime.value;
+	
 	var md={
 		cateNum:f.cateNum.value,
 		name:f.name.value,
@@ -1354,11 +1381,15 @@ function saveDetail() {
 		longitude:"37.556515",
 		latitude:"126.919482",
 		memo:f.memo.value,
-		sTime:f.sTime.value,
-		eTime:f.eTime.value,
+		sTime:sTime,
+		eTime:eTime,
 		price:f.price.value
 	}
 	
+	if(eTime-sTime<=0) {
+		alert("시작시간과 종료시간 설정을 올바르게 해주세요.");
+		return false;
+	}
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
 	var staNum=$(".ddiring").parent().attr("data-staNum");
 	var index2=$(".ddiring").parent().attr("data-index");
