@@ -8,6 +8,8 @@ public class Plan {
 	private String eDate; //여행 끝 날짜
 	private String title;
 	private String imageFileName; //이미지 파일 이름
+	private String writer; //작성자
+	private String staName; //역 이름
 	
 	// DetailPlan(세부계획)
 	private int detailPlanNum;
@@ -154,6 +156,18 @@ public class Plan {
 	}
 	public void setImageFileName(String imageFileName) {
 		this.imageFileName = imageFileName;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	public String getStaName() {
+		return staName;
+	}
+	public void setStaName(String staName) {
+		this.staName = staName;
 	}
 	
 	
