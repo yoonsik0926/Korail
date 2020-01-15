@@ -327,12 +327,13 @@ $(function(){
 				    </td>
 				</tr>
 			</table>
-			
+						
 			<div>
+			
 			<table style='width: 100%; margin: 15px auto 0px; border-spacing: 0px;'>
 				<tr height='30'> 
 					 <td align='left' >
-					 	<span style='font-weight: bold;' >댓글쓰기</span><span> - 이벤트에 대한 의견을 공유해주세요 </span>
+					 	<span style='font-weight: bold;' >댓글쓰기</span><span> - 이벤트에 대한 내용을 작성해주세요 </span>
 					 </td>
 				</tr>
 				<tr>
@@ -346,15 +347,13 @@ $(function(){
 				    </td>
 				 </tr>
 			</table>
-			     
+			    
 			<div id="listReply"></div>
-	    
-	    </div>
-			
-						
+	       </div>
+	   								
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">
-			    <td align="right">
+			    <td align="center">
 			        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/event/current?${query}';">목록으로</button>
 			    </td>
 			</tr>

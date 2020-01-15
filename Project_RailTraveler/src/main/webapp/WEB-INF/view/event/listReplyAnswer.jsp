@@ -24,7 +24,12 @@
             </div>
         </div>
         <div style='clear:both; padding: 5px 5px 5px 5%; border-bottom: 1px solid #ccc;'>
-            ${vo.content}
+            <c:if test="${vo.userId != sessionScope.member.userId &&  sessionScope.member.userId != 'admin' }">
+	           		<p style="color: #a9a9a9;">비밀글 입니다.<p>
+	           	</c:if>
+	              <c:if test="${vo.userId == sessionScope.member.userId ||  sessionScope.member.userId == 'admin' }">
+	              ${vo.content}
+	              </c:if>
         </div>
     </div>			            
 </c:forEach>

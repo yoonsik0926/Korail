@@ -117,6 +117,95 @@ public class EventController {
 		model.addAttribute("articleUrl", articleUrl);
 		return ".four.event.current.list";
 	}
+	
+	@RequestMapping(value="/event/announce")
+	public String announce(
+			@RequestParam(value="page", defaultValue="1") int current_page,
+			@RequestParam(defaultValue="0") int order,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			HttpServletRequest req,
+			Model model) throws Exception {
+		
+		String cp = req.getContextPath();
+   	    
+		int rows = 6;
+		int total_page = 0;
+		int dataCount = 0;
+   	    
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			keyword = URLDecoder.decode(keyword, "utf-8");
+		}
+
+		String mode="current";
+        if(req.getRequestURI().indexOf("/event/current")==-1) {
+        	 mode="last";
+        }
+		
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("mode", mode);
+        map.put("order", order);
+        map.put("condition", condition);
+        map.put("keyword", keyword);
+        
+                
+        dataCount = service.dataCount(map);
+        if(dataCount != 0)
+            total_page = myUtil.pageCount(rows,  dataCount) ;
+       
+        if(total_page < current_page) 
+            current_page = total_page;
+      
+        int offset=(current_page-1)*rows;
+		if(offset<0) offset=0; 
+		map.put("offset", offset);
+		map.put("rows", rows);
+
+        List<Event> list = service.listEvent(map);
+        List<Event> rankEvent = service.rankEvent(map);
+        
+        int listNum, n = 0;
+        for(Event dto : list) {
+            listNum = dataCount - (offset + n);
+            dto.setListNum(listNum);
+            n++;
+        }
+
+        String query = "order="+order+"&mode="+mode;
+        String listUrl;
+        
+        if(keyword.length()!=0) {
+        	query += "&condition=" +condition + 
+        	         "&keyword=" + URLEncoder.encode(keyword, "utf-8");	
+        }
+        listUrl = cp+"/event/"+mode+"?"+query;
+        
+        //이부분 추가했씁니다.
+        String articleUrl = cp+"/event/article?"+query+"&page="+current_page;	
+        
+        String paging = myUtil.paging(current_page, total_page, listUrl);
+        
+        if(keyword.length()!=0)
+			model.addAttribute("search", "search");
+        
+        model.addAttribute("subMenu", mode.equals("current")?0:1);
+        
+        model.addAttribute("list", list);
+        model.addAttribute("rankEvent", rankEvent);
+        model.addAttribute("page", current_page);
+        model.addAttribute("total_page", total_page);
+        model.addAttribute("dataCount", dataCount);
+        model.addAttribute("paging", paging);
+		
+		model.addAttribute("condition", condition);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("order", order);
+		model.addAttribute("mode", mode);
+		
+		//이부분 추가했씁니다.
+		model.addAttribute("articleUrl", articleUrl);
+		return ".four.event.announce.list";
+	}
 		
 		
 	@RequestMapping(value="/event/created", method=RequestMethod.GET)

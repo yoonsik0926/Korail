@@ -11,7 +11,7 @@
 		<tr height='35'>
 		    <td colspan='2'>
 		       <div style='clear: both;'>
-		           <div style='float: left;'><span style='color: #3EA9CD; font-weight: bold;'>댓글 ${replyCount}개</span> <span>[댓글 목록, ${pageNo}/${total_page} 페이지]</span></div>
+		           <div style='float: left;'><span style='color: #3EA9CD; font-weight: bold;'>댓글 ${replyCount}개</span></div>
 		           <div style='float: right; text-align: right;'></div>
 		       </div>
 		    </td>
@@ -29,20 +29,23 @@
 	           <c:if test="${vo.userId == sessionScope.member.userId ||  sessionScope.member.userId == 'admin' }">
 	                <span class="deleteReply" style="cursor: pointer;" data-replyNum='${vo.replyNum}' data-pageNo='${pageNo}'>삭제</span>
 	           	</c:if>
-	           <c:if test="${vo.userId != sessionScope.member.userId &&  sessionScope.member.userId != 'admin' }">
-	           		<span class="notifyReply">신고</span>
-	           	</c:if>
+	           
 	        </td>
 	    </tr>
 	    <tr>
 	        <td colspan='2' valign='top' style='padding:5px 5px;'>
+	              <c:if test="${vo.userId != sessionScope.member.userId &&  sessionScope.member.userId != 'admin' }">
+	           		<p style="color: #a9a9a9;">비밀글 입니다.<p>
+	           	</c:if>
+	              <c:if test="${vo.userId == sessionScope.member.userId ||  sessionScope.member.userId == 'admin' }">
 	              ${vo.content}
+	              </c:if>
 	        </td>
 	    </tr>
 	    
 	    <tr>
 	        <td style='padding:7px 5px;'>
-	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='${vo.replyNum}'>답글 <span id="answerCount${vo.replyNum}">${vo.answerCount}</span></button>
+	        	<button type='button' class='btn btnReplyAnswerLayout' data-replyNum='${vo.replyNum}'>답글 <span id="answerCount${vo.replyNum}">${vo.answerCount}</span></button>
 	        </td>
 	    </tr>
 	
