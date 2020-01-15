@@ -61,10 +61,31 @@ public class QnaServiceImpl implements QnaService {
 	}
 
 	@Override
+	public int reArticleCount(Map<String, Object> map) throws Exception {
+		int count = 0;
+		try {
+			count = dao.selectOne("qna.reArticleCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return count;
+	}
+	@Override
 	public List<Qna> listQna(Map<String, Object> map) {
 		List<Qna> list = null;
 		try {
 			list = dao.selectList("qna.listQna", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public List<Qna> listReQna(Map<String, Object> map) {
+		List<Qna> list = null;
+		try {
+			list = dao.selectList("qna.listReQna", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -317,5 +338,14 @@ public class QnaServiceImpl implements QnaService {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	@Override
+	public void updateEnable(Map<String, Object> map) throws Exception{
+		try {
+			dao.updateData("qna.updateEnable", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

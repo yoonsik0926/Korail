@@ -986,7 +986,7 @@ a {
 					<c:forEach var="file" items="${files}">
 					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
 					<td>
-					 <a href="<%=cp%>/friend/download?friendFileNum=${file.friendFileNum}">${file.friendFileNum}
+					 <a href="<%=cp%>/friend/download?friendFileNum=${file.friendFileNum}">
 					<i
 								class="far fa-arrow-alt-circle-down"></i></a></td>
 								<td>${file.originalFilename}</td>
@@ -1029,10 +1029,10 @@ a {
 		<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
 			<div class="fl">
 				<button type="button" class="btn btn-default"
-					onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+					onclick="javascript:location.href='<%=cp%>/friend/article?${query}&friendNum=${preReadDto.friendNum}';">
 					이전글</button>
 				<button type="button" class="btn btn-default"
-					onclick="javascript:location.href='<%=cp%>/friend/friend?${query}';">
+					onclick="javascript:location.href='<%=cp%>/friend/article?${query}&friendNum=${nextReadDto.friendNum}';">
 					다음글</button>
 			</div>
 			<div class="fr">

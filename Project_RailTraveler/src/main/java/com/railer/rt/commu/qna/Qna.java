@@ -14,7 +14,7 @@ public class Qna {
 	private int notice;
 	private int enable;
 	private int answer;
-	private String category;
+	private String category, categoryName;
 	
 	private int qnaFileNum;
 	private String saveFilename, originalFilename;
@@ -27,6 +27,15 @@ public class Qna {
 	private int replyCount;
 	private int bookmarkCount;
 	private int myBookMark;
+	private int reArticleCount;
+
+	public int getReArticleCount() {
+		return reArticleCount;
+	}
+
+	public void setReArticleCount(int reArticleCount) {
+		this.reArticleCount = reArticleCount;
+	}
 
 	private String deleteId;
 
@@ -212,6 +221,14 @@ public class Qna {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	
 	

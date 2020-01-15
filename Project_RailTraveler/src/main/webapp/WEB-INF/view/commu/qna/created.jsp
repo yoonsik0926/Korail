@@ -40,6 +40,7 @@ $(function () {
             f.content.focus();
             return false;
         }
+        
    		f.action="<%=cp%>/qna/${mode}";
 
         return true;
@@ -129,7 +130,7 @@ input[type=text], input[type=file] {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 자유게시판 - 글쓰기</span>
+			<span style="padding: 10px 0px; display: block;"> 동행구하기 - 글쓰기</span>
 		</h3>
 	</div>
 
@@ -147,6 +148,17 @@ input[type=text], input[type=file] {
 			<!-- 동행구하기 입력 폼 테이블 -->
 			<table class="tb-created">
 				<tbody id="boardtb">
+				<c:if test="${mode=='reArticle'}">
+					<tr class="tb-row" style="margin-bottom: 10px; ">
+						<td width="100" class="tb-title">원글 번호</td>
+						<td class="tb-content">${qnaNum}</td>
+					</tr>
+					<tr class="tb-row" style="margin-bottom: 10px; ">
+						<td width="100" class="tb-title">원글 카테고리</td>
+						<td class="tb-content">${categoryName}</td>
+					</tr>
+				</c:if>
+				<c:if test="${sessionScope.member.userId!='admin' and mode!='reArticle' }">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">분류</td>
 					<td class="tb-content">
@@ -166,6 +178,7 @@ input[type=text], input[type=file] {
 						</select>
   				 	</td>
 				</tr>
+				</c:if>
 					<tr class="tb-row">
 						<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 						<td class="tb-content"><input type="text" name="subject"
@@ -225,6 +238,11 @@ input[type=text], input[type=file] {
 							<input type="hidden" name="originalFilename"
 								value="${dto.originalFilename}">
 							<input type="hidden" name="page" value="${page}">
+						</c:if>
+						
+						<c:if test="${mode=='reArticle'}">
+							<input type="hidden" name="answer" value="${qnaNum}">
+							<input type="hidden" name="category" value="${categoryNum}">
 						</c:if>
 					</td>
 				</tr>

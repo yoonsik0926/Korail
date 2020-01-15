@@ -47,6 +47,7 @@ public class BoardController {
 	@RequestMapping(value="/board/board")
 	public String list(@RequestParam(name = "page", defaultValue = "1") int current_page,
 			@RequestParam(defaultValue = "all") String condition, @RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "0") int answer,
 			HttpServletRequest req, Model model) throws Exception {
 		
 

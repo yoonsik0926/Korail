@@ -24,7 +24,7 @@
 								</div>
 							</c:if>
 							<c:choose>
-								<c:when test="${vo.secret==1 and not(vo.userId ==sessionScope.member.userId or writer==sessionScope.member.userId)}">
+								<c:when test="${vo.secret==1 and not(vo.userId ==sessionScope.member.userId or writer==sessionScope.member.userId or 'admin'==sessionScope.member.userId)}">
 									<div style="font-size: 14px;
     color: #aaa;"><span>비밀글 입니다.</span></div>
 								</c:when>

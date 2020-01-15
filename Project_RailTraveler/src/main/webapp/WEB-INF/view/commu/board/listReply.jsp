@@ -186,5 +186,4 @@ $('textarea').click(function(){
 	</c:if>
 });
 	
-	
 </script>

@@ -14,7 +14,7 @@
 	parameter Type : QnaDTO-->
 	<insert id="insertQna" parameterType="com.railer.rt.commu.qna.Qna">
 		INSERT INTO qna(qnaNum, userId, subject, content, answer, category)
-		VALUES(#{qnaNum}, #{userId}, #{subject}, #{content}, #{answer, jdbcType=INTEGER},#{category})
+		VALUES(#{qnaNum}, #{userId}, #{subject}, #{content}, #{answer, jdbcType=INTEGER},#{category, jdbcType=VARCHAR})
 	</insert>
 	
 	<!--qna 첨부파일을 insert
@@ -81,12 +81,67 @@
 		</where>
 	</select>
 	
+	<!--동행게시판 게시물 수를 반환
+	parameter Type : map
+	return type : 정수형-->
+	<select id="reArticleCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM qna f
+		JOIN member2 m2 ON f.userId=m2.userId 
+		where f.answer=#{qnaNum}
+	</select>
+	
 	<!--해당 범위 안의 동행게시판 게시물을 가져오는, 해당 페이지의 동행게시판 게시물 리스트
 	parameter Type : map
 	result Type : Qna DTO-->
 	<select id="listQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
-      SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, deleteId, answer, f.enable, category,
+      SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, deleteId, f.answer, f.enable, f.category, categoryName,
             NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+            , NVL(reArticleCount,0) reArticleCount
+      FROM qna f 
+      JOIN member2 m2 ON f.userId=m2.userId
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
+         GROUP BY qnaNum
+      ) ff On f.qnaNum=ff.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
+         GROUP BY qnaNum
+      ) r On f.qnaNum=r.qnaNum
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) reArticleCount FROM qna
+         GROUP BY qnaNum
+      ) r On f.qnaNum=r.answer
+      LEFT OUTER JOIN (
+         SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
+         GROUP BY qnaNum
+      ) fb On f.qnaNum=fb.qnaNum
+      LEFT OUTER JOIN category ct On f.category=ct.category
+      <where>
+         <if test="keyword!=null and keyword!=''">
+            <include refid="where-list"/>
+         </if>
+         <if test="category!='all'">
+            and f.category=#{category}
+         </if>
+         <if test="answer!=0">
+            and f.answer=#{answer}
+         </if>
+         <if test="answer==0">
+            and f.answer=0
+         </if>
+         and f.userid!='admin'
+      </where>
+      ORDER BY f.qnaNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+   </select>
+   
+	<!--해당 범위 안의 동행게시판 게시물을 가져오는, 해당 페이지의 동행게시판 게시물 리스트
+	parameter Type : map
+	result Type : Qna DTO-->
+	<select id="listReQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
+      SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, deleteId, f.answer, f.enable, f.category, categoryName,
+            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
       LEFT OUTER JOIN (
@@ -101,13 +156,13 @@
          SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
          GROUP BY qnaNum
       ) fb On f.qnaNum=fb.qnaNum
+      LEFT OUTER JOIN category ct On f.category=ct.category
+      LEFT OUTER JOIN (
+         SELECT qnaNum, userid, COUNT(*) myBookMark FROM qnaBookMark
+         where userid=#{userId} and qnaNum=#{qnaNum} group by qnaNum, userid
+      ) fb1 On f.qnaNum=fb1.qnaNum
       <where>
-         <if test="keyword!=null and keyword!=''">
-            <include refid="where-list"/>
-         </if>
-         <if test="category!='all'">
-            and category=#{category}
-         </if>
+         f.answer=#{answer}
          and f.userid!='admin'
       </where>
       ORDER BY f.qnaNum DESC
@@ -118,8 +173,8 @@
 	parameter Type : 정수
 	result Type : Qna DTO-->
 	<select id="readQna" parameterType="map"  resultType="com.railer.rt.commu.qna.Qna">
-		SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, answer, f.enable, category,
-		 NVL(fileCount,0) fileCount
+		SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, f.answer, f.enable, f.category,
+		 categoryName, NVL(fileCount,0) fileCount
             ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
@@ -139,7 +194,9 @@
          SELECT qnaNum, userid, COUNT(*) myBookMark FROM qnaBookMark
          where userid=#{userId} and qnaNum=#{qnaNum} group by qnaNum, userid
       ) fb1 On f.qnaNum=fb1.qnaNum
-      	WHERE f.qnaNum=#{qnaNum}
+       JOIN category ct ON ct.category=f.category
+      where
+         f.qnaNum=#{qnaNum}
 	</select>
 	
 	<!--공지사항 해당 게시물에 대한 파일 리스트 정보 가져오기
@@ -305,4 +362,9 @@ from qnaReply fr
 			qnaReplyNum = #{qnaReplyNum}
 		</if>
 	</delete>
+	
+	<!-- 업데이트. 채택하기! -->
+	<update id="updateEnable" parameterType="map">
+		update Qna set enable=#{enable} WHERE qnaNum=#{qnaNum}
+	</update>
 </mapper>

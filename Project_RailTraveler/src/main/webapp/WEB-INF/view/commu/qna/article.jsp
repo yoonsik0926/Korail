@@ -2,9 +2,12 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
 %>
+<link href="<%=cp%>/resource/css/modal.css" rel="stylesheet">
+<script src="<%=cp%>/resource/js/commu.js"></script>
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script type="text/javascript">
 	function sendLinkFacebook() {
@@ -47,30 +50,272 @@
 	function modalOn() {
 		$('#myModal').modal('toggle');
 	}
-	function clickLikeBtn() {
-		var cs = document.getElementById("boardLikeIcon");
-		if (cs.className == 'far fa-heart') {
-			cs.className = 'fas fa-heart';
-		} else {
-			cs.className = 'far fa-heart';
-		}
-	}
-	function clickReLikeBtn() {
-		var cs = document.getElementById("boardReLikeIcon");
-		if (cs.className == 'far fa-heart') {
-			cs.className = 'fas fa-heart';
-		} else {
-			cs.className = 'far fa-heart';
-		}
-	}
 	
-	function snsShare() {
-// 		$('#cocoaModal').css("display","block");
-	}
+	
+	
+	///////////////////////////////////////
+	///////////////////////////////////////
+	///////////////////////////////////////
+	
+	function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+function ajaxHTML(url, type, query, selector) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,success:function(data) {
+			$(selector).html(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+//게시글 공감 여부
+$(function(){
+// 	$(".btnSendQnaLike").click(function(){
+// 		<c:if test="${empty sessionScope.member.userId}">
+// 		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+<%-- 			location.href="<%=cp%>/member/login"; --%>
+// 		else{
+// 			return;
+// 		}
+// 		</c:if>
+// 		var cs = document.getElementById("boardLikeIcon");
+// 		if( cs.className =="far fa-heart"){
+// 			if(! confirm("북마크 하시겠습니까 ? ")) {
+// 				return false;
+// 			}
+			
+<%-- 			var url="<%=cp%>/qna/insertQnaBookmark"; --%>
+// 			var qnaNum="${dto.qnaNum}";
+// 			var query = {qnaNum:qnaNum};
+			
+// 			var fn = function(data){
+// 				var state=data.state;
+// 				if(state=="true") {
+// 					var count = data.bookmarkCount;
+// 					$("#qnabookmarkCount").text(count);
+// 					cs.className = 'fas fa-heart';
+// 				} else if(state=="false") {
+// 					alert("좋아요는 한번만 가능합니다. !!!");
+// 				}
+// 			}; 
+			
+// 			ajaxJSON(url, "post", query, fn);
+			
+			
+			
+// 		}else{
+// 			if(! confirm("북마크를 취소하시겠습니까 ? ")) {
+// 				return false;
+// 			}
+			
+<%-- 			var url="<%=cp%>/qna/deleteQnaBookmark"; --%>
+// 			var qnaNum="${dto.qnaNum}";
+// 			var query = {qnaNum:qnaNum};
+			
+// 			var fn = function(data){
+// 				var state=data.state;
+// 				if(state=="true") {
+// 					var count = data.bookmarkCount;
+// 					$("#qnabookmarkCount").text(count);
+// 					cs.className = 'far fa-heart';
+// 				} else if(state=="false") {
+// 					alert("좋아요는 한번만 가능합니다. !!!");
+// 				}
+// 			};
+			
+// 			ajaxJSON(url, "post", query, fn);
+// 		}
+// 	});
+});
 
-	// http://www.libertypage.net/myblog/post/18/
+//게시물 삭제
+function deleteQna(num) {
+	var q="qnaNum=${dto.qnaNum}&${query}";
+	var url="<%=cp%>/qna/delete?"+q;
+	
+	if(confirm("게시물을 삭제 하시겠습니까 ?")) {
+<%-- 		var url="<%=cp%>/notice/delete?num="+num+"&${query}"; --%>
+		location.href=url;
+	}
+}
+
+//채택하기
+function updateEnable(num) {
+	var q="qnaNum="+${dto.qnaNum}+"&enable="+num+"&${query}";
+// 		console.log(q);
+	var url="<%=cp%>/qna/updateEnable?"+q;
+	
+	location.href=url;
+}
+
+
+function insertReArticle(){
+	var qnaNum="${dto.qnaNum}";
+	var categoryNum="${dto.category}";
+	var url="<%=cp%>/qna/createdReArticle?qnaNum="+qnaNum+"&categoryNum="+categoryNum+"&categoryName=${dto.categoryName}&${query}";
+// 	console.log(url);
+	location.href=url;
+	
+};
+
+//게시글 공감 여부
+$(function(){
+	$(".btnSendBoardLike").click(function(){
+		<c:if test="${empty sessionScope.member.userId}">
+			if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+				location.href="<%=cp%>/member/login";
+			else{
+				return;
+			}
+		</c:if>
+		var cs = document.getElementById("boardLikeIcon");
+		var qnaNum=$(this).data('num');
+		var $boardLikeCount = "#boardLikeCount"+qnaNum;
+		if( cs.className =="far fa-heart"){
+			if(! confirm("북마크 하시겠습니까 ? ")) {
+				return false;
+			}
+			
+			var url="<%=cp%>/qna/insertQnaBookmark";
+			
+			var query = {'qnaNum':qnaNum};
+			
+			var fn = function(data){
+				var state=data.state;
+				if(state=="true") {
+					var count = data.bookmarkCount;
+					$($boardLikeCount).text(count);
+					cs.className = 'fas fa-heart';
+				} else if(state=="false") {
+					alert("좋아요는 한번만 가능합니다. !!!");
+				}
+			}; 
+			
+			ajaxJSON(url, "post", query, fn);
+			
+			
+			
+		}else{
+			if(! confirm("북마크를 취소하시겠습니까 ? ")) {
+				return false;
+			}
+			
+			var url="<%=cp%>/qna/deleteQnaBookmark";
+			var query = {'qnaNum':qnaNum};
+			
+			var fn = function(data){
+				var state=data.state;
+				if(state=="true") {
+					var count = data.bookmarkCount;
+					$($boardLikeCount).text(count);
+					cs.className = 'far fa-heart';
+				} else if(state=="false") {
+					alert("좋아요는 한번만 가능합니다. !!!");
+				}
+			};
+			
+			ajaxJSON(url, "post", query, fn);
+		}
+	});
+});
+
+/////////////////////////////////////
+/////////////////////////////////////
+/////////////////////////////////////
+// <div id="reply-div${dto.qnaNum}"></div>
+// 			<div id="articleReply-div${dto.qnaNum}"></div>
+
+function listPage(num, page) {
+	var url = "<%=cp%>/qna/listReply";
+	var query = "qnaNum="+num+"&userId=${dto.userId}&pageNo="+page;
+	var selector = "#reply-div"+num;
+	
+	ajaxHTML(url, "get", query, selector);
+}
+
+function listReArticle(page) {
+	var num = '${dto.qnaNum}';
+	var category = '${dto.category}';
+	var url = "<%=cp%>/qna/listReArticle";
+	var query = "qnaNum=${dto.qnaNum}&userId=${dto.userId}&category=${dto.category}&pageNo="+page;
+	var selector = "#articleReply-div"+num;
+	
+	ajaxHTML(url, "get", query, selector);
+}
+
+$(function(){
+	$("body").on("click",".btnSendReply", function(){
+		
+		var qnaNum=$(this).data('num');
+		var $content=$(this).parent().find("textarea");
+		var content=$content.val().trim();
+		if(! content) {
+			alert("내용을 입력해주세요");
+			$content.focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		var url="<%=cp%>/qna/insertReply";
+		var query="qnaNum="+qnaNum+"&content="+content;
+		console.log(qnaNum);
+		var fn = function(data){
+			$content.val("");
+			
+			var state=data.state;
+			if(state=="true") {
+				listPage(qnaNum,1);
+			} else if(state=="false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxJSON(url, "post", query, fn);
+	});
+});
 </script>
 <style type="text/css">
+::-webkit-scrollbar {
+	display:none;
+}
+.fl {
+	float: left;
+	margin-top: 8px;
+}
+
+.fr {
+	float: right;
+	margin-top: 8px;
+}
 tfoot td{
  padding: 6px 10px;
 }
@@ -268,73 +513,199 @@ a#MOVE_TOP_BTN {
     text-align: center;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>
-<!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
-	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content"
-			style="padding: 15px; background: #fffff5; border: 3px navy dotted;">
-			<h3 style="font-weight: 900; border-bottom: 1px solid;">다운로드</h3>
-			<ul>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-				<li style="padding: 5px;"><a href="#"><span><i
-							class="far fa-arrow-alt-circle-down"></i>
-							2019학년도_겨울계절학기_과목개설현황_및_수업시간표_20191111.pdf</span></a></li>
-			</ul>
+
+
+
+<!-- SNS 공유하기 모달 -->
+<div id="snsModal" role="dialog" tabindex="-1"
+	aria-labelledby="mySmallModalLabel" aria-hidden="true"
+	data-backdrop="true" data-keyboard="true"
+	class="modal1 modal_post_social" style="display: none;">
+	<div class="modal-dialog"
+		style="width: 315px; position: absolute; right: 16.5%;
+    top: 18.5%;">
+		<div class="modal-content">
+			<div class="text-basic">
+				<div class="social-btn">
+					<ul>
+						<li role="" class="kakao"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li>
+						<li role="" class="story"><a href="javascript:;"
+							onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li>
+						<li role="" class="line"><a href="javascript:;"
+							onclick="SNS.setSnsApi('line')">라인</a></li>
+						<li role="" class="band"><a href="javascript:;"
+							onclick="SNS.setSnsApi('band')">밴드</a></li>
+						<li role="" class="naver"><a href="javascript:;"
+							onclick="SNS.setSnsApi('naver')">네이버</a></li>
+						<li role="" class="face"><a href="javascript:;"
+							onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
+						<li role="" class="twitter"><a href="javascript:;"
+							onclick="SNS.setSnsApi('twitter')">트위터</a></li>
+						<li role="" class="googleplus"><a href="javascript:;"
+							onclick="SNS.setSnsApi('googleplus')">Google+</a></li>
+					</ul>
+				</div>
+				<div class="url-copy holder">
+					<div class="form-control-line">
+						<input type="text"
+							class="_sns_copy_url form-control"
+							value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board"
+							readonly="readonly">
+						<button type="button"
+							class="_sns_copy_btn sns_copy_btn btn btn-default"
+							onclick="">복사</button>
+					</div>
+				</div>
+				<div id="copy_complete" class="text-center"></div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<!--Modal: 신고 모달-->
+<form name="singoForm" method="post" action="">
+<div class="modal fade  bd-example-modal-sm" id="singo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 560px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+<!--       $('#targetType').val('0'); -->
+<!-- 		$('#targetUserId').text(targetUserId); -->
+<!-- 		$('#targetContent').text(targetContent);		 -->
+<!-- 		$('#targetNum').val(num); -->
+<!-- 		$('#targetUrl').val(targetUrl); -->
+      <input type="hidden"  id="targetType" name="targetType">
+      <input type="hidden"  id="targetTitle" name="targetTitle">
+      <input type="hidden"  id="targetNum" name="targetNo">
+      <input type="hidden"  id="targetUrl" name="targetUrl">
+      <input type="hidden" id="singoreason" value="etc" >
+
+      <div class="modal-header d-flex justify-content-center" style="background-color: #d3d3d3; padding: 9px 0px 9px 15px; border-bottom:1px solid #c4c4c4 ">
+        <p style="font-size:22px; text-align:left;font-weight: 700;margin: 0px 0px;">신고하기</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 12px 15px 0px; text-align: left; font-weight:700;">
+		<div style=" border-bottom:1px solid #c4c4c4">
+		<p>제&nbsp;&nbsp;&nbsp;목 :&nbsp;&nbsp;<input id="targetContent"  style="font-weight: 500; cursor: auto;border: none;" value="얄라리얄라 얄라숑" readonly="readonly"></p>
+		<p>작성자 :&nbsp;&nbsp;<input id="targetUserId" name="targetUserId" style="font-weight: 500; cursor: auto;border: none;" value="yoonsik09(김**)" readonly="readonly"></p>
+        </div>
+        
+        <div style="margin: 10px 0px;">
+        	<table style="width: 100%; ">
+        		<tr>
+        			<td width="17%" valign="top">
+        			<p>신고사유:&nbsp;&nbsp;</p>
+        			</td>
+        			<td width="83%" valign="top">
+        			<span style="font-size: 14px; color: #949494;font-weight: 500">여러 사유에 해당하는 경우 대표 사례 하나만 선택해주세요</span>
+        			</td>
+        		</tr>
+        		
+        		<tr>
+        		<td width="17%"></td>
+        		<td width="83%">
+        		    <P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="부적절한 홍보 게시물" >부적절한 홍보 게시물<a id="adverClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P> 
+        		    <div id="adverInfo" style="display: none ">
+        		   	 <ul style="font-size: 13px; color: #a9a9a9;font-weight: 500 ;margin: 10px 0px ; padding: 0px 0px 0px 20px; ">
+      						<li>불법 사행성, 도박사이트를 홍보하는 경우</li>
+      						<li>개인정보, 이미테이션, 성인의약품, 마약, 대포폰 등 불법 제품 및 정보를 홍보, 판매하는 경우</li>
+      						<li>성매매, 장기매매 등의 신체 관련 거래 정보</li>
+    				 </ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="음란성 또는 청소년에게 부적합한 내용">음란성 또는 청소년에게 부적합한 내용<a id="19ageClick" style="font-size:12px;color: #949494; cursor: pointer;">&nbsp;| 더보기</a></P>
+					<div id="19ageInfo" style="display: none ">
+       		   	 		<ul style="font-size: 13px; color: #a9a9a9;font-weight: 500;margin: 10px 0px ; padding: 0px 0px 0px 20px;">
+      						<li>음란물 또는 음란한 행위(노골적인 성행위 장면)를 묘사하는 이미지/동영상</li>
+      						<li>살해/상해/폭력 등 잔인한 장면을 묘사하는 이미지/동영상</li>
+      						<li>중고 속옷 판매, 가출 유도 등의 청소년 유해 정보 공유</li>
+    				 	</ul>
+        		    </div>
+					<P style="font-weight: 500"><input class="notEtc" type="radio" name="chk_info" value="명예훼손/사생활 침해 및 저작권침해 등">명예훼손/사생활 침해 및 저작권침해 등</P>
+					<P style="font-weight: 500"><input type="radio" name="chk_info" id="etc" value="etc">기타</P>
+					
+					<div id="etcTextarea" style="display: none">
+						<textarea id="etcText" name="content" style="height:100px; width: 100%" placeholder="해당 신고는 Rail_Traveler 운영자에게 전달됩니다."></textarea>
+					</div>					
+        		</td>
+
+        		</tr>
+        	</table>
+      	</div>
+      	
+      	<div class="modal-footer flex-center" style="margin-top:5px; border-top:1px solid #c4c4c4" align="center">
+      	    <a onclick="singosubmit();" type="button" class="btn btn-info " >신고하기</a>
+        	<a type="button" class="btn  btn-info waves-effect cancelsingo" data-dismiss="modal">취소</a>
+      	</div>
+        
+        </div>
+
+
+    </div>
+  </div>
+</div>
+</form>
+<!--Modal: 신고모달-->
+
+
+<!-- 첨부파일 관리 모달 -->
+<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1"
+	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content" style="margin: 0 auto; width: 500px;">
+			<h3
+				style="margin: 0; padding: 10px; color: white; background: #141832f2; text-align: center; font-weight: 900;">첨부파일</h3>
+			<div style="padding: 10px;">
+				<table id="fileDownTb" style="
+    width: 100%;
+">
+					<tbody><tr style="border-bottom: 1px solid;    height: 35px;">
+						<th style="
+    width: 10%;
+">다운</th>
+						<th style="    text-align: center;
+    width: 50%;
+">파일명</th>
+						<th style="
+    width: 10%;
+">파일크기</th>
+					</tr>
+					<c:forEach var="file" items="${files}">
+					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
+					<td>
+					 <a href="<%=cp%>/qna/download?qnaFileNum=${file.qnaFileNum}">
+					<i
+								class="far fa-arrow-alt-circle-down"></i></a></td>
+								<td>${file.originalFilename}</td>
+								
+								<td>
+					(<fmt:formatNumber
+							value="${file.fileSize/1024}" pattern="0.00" />KByte)</td>
+					</tr>
+						
+				</c:forEach>
+					<tr>
+						<td colspan="3"><a class="btn"
+							href="<%=cp%>/qna/zipDownload?qnaNum=${dto.qnaNum}" style="    width: 100%;
+    height: 45px;
+    padding: 10px;
+    font-size: 15px;
+    background: #eee;">
+								zip 파일로 받기</a></td>
+					</tr>
+					
+				</tbody></table>
+					
+					
+			</div>
+		</div>
+	</div>
+</div>
+
+
 
 <div class="body-content-container">
 	<div class="page-three-title mt40">
@@ -345,39 +716,50 @@ a#MOVE_TOP_BTN {
 
 	<div id="sir_lbo" class="sir_lbo"
 		style="padding: 0; margin: 0; font-size: 1.025em;">
-		<button class="comment_num btn btn-flat" type="button" onclick="snsShare()"><i class="icon-share board-summary-icon"></i></button>
 		<div style="padding-bottom: 10px;"></div>
-		<table style="width: 100%; border-spacing: 0px;">
-			<tr height="45">
-				<td width="300" align="left">
-					<button type="button" class="btn btn-default"
-						onclick="javascript:location.href='<%=cp%>/bbs/list?${query}';">
-						목록 <span>></span> 맛집
-					</button>
-				</td>
-
-				<td align="right"><c:if
-						test="${sessionScope.member.userId==dto.userId}">
+			<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
+			<div class="fl">
+			<c:if test="${not empty preReadDto}">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/qna/article?${query}&qnaNum=${preReadDto.qnaNum}';">
+					이전글</button></c:if>
+					<c:if test="${not empty nextReadDto}">
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/qna/article?${query}&qnaNum=${nextReadDto.qnaNum}';">
+					다음글</button></c:if>
+			</div>
+			<div class="fr">
+				<c:if test="${dto.notice!=1}">
+					<c:if test="${ (not empty dto.enable) and dto.enable!=0}">
 						<button type="button" class="btn btn-default"
-							onclick="updateBoard();">수정</button>
-					</c:if> <c:if
-						test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+							style="background: #aaa; color: white;" disabled='disabled'>완료</button>
+					</c:if>
+					<c:if test="${dto.enable==0}">
 						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();">삭제</button>
-					</c:if></td>
-			</tr>
-		</table>
+							onclick="updateEnable(${dto.qnaNum});"
+							style="background: #f97509; color: white;" disabled='disabled'>미완료</button>
+					</c:if>
+				</c:if>
+				<button type="button" class="btn btn-default"
+					onclick="javascript:location.href='<%=cp%>/qna/qna?${query}';">
+					목록</button>
+			</div>
+			<div class="cb"></div>
+		</div>
 		<table
 			style="width: 100%; margin: 0px auto 0px; border-spacing: 0px; border-collapse: collapse; border-top: 2px solid #000; border-bottom: 2px solid #000;">
-			<thead>
 				<tr>
 					<td colspan="3" style="padding-top: 15px;">
-						<h3 style="margin: 10px 0 2px; font-size: 25px;">묻고답하기 게시물입니당 
+						<h3 style="margin: 10px 0 10px; font-size: 25px;"><span style="    font-size: 22px;
+    background: #eeeeee45;
+    padding: 1px 7px;
+    border: 4px double #cccccc;
+    border-radius: 10px;">${dto.categoryName}</span> ${dto.subject} 
 						
 						<span style="float: right;">
 						
-						<i class="fa fa-heart" style="width: 22px;"></i>&nbsp;5
-						<i class="fas fa-comments"></i> 5
+						<i class="fa fa-heart" style="width: 22px;"></i>&nbsp;${dto.bookmarkCount}
+						<i class="fas fa-comments"></i> 5(답글개수)
 						
 						</span> </h3>
 					</td>
@@ -385,74 +767,45 @@ a#MOVE_TOP_BTN {
 
 				<tr class="tb-row" style="height: 30px;">
 					<td colspan="3" align="left"
-						style="padding-left: 5px; font-size: 13px;"><span>이겨레</span><span>|</span><span>2019.
-							12. 15. 20:47:43</span><span>|</span><span>조회 101회</span><span>|</span><span>댓글
-							4</span></td>
+						style="padding-left: 5px; font-size: 13px;"><span>${dto.userName} </span><span>|</span><span>
+						${dto.created} </span><span>|</span><span>조회 ${dto.hitCount}회</span><span>|</span><span>댓글
+							${dto.replyCount}</span></td>
 				</tr>
 				<tr>
 					<td colspan="3" style="padding: 20px 5px;" valign="top"
-						height="200">내용입니드아아아 내용입니드아아아 내용입니드아아아 내용입니드아아아 내용입니드아아아
-						내용입니드아아아</td>
+						height="200">${dto.content} </td>
 				</tr>
 
-				<tr class="tb-row" style="border-bottom: 0;">
-					<td colspan="3" height="40" align="center">
+				<tr style="border-bottom: 0;">
+					<td colspan="3" height="40" align="center">${dto.myBookMark}
 						<button type="button" class="btn btnSendBoardLike btn-default"
 							title="좋아요"
-							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;"
-							onclick="clickLikeBtn();">
-							<i id="boardLikeIcon" class="far fa-heart"
+							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;" 
+							  data-num='${dto.qnaNum}' >
+							<i id="boardLikeIcon" ${dto.myBookMark==0? 'class="fas fa-heart"':'class="far fa-heart"'} 
 								style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
-								id="boardLikeCount">${dto.boardLikeCount}0</span>
+								id="boardLikeCount${dto.qnaNum}">${dto.bookmarkCount}</span>
 						</button>
 					</td>
 				</tr>
+				<c:if test="${not empty dto.fileCount}">
 				<tr class="tb-row">
 					<td colspan="3" align="left"
 						style="padding-left: 5px; color: blue;"><a
-						onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (0)</a></td>
+						onclick="modalOn();" style="cursor: pointer;"> 첨부된 파일 (${dto.fileCount})</a></td>
 				</tr>
-			</thead>
-			<tbody>
-				<tr height='30'>
-					<td align='left' colspan="3"><span style='font-weight: bold;'>댓글
-							(3)</span></td>
+				</c:if>
+				<c:if test="${empty dto.fileCount}">
+				<tr class="tb-row">
+					<td colspan="3" align="left"
+						style="padding-left: 5px; color: #ccc;">첨부된 파일이 없습니다.</td>
 				</tr>
-				<tr>
-					<td style='padding: 5px 0px 15px;' colspan="3"><textarea
-							class='boxTA'
-							style='width: 89%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
-						<button type='button' class='btn btnSendReply btn-default'
-							data-num='10'
-							style='margin-left: 1%; width: 10%; height: 50px; padding: 10px 1px; float: left;'>등록</button>
-
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-
-
-
-
-
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span><b>작성자</b></span></td>
-					<td>| 내용이 이렇게 적히는거죠??????????????????????????</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
-				</tr>
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span>관리자</span></td>
-					<td>| 자제좀요</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
-				</tr>
-			</tfoot>
-		</table>
+				</c:if>
+				</table>
+			<div id="reply-div${dto.qnaNum}"></div>
+			<div id="articleReply-div${dto.qnaNum}">
+				
+							
 <!-- List group -->
 				<ul class="list-group" style="margin: 20px 0;
     box-shadow: none;">
@@ -460,18 +813,21 @@ a#MOVE_TOP_BTN {
 					<li id="note-title" class="list-group-item note-title"
 						style="background: beige;">
 						<h3 class="panel-title" style="    float: left;">
-							답글 <span id="note-count">2</span>
+							답글 <span id="note-count">${reArticleCount}</span>
 						</h3>
 						<h3 class="panel-title" style="float: right;">
 							<a href="#">최신순<a href="#"></a> | <a href="#">추천순</a>
 						</h3>
 						<div style="clear: both;"></div>
 					</li>
-
-					<li class="list-group-item note-item clearfix" id="note-1861368">
+					
+					
+				<c:forEach var="reArticle" items="${listReArticle}">
+					<li class="list-group-item note-item clearfix">
 					<div style="padding: 5px 0 10px 10px;">
-					<div style="color: red;font-size: 15px;text-shadow: 1px 1px yellow;">* 채택 된 답변입니다 *</div>
-    
+					<c:if test="${reArticle.qnaNum==dto.enable}">
+						<div style="color: red;font-size: 15px;text-shadow: 1px 1px yellow;">* 채택 된 답변입니다 *</div>
+   					 </c:if>
     </div>
 							<div class="content-body panel-body pull-left" style="padding: 0 15px; width: 92%">
 
@@ -481,10 +837,9 @@ a#MOVE_TOP_BTN {
     float: left;
     width: 50px;"><i class="far fa-comment-dots" style="font-size: 35px;"></i></div>
 									<div class="avatar-info">
-									관리자
+									${reArticle.userName }
 										<div class="date-created">
-											<span class="timeago" title="2019-12-16 22:20:55.0">2019-12-16
-												22:20:55</span>
+											<span class="timeago" title="2019-12-16 22:20:55.0">${reArticle.created }</span>
 										</div>
 									</div>
 								</div>
@@ -492,8 +847,7 @@ a#MOVE_TOP_BTN {
 									<article id="note-text-1861368"
 										class="list-group-item-text note-text">
 
-										<p>둘다 합격했다는 전제하에.......</p>
-										<p>가고 싶은데 가세요. 근데 두군데 다 합격???</p>
+										${reArticle.content}
 
 									</article>
 								</fieldset>
@@ -501,68 +855,49 @@ a#MOVE_TOP_BTN {
 
 							<div class="content-function pull-right text-center" style="width: 60px;">
 								<div class="content-function-group">
-								<button type="button" class="btn btn-warning"
-							onclick="updateBoard();" style="width: 60px;
-    margin-bottom: 5px;"> 채택</button>
-									<button type="button" class="btn btn-default"
-							onclick="clickReLikeBtn();" style="width: 60px;
-    margin-bottom: 5px;"><i id="boardReLikeIcon" class="far fa-heart" style="font-size: 15px;
-    margin: 0 auto; color: orangered;"></i>&nbsp;${dto.boardLikeCount}0</button>
-    
-    <button type="button" class="btn btn-default"
-							onclick="updateBoard();" style="width: 60px;
-    margin-bottom: 5px;">수정</button>
+								<c:if
+						test="${dto.userId==sessionScope.member.userId and (dto.enable==0)}">
+						<button type="button" class="btn btn-warning"
+							onclick="updateEnable(${reArticle.qnaNum});"
+							style="width: 60px; margin-bottom: 5px;">채택</button>
+					</c:if>
+						
+					<button type="button" class="btn btn-default btnSendBoardLike" title="좋아요" data-num='${reArticle.qnaNum}'
+						style="width: 60px; margin-bottom: 5px;">
+						<i id="boardLikeCount${reArticle.qnaNum}" ${reArticle.myBookMark==0? 'class="far fa-heart"':'class="fas fa-heart"'} 
+							style="font-size: 15px; margin: 0 auto; color: orangered;"></i>&nbsp;${reArticle.bookmarkCount}
+					</button>
+					<c:if test="${reArticle.userId==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default"
-							onclick="deleteBoard();" style="width: 60px;">삭제</button>
-							
-							
+							onclick="updateBoard(${reArticle.qnaNum});"
+							style="width: 60px; margin-bottom: 5px;">수정</button>
+					</c:if>
+					<c:if
+						test="${reArticle.userId==sessionScope.member.userId or reArticle.userId=='admin'}">
+						<button type="button" class="btn btn-default"
+							onclick="deleteBoard(${reArticle.qnaNum});" style="width: 60px;">삭제</button>
+					</c:if>
 								</div>
 							</div>
-<table
-			style="width: 100%; margin: 10px auto; border-spacing: 0px; border-collapse: collapse;">
-			 
-			<tbody>
-				<tr height='30'>
-					<td align='left' colspan="3"><span style='font-weight: bold;'>댓글
-							(3)</span></td>
-				</tr>
-				<tr>
-					<td style='padding: 5px 0px 15px;' colspan="3"><textarea
-							class='boxTA'
-							style='width: 89%; height: 50px; float: left; resize: none; overflow-y: scroll;'></textarea>
-						<button type='button' class='btn btnSendReply btn-default'
-							data-num='10'
-							style='margin-left: 1%; width: 10%; height: 50px; padding: 10px 1px; float: left;'>등록</button>
 
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-
-
-
-
-
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td width='80' style=''><span><b>관리자</b></span></td>
-					<td>내용이 이렇게 적히는거죠??????????????????????????</td>
-					<td width='250' style="text-align: right;"><span>2019-12-16
-							18:03:22</span> | <span class="deleteReply" style="cursor: pointer;"
-						data-replyNum='0' data-pageNo='0'>삭제</span> <span
-						class="notifyReply">신고</span></td>
-				</tr>
-			</tfoot>
-		</table>
+			<div id="reply-div${reArticle.qnaNum}">
+			
+			</div>
 					</li>
+					
+					
+					</c:forEach>
+					<c:if test="${(not empty sessionScope.member.userId) and 'admin'!=sessionScope.member.userId}">
 					<li class="list-group-item note-form" style="padding: 5px 0 15px 0;
     text-align: center;">
 <button class="reBoardBtn" style="font-weight: 900;
     width: 20%;
     height: 45px;
     border-radius: 10px 0 10px 0;
-    text-shadow: 1px 2px #ffffff59;">답글 쓰기</button>
+    text-shadow: 1px 2px #ffffff59;" onclick="insertReArticle();">답글 쓰기</button>
 					</li>
-					
+					</c:if>
+					<c:if test="${empty sessionScope.member.userId}">
 					<li class="list-group-item note-form clearfix">
 
 
@@ -574,19 +909,50 @@ a#MOVE_TOP_BTN {
 						</div>
 
 					</li>
+					</c:if>
 				</ul>
 			
-			
+			</div>
 </div>
 </div>
 <div id="cocoaModal" role="dialog" 
  tabindex="-1" aria-labelledby="mySmallModalLabel"
 aria-hidden="true" data-backdrop="true" data-keyboard="true"  class="in modal_post_social">
 	<div class="modal-dialog">
-		<div class="modal-content"><div class="text-basic"><div class="social-btn"><ul><li role="" class="kakao"><a href="javascript:;" onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li><li role="" class="story"><a href="javascript:;" onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li><li role="" class="line"><a href="javascript:;" onclick="SNS.setSnsApi('line')">라인</a></li><li role="" class="band"><a href="javascript:;" onclick="SNS.setSnsApi('band')">밴드</a></li><li role="" class="naver"><a href="javascript:;" onclick="SNS.setSnsApi('naver')">네이버</a></li><li role="" class="face"><a href="javascript:;" onclick="SNS.setSnsApi('facebook')">페이스북</a></li><li role="" class="twitter"><a href="javascript:;" onclick="SNS.setSnsApi('twitter')">트위터</a></li><li role="" class="googleplus"><a href="javascript:;" onclick="SNS.setSnsApi('googleplus')">Google+</a></li></ul></div><div class="url-copy holder"><div class="form-control-line"><input type="text" id="sns_copy_url" class="_sns_copy_url form-control" value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board" readonly="readonly"><button type="button" class="_sns_copy_btn sns_copy_btn btn btn-default" onclick="SNS.copyToClipboard()" data-clipboard-target="._sns_copy_url">복사</button></div></div><div id="copy_complete" class="text-center"></div></div></div>
+		<div class="modal-content">
+		<div class="text-basic"><div class="social-btn">
+		<ul><li role="" class="kakao"><a href="javascript:;" onclick="SNS.setSnsApi('kakaotalk')">카카오톡</a></li>
+		<li role="" class="story"><a href="javascript:;" onclick="SNS.setSnsApi('kakaostory')">카카오스토리</a></li>
+		<li role="" class="line"><a href="javascript:;" onclick="SNS.setSnsApi('line')">라인</a></li>
+		<li role="" class="band"><a href="javascript:;" onclick="SNS.setSnsApi('band')">밴드</a></li>
+		<li role="" class="naver"><a href="javascript:;" onclick="SNS.setSnsApi('naver')">네이버</a></li>
+		<li role="" class="face"><a href="javascript:;" onclick="SNS.setSnsApi('facebook')">페이스북</a></li>
+		<li role="" class="twitter"><a href="javascript:;" onclick="SNS.setSnsApi('twitter')">트위터</a></li>
+		<li role="" class="googleplus"><a href="javascript:;" onclick="SNS.setSnsApi('googleplus')">Google+</a></li>
+		</ul></div><div class="url-copy holder"><div class="form-control-line">
+		<input type="text" class="_sns_copy_url form-control" value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board" readonly="readonly">
+		<button type="button" class="_sns_copy_btn sns_copy_btn btn btn-default" onclick="">복사</button></div></div><div id="copy_complete" class="text-center"></div></div></div>
 	</div>
 </div>
 <script>
+$(function(){
+	listPage('${dto.qnaNum}',1);
+	<c:forEach var="reArticle" items="${listReArticle}">
+		listPage('${reArticle.qnaNum}',1);
+	</c:forEach>
+// 	listReArticle(1);
+});
+// $(function () {
+// 	$("body").on("click",".reBoardBtn",function(){
+// 		console.log("답글쓰기~");
+// 	});
+// })	
+
+$("body").on("click",'textarea',function(){
+	<c:if test="${empty sessionScope.member.userId}">
+			location.href="<%=cp%>/member/login";
+	</c:if>
+});	
 	Kakao.init('43fed4f22c437dfe99e213d8555c56e0');
 	function sendLinkKakao() {
 		Kakao.Link.sendDefault({

@@ -86,7 +86,7 @@ text-decoration: underline;
 			style="padding: 0; margin: 0; font-size: 1.025em;">
 			<thead>
 				<tr>
-				<td width="200" colspan="5" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
+				<td width="200" colspan="7" style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 						<select onchange="changeCategory();" name="category" class="boxTF" style="border-radius: 3px; width: 150px; height: 100%; border: 1px solid #ccc; margin-right: 10px;">
 						<option value="all" ${category=="all"?"selected='selected'":""}>전체</option>
 							<optgroup label="플래너">
@@ -142,8 +142,9 @@ text-decoration: underline;
 				</tr>
 				<tr class="lbo_li lbo_legend lbo_legend_like">
 					<th width="75" style="padding-left: 1.5%;">번호</th>
+					<th width="100" style="padding-left: 10px;"><span>분류</span></th>
 					<th><span style="padding-left: 10px;">제목</span></th>
-					<th width="120"><span>작성자</span></th>
+					<th width="100"><span>작성자</span></th>
 					<th width="100"><span>작성일</span></th>
 					<th width="80"><span>조회수</span></th>
 					<th width="80"><span>상태</span></th>
@@ -163,7 +164,7 @@ text-decoration: underline;
 									style="font-size: 14px; font-weight: 600; display: block;">공지</span>
 							</div>
 						</td>
-						<td colspan="2" style="text-align: left; padding-left: 20px;">※
+						<td colspan="4" style="text-align: left; padding-left: 20px;">※
 							${dto.subject} ※ <c:if test="${dto.gap<=1}"><img alt="" style="width: 17px;" src="<%=cp%>/resource/images/commu/new1.png"> </c:if></td>
 						<td colspan="2" style="text-align: right; padding-right: 13px;"><i>${dto.created}</i></td>
 					</tr>
@@ -172,12 +173,13 @@ text-decoration: underline;
 				<c:forEach var="dto" items="${list}">
 					<tr>
 						<td>${dto.listNum}</td>
+						<td>${dto.categoryName}</td>
 					<c:if test="${empty dto.deleteId}">
 						<td style="text-align: left; padding-left: 20px;">
 						
 						<a href="${articleUrl}&qnaNum=${dto.qnaNum}">${dto.subject} </a> <span style="margin-left: 7px;
     font-size: 14px;"> <i class="far fa-heart" style="margin-right: 2px;
-    color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;
+    color: #969696;"></i>${dto.bookmarkCount} <i class="far fa-comment-alt" style="margin-right: 2px;     margin-left: 5px;
     color: #969696;"></i>${dto.replyCount}<c:if test="${dto.fileCount>0}"><i class="far fa-save" style="margin-left: 5px; margin-right: 2px; color: #969696;"></i>${dto.fileCount}</c:if>
 								<c:if test="${dto.gap<=1}"><img alt="" 
 								src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
@@ -186,20 +188,20 @@ text-decoration: underline;
 						<td>${dto.created}</td>
 						<td>${dto.hitCount}</td>
 						<td>
-						<c:if test="${dto.enable==1}">
+						<c:if test="${dto.enable!=0}">
 						<span style="border-radius: 5px;
     font-size: 13px;
     font-weight: 900;
     display: inline-block;
-    padding: 1px 3px;
-    background: #bb2b23;
+    padding: 1px 9px;
+    background: #ccc;
     color: #FFFFFF;">완료</span></c:if>
 						<c:if test="${dto.enable==0}"><span style="border-radius: 5px;
     font-size: 13px;
     font-weight: 900;
     display: inline-block;
     padding: 1px 3px;
-    background: #ccc;
+    background: #bb2b23;
     color: #FFFFFF;">미완료</span></c:if>
 
     </td>

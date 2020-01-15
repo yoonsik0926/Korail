@@ -6,7 +6,10 @@ import java.util.Map;
 public interface QnaService {
 	public void insertQna(Qna dto, String pathname) throws Exception;
 	public int dataCount(Map<String, Object> map);
+
+	int reArticleCount(Map<String, Object> map) throws Exception;
 	public List<Qna> listQna(Map<String, Object> map);
+	public List<Qna> listReQna(Map<String, Object> map);
 	public List<Qna> listQnaTop();
 	
 	public void updateHitCount(int num) throws Exception;
@@ -33,4 +36,5 @@ public interface QnaService {
 	public int replyCount(Map<String, Object> map) throws Exception;
 	public List<QnaReply> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;
+	void updateEnable(Map<String, Object> map) throws Exception;
 }
