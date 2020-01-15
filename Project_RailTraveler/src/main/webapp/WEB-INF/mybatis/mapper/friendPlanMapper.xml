@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fplan">
+	<select id="listPlan" parameterType="map" resultType="">
+		select p.planNum, p.userId, userName, p.sDate, (to_date(p.sDate) +3) eDate, title, p.imageFileName, detailPlanNum, d.staNum, staName, nthDay
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+		join member2 m on m.userId = p.userId
+		where p.userId = #{userId}	
+	</select>
+
+</mapper>

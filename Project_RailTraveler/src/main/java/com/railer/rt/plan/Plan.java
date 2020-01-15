@@ -5,7 +5,9 @@ public class Plan {
 	private int ticketDay; // 티켓이 몇일차짜리 인지
 	private String userId;
 	private String sDate; // 내일로 여행 시작날짜
+	private String eDate; //여행 끝 날짜
 	private String title;
+	private String imageFileName; //이미지 파일 이름
 	
 	// DetailPlan(세부계획)
 	private int detailPlanNum;
@@ -141,6 +143,19 @@ public class Plan {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String geteDate() {
+		return eDate;
+	}
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
+	}
+	public String getImageFileName() {
+		return imageFileName;
+	}
+	public void setImageFileName(String imageFileName) {
+		this.imageFileName = imageFileName;
+	}
+	
 	
 	
 }
