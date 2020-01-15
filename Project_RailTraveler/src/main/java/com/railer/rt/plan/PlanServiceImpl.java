@@ -81,7 +81,7 @@ public class PlanServiceImpl implements PlanService {
 			
 			// 몇일차의 세부계획(역정보를 담고 있는 오브작트의 배열을 도는 for문) 즉
 			for(int i=0; i< jarr.length(); i++) {
-				JSONArray jarr2=new JSONArray(jarr.get(i).toString());
+				JSONArray jarr2=new JSONArray(String.valueOf(jarr.get(i).toString()));
 				if(jarr2.length()==0) continue; // 일차에 등록된 역 정보가 없을 경우 다음일차로 넘어감(그냥 진행)
 				
 				for(int j=0; j< jarr2.length(); j++) {
