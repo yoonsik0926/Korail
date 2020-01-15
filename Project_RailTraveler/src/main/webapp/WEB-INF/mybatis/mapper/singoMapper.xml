@@ -86,26 +86,26 @@
 	</select>
 	
  	<select id="singo.singoList" parameterType="map" resultType="com.railer.rt.singo.Singo" >
- 		<choose>
- 		<when test='selected=="reply"'>
- 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.content targetContent,targetUrl,b.created
- 		</when>
-		
- 		<when test='selected=="board"'>
- 		select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.subject targetContent,targeturl,b.created
- 		</when>
- 		</choose>		
-		from blame b join ${targetTitle} x 
-		on b.targetNo = x.${numName}		
-		<where>
-		 	targetTitle = #{targetTitle}
-		 	
-			<if test="keyword!=null and keyword!='' ">
-				and <include refid="where-list"/>
-			</if>
-		</where>   
-			OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
-	</select> 
+       <choose>
+       <when test='selected=="reply"'>
+       select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.content targetContent,targetUrl,b.created
+       </when>
+      
+       <when test='selected=="board"'>
+       select blameNo , targetNo, targettype, targetTitle,b.userid,targetuserid,b.content,x.subject targetContent,targeturl,b.created
+       </when>
+       </choose>      
+      from blame b join ${targetTitle} x 
+      on b.targetNo = x.${numName}      
+      <where>
+          targetTitle = #{targetTitle}
+          
+         <if test="keyword!=null and keyword!='' ">
+            and <include refid="where-list"/>
+         </if>
+      </where>   
+         OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+   </select> 
 	
 	<select id="singo.singoCountList" parameterType="map" resultType="com.railer.rt.singo.SingoManagment">
 		select username , targetUserId ,singoCount, m2.enabled enabled

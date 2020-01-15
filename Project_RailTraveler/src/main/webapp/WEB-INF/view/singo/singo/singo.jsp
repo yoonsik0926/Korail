@@ -229,7 +229,7 @@ a {
 		
 
 <div class="body-content-container">
-		<div class="container" style="margin:20px auto; margin-bottom:50px; width: 93%">
+		<div class="container" style="margin:20px auto; margin-bottom:50px; width: 100%">
 			<div class="row" style="width: 100%; margin: 10px auto;">
 				<div class="col" style="font-size: 18px; font-weight: 600;">
 					<ul class="nav nav-tabs tabs" style="width: 100%; cursor: pointer;">
@@ -271,17 +271,17 @@ a {
  					 
  					<optgroup label="묻고답하기">
     				<option  value="qna" ${targetTitle=="qna"?"selected='selected'":""}>게시판</option>
-   					 <option value="qnareply" ${targetTitle=="qnareply"?"selected='selected'":""}>댓글</option>
+   					 <option value="qnaReply" ${targetTitle=="qnareply"?"selected='selected'":""}>댓글</option>
   					</optgroup>
  					 
  					<optgroup label="자유게시판">
     				<option value="board" ${targetTitle=="board"?"selected='selected'":""}>게시판</option>
-   					 <option value="boardreply" ${targetTitle=="boardreply"?"selected='selected'":""}>댓글</option>
+   					 <option value="boardReply" ${targetTitle=="boardreply"?"selected='selected'":""}>댓글</option>
   					</optgroup>
   					
   					 <optgroup label="동행구하기">
     				<option value="friend" ${targetTitle=="friend"?"selected='selected'":""}>게시판</option>
-   					 <option value="friendreply"${targetTitle=="friendreply"?"selected='selected'":""}>댓글</option>
+   					 <option value="friendReply"${targetTitle=="friendreply"?"selected='selected'":""}>댓글</option>
   					</optgroup>
 					</select>
 				
@@ -346,7 +346,7 @@ a {
 	</div>
 	</c:when>
 	<c:when test="${mode=='userManagment'}">
-	<div id="usermanagment" style="display: block; width:90%; margin: 0px auto;">
+	<div id="usermanagment" style="display: block; width:100%; margin: 0px auto;">
 
 	<table class="table table-hover tb-board" style="padding: 0; margin: 0; font-size: 1.025em; text-align: center;">
 			<thead style="text-align: center">

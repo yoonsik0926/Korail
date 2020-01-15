@@ -62,19 +62,19 @@ public class SingoController {
 		else if (targetTitle.equals("qna")) {
 			numName="qnaNum";
 		}
-		else if (targetTitle.equals("friendreply")) {
+		else if (targetTitle.equals("friendReply")) {
 			numName="friendreplyNum";
 		}
-		else if (targetTitle.equals("boardreply")) {
+		else if (targetTitle.equals("boardReply")) {
 			numName="boardreplyNum";
 		}
-		else if (targetTitle.equals("qnareply")) {
+		else if (targetTitle.equals("qnaReply")) {
 			numName="qnareplyNum";
 		}
 		
 		
 		//reply일 때 content 게시판일때 subject 출력
-		if(targetTitle.contains("reply")) {
+		if(targetTitle.contains("Reply")||targetTitle.contains("reply")) {
 			map.put("selected", "reply");
 		}else {
 			map.put("selected", "board");
@@ -98,6 +98,7 @@ public class SingoController {
 		map.put("offset", offset);
 		map.put("rows", rows);
 		
+
 		
 		//신고 목록을 가져온다~
 		List<Singo> singoList = new ArrayList<Singo>();		
@@ -120,11 +121,11 @@ public class SingoController {
 		model.addAttribute("dataCount",dataCount);
 		model.addAttribute("paging", paging);
 		model.addAttribute("singoList", singoList);
-		model.addAttribute("subMenu", "0");
+		model.addAttribute("subMenu", "1");
 		model.addAttribute("title", "투어댓글");
-	     model.addAttribute("mode", mode);
+	    model.addAttribute("mode", mode);
 		
-		return ".singo.singo";
+		return ".four.singo.singo.singo";
 	}
 	
 	@RequestMapping(value="/singo/userManagment")
@@ -187,7 +188,8 @@ public class SingoController {
 		     model.addAttribute("singoCountList", singoCountList);
 		     model.addAttribute("mode", mode);
 		     model.addAttribute("condition", condition);
-				return ".singo.singo";
+		     model.addAttribute("subMenu", "1");
+				return ".four.singo.singo.singo";
 	}
 
 	

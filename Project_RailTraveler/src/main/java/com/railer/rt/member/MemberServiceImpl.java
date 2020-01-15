@@ -216,6 +216,28 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+	@Override
+	public List<Member> userList(Map<String, Object> map) {
+		List<Member> list = null;
+		try {
+			list = dao.selectList("member.totalList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int userCount(Map<String, Object> map) {
+		int result =-1;
+		try {
+			result = dao.selectOne("member.totalUserCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 
 	
 	
