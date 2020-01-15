@@ -53,27 +53,77 @@ ul {
 .listcount {
  font-size: 15px;
  display: inline-block;
-}      
+}
+
+.carousel {
+	background: white;
+}
+
+.carousel-cell {
+	width: 25%;
+	height: 300px;
+	margin-right: 10px;
+	/* margin-top: 22.5px; */
+	margin-bottom: 22.5px;
+	background: #ED2;
+	border-radius: 5px;
+	counter-increment: carousel-cell;
+}
+
+.carousel-cell.is-selected {
+	background: #ED2;
+}
+
+/* cell number */
+.carousel-cell:before {
+	display: block;
+	text-align: center;
+	line-height: 200px;
+	font-size: 80px;
+	color: white;
+}
+
+.fPlan {
+	width: 100%;
+	height: 300px;
+	margin-right: 10px;
+	margin-bottom: 22.5px;
+	border-radius: 5px;
+}
+
+.sample_image  img {
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	-ms-transform: scale(1);
+	-o-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s;
+	-moz-transition: .3s;
+	-ms-transition: .3s;
+	-o-transition: .3s;
+	transition: .3s;
+}
+
+.sample_image:hover img {
+	-webkit-transform: scale(1.2);
+	-moz-transform: scale(1.2);
+	-ms-transform: scale(1.2);
+	-o-transform: scale(1.2);
+	transform: scale(1.2);
+}   
 
 </style>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
-<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<link rel="stylesheet" href="<%=cp%>/resource/css/flickity.min.css">
+<script src="<%=cp%>/resource/js/flickity.pkgd.min.js"></script>
+<script  src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-      $('.bxslider').bxSlider({
-    	 auto:true,
-      	 speed:500,
-      	 pause:5000,
-      	 slideWidth: 600,
-      	 mode:'horizontal',
-      	 autoControls:true,
-      	 pager:true,
-      	 captions:true,
-    	  
-      });
-    });
     
     function deleteEvent(eventNum) {
     	if(confirm("위 이벤트를 삭제 하시겠습니까 ?")) {
@@ -125,13 +175,19 @@ ul {
 	 </div>    
      
      <c:if test="${mode=='current' }">
-     <div style="margin-left: 300px;">
-     	<ul class="bxslider">
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event1.jpg"></a></li>
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event2.png"></a></li>
-     		<li><a href="#"><img src="/Project_RailTraveler/resource/img/event3.png"></a></li>
-     	</ul>
-     </div>	
+     <div class="recommend" style="width: 100%; height: 50% !important;">
+		<div class="carousel" data-flickity='{"groupCells": true }'
+			style="height: 350px;">
+						
+			<c:forEach var="vo" items="${rankEvent}">
+			<div class="carousel-cell sample_image">
+				<img class="fPlan" src="<%=cp%>/uploads/event/${vo.imageFilename}"
+				                  
+	                    onclick="javascript:article('${vo.eventNum}');"/>
+			</div>	
+			</c:forEach>
+		</div>
+		</div>
           
      <div class="tit-heading tit-evt" style="margin-bottom: 30px;">
     	<h3> 이벤트 모음 </h3>

@@ -39,9 +39,15 @@
 		</where>   
 	</select>
 	
-	<!-- 세부계획 모달창에서 카테고리 뿌리기 -->
-	<select id="listCategory" parameterType="map" resultType="com.railer.rt.plan.Tour">
-		SELECT t.cateNum, cateName, detailcateNum, detailcateName
+	<!-- 세부계획 모달창에서 대분류 카테고리 뿌리기 -->
+	<select id="listCategory" resultType="com.railer.rt.plan.Tour">
+		SELECT t.cateNum, cateName
+		FROM tourcategory t
+	</select>
+	
+	<!-- 세부계획 모달창에서 소분류 카테고리 뿌리기 -->
+	<select id="listDetailCategory" parameterType="map" resultType="com.railer.rt.plan.Tour">
+		SELECT t.cateNum, detailcateNum, detailcateName
 		FROM tourcategory t
 		JOIN detailtourcategory dt ON t.cateNum=dt.cateNum
 		WHERE t.cateNum=#{cateNum}
@@ -49,8 +55,8 @@
 	
 	<!-- 몇일차 여행인지 추가하기 -->
 	<insert id="insertPlan" parameterType="map">
-		INSERT INTO plan(planNum, userId, ticketDay, sDate)
-			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate})
+		INSERT INTO plan(planNum, userId, ticketDay, sDate, title)
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
@@ -64,4 +70,26 @@
 		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
 			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel},#{address},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR},#{memo},#{sTime},#{eTime},#{price})
 	</insert>
+	
+	<!-- 세부계획 모달에서 장소 검색 -->
+	<select id="listTour" parameterType="map" resultType="com.railer.rt.plan.Tour">
+		SELECT tourNum, staNum, detailcateNum, name, tel, address
+		FROM tour
+		<where>
+		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
+		AND INSTR(name, #{keyword}) &gt; 0
+		</where>
+      ORDER BY tourNum DESC
+      OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
+	</select>
+	
+	<!-- 검색한 장소 개수 -->
+   <select id="placeDataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM tour t
+		<where>
+		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
+		AND INSTR(name, #{keyword}) &gt; 0
+		</where>     
+	</select>
 </mapper>

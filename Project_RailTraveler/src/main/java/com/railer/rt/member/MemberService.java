@@ -22,4 +22,7 @@ public interface MemberService {
 	
 	public void deleteMember(String userId) throws Exception;
 	public Member findId(Map<String, Object> map) throws Exception;
+	
+	public List<Member> userList(Map<String, Object> map);
+	public int userCount(Map<String, Object> map);
 }

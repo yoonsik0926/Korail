@@ -48,7 +48,6 @@ public class MypageController {
 			throws Exception {
 
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
 		if (info == null) {
 			return "redirect:/member/login";
 		}
@@ -627,7 +626,7 @@ public class MypageController {
 		}
 		
 		int dataCount = 0;
-		int rows = 1;
+		int rows = 10;
 		int total_page = 0;
 		
 		Map<String, Object> map = new HashMap<>();

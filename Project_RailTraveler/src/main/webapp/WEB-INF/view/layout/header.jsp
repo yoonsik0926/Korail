@@ -90,7 +90,19 @@ System.out.print(cp);
                 </li>
                 
                 <c:if test="${sessionScope.member.userId=='admin'}">
-               	 <li><a href="<%=cp%>/singo/singo">신고목록</a></li>
+            	 
+               	<li class="dropdown">
+                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">관리 <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="<%=cp%>/member/totalList">유저 관리</a></li>
+                        <li> <a href="<%=cp%>/singo/singo" >신고 목록</a></li>
+                        <li>  <a href="<%=cp%>/usermanagement/sale">매출관리</a></li>
+                        
+    
+   
+   
+                      </ul>
+                </li>
                 </c:if>
                 
               </ul>

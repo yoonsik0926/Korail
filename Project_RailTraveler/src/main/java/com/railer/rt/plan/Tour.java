@@ -16,7 +16,7 @@ public class Tour {
 	private int tourNum;
 	private String imagefilename;
 	
-	private int cateNum; //전체.맛집..
+	private int cateNum; // 맛집,숙박,명소
 	private String cateName; //전체.맛집..이름
 	
 	private int locNum; //지역번호

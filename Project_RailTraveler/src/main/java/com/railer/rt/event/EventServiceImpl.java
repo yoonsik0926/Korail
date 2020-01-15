@@ -161,4 +161,82 @@ public class EventServiceImpl implements EventService {
 		}
 		return result;
 	}
+
+	@Override
+	public List<Event> rankEvent(Map<String, Object> map) {
+		List<Event> list = null;
+
+		try {
+			list = dao.selectList("event.rankEvent", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public void insertReply(Reply dto) throws Exception {
+		try {
+			dao.insertData("event.insertReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<Reply> listReply(Map<String, Object> map) {
+		List<Reply> list=null;
+		try {
+			list=dao.selectList("event.listReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int replyCount(Map<String, Object> map) {
+		int result=0;
+		try {
+			result=dao.selectOne("event.replyCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public void deleteReply(Map<String, Object> map) throws Exception {
+		try {
+			dao.deleteData("event.deleteReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<Reply> listReplyAnswer(int answer) {
+		List<Reply> list=null;
+		try {
+			list=dao.selectList("event.listReplyAnswer", answer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int replyAnswerCount(int answer) {
+		int result=0;
+		try {
+			result=dao.selectOne("event.replyAnswerCount", answer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

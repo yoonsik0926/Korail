@@ -1,6 +1,7 @@
 package com.railer.rt.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.railer.rt.common.MyUtil;
 import com.railer.rt.mail.Mail;
 import com.railer.rt.mail.MailSender;
 
 
 @Controller("member.memberController")
 public class MemberController {
+	@Autowired
+	private MyUtil myUtil;
+	
+	
 	@Autowired
 	private MemberService service;
 	
@@ -30,6 +36,8 @@ public class MemberController {
 	
 	@Autowired
 	private MailSender mailSender;
+	
+	
 	
 	@RequestMapping(value="/member/member", method=RequestMethod.GET)
 	public String memberForm(Model model) {
@@ -356,6 +364,70 @@ public class MemberController {
 					
 		return "redirect:/member/complete";
 	}
+	
+	
+	//관리	
+	@RequestMapping(value="/member/totalList", method=RequestMethod.GET)
+	public String aaa(Model model,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			@RequestParam(value="page", defaultValue="1") int current_page,
+			HttpServletRequest req) {
+		
+		String cp = req.getContextPath();	
+
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		
+		int rows = 20;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		//총 인원 수 구하기 (데이터 구하기
+		dataCount = service.userCount(map);
+	
+		//페이징처리
+		if (dataCount != 0)
+			total_page = myUtil.pageCount(rows, dataCount);
+
+		if (total_page < current_page)
+			current_page = total_page;
+		
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("rows", rows);
+		
+		//유저 전체 목록 가져오기
+		List<Member> totalUserList= service.userList(map);
+		List<Member> first11= service.userList(map);
+
+		
+		//리스트 번호 재정의
+        int listNum, n = 0;
+        for(Member dto : totalUserList) {
+            listNum = dataCount - (offset + n);
+            dto.setUserNum(listNum);
+            n++;
+        }
+        
+		String listUrl = cp +"member/totalList";	
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("paging", paging);
+		model.addAttribute("subMenu", 0);		
+		model.addAttribute("totalUserList",totalUserList);
+		
+		return ".four.usermanage.usermanagement.userManagement";
+	}
+	
+
 	
 }
 
