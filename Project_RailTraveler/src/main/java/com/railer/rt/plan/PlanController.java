@@ -1,5 +1,6 @@
 package com.railer.rt.plan;
 
+import java.io.File;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +91,6 @@ public class PlanController {
 	public Map<String, Object> insertTicketDay(@RequestParam String days,
 											   @RequestParam String sDate,
 											   @RequestParam String title,
-											   @RequestParam String imageFileName,
 											   HttpSession session,
 											   HttpServletRequest request) {
 		
@@ -101,7 +101,6 @@ public class PlanController {
 		map.put("days",days);
 		map.put("sDate",sDate);
 		map.put("title", title);
-		map.put("imageFileName", imageFileName);
 		
 		try {
 			service.insertPlan(map);
@@ -181,5 +180,20 @@ public class PlanController {
 		model.addAttribute("subMenu", "2");
 		model.addAttribute("title", "추천 코스");
 		return ".four.plan.plan.list";
+	}
+	
+	@RequestMapping(value="/plan/updateImage", method=RequestMethod.POST)
+	public String updateImage(Plan dto,
+							  HttpSession session) throws Exception {
+		
+		String root=session.getServletContext().getRealPath("/");
+		String path=root+"uploads"+File.separator+"plan";
+		
+		try {
+			service.updateImage(dto, path);
+		} catch (Exception e) {
+		}
+    	
+		return "redirect:/friendPlan/planlist";
 	}
 }

@@ -56,7 +56,7 @@
 	<!-- 몇일차 여행인지 추가하기 -->
 	<insert id="insertPlan" parameterType="map">
 		INSERT INTO plan(planNum, userId, ticketDay, sDate, title, imageFileName)
-			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title}, #{imageFileName})
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title}, #{imageFileName, jdbcType=VARCHAR})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->
@@ -92,4 +92,10 @@
 		AND INSTR(name, #{keyword}) &gt; 0
 		</where>     
 	</select>
+	
+	<!-- 이미지 파일 업데이트(라고 말하지만 사실상 등록) -->
+	<update id="updateImage" parameterType="com.railer.rt.plan.Plan">
+		UPDATE plan SET imageFileName=#{imageFileName}
+		WHERE planNum=#{planNum}
+	</update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.railer.rt.plan;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Plan {
 	private int planNum;
 	private int ticketDay; // 티켓이 몇일차짜리 인지
@@ -8,6 +10,7 @@ public class Plan {
 	private String eDate; //여행 끝 날짜
 	private String title;
 	private String imageFileName; //이미지 파일 이름
+	private MultipartFile upload;
 	private String writer; //작성자
 	private String staName; //역 이름
 	
@@ -168,6 +171,12 @@ public class Plan {
 	}
 	public void setStaName(String staName) {
 		this.staName = staName;
+	}
+	public MultipartFile getUpload() {
+		return upload;
+	}
+	public void setUpload(MultipartFile upload) {
+		this.upload = upload;
 	}
 	
 	

@@ -9,12 +9,16 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railer.rt.common.FileManager;
 import com.railer.rt.common.dao.CommonDAO;
 
 @Service("plan.planService")
 public class PlanServiceImpl implements PlanService {
 	@Autowired
 	private CommonDAO dao;
+	
+	@Autowired
+	private FileManager fileManager;
 	
 	@Override
 	public List<Station> listStation(Map<String, Object> map) {
@@ -173,6 +177,22 @@ public class PlanServiceImpl implements PlanService {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Override
+	public void updateImage(Plan dto, String pathname) throws Exception {
+		try {
+			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+			if(saveFilename!=null) {
+				dto.setImageFileName(saveFilename);
+
+				dao.updateData("plan.updateImage", dto);
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
 	}
 
 }

@@ -727,8 +727,8 @@ $(function() {
 			return false;
 		}
 
-		var imageFileName = new FormData();
-		imageFileName.append("imageFileName", $("input[name=imageFileName]")[0].file[0]);
+// 		var imageFileName = new FormData();
+// 		imageFileName.append("imageFileName", $("input[name=imageFileName]")[0].file[0]);
 		
 		var title=$("input[name='title']").val();
 // 		var imageFileName=$("input[name='imageFileName']").val();
@@ -737,12 +737,13 @@ $(function() {
 		var jsonData=JSON.stringify(days);
 // 		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
-		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title, "imageFileName":imageFileName};
-		console.log(query);
+		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title};
+// 		console.log(query);
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
+			$("form[name='imageSend']").submit();
 		};
-		ajaxJSONImage(url, "get", query, fn);
+		ajaxJSON(url, "get", query, fn);
 	});
 });
 
@@ -769,35 +770,34 @@ $(function(){
 });
 
 // 세부계획에서 장소 검색
-
-	function findTourThing(page){
-		var detailcateNum=$("#detailTourCategory").val();
-		var tourKeyword=$("input[name='tourKeyword']").val();
-		var staNum=$(".ddiring").parent().attr("data-staNum");
-		
-		
-		var url="<%=cp%>/plan/searchPlace";
-		var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
+function findTourThing(page){
+	var detailcateNum=$("#detailTourCategory").val();
+	var tourKeyword=$("input[name='tourKeyword']").val();
+	var staNum=$(".ddiring").parent().attr("data-staNum");
 	
-		var fn=function(data) {
-			$("#listTour").empty();
-			for (var i = 0; i < data.list.length; i++) {
-				var tel=(data.list[i].tel==null? "":data.list[i].tel);
-				$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
-									 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;'>"+data.list[i].name+"</td>"
-									 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:100px;'>"+tel+"</td>"
-									 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:240px;'>"+data.list[i].address+"</td>"
-									 +"</tr>"
-									 );
-				
-			}
-			$("#listTourPaging").html("<div style='font-size: 14px;' align='center'>"
-					 			  	  +data.paging
-					 			  	  +"</div>"
-									 );
-		};
-		ajaxJSON(url, "post", query, fn);
+	
+	var url="<%=cp%>/plan/searchPlace";
+	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
+
+	var fn=function(data) {
+		$("#listTour").empty();
+		for (var i = 0; i < data.list.length; i++) {
+			var tel=(data.list[i].tel==null? "":data.list[i].tel);
+			$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
+								 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;'>"+data.list[i].name+"</td>"
+								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:100px;'>"+tel+"</td>"
+								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:240px;'>"+data.list[i].address+"</td>"
+								 +"</tr>"
+								 );
+			
+		}
+		$("#listTourPaging").html("<div style='font-size: 14px;' align='center'>"
+				 			  	  +data.paging
+				 			  	  +"</div>"
+								 );
 	};
+	ajaxJSON(url, "post", query, fn);
+};
 
 </script>
 </head>
@@ -867,10 +867,12 @@ $(function(){
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
 				<div style="z-index: 5; padding: 20px; position: absolute; width: 75%; background-color: white; background-color: rgba(255,255,255,0.5);">
-					<div class="titleAndImage">
-						<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
-						<p> 대표 이미지 : <input type="file" accept="image/*" name="imageFileName" id="img_upload" style="display: inline-block;"> </p>
-					</div>
+					<form name="imageSend" action="/plan/updateImage" method="post" enctype="multipart/form-data">
+						<div class="titleAndImage">
+							<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
+							<p> 대표 이미지 : <input type="file" accept="image/*" name="imageFileName" id="img_upload" style="display: inline-block;"> </p>
+						</div>
+					</form>
 					<div style="width: 100%; height: 35px;">
 						<select name="locNum" style="width: 80px; height: 35px; float: left;">
 							<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
@@ -1429,7 +1431,6 @@ function saveDetail() {
 		eTime:eTime,
 		price:f.price.value
 	}
-	
 	if(eTime-sTime<=0) {
 		alert("시작시간과 종료시간 설정을 올바르게 해주세요.");
 		return false;
@@ -1440,6 +1441,7 @@ function saveDetail() {
 	// 	console.log(staNum+", "+index2+", "+md);
 	days[ilcha-1][index2].detailList.push(md);
 	
+	console.log(md);
 	var mdNum=days[ilcha-1][index2].detailList.length-1;
 	$(".mdList").append('<li>'
 					   +	'<div>'
