@@ -502,9 +502,10 @@ div.timeSelect {
 }
 </style>
 <script type="text/javascript">
+// 비회원일 경우 접근을 막는다.
 $(function () {
 	<c:if test="${empty sessionScope.member.userId}">
-		alert("로그인하러간다용숑숑!");
+		alert("로그인이 필요한 페이지입니다.");
 		location.href='<%=cp%>/member/login';
 	</c:if>
 });
@@ -575,21 +576,17 @@ function getDaysLater1(sDate, days) {
     return s;
 }
 
-// 일수 선택 모달
+// 티켓 일수 선택 모달
 function selectTripDay() {
     $('#selectingDay').show();
 };
 
-// 팝업 Close 기능
+// 티켓 일수 선택 모달 Close 기능
 function close_pop(flag) {
      $('#selectingDay').hide();
 };
 
-
-// function close_planning() {
-// 	$("#detailPlanPlus").hide();
-// };
-
+// 티켓 일수 선택 후 일수에 따라 planList 세팅
 function getNumber(day) {
 	days=new Array(day.value);
 	
@@ -665,12 +662,11 @@ function getNumber(day) {
 	$('#selectingDay').hide();
 }
 
+// 페이지 첫 로딩시 마커의 오버레이들 모두 숨기기
 $(document).ready(function(){
 	$('.plusStation').parent().hide();
 });
 
-// 배열을 ajax로 보내기 위해서 반드시 써줘야함.
-// $.ajaxSettings.traditional = true;
 
 function ajaxJSON(url, type, query, fn) {
 	$.ajax({
@@ -678,7 +674,6 @@ function ajaxJSON(url, type, query, fn) {
 		,url:url
 		,data:query
 		,dataType:"json"
-		// ,traditional:true
 		,success:function(data) {
 			fn(data);
 		}
@@ -747,28 +742,25 @@ $(function() {
 });
 
 
-// 역 검색기능
+// 초기 화면에서 역 검색기능, 검색해서 해당되는 마커를 띄워줌
 $(function(){
 	$("body").on("click", ".findNow", function(){
 	
 		var locNum=$("select[name='locNum']").val();
 		var keyword=$("input[name='keyword']").val();
 		
-// 		console.log(locNum);
-// 		console.log(keyword);
 		var url="<%=cp%>/plan/searchStation";
 		var query="locNum="+locNum+"&keyword="+keyword;
 		
 		var fn = function(data){
-// 			console.log(data.list);
-			drawMap(data.list);
+			drawMap(data.list); // 검색해서 나온 결과값들만 마커로 다시 뿌려주는 작업
 		};
 		
 		ajaxJSON(url, "post", query, fn);
 	});
 });
 
-// 세부계획에서 장소 검색
+// 세부계획 모달에서 장소 검색
 function findTourThing(page){
 	var detailcateNum=$("#detailTourCategory").val();
 	var tourKeyword=$("input[name='tourKeyword']").val();
@@ -883,8 +875,8 @@ function findTourThing(page){
 							<option value="5" ${locNum=="5" ? "selected='selected'":""}>경상권</option>						
 						</select>
 						<input type="text" id="findStation" name="keyword" value="${keyword}"
-							style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
-							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
+							style="width: 225px; padding: 0 8px; height: 35px; float:left; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
+							placeholder="검색할 역을 입력하세요"> <button class="findNow" style="width: 35px; height: 35px; font-size: 20px;"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 						
 						<div id="userNameHere">
 							<c:if test="${not empty sessionScope.member.userId}">
@@ -908,8 +900,7 @@ function findTourThing(page){
 							<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
 								<p>시간선택 및 세부일정 짜기</p>
 							</button>
-							<ul class="mdList">
-							</ul>
+							<ul class="mdList"></ul>
 						</div>
 					</div>		
 				</div>
@@ -929,16 +920,22 @@ function findTourThing(page){
 							      <div class="modal-body selectTime">
 							   <span>시작 시간 : </span>
                                 <select class="selBox startNow" id="startNow" name="sTime">
-                                   <c:forEach var="i" begin="7" end="24">
+                                   <c:forEach var="i" begin="0" end="9">
+                                      <option>0${i}</option>
+                                   </c:forEach>
+                                   <c:forEach var="i" begin="10" end="24">
                                       <option>${i}</option>
-                                   </c:forEach>   
+                                   </c:forEach>
                                 </select>
                              
                              <span>종료 시간 : </span>
                                 <select class="selBox endNow" id="endNow" name="eTime">
-                                	<c:forEach var="i" begin="7" end="24">
-                                    	<option>${i}</option>
-                                   	</c:forEach>   
+                                	 <c:forEach var="i" begin="0" end="9">
+                                      <option>0${i}</option>
+                                   </c:forEach>
+                                   <c:forEach var="i" begin="10" end="24">
+                                      <option>${i}</option>
+                                   </c:forEach>  
                                 </select>
                            		<br>
 	                              	<div style="display: block;">
@@ -1027,7 +1024,6 @@ function fnImgPop(url){
   	img.src=url;
   	var win_width=800;
   	var win_height=500;
-//   	var win=img.height+50;
   	var OpenWindow=window.open('','_blank', 'width=810, height=510, menubars=no, scrollbars=auto, left=500, top=100');
   	OpenWindow.document.write("<style>body{margin:2px; padding:0px;}</style><img src='"+url+"' width='"+win_width+"', height='"+win_height+"'>");
 }
@@ -1035,8 +1031,6 @@ function fnImgPop(url){
 // 계획짜기 버튼을 눌렀을 때 mdList(세부계획 리스트) 등장
 $(function() {
     $("body").on('click', '.detailPlanning', function(){
-// 		console.log(detailPlan=$('.detailPlanning').parent().parent().next().attr("class"));
-// 		var cname="."+$(this).parent().parent().attr("class")+".planListDetail";
 		if($(this).parent().siblings().hasClass("activeGreen")) {
 			alert("이미 선택된 일차가 있습니다.");
 			return;
@@ -1055,20 +1049,15 @@ $(function() {
         	$(this).parent().next().slideUp();
         	$(this).parent().removeClass('activeGreen');
         	$(this).prev().prev().find("input[name=selectedDay]").removeClass("activeGreen");
-//         	$(this).parent().parent().next().toggleClass("activeGreen");
         }
     	
-    	
     });
-    
 });
 
 
 // 맵에서 역 선택해서 일차계획에 추가하기
 $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
-// 		console.log($(this).prev().text());
-// 		console.log($("#planListForm").children().hasClass("activeGreen"));
 	
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
 	var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
@@ -1092,10 +1081,8 @@ $(function() {
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
-// 			$(this).parent().parent().hide();
-// 			console.log(days[ilcha-1].length);
 			days[ilcha-1][days[ilcha-1].length-1].detailList=new Array();
-			$(this).prevAll("button[class='close']").click();
+			$(this).prevAll("button[class='close']").click(); // 추가하기 버튼을 누르면 오버레이에서 닫힘버튼 클릭
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
 			return;
@@ -1131,13 +1118,6 @@ $(function() {
 								   +	'<button type="button" class="btn btn-default mdplanDelete" style="height:80px;">삭제</button>'
 								   +'</li>'
 								   );
-								
-// 				console.log("시작");
-// 				console.log(days[ilcha-1][index][i]);
-// 				console.log("일자:"+ilcha);
-// 				console.log("역정보인덱스:"+index);
-// 				console.log("디테일:"+i);
-// 				console.log("끝");
 			}
 			
 		} else {
@@ -1262,7 +1242,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
         	customOverlay.setMap(null);
         };
         var $plusStation=$('<div class="plusStation" />');
-        var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
+        var $close=$('<button type="button" onclick="close(this);" class="close" id="closeOverlay" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
         var $span=$('<span aria-hidden="true">&times;</span>');
         var $staContent=$('<div class="staContent" />');
         var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/${dto.imageFilename}" "width=800px, height=800px">');
@@ -1422,7 +1402,7 @@ function saveDetail() {
 	
 	var sTime=f.sTime.value;
 	var eTime=f.eTime.value;
-	
+	console.log(sTime);
 	var md={
 		cateNum:f.cateNum.value,
 		name:f.name.value,
@@ -1445,7 +1425,6 @@ function saveDetail() {
 	// 	console.log(staNum+", "+index2+", "+md);
 	days[ilcha-1][index2].detailList.push(md);
 	
-	console.log(md);
 	var mdNum=days[ilcha-1][index2].detailList.length-1;
 	$(".mdList").append('<li>'
 					   +	'<div>'
