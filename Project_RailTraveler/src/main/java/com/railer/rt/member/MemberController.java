@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.railer.rt.common.MyUtil;
 import com.railer.rt.mail.Mail;
 import com.railer.rt.mail.MailSender;
+import com.railer.rt.singo.Singo;
 
 
 @Controller("member.memberController")
@@ -336,7 +338,7 @@ public class MemberController {
 		
 		try {
 			Map<String, Object> map = new HashMap<>();
-			map.put("enabled", 0);
+			map.put("enabled", 3);
 			map.put("userId",info.getUserId());
 			
 			service.updateEnabled(map);
@@ -426,6 +428,29 @@ public class MemberController {
 		
 		return ".four.usermanage.usermanagement.userManagement";
 	}
+	
+	//신고 테이블 추가
+	@RequestMapping(value="/member/loginfailbyCount")
+	@ResponseBody
+	public Map<String, Object> insertSingo(
+			@RequestParam String userId,
+			HttpSession session
+			) {
+		
+		String state ="true";
+		
+		try {
+			service.loginenabled(userId);
+		} catch (Exception e) {
+			state="false";
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("state", state);
+		return model;
+	}
+	
+	
 	
 
 	

@@ -144,4 +144,8 @@
 		select nvl(count(*),0) from member2
 	</select>
 	
+	<update id="loginfailbyCount" parameterType="map">
+		update member2 set enabled = 1 where userId = #{userId}
+	</update>
+	
 </mapper>

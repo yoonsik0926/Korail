@@ -80,7 +80,9 @@
 	
 	<jdbc-user-service data-source-ref="dataSource"
 		id="userService"
-		users-by-username-query="SELECT userId username, userPwd password, enabled enabled 
+		users-by-username-query="SELECT userId username, userPwd password, 
+(case when enabled=1 then 1
+else 0 end) enabled 
         FROM member2
         WHERE userId=?"
 		authorities-by-username-query="SELECT userId username, authority FROM memberAuthority WHERE userId=?"

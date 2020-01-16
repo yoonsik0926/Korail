@@ -422,14 +422,14 @@ a {
 						<button class="btn"  onclick="restrictId('${vo.targetUserId}','unabled');">비활성화 적용</button>
 					</td>
 					</c:when>
-					<c:otherwise>
+					<c:when test="${vo.enabled==2}">
 					<td>
 						<span style="color: red; font-weight: 700">비활성화</span>
 					</td>
 					<td>
 					<button class="btn" onclick="restrictId('${vo.targetUserId}','enabled');">비활성화 풀기</button>
 					</td>
-					</c:otherwise>
+					</c:when>
 					</c:choose>
 					
 					

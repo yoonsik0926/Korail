@@ -59,6 +59,28 @@ function searchList() {
  	f.action = "<%=cp%>/member/totalList";
 	f.submit();		
 }
+
+function restrictId(userId) {
+
+		var result = confirm("해당 계정을 활성화 시키겠습니까?");
+	
+	if(result){
+		var url = "<%=cp%>/member/loginfailbyCount";
+		var query = "userId="+userId;
+		
+		var fn = function(data) {
+			if(data.state=='true'){
+					alert("아이디 활성화 완료")				
+			}else{
+				alert("사용자 아이디 활성화 실패!!")
+			}
+		}
+		
+		ajaxJSON(url, "get", query, fn);
+
+	}
+}
+
 </script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -81,7 +103,7 @@ function searchList() {
 						<thead style="text-align: center">
 							<tr>
 
-								<td width="200" colspan="6"
+								<td width="200" colspan="8"
 									style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
 
 
@@ -122,6 +144,8 @@ function searchList() {
 								<th width="170"><span>이메일</span></th>
 								<th width="150"><span style="padding-left: 10px;">전화번호</span></th>
 								<th width="150"><span>가입날짜</span></th>
+								<th width="150"><span>상태</span></th>
+								<th width="130"><span>비고</span></th>
 							</tr>
 						</thead>
 						<tbody style="border-bottom: 2px solid black;">
@@ -134,6 +158,31 @@ function searchList() {
 									<td>${dto.email}</td>
 									<td>${dto.tel}</td>
 									<td>${dto.registration_date}</td>
+									<c:choose>
+										<c:when test="${dto.enabled==0}">
+										<td style="color: tomato;font-weight: 700">로그인 5회오류</td>
+										<td>
+										<button class="btn" onclick="restrictId('${dto.userId}');">계정 활성화</button>
+										</td> 
+										</c:when>
+										
+										<c:when test="${dto.enabled==2}">
+										<td  style="color: red; font-weight: 700">신고 접수 상태</td>
+										<td>
+										<button class="btn" onclick="location.href='<%=cp%>/singo/userManagment?mode=userManagment'">신고현황보기</button>
+										</td> 
+										</c:when>
+										
+										<c:otherwise>
+										<td>정상 계정</td>
+										<td>
+										&nbsp;
+										</td> 
+										</c:otherwise>
+									
+									</c:choose>
+									
+			
 								</tr>
 								</c:if>
 							</c:forEach>

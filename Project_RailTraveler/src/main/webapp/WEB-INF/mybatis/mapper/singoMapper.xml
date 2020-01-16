@@ -137,11 +137,11 @@
 )
 </select>
 
-	<!--5회 이상 사용자 정지 매기기-->
+	<!--5회 이상 사용자 정지 매기기--> 
 	<update id="singo.restrictUserId" parameterType="map">
 	<choose>
 	<when test='userState=="unabled"'>
-		update member2 set enabled = 0 where userId = #{targetUserId}
+		update member2 set enabled = 2 where userId = #{targetUserId}
 	</when>
 	<otherwise>
 		update member2 set enabled = 1 where userId = #{targetUserId}

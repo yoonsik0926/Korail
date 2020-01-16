@@ -25,4 +25,5 @@ public interface MemberService {
 	
 	public List<Member> userList(Map<String, Object> map);
 	public int userCount(Map<String, Object> map);
+	public void loginenabled(String userId);
 }

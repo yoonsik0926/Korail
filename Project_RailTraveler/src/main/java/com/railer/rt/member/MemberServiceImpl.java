@@ -238,6 +238,17 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	@Override
+	public void loginenabled(String userId) {
+		int result = -1;
+		try {
+			dao.updateData("member.loginfailbyCount", userId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+
 
 	
 	
