@@ -127,35 +127,45 @@ public class FriendPlanController {
 		Plan dto = fPlanService.readPlan(planNum);
 		if(dto == null)
 			return "redirect:/friendPlan/planlist";
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("planNum", planNum);
 		
 		//역 이름, 시작 날짜, 종료 날짜, 경도, 위도, 일 수 (nthDay)
 		List<Plan> stationList = fPlanService.readStation(map);
 		
-		//세부 일정
-		List<Plan> detailList = fPlanService.readDetailPlan(map);
+		
 		
 		//가격 구하기
 		map.put("cateName", "명소");
 		int tourPrice = fPlanService.calPrice(map);
+		//세부 일정
+		List<Plan> tourList = fPlanService.readDetailPlan(map);
 		
 		map.put("cateName", "맛집");
 		int foodPrice = fPlanService.calPrice(map);
+		//세부 일정
+		List<Plan> foodList = fPlanService.readDetailPlan(map);
 		
 		map.put("cateName", "숙소");
 		int hotelPrice = fPlanService.calPrice(map);
+		//세부 일정
+		List<Plan> hotelList = fPlanService.readDetailPlan(map);
 		
+		//전체 금액
 		int totPrice = tourPrice + foodPrice + hotelPrice;
 
+	
 		//역 개수
 		int stationCount = fPlanService.stationCount(planNum);
 		int length = 173 + (182*(stationCount-2));
 		
 		model.addAttribute("dto",dto);
 		model.addAttribute("stationList",stationList);
-		model.addAttribute("detailList",detailList);
+		model.addAttribute("tourList",tourList);
+		model.addAttribute("foodList",foodList);
+		model.addAttribute("hotelList",hotelList);
+
 		model.addAttribute("listUrl",listUrl);
 		model.addAttribute("tourPrice",tourPrice);
 		model.addAttribute("foodPrice",foodPrice);

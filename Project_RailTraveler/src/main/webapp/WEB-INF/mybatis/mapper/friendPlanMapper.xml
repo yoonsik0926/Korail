@@ -63,7 +63,7 @@
 	</select>
 	
 	<select id="readStation" parameterType="map" resultType="com.railer.rt.plan.Plan">
-		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay),'yyyy-mm-dd') eDate,
+		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay+1),'yyyy-mm-dd') eDate,
 			 nthDay, s.staNum,s.locNum,staName,s.imageFileName, latitude, longitude
 		from plan p
 		join detailPlan d on p.planNum = d.planNum
@@ -83,12 +83,12 @@
 	
 	<select id="readDetail" parameterType="map" resultType="com.railer.rt.plan.Plan">
 		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, 
-	    	cateName, name,memo,sTime,eTime,price
+	    	cateName, name,memo,LPAD(sTime, 3) sTime,LPAD(eTime, 3) eTime,price
 		from plan p
 		join detailPlan d on p.planNum = d.planNum
 		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
 		join tourCategory t on m.cateNum = t.cateNum
-		where p.planNum = #{planNum}
+		where p.planNum = #{planNum} and cateName= #{cateName}
 		order by nthDay
 	</select>
 	
@@ -101,6 +101,9 @@
 		where p.planNum = #{planNum} and cateName= #{cateName}
 		order by nthDay
 	</select>
-
 	
+	<select id="sDate" parameterType="Integer" resultType="com.railer.rt.plan.Plan">
+		select sDate from plan where planNum = #{planNum}
+	
+	</select>
 </mapper>

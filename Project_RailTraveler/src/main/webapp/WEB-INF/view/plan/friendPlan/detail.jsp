@@ -62,6 +62,8 @@
 
 <script type="text/javascript">
 
+
+
 //도시 이동 달력
 var calendar=null;
 var color = ['#69cffd','#90bbf9','#b1a9f6','#e08ff1','#c49ef4','#d198f3','#bfc6fb'];
@@ -82,6 +84,7 @@ $(function() {
 
 		},
 		defaultView: 'month',
+		defaultDate :'${dto.sDate}',
 		views: {
 			timelineThreeDays: {
 				type: 'timeline',
@@ -112,13 +115,13 @@ $(function() {
 var calendar2=null;
 
 $(function() {
-	calenda2r=$('#scheduler').fullCalendar({
+	calendar2=$('#scheduler').fullCalendar({
 		editable: false, // enable draggable events
 		selectable: false, // click하거나 select 할때의 events
 		selectHelper: false,
 		locale: 'ko',
 		aspectRatio: 1.8,
-		scrollTime: '09:00', // undo default 6am scrollTime
+		scrollTime: '00:00', // undo default 6am scrollTime
 		header: {
 			 left: "prev,next",
 			 center: "",
@@ -126,6 +129,7 @@ $(function() {
 
 		},
 		defaultView: 'agendaWeek',
+		defaultDate : '${dto.sDate}',
 		views: {
 			timelineThreeDays: {
 				type: 'timeline',
@@ -134,41 +138,66 @@ $(function() {
 		},
 
 		events: [
-			 	{
-	                title : "서울역",
-	                start : "2020-01-13",
-	                end : "2020-01-15",
-	                color : "#69cffd"
-	         	},
-	         	{
-	                title : "부산역",
-	                start : "2020-01-14",
-	                end : "2020-01-17",
-	                color : "#90bbf9"
-	         	},
-	         	{
-	                title : "대구역",
-	                start : "2020-01-16",
-	                end : "2020-01-19",
-	                color : "#b1a9f6"
-	         	},
-	         	{
-	                title : "여수역",
-	                start : "2020-01-18",
-	                end : "2020-01-20",
-	                color : "#e08ff1"
-	         	}, 
-	         	{
-	                title : "서울 맛집",
-	                start : "2020-01-13 13:00",
-	                end : "2020-01-13 14:00",
-	                color : "#69cffd"
-	         	}
-
-		],
+			<c:forEach var="vo" items="${stationList}">
+				{
+					title :"${vo.staName}역",
+					start : "${vo.sDate}",
+					end : "${vo.eDate}",
+					color : color[Math.floor(Math.random() * (color.length))]
+				},
+			</c:forEach>
 			
+			<c:forEach var="vo" items="${tourList}">
+				{
+					title :"${vo.name} : ${vo.memo}",
+					start : "${vo.sDate} ${vo.sTime}:00",
+					end : "${vo.sDate} ${vo.eTime}:00",
+					color : "#8bc34a"
+				},
+			</c:forEach> 
+			
+			<c:forEach var="vo" items="${foodList}">
+				{
+					title :"${vo.name} : ${vo.memo}",
+					start : "${vo.sDate} ${vo.sTime}:00",
+					end : "${vo.sDate} ${vo.eTime}:00",
+					color : "#ffc107"
+				},
+			</c:forEach>
+				
+			<c:forEach var="vo" items="${hotelList}">
+			{
+				title :"${vo.name} : ${vo.memo}",
+				start : "${vo.sDate} ${vo.sTime}:00",
+				end : "${vo.sDate} ${vo.eTime}:00",
+				color : "#9E9E9E"
+			},
+			</c:forEach>
+			
+			{
+				title :"숙소 1",
+				start : "2020-01-21 00:00",
+				end : "2020-01-21 01:00",
+				color : "#9E9E9E"
+			},
+			{
+				title :"숙소 2",
+				start : "2020-01-22 00:00",
+				end : "2020-01-22 01:00",
+				color : "#9E9E9E"
+			},
+			{
+				title :"숙소 3",
+				start : "2020-01-23 00:00",
+				end : "2020-01-23 01:00",
+				color : "#9E9E9E"
+			}
+			
+			
+		],
 
 		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives' // 비영리기관라이선스
+
 	});
 	
 });
@@ -286,14 +315,20 @@ table th span {
 								style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
 	
 								<div style="height: 200px; width: 150px;">
-									<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
-										src="<%=cp%>/resource/images/station/seoul.jpg"
+									<a href="<%=cp%>/tour/${vo.locNum==1?'sudo':vo.locNum==2? 'chungcheong' :vo.locNum==3? 'gangwon' :vo.locNum==4? 'jeonla' : 'gyeongsang'}
+											?q=staNum:${vo.staNum},subTitle:
+												${vo.locNum==1?'sudo':
+													vo.locNum==2? 'chungcheong' :
+														vo.locNum==3? 'gangwon' :
+															vo.locNum==4? 'jeonla' : 'gyeongsang'}"> 
+									<img
+										src="<%=cp%>/resource/images/station/${vo.imageFileName}"
 										style="border-radius: 5px; width: 100%; height: 90%;"></a>
 								</div>
 	
 								<div style="text-align: center;">
 									<div
-										style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">서울역</div>
+										style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">${vo.staName}역</div>
 									<div style="line-height: 10px;">
 										<div
 											style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
@@ -303,8 +338,6 @@ table th span {
 							</div>
 						</li>
 					</c:forEach>
-
-
 
 					<!-- 점선 역 하나 추가 될 때마다 width 182px씩 증가  초기 width : 173px-->
 					<li
@@ -320,19 +353,9 @@ table th span {
 
 		<div style="width: 100%;">
 			<h4 style="font-weight: 700; color: #5d5858;">일정표</h4>
+			<div id='schLoading'>loading...</div>
 			<div id='scheduler'></div>
-
-
-
-			
-
-						
-						
-						
-						
-						
-						
-						
+		
 		</div>
 
 
@@ -340,16 +363,11 @@ table th span {
 
 
 
-			</div>
+</div>
 
-		</div>
-
-
-
+</div>
 
 <script type="text/javascript">
-
-
 var mapContainer = document.getElementById('planMap'), // 지도를 표시할 div  
     mapOption = { 
         center: new kakao.maps.LatLng(36.062611, 128.081476), // 지도의 중심좌표
