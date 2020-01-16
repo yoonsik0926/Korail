@@ -13,4 +13,8 @@ public interface FriendPlanService {
 	public List<Plan> readDetailPlan(Map<String, Object> map) throws Exception;
 	
 	public int calPrice(Map<String, Object> map) throws Exception;
+	
+	public void likeFriendPlan(Map<String, Object> map) throws Exception;
+	public void disLikePlan(Map<String, Object> map) throws Exception;
+	public int checkLike(Map<String, Object> map) throws Exception;
 }

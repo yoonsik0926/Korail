@@ -97,6 +97,40 @@ public class FriendPlanServiceImpl implements FriendPlanService{
 	}
 
 
+	@Override
+	public void likeFriendPlan(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("fplan.likePlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public void disLikePlan(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("fplan.disLikePlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public int checkLike(Map<String, Object> map) throws Exception {
+		int check = 0;
+		try {
+			check = dao.selectOne("fplan.checkLike",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return check;
+	}
+
+
 	
 
 }

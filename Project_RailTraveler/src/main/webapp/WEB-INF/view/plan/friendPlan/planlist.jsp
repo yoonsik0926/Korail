@@ -104,3 +104,35 @@ function searchList(){
 	</div>
 </div>
 
+
+<!--Modal: modalPush-->
+<div class="modal fade  bd-example-modal-sm" id="likealarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center" style="padding: 5px 5px;">
+        <h5  class="heading" style="font-size:25px; font-weight: 700; margin: 5px 5px;">Rail Traveler</h5>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px; margin-top: 30px;">
+        <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
+
+        <p id="modaltext" style="font-size: 15px; font-weight:500; margin-top: 10px; margin-left: 10px;">회원에게만 제공되는 서비스입니다!</p>
+		<p id="modaltext" style="margin-top: 20px;">
+	
+		</p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" >
+        <a type="button" href="<%=cp%>/member/login" class="btn  btn-info waves-effect" >로그인</a>
+        <a type="button" href="<%=cp%>/member/member" class="btn  btn-info waves-effect" >회원가입</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+      </div>
+    </div>
+  </div>
+</div>
+

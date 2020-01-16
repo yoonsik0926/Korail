@@ -7,14 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.MyUtil;
+import com.railer.rt.member.SessionInfo;
 
 @Controller("plan.friendPlanController")
 public class FriendPlanController {
@@ -178,6 +181,35 @@ public class FriendPlanController {
 		model.addAttribute("title", "친구의 여행 플랜");
 		
 		return ".four.plan.friendPlan.detail";
+	}
+	
+	
+	@RequestMapping(value="/friendPlan/like")
+	@ResponseBody
+	public Map<String, Object> likePlan(
+			@RequestParam int planNum,
+			HttpSession session) throws Exception{
+		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("planNum", planNum);
+		map.put("userId", info.getUserId());
+		
+
+		//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
+		int likecheck = fPlanService.checkLike(map);
+				
+		if(likecheck==0) {
+			fPlanService.likeFriendPlan(map);;			
+		}else{
+			fPlanService.disLikePlan(map);;
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("likecheck", likecheck);	
+		
+		return model;
 	}
 	
 }
