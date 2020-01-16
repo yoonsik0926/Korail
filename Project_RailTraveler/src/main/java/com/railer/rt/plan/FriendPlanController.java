@@ -1,5 +1,7 @@
 package com.railer.rt.plan;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,8 @@ public class FriendPlanController {
 		
 		String cp = req.getContextPath();
 		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
 		int rows = 8;
 		int total_page = 0;
 		int dataCount = 0;
@@ -70,14 +74,14 @@ public class FriendPlanController {
 		List<Plan> list = fPlanService.listPlan(map);
 				
 		String query = "";
-		String articleUrl = "";
+		String articleUrl = cp +"/friendPlan/detail?";
 		
 		if(keyword.length()!=0) {
-			query = "&condition="+condition+"&keyword="+keyword;
+			query = "condition="+condition+"&keyword="+keyword+"&";
 		}
 		
 		if(query.length()!=0) {
-			articleUrl = cp +"/plan/friendPlan/detail?page="+current_page+query;
+			articleUrl += query;
 		}
 		
 		// AJAX 용 페이징
@@ -100,11 +104,65 @@ public class FriendPlanController {
 	
 	
 	@RequestMapping(value="/friendPlan/detail")
-	public String detail(Model model) throws Exception {
+	public String detail(
+			@RequestParam int planNum,
+			@RequestParam String page,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			HttpServletRequest req,
+			Model model) throws Exception {
 		
+		String cp = req.getContextPath();
 		
+		keyword = URLDecoder.decode(keyword, "utf-8");
 		
+		String query = "page="+page;
+		if(keyword.length()!=0) {
+			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
+		}
 		
+		String listUrl = cp + "/friendPlan/planlist?"+query;
+		
+		//여행 시작 날짜, 종료 날짜, 티켓 일수 ,userId, title
+		Plan dto = fPlanService.readPlan(planNum);
+		if(dto == null)
+			return "redirect:/friendPlan/planlist";
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("planNum", planNum);
+		
+		//역 이름, 시작 날짜, 종료 날짜, 경도, 위도, 일 수 (nthDay)
+		List<Plan> stationList = fPlanService.readStation(map);
+		
+		//세부 일정
+		List<Plan> detailList = fPlanService.readDetailPlan(map);
+		
+		//가격 구하기
+		map.put("cateName", "명소");
+		int tourPrice = fPlanService.calPrice(map);
+		
+		map.put("cateName", "맛집");
+		int foodPrice = fPlanService.calPrice(map);
+		
+		map.put("cateName", "숙소");
+		int hotelPrice = fPlanService.calPrice(map);
+		
+		int totPrice = tourPrice + foodPrice + hotelPrice;
+
+		//역 개수
+		int stationCount = fPlanService.stationCount(planNum);
+		int length = 173 + (182*(stationCount-2));
+		
+		model.addAttribute("dto",dto);
+		model.addAttribute("stationList",stationList);
+		model.addAttribute("detailList",detailList);
+		model.addAttribute("listUrl",listUrl);
+		model.addAttribute("tourPrice",tourPrice);
+		model.addAttribute("foodPrice",foodPrice);
+		model.addAttribute("hotelPrice",hotelPrice);
+		model.addAttribute("totPrice",totPrice);
+		model.addAttribute("length",length);
+		model.addAttribute("stationCount",stationCount);
 		
 		model.addAttribute("subMenu", "1");
 		model.addAttribute("title", "친구의 여행 플랜");

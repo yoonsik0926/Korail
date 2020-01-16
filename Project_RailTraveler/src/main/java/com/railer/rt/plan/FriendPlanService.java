@@ -5,8 +5,12 @@ import java.util.Map;
 
 public interface FriendPlanService {
 	public List<Plan> listPlan(Map<String, Object> map) throws Exception;
-	public List<Plan> listStation(Map<String, Object> map) throws Exception;
 	public int dataCount(Map<String, Object> map) throws Exception;
 	
-	public Plan readPlan(Map<String, Object> map) throws Exception;
+	public Plan readPlan(int planNum) throws Exception;
+	public List<Plan> readStation(Map<String, Object> map) throws Exception;
+	public int stationCount(int planNum) throws Exception;
+	public List<Plan> readDetailPlan(Map<String, Object> map) throws Exception;
+	
+	public int calPrice(Map<String, Object> map) throws Exception;
 }

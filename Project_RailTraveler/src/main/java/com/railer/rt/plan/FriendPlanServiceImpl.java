@@ -37,28 +37,66 @@ public class FriendPlanServiceImpl implements FriendPlanService{
 		return dataCount;
 	}
 
-
 	@Override
-	public List<Plan> listStation(Map<String, Object> map) throws Exception {
-		List<Plan> station = null;
-		try {
-			station = dao.selectList("fplan.listStation",map);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return station;
-	}
-
-
-	@Override
-	public Plan readPlan(Map<String, Object> map) throws Exception {
+	public Plan readPlan(int planNum) throws Exception {
 		Plan dto = null;
 		try {
-			dto = dao.selectOne("fplan.readPlan",map);
+			dto = dao.selectOne("fplan.readPlan",planNum);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return dto;
 	}
+
+	@Override
+	public List<Plan> readStation(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("fplan.readStation",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<Plan> readDetailPlan(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("fplan.readDetail",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	@Override
+	public int calPrice(Map<String, Object> map) throws Exception {
+		int price = 0;
+		try {
+			price = dao.selectOne("fplan.calPrice",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return price;
+	}
+
+
+	@Override
+	public int stationCount(int planNum) throws Exception {
+		int stationCount = 0;
+		try {
+			stationCount = dao.selectOne("fplan.stationCount",planNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return stationCount;
+	}
+
+
+	
 
 }

@@ -13,6 +13,8 @@ public class Plan {
 	private MultipartFile upload;
 	private String writer; //작성자
 	private String staName; //역 이름
+	private int locNum; //지역 번호
+	
 	
 	// DetailPlan(세부계획)
 	private int detailPlanNum;
@@ -178,6 +180,13 @@ public class Plan {
 	public void setUpload(MultipartFile upload) {
 		this.upload = upload;
 	}
+	public int getLocNum() {
+		return locNum;
+	}
+	public void setLocNum(int locNum) {
+		this.locNum = locNum;
+	}
+	
 	
 	
 	

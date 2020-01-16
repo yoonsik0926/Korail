@@ -61,36 +61,13 @@
 	src="<%=cp%>/resource/fullcalendar/locale-all.js"></script>
 
 <script type="text/javascript">
-function login() {
-	location.href="<%=cp%>/member/login";
-}
-
-function ajaxJSON(url, type, query, fn) {
-	$.ajax({
-		type:type
-		,url:url
-		,data:query
-		,dataType:"json"
-		,success:function(data) {
-			fn(data);
-		}
-		,beforeSend:function(jqXHR) {
-	        jqXHR.setRequestHeader("AJAX", true);
-	    }
-	    ,error:function(jqXHR) {
-	    	if(jqXHR.status==403) {
-	    		login();
-	    		return false;
-	    	}
-	    	console.log(jqXHR.responseText);
-	    }
-	});
-}
 
 //도시 이동 달력
 var calendar=null;
+var color = ['#69cffd','#90bbf9','#b1a9f6','#e08ff1','#c49ef4','#d198f3','#bfc6fb'];
 
 $(function() {
+	
 	calendar=$('#calendar').fullCalendar({
 		editable: false, // enable draggable events
 		selectable: false, // click하거나 select 할때의 events
@@ -114,31 +91,14 @@ $(function() {
 
 		
 		events: [
-            {
-                title : "서울역",
-                start : "2020-01-13",
-                end : "2020-01-15",
-                color : "#69cffd"
-         	},
-         	{
-                title : "부산역",
-                start : "2020-01-14",
-                end : "2020-01-17",
-                color : "#90bbf9"
-         	},
-         	{
-                title : "대구역",
-                start : "2020-01-16",
-                end : "2020-01-19",
-                color : "#b1a9f6"
-         	},
-         	{
-                title : "여수역",
-                start : "2020-01-18",
-                end : "2020-01-20",
-                color : "#e08ff1"
-         	},
-
+			<c:forEach var="vo" items="${stationList}">
+				{
+					title :"${vo.staName}역",
+					start : "${vo.sDate}",
+					end : "${vo.eDate}",
+					color : color[Math.floor(Math.random() * (color.length))]
+				},
+			</c:forEach>
 		],
 
 		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives' // 비영리기관라이선스
@@ -197,7 +157,7 @@ $(function() {
 	                start : "2020-01-18",
 	                end : "2020-01-20",
 	                color : "#e08ff1"
-	         	},
+	         	}, 
 	         	{
 	                title : "서울 맛집",
 	                start : "2020-01-13 13:00",
@@ -212,6 +172,7 @@ $(function() {
 	});
 	
 });
+
 
 </script>
 
@@ -253,12 +214,12 @@ table th span {
 
 		<div style="width: 100%; display: inline-block;">
 
-
+		
 			<div id="planName">
 				<h4 style="font-weight: 700; color: #5d5858;">
-					겨울 느낌 뿜뿜 여행 <span
+					${dto.title==''or dto.title==null?'제목이 없는 여행 플랜':dto.title}<span
 						style="font-family: 'Lobster', cursive !important; font-weight: 400; font-size: 18px; color: #b7b7b7;">&nbsp;&nbsp;by
-						Youjin</span>
+						${dto.userId}</span>
 				</h4>
 			</div>
 
@@ -277,10 +238,10 @@ table th span {
 				style="width: 25%; height: 80px; display: inline; float: left; vertical-align: middle; margin-right: 150px; margin-top: 40px; text-align: center; font-size: 18px; border: 1px #84c1fa solid; border-radius: 50px; background: #84c1fa; color: white;">
 				<table style="width: 100%; margin-top: 15px;">
 					<tr>
-						<td style="font-size: 19px; font-weight: 700;">7 Days</td>
+						<td style="font-size: 19px; font-weight: 700;">${dto.ticketDay} Days</td>
 					</tr>
 					<tr>
-						<td>2020-01-13 ~ 2020-01-20</td>
+						<td>${dto.sDate} ~ ${dto.eDate}</td>
 					</tr>
 				</table>
 			</div>
@@ -297,10 +258,10 @@ table th span {
 						<td style="font-weight: 700;"><i class="fas fa-bed"></i>&nbsp;&nbsp;숙소</td>
 					</tr>
 					<tr>
-						<td>50만원</td>
-						<td>22만원</td>
-						<td>8만원</td>
-						<td>20만원</td>
+						<td>${totPrice}원</td>
+						<td>${foodPrice}원</td>
+						<td>${tourPrice}원</td>
+						<td>${hotelPrice}원</td>
 					</tr>
 
 				</table>
@@ -313,108 +274,41 @@ table th span {
 
 			<!-- 여행 루트 최대 6개 역이 한줄에 -->
 			<div
-				style="width: 100%;margin-top: 30px; ${row==2?'height:600px;':'height:300px;'} ">
+				style="width: 100%;margin-top: 30px; ${stationCount>=6? 'height:600px;':'height:300px;'} ">
 				<ul class="nolist swiper-wrapper"
 					style="list-style: none; margin: 0; padding: 0;">
-					<li class="swiper-slide"
-						style="width: 150px; border: 0px solid #c0c0c0; position: relative; height: 300px; float: left; margin-right: 30px;">
-						<div
-							style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
-
-							<div style="height: 200px; width: 150px;">
-								<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
-									src="<%=cp%>/resource/images/station/seoul.jpg"
-									style="border-radius: 5px; width: 100%; height: 90%;"></a>
-							</div>
-
-							<div style="text-align: center;">
-								<div
-									style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">서울역</div>
-								<div style="line-height: 10px;">
-									<div
-										style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
+					
+					<c:forEach var="vo" items="${stationList}">
+					
+						<li class="swiper-slide"
+							style="width: 150px; border: 0px solid #c0c0c0; position: relative; height: 300px; float: left; margin-right: 30px;">
+							<div
+								style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
+	
+								<div style="height: 200px; width: 150px;">
+									<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
+										src="<%=cp%>/resource/images/station/seoul.jpg"
+										style="border-radius: 5px; width: 100%; height: 90%;"></a>
 								</div>
-							</div>
-
-						</div>
-					</li>
-
-					<li class="swiper-slide"
-						style="width: 150px; border: 0px solid #c0c0c0; position: relative; height: 300px; float: left; margin-right: 30px;">
-						<div
-							style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
-
-							<div style="height: 200px; width: 150px;">
-								<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
-									src="<%=cp%>/resource/images/station/busan.jpg"
-									style="border-radius: 5px; width: 100%; height: 90%;"></a>
-							</div>
-
-							<div style="text-align: center;">
-								<div
-									style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">부산역</div>
-								<div style="line-height: 10px;">
+	
+								<div style="text-align: center;">
 									<div
-										style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
+										style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">서울역</div>
+									<div style="line-height: 10px;">
+										<div
+											style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
+									</div>
 								</div>
+	
 							</div>
-
-						</div>
-					</li>
-
-					<li class="swiper-slide"
-						style="width: 150px; border: 0px solid #c0c0c0; position: relative; height: 300px; float: left; margin-right: 30px;">
-						<div
-							style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
-
-							<div style="height: 200px; width: 150px;">
-								<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
-									src="<%=cp%>/resource/images/station/daegu.jpg"
-									style="border-radius: 5px; width: 100%; height: 90%;"></a>
-							</div>
-
-							<div style="text-align: center;">
-								<div
-									style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">대구역</div>
-								<div style="line-height: 10px;">
-									<div
-										style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
-								</div>
-							</div>
-
-						</div>
-					</li>
-
-					<li class="swiper-slide"
-						style="width: 150px; border: 0px solid #c0c0c0; position: relative; height: 300px; float: left; margin-right: 30px;">
-						<div
-							style="text-align: center; float: left; width: 150px; heigth: 300px; position: relative;">
-
-							<div style="height: 200px; width: 150px;">
-								<a href="<%=cp%>/tour/sudo?q=staNum:4,subTitle:sudo"> <img
-									src="<%=cp%>/resource/images/station/yeosuexpo.jpg"
-									style="border-radius: 5px; width: 100%; height: 90%;"></a>
-							</div>
-
-							<div style="text-align: center;">
-								<div
-									style="height: 25px; padding-top: 3px; font-size: 10pt; font-weight: 400">여수역</div>
-								<div style="line-height: 10px;">
-									<div
-										style="display: inline-block; width: 10px; height: 10px; background: #696969; border-radius: 10px;"></div>
-								</div>
-							</div>
-
-						</div>
-					</li>
+						</li>
+					</c:forEach>
 
 
 
-
-
-					<!-- 점선 역 하나 추가 될 때마다 width 182px씩 증가-->
+					<!-- 점선 역 하나 추가 될 때마다 width 182px씩 증가  초기 width : 173px-->
 					<li
-						style="position: absolute; display: block; z-index: 1; top: 1147px; width: 537px; left: 474px; border-top: 2px dashed #696969;"></li>
+						style="position: absolute; display: block; z-index: 1; top: 1147px; width:${length}px;  left: 474px; border-top: 2px dashed #696969;"></li>
 
 				</ul>
 
@@ -468,19 +362,12 @@ var dots = {};
 
 //마커 위치
 var positions = [
-	{
-		title : "서울역",
-		latlng : new daum.maps.LatLng(37.549243,126.970429)
-	}, {
-		title : "부산역",
-		latlng : new daum.maps.LatLng(35.115471,129.042222)
-	}, {
-		title : "대구역",
-		latlng : new daum.maps.LatLng(35.876068,128.596355)
-	}, {
-		title : "여수역",
-		latlng : new daum.maps.LatLng(34.753071,127.748977)
-	}
+	<c:forEach var="vo" items="${stationList}">
+		{
+			title : "${vo.staName}",
+			latlng : new daum.maps.LatLng("${vo.latitude}","${vo.longitude}")
+		}, 
+	</c:forEach>
 ];
 
 //마커 이미지의 이미지 주소입니다

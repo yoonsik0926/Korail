@@ -56,24 +56,49 @@
 		</where>
 	</select>
 	
+	<select id="readPlan" parameterType="Integer" resultType="com.railer.rt.plan.Plan">
+		select sDate, to_char((to_date(sDate) + ticketDay),'yyyy-mm-dd') eDate, title, userId,ticketDay
+		from plan p
+		where planNum = #{planNum}
+	</select>
+	
 	<select id="readStation" parameterType="map" resultType="com.railer.rt.plan.Plan">
-		select p.planNum, ticketDay, to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay),'yyyy-mm-dd') eDate, nthDay,
-        staName, latitude, longitude
+		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay),'yyyy-mm-dd') eDate,
+			 nthDay, s.staNum,s.locNum,staName,s.imageFileName, latitude, longitude
 		from plan p
 		join detailPlan d on p.planNum = d.planNum
 		join station s on d.staNum = s.staNum
+        join location l on s.locNum = l.locNum
 		where p.planNum = #{planNum}
-		order by nthDay
+        order by nthDay
+	</select>
+	
+	<select id="stationCount" parameterType="Integer" resultType="Integer">
+		select nvl(count(*),0) from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+		where p.planNum = #{planNum}
+        order by nthDay
 	</select>
 	
 	<select id="readDetail" parameterType="map" resultType="com.railer.rt.plan.Plan">
-		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay),'yyyy-mm-dd') eDate, 
-	    nthDay,cateName, name,memo,sTime,eTime,price
+		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, 
+	    	cateName, name,memo,sTime,eTime,price
 		from plan p
 		join detailPlan d on p.planNum = d.planNum
 		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
 		join tourCategory t on m.cateNum = t.cateNum
 		where p.planNum = #{planNum}
+		order by nthDay
+	</select>
+	
+	<select id="calPrice" parameterType="Map" resultType="Integer">
+		select nvl(sum(price),0)
+        from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
+		join tourCategory t on m.cateNum = t.cateNum
+		where p.planNum = #{planNum} and cateName= #{cateName}
 		order by nthDay
 	</select>
 
