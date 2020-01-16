@@ -61,7 +61,6 @@ public class QnaController {
 		map.put("condition", condition);
 		map.put("keyword", keyword);
 		map.put("category", category);
-		map.put("answer", answer);
  
 		dataCount = service.dataCount(map);
 		total_page = util.pageCount(rows, dataCount);

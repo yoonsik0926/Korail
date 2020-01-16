@@ -109,8 +109,8 @@
          GROUP BY qnaNum
       ) r On f.qnaNum=r.qnaNum
       LEFT OUTER JOIN (
-         SELECT qnaNum, COUNT(*) reArticleCount FROM qna
-         GROUP BY qnaNum
+         SELECT answer, COUNT(*) reArticleCount FROM qna
+         GROUP BY answer
       ) r On f.qnaNum=r.answer
       LEFT OUTER JOIN (
          SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
@@ -124,13 +124,8 @@
          <if test="category!='all'">
             and f.category=#{category}
          </if>
-         <if test="answer!=0">
-            and f.answer=#{answer}
-         </if>
-         <if test="answer==0">
             and f.answer=0
-         </if>
-         and f.userid!='admin'
+         	and f.userid!='admin'
       </where>
       ORDER BY f.qnaNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY

@@ -198,8 +198,9 @@ $(function(){
 				return;
 			}
 		</c:if>
-		var cs = document.getElementById("boardLikeIcon");
 		var qnaNum=$(this).data('num');
+		var csnum = "boardLikeIcon"+qnaNum;
+		var cs = document.getElementById(csnum);
 		var $boardLikeCount = "#boardLikeCount"+qnaNum;
 		if( cs.className =="far fa-heart"){
 			if(! confirm("북마크 하시겠습니까 ? ")) {
@@ -222,8 +223,6 @@ $(function(){
 			}; 
 			
 			ajaxJSON(url, "post", query, fn);
-			
-			
 			
 		}else{
 			if(! confirm("북마크를 취소하시겠습니까 ? ")) {
@@ -782,7 +781,7 @@ a#MOVE_TOP_BTN {
 							title="좋아요"
 							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;" 
 							  data-num='${dto.qnaNum}' >
-							<i id="boardLikeIcon" ${dto.myBookMark==0? 'class="fas fa-heart"':'class="far fa-heart"'} 
+							<i id="boardLikeIcon${dto.qnaNum}" ${dto.myBookMark==0? 'class="far fa-heart"':'class="fas fa-heart"'} 
 								style="font-size: 20px; display: block; margin: 0 auto; color: orangered;"></i><span
 								id="boardLikeCount${dto.qnaNum}">${dto.bookmarkCount}</span>
 						</button>
@@ -864,8 +863,9 @@ a#MOVE_TOP_BTN {
 						
 					<button type="button" class="btn btn-default btnSendBoardLike" title="좋아요" data-num='${reArticle.qnaNum}'
 						style="width: 60px; margin-bottom: 5px;">
-						<i id="boardLikeCount${reArticle.qnaNum}" ${reArticle.myBookMark==0? 'class="far fa-heart"':'class="fas fa-heart"'} 
-							style="font-size: 15px; margin: 0 auto; color: orangered;"></i>&nbsp;${reArticle.bookmarkCount}
+						<i id="boardLikeIcon${reArticle.qnaNum}" ${reArticle.myBookMark==0? 'class="far fa-heart"':'class="fas fa-heart"'} 
+							style="font-size: 15px; margin: 0 auto; color: orangered;"></i>
+							<span id="boardLikeCount${reArticle.qnaNum}">&nbsp;${reArticle.bookmarkCount}</span>
 					</button>
 					<c:if test="${reArticle.userId==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default"
