@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript"
@@ -84,12 +85,23 @@ jQuery(document).ready(function() {
 	
 	function sendBoard() {
         var f = document.boardForm;
-    	
+
         f.action = "<%=cp%>/event/${mode}";
 
         f.submit();
   }	
-    
+
+	function checkOnly(chk){
+
+		   var obj = document.getElementsByName("userSelect");
+
+		      for(var i=0; i<obj.length; i++){
+		            if(obj[i] != chk){
+		                  obj[i].checked = false;
+		                  }
+		            }
+		    }
+	    
 </script>
 <style type="text/css">
 .tb-row {
@@ -124,8 +136,8 @@ input[type=text], input[type=file] {
 	border: 1px solid #ccc;
 }
 
- .datePicker {
-        text-align:center;
+.datePicker {
+        text-align: center;
         width:80px;    
     }
 
@@ -152,7 +164,8 @@ input[type=text], input[type=file] {
 					</td>
 				</tr>
 			</table>
-					
+			
+				
 			<table class="tb-created">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">제&nbsp;&nbsp;목</td>
@@ -175,6 +188,14 @@ input[type=text], input[type=file] {
 				</tr>
 				
 				<tr class="tb-row">
+					<td width="100" class="tb-title">댓글기능</td>
+					<td class="tb-content">	
+						    <input type="radio" name="comments" value="1" checked="checked">가능
+							<input type="radio" name="comments" value="0">불가능	
+					</td>
+				</tr>
+				
+				<tr class="tb-row">
 					<td width="100" class="tb-title" style="padding-top: 5px;"
 						valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
 					<td valign="top" style="padding: 5px 1% 5px 10px;">
@@ -191,6 +212,7 @@ input[type=text], input[type=file] {
 			       </td>
 			  </tr>
 			</table>
+			
 			
 			<table style="width: 100%; margin: 0px auto; border-spacing: 0px; text-align: center;">
 				<tr>

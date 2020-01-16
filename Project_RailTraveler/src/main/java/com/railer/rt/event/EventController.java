@@ -162,8 +162,7 @@ public class EventController {
 		map.put("rows", rows);
 
         List<Event> list = service.listEvent(map);
-        List<Event> rankEvent = service.rankEvent(map);
-        
+                
         int listNum, n = 0;
         for(Event dto : list) {
             listNum = dataCount - (offset + n);
@@ -191,7 +190,6 @@ public class EventController {
         model.addAttribute("subMenu", mode.equals("current")?0:1);
         
         model.addAttribute("list", list);
-        model.addAttribute("rankEvent", rankEvent);
         model.addAttribute("page", current_page);
         model.addAttribute("total_page", total_page);
         model.addAttribute("dataCount", dataCount);

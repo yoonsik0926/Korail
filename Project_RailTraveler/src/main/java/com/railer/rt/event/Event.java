@@ -12,6 +12,7 @@ public class Event {
 	private MultipartFile upload;
 	private int hitCount;
 	private int eventLikeCount;
+	private int comments;
 	
 	public int getEventNum() {
 		return eventNum;
@@ -72,6 +73,12 @@ public class Event {
 	}
 	public void setEventLikeCount(int eventLikeCount) {
 		this.eventLikeCount = eventLikeCount;
+	}
+	public int getComments() {
+		return comments;
+	}
+	public void setComments(int comments) {
+		this.comments = comments;
 	}
 	
 	

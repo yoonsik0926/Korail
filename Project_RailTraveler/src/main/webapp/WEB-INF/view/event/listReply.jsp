@@ -29,8 +29,7 @@
 	           <c:if test="${vo.userId == sessionScope.member.userId ||  sessionScope.member.userId == 'admin' }">
 	                <span class="deleteReply" style="cursor: pointer;" data-replyNum='${vo.replyNum}' data-pageNo='${pageNo}'>삭제</span>
 	           	</c:if>
-	           
-	        </td>
+	       </td>
 	    </tr>
 	    <tr>
 	        <td colspan='2' valign='top' style='padding:5px 5px;'>
