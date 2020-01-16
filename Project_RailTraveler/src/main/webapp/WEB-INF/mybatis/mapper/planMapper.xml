@@ -55,8 +55,8 @@
 	
 	<!-- 몇일차 여행인지 추가하기 -->
 	<insert id="insertPlan" parameterType="map">
-		INSERT INTO plan(planNum, userId, ticketDay, sDate, title)
-			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title})
+		INSERT INTO plan(planNum, userId, ticketDay, sDate, title, imageFileName)
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title}, #{imageFileName})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기 -->

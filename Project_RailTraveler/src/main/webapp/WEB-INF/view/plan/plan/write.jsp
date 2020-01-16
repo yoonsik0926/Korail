@@ -470,11 +470,12 @@ div.timeSelect {
 }
 
 .finalSave {
-	width: 100px;
-    height: 35px;
+	width: 120px;
+    height: 50px;
     font-size: 20;
     background: red;
     color: white;
+    float: right;
 }
 
 #userNameHere {
@@ -694,25 +695,54 @@ function ajaxJSON(url, type, query, fn) {
 	});
 }
 
+// ajax로 이미지 파일 서버로 전송
+function ajaxJSONImage(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,processData: false
+		,contentType: false
+		,success:function(data) {
+			fn(data);
+		}
+		,beforeSend:function(jqXHR) {
+	        jqXHR.setRequestHeader("AJAX", true);
+	    }
+	    ,error:function(jqXHR) {
+	    	if(jqXHR.status==403) {
+	    		login();
+	    		return false;
+	    	}
+	    	console.log(jqXHR.responseText);
+	    }
+	});
+}
+
 //최종저장버튼 클릭시 모든 세부계획 저장
 $(function() {
 	$("body").on("click", ".finalSave", function(){
-		var title;
 		if(! confirm("작성한 모든 계획을 저장하시겠습니까?")) {
 			return false;
 		}
-		title=prompt("제목을 작성해주세요.","");			
+
+		var imageFileName = new FormData();
+		imageFileName.append("imageFileName", $("input[name=imageFileName]")[0].file[0]);
+		
+		var title=$("input[name='title']").val();
+// 		var imageFileName=$("input[name='imageFileName']").val();
 		var sDate=$("#datepicker").val();
 		
 		var jsonData=JSON.stringify(days);
-		console.log(jsonData);
+// 		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
-		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title};
-		
+		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title, "imageFileName":imageFileName};
+		console.log(query);
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
 		};
-		ajaxJSON(url, "get", query, fn);
+		ajaxJSONImage(url, "get", query, fn);
 	});
 });
 
@@ -836,10 +866,10 @@ $(function(){
 
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
-				<div style="z-index: 5; padding: 20px; position: absolute; width: 75%;">
+				<div style="z-index: 5; padding: 20px; position: absolute; width: 75%; background-color: white; background-color: rgba(255,255,255,0.5);">
 					<div class="titleAndImage">
-						<p> 플랜 이름 : <input type="text" name="title"> </p>
-						<p> 대표 이미지 : <input type="file" name="img_upload" id="img_upload" accept="image/*"> </p>
+						<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
+						<p> 대표 이미지 : <input type="file" accept="image/*" name="imageFileName" id="img_upload" style="display: inline-block;"> </p>
 					</div>
 					<div style="width: 100%; height: 35px;">
 						<select name="locNum" style="width: 80px; height: 35px; float: left;">
@@ -853,7 +883,7 @@ $(function(){
 						<input type="text" id="findStation" name="keyword" value="${keyword}"
 							style="width: 225px; padding: 0 8px; height: 35px; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
 							placeholder="검색할 역을 입력하세요"> <button class="findNow"><i class="fas fa-search" style="max-width: 100%;"></i></button>
-						<button type="button" class="finalSave">최종저장</button>
+						
 						<div id="userNameHere">
 							<c:if test="${not empty sessionScope.member.userId}">
 								<span>${sessionScope.member.userName}(${sessionScope.member.userId})님 접속중...</span>
@@ -1427,6 +1457,8 @@ function saveDetail() {
 $(function() {
 	$("body").on("click", ".inputThing.moreDetail", function() {
 		alert("들어감");
+		console.log($("input[id='img_upload']").val());
+		console.log($("input[name='title']").val());
 	});
 });
 
@@ -1476,37 +1508,35 @@ $(function() {
 	});
 });
 
-// form 태그 없이 이미지파일 첨부하기
-$(function(){
-    // image upload
-    $('#img-upload').on('change', function() {
+// // form 태그 없이 이미지파일 첨부하기
+// function ajaxFileUpload() {
+// 	// 업로드 버튼이 클릭되면 파일 찾기 창을 띄운다.
+//     $("#img_upload").click();
+// }
 
-        // ex) C:\fakepath\filename.jpg
-        // 슬래시 기준으로 나누어서 마지막 이름만 추출
-        var img_name = $(this).val().split("\\").pop();
+// function ajaxFileChange() {
+//     // 파일이 선택되면 업로드를 진행한다.
+//     ajaxFileTransmit();
+// }
+// function ajaxFileTransmit() {
+//     var form = $("ajaxFrom")[0];
+//     var formData = new FormData(form);
+//     formData.append("message", "파일 확인 창 숨기기");
+//     formData.append("file", $("#img_upload")[0].files[0]);
 
-        // create form ( 가상으로 폼을 만들어냄 )
-        var myFormData = new FormData();
-        // PHP - image 는 이름 (post), 뒤에는 파일내용 (files)
-        myFormData.append('image', this.files[0]);
+//     $.ajax({
+//           url : ""
+//         , type : "POST"
+//         , processData : false
+//         , contentType : false
+//         , data : formData
+//         , success:function(json) {
+//             var obj = JSON.parse(json);
+//         }
+//     });
+// }
 
-        $.ajax({
-            type: 'post',
-            url: '/upload.php',
-            processData: false, // DOMDocument 또는 처리되지 않은 데이터 파일을 보내려면 false
-            contentType: false, // 서버에 데이터를 보낼 때 사용되는 내용 유형
-            data: myFormData,
-            success:function( data ){
-                // 결과는 2탄에서
-                console.log( data );
-            },
-            error:function(){
-                console.log("호출 실패");
-            }
-        });
-    });
 
-});
 </script>
 </body>
 </html>

@@ -90,6 +90,7 @@ public class PlanController {
 	public Map<String, Object> insertTicketDay(@RequestParam String days,
 											   @RequestParam String sDate,
 											   @RequestParam String title,
+											   @RequestParam String imageFileName,
 											   HttpSession session,
 											   HttpServletRequest request) {
 		
@@ -100,6 +101,7 @@ public class PlanController {
 		map.put("days",days);
 		map.put("sDate",sDate);
 		map.put("title", title);
+		map.put("imageFileName", imageFileName);
 		
 		try {
 			service.insertPlan(map);

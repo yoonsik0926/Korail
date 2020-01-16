@@ -66,6 +66,7 @@ public class PlanServiceImpl implements PlanService {
 			String userId=(String)map.get("userId");
 			String sDate=(String)map.get("sDate");
 			String title=(String)map.get("title");
+			String imageFileName=(String)map.get("imageFileName");
 
 			// 뷰에서 넘어온 3차원 배열 -> 이놈의 길이가 일수
 			JSONArray jarr=new JSONArray(days);
@@ -76,6 +77,7 @@ public class PlanServiceImpl implements PlanService {
 			paramMap.put("sDate", sDate);
 			paramMap.put("userId", userId);
 			paramMap.put("title", title);
+			paramMap.put("imageFileName", imageFileName);
 			
 			dao.insertData("plan.insertPlan",paramMap);
 			
