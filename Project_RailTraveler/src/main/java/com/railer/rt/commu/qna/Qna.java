@@ -16,6 +16,25 @@ public class Qna {
 	private int answer;
 	private String category, categoryName;
 	
+	private List<File> files;
+	
+	private String subjectParent;
+	public String getSubjectParent() {
+		return subjectParent;
+	}
+
+	public void setSubjectParent(String subjectParent) {
+		this.subjectParent = subjectParent;
+	}
+
+	public List<File> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<File> files) {
+		this.files = files;
+	}
+
 	private int qnaFileNum;
 	private String saveFilename, originalFilename;
 	private long fileSize;
@@ -229,6 +248,30 @@ public class Qna {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+	@Override
+	public String toString() {
+		return "Qna [listNum=" + listNum + ", qnaNum=" + qnaNum + ", userId=" + userId + ", userName=" + userName
+				+ ", subject=" + subject + ", content=" + content + ", created=" + created + ", hitCount=" + hitCount
+				+ ", notice=" + notice + ", enable=" + enable + ", answer=" + answer + ", category=" + category
+				+ ", categoryName=" + categoryName + ", files=" + files + ", subjectParent=" + subjectParent
+				+ ", qnaFileNum=" + qnaFileNum + ", saveFilename=" + saveFilename + ", originalFilename="
+				+ originalFilename + ", fileSize=" + fileSize + ", fileCount=" + fileCount + ", upload=" + upload
+				+ ", gap=" + gap + ", replyCount=" + replyCount + ", bookmarkCount=" + bookmarkCount + ", myBookMark="
+				+ myBookMark + ", reArticleCount=" + reArticleCount + ", deleteId=" + deleteId + ", getSubjectParent()="
+				+ getSubjectParent() + ", getFiles()=" + getFiles() + ", getReArticleCount()=" + getReArticleCount()
+				+ ", getListNum()=" + getListNum() + ", getQnaNum()=" + getQnaNum() + ", getUserId()=" + getUserId()
+				+ ", getUserName()=" + getUserName() + ", getSubject()=" + getSubject() + ", getContent()="
+				+ getContent() + ", getCreated()=" + getCreated() + ", getHitCount()=" + getHitCount()
+				+ ", getNotice()=" + getNotice() + ", getEnable()=" + getEnable() + ", getAnswer()=" + getAnswer()
+				+ ", getQnaFileNum()=" + getQnaFileNum() + ", getSaveFilename()=" + getSaveFilename()
+				+ ", getOriginalFilename()=" + getOriginalFilename() + ", getFileSize()=" + getFileSize()
+				+ ", getFileCount()=" + getFileCount() + ", getUpload()=" + getUpload() + ", getGap()=" + getGap()
+				+ ", getReplyCount()=" + getReplyCount() + ", getBookmarkCount()=" + getBookmarkCount()
+				+ ", getMyBookMark()=" + getMyBookMark() + ", getDeleteId()=" + getDeleteId() + ", getCategory()="
+				+ getCategory() + ", getCategoryName()=" + getCategoryName() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	
 	

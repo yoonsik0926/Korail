@@ -135,10 +135,13 @@
 	parameter Type : map
 	result Type : Qna DTO-->
 	<select id="listReQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
-      SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, deleteId, f.answer, f.enable, f.category, categoryName,
-            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
+      SELECT f.qnaNum,f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,f.created, deleteId, f.answer, f.enable, f.category, categoryName,
+            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount, NVL(myBookMark,0) myBookMark 
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
+        LEFT OUTER JOIN (
+         SELECT qnaNum, subject FROM qna
+      ) qp On f.answer=qp.qnaNum
       LEFT OUTER JOIN (
          SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
          GROUP BY qnaNum
@@ -151,10 +154,10 @@
          SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
          GROUP BY qnaNum
       ) fb On f.qnaNum=fb.qnaNum
-      LEFT OUTER JOIN category ct On f.category=ct.category
+      LEFT OUTER JOIN category ct On f.category=ct.category 
       LEFT OUTER JOIN (
-         SELECT qnaNum, userid, COUNT(*) myBookMark FROM qnaBookMark
-         where userid=#{userId} and qnaNum=#{qnaNum} group by qnaNum, userid
+         SELECT qnaNum, 1 myBookMark FROM qnaBookMark
+         where userid=#{userId}
       ) fb1 On f.qnaNum=fb1.qnaNum
       <where>
          f.answer=#{answer}
@@ -168,11 +171,14 @@
 	parameter Type : 정수
 	result Type : Qna DTO-->
 	<select id="readQna" parameterType="map"  resultType="com.railer.rt.commu.qna.Qna">
-		SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created, f.answer, f.enable, f.category,
+		SELECT f.qnaNum,f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,f.created, f.answer, f.enable, f.category,
 		 categoryName, NVL(fileCount,0) fileCount
             ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
+        LEFT OUTER JOIN (
+         SELECT qnaNum, subject FROM qna
+      ) qp On f.answer=qp.qnaNum
       LEFT OUTER JOIN (
          SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
          GROUP BY qnaNum
@@ -202,6 +208,16 @@
    	FROM qnaFile
    	WHERE qnaNum=#{qnaNum}
    </select>
+	
+	<!--공지사항 해당 게시물에 대한 파일 리스트 정보 가져오기
+	parameter Type : 정수
+	result Type : Qna DTO (uploads)-->
+	<select id="listFile1" parameterType="Integer" resultType="com.railer.rt.commu.qna.File">
+   	SELECT qnaFileNum, qnaNum, saveFilename, originalFilename, fileSize
+   	FROM qnaFile
+   	WHERE qnaNum=#{qnaNum}
+   </select>
+	
 	
 	<!-- 해당 게시물에 대한 이전글 정보 가져오기
 	parameter Type : map
@@ -264,13 +280,14 @@
    	WHERE qnaFileNum=#{qnaFileNum}
    </select>
    
-   <!--공지사항 제목, 내용 수정
+   <!--제목, 내용 수정
 	parameter Type : map
 	result Type : Notice DTO-->
 	<update id="updateQna" parameterType="com.railer.rt.commu.qna.Qna">
 		UPDATE Qna SET subject=#{subject},content=#{content},category=#{category}
 		WHERE qnaNum=#{qnaNum}
 	</update>
+	
 	
 	<!--공지사항 삭제
 	parameter Type : 정수

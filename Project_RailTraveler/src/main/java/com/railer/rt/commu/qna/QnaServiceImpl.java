@@ -228,6 +228,16 @@ public class QnaServiceImpl implements QnaService {
 		}
 		return list;
 	}
+	@Override
+	public List<File> listFile1(int num) {
+		List<File> list = null;
+		try {
+			list = dao.selectList("qna.listFile", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	@Override
 	public Qna readFile(int qnaFileNum) {

@@ -1,9 +1,11 @@
 package com.railer.rt.commu.qna;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.railer.rt.common.FileManager;
 import com.railer.rt.common.MyUtil;
-import com.railer.rt.commu.board.BoardReply;
+import com.railer.rt.commu.qna.Qna;
 import com.railer.rt.member.SessionInfo;
 
 @Controller("commu.qna.qnaController")
@@ -187,10 +189,17 @@ public class QnaController {
 		if (! category.equals("all")) {
 			query = "&category=" + URLEncoder.encode(category, "UTF-8");
 		}
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		Map<String, Object> readMap = new HashMap<String, Object>();
+		readMap.put("userId", info.getUserId());
+		readMap.put("qnaNum", qnaNum);
 		
-		model.addAttribute("qnaNum", qnaNum);
-		model.addAttribute("categoryName", categoryName);
-		model.addAttribute("categoryNum", categoryNum);
+		Qna dto = null;
+		dto = service.readQna(readMap);
+		List<Qna> listFile=service.listFile(qnaNum);
+		
+		model.addAttribute("listFile", listFile);
+		model.addAttribute("dto", dto);
 		model.addAttribute("query", query);
 		model.addAttribute("subMenu", "1");
 		model.addAttribute("mode", "reArticle");
@@ -282,9 +291,14 @@ public class QnaController {
 		
 		// AJAX 용 페이징
 		String paging=util.pagingMethod(current_page, total_page, "listReArticle");
-		
 		List<Qna> files = service.listFile(qnaNum);
-
+		
+		for (Qna qna : listReArticle) {
+			List<com.railer.rt.commu.qna.File> listFs  = service.listFile1(qna.getQnaNum());
+			if(!listFs.isEmpty()) {
+				qna.setFiles(listFs);
+			}
+		}
 		// 이전 글, 다음 글
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("category", category);
@@ -466,6 +480,209 @@ public class QnaController {
 				
 			}
 			
+			@RequestMapping(value="/qna/delete")
+			public String delete(
+					@RequestParam int qnaNum,
+					@RequestParam String page,
+					@RequestParam(defaultValue="all") String condition,
+					@RequestParam(defaultValue="") String keyword,
+					HttpSession session) throws Exception {
+				SessionInfo info=(SessionInfo)session.getAttribute("member");
+				
+				keyword = URLDecoder.decode(keyword, "utf-8");
+				String query="page="+page;
+				if(keyword.length()!=0) {
+					query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
+				} 
+				
+				String root=session.getServletContext().getRealPath("/");
+				String pathname=root+"uploads"+File.separator+"qna";
+				
+				Map<String, Object> map=new HashMap<String, Object>();
+				map.put("userId", info.getUserId());
+				map.put("qnaNum", qnaNum);
+				System.out.println(qnaNum);
+				System.out.println(qnaNum);
+				System.out.println(qnaNum);
+				System.out.println(qnaNum);
+				System.out.println(qnaNum);
+				service.deleteQna(map, pathname);
+				
+				return "redirect:/qna/qna?"+query;
+			}
+			
+			@RequestMapping(value="/qna/updateReArticle")
+			public String updateReArticleForm(@RequestParam int qnaNum, @RequestParam String categoryNum, @RequestParam String categoryName, @RequestParam(defaultValue = "1") String page,
+					@RequestParam(defaultValue = "all") String condition, @RequestParam(defaultValue = "all") String category, @RequestParam(defaultValue = "") String keyword,
+					HttpServletResponse resp, Model model, HttpSession session) throws Exception {
+				
+				
+				keyword = URLDecoder.decode(keyword, "utf-8");
+
+				String query = "page=" + page;
+				if (keyword.length() != 0) {
+					query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+				}
+				if (! category.equals("all")) {
+					query = "&category=" + URLEncoder.encode(category, "UTF-8");
+				}
+				
+				SessionInfo info = (SessionInfo) session.getAttribute("member");
+				String userId;
+				if(info==null) {
+					return "redirect:/qna/article?qnaNum="+qnaNum;
+				}else {
+					userId= info.getUserId();
+				}
+				
+				Map<String, Object> readMap = new HashMap<String, Object>();
+				readMap.put("userId", userId);
+				readMap.put("qnaNum", qnaNum);
+				
+				Qna dto = service.readQna(readMap);
+				System.out.println(dto.toString());
+				List<Qna> listFile=service.listFile(qnaNum);
+				
+				model.addAttribute("listFile", listFile);
+				model.addAttribute("qnaNum", qnaNum);
+				model.addAttribute("categoryName", categoryName);
+				model.addAttribute("categoryNum", categoryNum);
+				model.addAttribute("query", query);
+				model.addAttribute("dto", dto);
+				model.addAttribute("subMenu", "1");
+				model.addAttribute("mode", "reArticleUpdate");
+				return ".four.commu.qna.created";
+			}
+			
+			@RequestMapping(value = "/qna/reArticleUpdate", method = RequestMethod.POST)
+			public String updateReArticleSubmit(Qna dto, HttpSession session, String pageNo, Model model) throws Exception {
+				String root = session.getServletContext().getRealPath("/");
+				String pathname = root + "uploads" + File.separator + "qna";
+				SessionInfo info = (SessionInfo) session.getAttribute("member");
+				try {
+					dto.setUserId(info.getUserId());
+					service.insertQna(dto, pathname);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				model.addAttribute("qnaNum", dto.getAnswer());
+				return "redirect:/qna/article?qnaNum="+dto.getAnswer();
+			}
+			
+			@RequestMapping(value="/qna/update", method=RequestMethod.GET)
+			public String updateForm(
+					@RequestParam int qnaNum,
+					@RequestParam String page,
+					HttpSession session,
+					Model model) throws Exception {
+				SessionInfo info=(SessionInfo)session.getAttribute("member");
+				
+				Map<String, Object> readMap = new HashMap<String, Object>();
+				readMap.put("userId", info.getUserId());
+				readMap.put("qnaNum", qnaNum);
+				
+				Qna dto = null;
+				dto = service.readQna(readMap);
+				System.out.println(dto.toString());
+				List<Qna> listFile=service.listFile(qnaNum);
+				
+				if(dto==null) {
+					return "redirect:/qna/qna?page="+page;
+				}
+
+				if(! info.getUserId().equals(dto.getUserId())) {
+					return "redirect:/qna/qna?page="+page;
+				}
+				model.addAttribute("listFile", listFile);
+				model.addAttribute("dto", dto);
+				model.addAttribute("mode", "update");
+				model.addAttribute("page", page);
+				model.addAttribute("subMenu", "3");
+				return ".four.commu.qna.created";
+			}
+			
+			@RequestMapping(value="/qna/update", method=RequestMethod.POST)
+			public String updateSubmit(
+					Qna dto, 
+					@RequestParam String page,
+					HttpSession session) throws Exception {
+				
+				String root=session.getServletContext().getRealPath("/");
+				String pathname=root+"uploads"+File.separator+"qna";		
+
+				try {
+					service.updateQna(dto, pathname);		
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return "redirect:/qna/article?qnaNum="+dto.getQnaNum()+"&page="+page;
+			} 
+			
+			@RequestMapping(value="/qna/download")
+			public void download(
+					@RequestParam int qnaFileNum,
+					HttpServletResponse resp,
+					HttpSession session) throws Exception {
+				String root = session.getServletContext().getRealPath("/");
+				String pathname = root + "uploads" + File.separator + "qna";
+
+				boolean b = false; 
+				
+				Qna dto = service.readFile(qnaFileNum);
+				if(dto!=null) {
+					String saveFilename = dto.getSaveFilename();
+					String originalFilename = dto.getOriginalFilename();
+					  
+					b = fileManager.doFileDownload(saveFilename, originalFilename, pathname, resp);
+				}
+				
+				if (!b) {
+					try {
+						resp.setContentType("text/html; charset=utf-8");
+						PrintWriter out = resp.getWriter();
+						out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+					} catch (Exception e) {
+					}
+				}
+			}
+
+			@RequestMapping(value="/qna/zipDownload")
+			public void zipdownload(
+					@RequestParam int qnaNum,
+					HttpServletResponse resp,
+					HttpSession session) throws Exception {
+				String root = session.getServletContext().getRealPath("/");
+				String pathname = root + "uploads" + File.separator + "qna";
+
+				boolean b = false;
+				
+				List<Qna> listFile = service.listFile(qnaNum);
+				if(listFile.size()>0) {
+					String []sources = new String[listFile.size()];
+					String []originals = new String[listFile.size()];
+					String zipFilename = qnaNum+".zip";
+					
+					for(int idx = 0; idx<listFile.size(); idx++) {
+						sources[idx] = pathname+File.separator+listFile.get(idx).getSaveFilename();
+						originals[idx] = File.separator+listFile.get(idx).getOriginalFilename();
+					}
+					
+					b = fileManager.doZipFileDownload(sources, originals, zipFilename, resp);
+				}
+				
+				if (!b) {
+					try {
+						resp.setContentType("text/html; charset=utf-8");
+						PrintWriter out = resp.getWriter();
+						out.println("<script>alert('파일 다운로드가 불가능 합니다 !!!');history.back();</script>");
+					} catch (Exception e) {
+					}
+				}
+			}
+			
+			
 			// 댓글의 좋아요/싫어요 추가 : AJAX-JSON
 			@RequestMapping(value = "/qna/insertQnaBookmark", method = RequestMethod.POST)
 			@ResponseBody
@@ -526,6 +743,51 @@ public class QnaController {
 				}
 				model.put("bookmarkCount", bookmarkCount);
 				model.put("state", state);
+				return model;
+			}
+			
+			// 파일목록 : AJAX-JSON
+			@RequestMapping(value = "/qna/listFile", method = RequestMethod.POST)
+			@ResponseBody
+			public Map<String, Object> listFile(@RequestParam int qnaNum, HttpSession session) {
+				String state = "true";
+
+				Map<String, Object> model = new HashMap<>();
+				List<Qna> files=null;;
+				try {
+					files = service.listFile(qnaNum);
+				} catch (Exception e) {
+					state = "false";
+				}
+				model.put("files", files);
+				model.put("state", state);
+				return model;
+			}				
+			@RequestMapping(value="/qna/deleteFile", method=RequestMethod.POST)
+			@ResponseBody
+			public Map<String, Object> deleteFile(
+					@RequestParam int qnaFileNum,
+					HttpServletResponse resp,
+					HttpSession session) throws Exception {
+				String root = session.getServletContext().getRealPath("/");
+				String pathname = root + "uploads" + File.separator + "qna";
+				
+				Qna dto=service.readFile(qnaFileNum);
+				if(dto!=null) {
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+				
+				Map<String, Object> model = new HashMap<>(); 
+				try {
+					Map<String, Object> map=new HashMap<String, Object>();
+					map.put("field", "qnaFileNum");
+					map.put("num", qnaFileNum);
+					service.deleteFile(map);
+					model.put("state", "true");
+				} catch (Exception e) {
+					model.put("state", "false");
+				}
+				
 				return model;
 			}
 }

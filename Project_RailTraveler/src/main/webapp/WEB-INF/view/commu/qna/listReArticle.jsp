@@ -78,7 +78,7 @@
 					<c:if
 						test="${reArticle.userId==sessionScope.member.userId or reArticle.userId=='admin'}">
 						<button type="button" class="btn btn-default"
-							onclick="deleteBoard(${reArticle.qnaNum});" style="width: 60px;">삭제</button>
+							onclick="deleteQna(${reArticle.qnaNum});" style="width: 60px;">삭제</button>
 					</c:if>
 
 

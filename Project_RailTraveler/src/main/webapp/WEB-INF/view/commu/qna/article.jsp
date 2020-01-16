@@ -98,69 +98,10 @@ function ajaxHTML(url, type, query, selector) {
 	    }
 	});
 }
-//게시글 공감 여부
-$(function(){
-// 	$(".btnSendQnaLike").click(function(){
-// 		<c:if test="${empty sessionScope.member.userId}">
-// 		if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
-<%-- 			location.href="<%=cp%>/member/login"; --%>
-// 		else{
-// 			return;
-// 		}
-// 		</c:if>
-// 		var cs = document.getElementById("boardLikeIcon");
-// 		if( cs.className =="far fa-heart"){
-// 			if(! confirm("북마크 하시겠습니까 ? ")) {
-// 				return false;
-// 			}
-			
-<%-- 			var url="<%=cp%>/qna/insertQnaBookmark"; --%>
-// 			var qnaNum="${dto.qnaNum}";
-// 			var query = {qnaNum:qnaNum};
-			
-// 			var fn = function(data){
-// 				var state=data.state;
-// 				if(state=="true") {
-// 					var count = data.bookmarkCount;
-// 					$("#qnabookmarkCount").text(count);
-// 					cs.className = 'fas fa-heart';
-// 				} else if(state=="false") {
-// 					alert("좋아요는 한번만 가능합니다. !!!");
-// 				}
-// 			}; 
-			
-// 			ajaxJSON(url, "post", query, fn);
-			
-			
-			
-// 		}else{
-// 			if(! confirm("북마크를 취소하시겠습니까 ? ")) {
-// 				return false;
-// 			}
-			
-<%-- 			var url="<%=cp%>/qna/deleteQnaBookmark"; --%>
-// 			var qnaNum="${dto.qnaNum}";
-// 			var query = {qnaNum:qnaNum};
-			
-// 			var fn = function(data){
-// 				var state=data.state;
-// 				if(state=="true") {
-// 					var count = data.bookmarkCount;
-// 					$("#qnabookmarkCount").text(count);
-// 					cs.className = 'far fa-heart';
-// 				} else if(state=="false") {
-// 					alert("좋아요는 한번만 가능합니다. !!!");
-// 				}
-// 			};
-			
-// 			ajaxJSON(url, "post", query, fn);
-// 		}
-// 	});
-});
 
 //게시물 삭제
 function deleteQna(num) {
-	var q="qnaNum=${dto.qnaNum}&${query}";
+	var q="qnaNum="+num+"&${query}";
 	var url="<%=cp%>/qna/delete?"+q;
 	
 	if(confirm("게시물을 삭제 하시겠습니까 ?")) {
@@ -185,15 +126,28 @@ function insertReArticle(){
 	var url="<%=cp%>/qna/createdReArticle?qnaNum="+qnaNum+"&categoryNum="+categoryNum+"&categoryName=${dto.categoryName}&${query}";
 // 	console.log(url);
 	location.href=url;
-	
+};
+function update(qnaNum){
+	var url="<%=cp%>/qna/update?qnaNum="+qnaNum+"&${query}";
+// 	console.log(url);
+	location.href=url;
+};
+
+function updateReArticle(qnaNum){
+	var categoryNum="${dto.category}";
+	var url="<%=cp%>/qna/updateReArticle?qnaNum="+qnaNum+"&categoryNum="+categoryNum+"&categoryName=${dto.categoryName}&${query}";
+// 	console.log(url);
+	location.href=url;
 };
 
 //게시글 공감 여부
 $(function(){
 	$(".btnSendBoardLike").click(function(){
 		<c:if test="${empty sessionScope.member.userId}">
-			if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?"))
+			if(confirm("로그인이 필요한 기능입니다. 로그인페이지로 이동하시겠습니까?")){
 				location.href="<%=cp%>/member/login";
+				return;
+			}
 			else{
 				return;
 			}
@@ -655,29 +609,20 @@ a#MOVE_TOP_BTN {
 	role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content" style="margin: 0 auto; width: 500px;">
-			<h3
-				style="margin: 0; padding: 10px; color: white; background: #141832f2; text-align: center; font-weight: 900;">첨부파일</h3>
+			<h3	style="margin: 0; padding: 10px; color: white; background: #141832f2; text-align: center; font-weight: 900;">첨부파일</h3>
 			<div style="padding: 10px;">
-				<table id="fileDownTb" style="
-    width: 100%;
-">
-					<tbody><tr style="border-bottom: 1px solid;    height: 35px;">
-						<th style="
-    width: 10%;
-">다운</th>
-						<th style="    text-align: center;
-    width: 50%;
-">파일명</th>
-						<th style="
-    width: 10%;
-">파일크기</th>
+				<table id="fileDownTb" style="    width: 100%;">
+					<tbody>
+					<tr style="border-bottom: 1px solid; height: 35px;">
+						<th style="width: 10%;">다운</th>
+						<th style="text-align: center; width: 50%;">파일명</th>
+						<th style="width: 10%;">파일크기</th>
 					</tr>
 					<c:forEach var="file" items="${files}">
 					<tr style="    height: 35px;border-bottom: 1px solid #ccc;">
 					<td>
 					 <a href="<%=cp%>/qna/download?qnaFileNum=${file.qnaFileNum}">
-					<i
-								class="far fa-arrow-alt-circle-down"></i></a></td>
+					<i class="far fa-arrow-alt-circle-down"></i></a></td>
 								<td>${file.originalFilename}</td>
 								
 								<td>
@@ -739,6 +684,14 @@ a#MOVE_TOP_BTN {
 							style="background: #f97509; color: white;" disabled='disabled'>미완료</button>
 					</c:if>
 				</c:if>
+				<c:if test="${dto.userId ==sessionScope.member.userId}">
+				<button type="button" class="btn btn-default"
+					onclick="update(${dto.qnaNum});">
+					수정</button></c:if>
+					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
+					<button type="button" class="btn btn-default"
+					onclick="deleteQna(${dto.qnaNum});">
+					삭제</button></c:if>
 				<button type="button" class="btn btn-default"
 					onclick="javascript:location.href='<%=cp%>/qna/qna?${query}';">
 					목록</button>
@@ -838,18 +791,32 @@ a#MOVE_TOP_BTN {
 									<div class="avatar-info">
 									${reArticle.userName }
 										<div class="date-created">
-											<span class="timeago" title="2019-12-16 22:20:55.0">${reArticle.created }</span>
+											<span class="timeago" title="2019-12-16 22:20:55.0">${reArticle.created}</span>
 										</div>
 									</div>
 								</div>
-								<fieldset class="form">
-									<article id="note-text-1861368"
+									<article 
 										class="list-group-item-text note-text">
 
 										${reArticle.content}
 
 									</article>
-								</fieldset>
+									
+									<c:if test="${not empty reArticle.files}">
+										<div style="border: 1px solid">
+											<h5>첨부파일 [${reArticle.fileCount}] </h5>
+										<c:forEach var="fl" items="${reArticle.files}">
+											<ul>
+											<li><a href="<%=cp%>/qna/download?qnaFileNum=${fl.qnaFileNum}">
+						<i class="far fa-arrow-alt-circle-down"></i></a>
+						${fl.originalFilename}
+						(<fmt:formatNumber
+								value="${fl.fileSize/1024}" pattern="0.00" />KByte)
+						</li>
+											</ul>
+										</c:forEach>
+										</div>
+									</c:if>
 							</div>
 
 							<div class="content-function pull-right text-center" style="width: 60px;">
@@ -869,13 +836,13 @@ a#MOVE_TOP_BTN {
 					</button>
 					<c:if test="${reArticle.userId==sessionScope.member.userId}">
 						<button type="button" class="btn btn-default"
-							onclick="updateBoard(${reArticle.qnaNum});"
+							onclick="updateReArticle(${reArticle.qnaNum});"
 							style="width: 60px; margin-bottom: 5px;">수정</button>
 					</c:if>
 					<c:if
 						test="${reArticle.userId==sessionScope.member.userId or reArticle.userId=='admin'}">
 						<button type="button" class="btn btn-default"
-							onclick="deleteBoard(${reArticle.qnaNum});" style="width: 60px;">삭제</button>
+							onclick="deleteQna(${reArticle.qnaNum});" style="width: 60px;">삭제</button>
 					</c:if>
 								</div>
 							</div>
@@ -903,7 +870,7 @@ a#MOVE_TOP_BTN {
 
 						<div class="">
 							<h5 class="" style="text-align: center;">
-								<a href="/login/auth?redirectUrl=%2Farticle%2F661621"
+								<a href="<%=cp%>/member/login"
 									class="link">로그인</a>을 하시면 답글을 등록할 수 있습니다.
 							</h5>
 						</div>

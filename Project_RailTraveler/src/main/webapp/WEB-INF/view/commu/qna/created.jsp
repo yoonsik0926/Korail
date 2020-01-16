@@ -148,43 +148,45 @@ input[type=text], input[type=file] {
 			<!-- 동행구하기 입력 폼 테이블 -->
 			<table class="tb-created">
 				<tbody id="boardtb">
-				<c:if test="${mode=='reArticle'}">
+				<c:if test="${mode=='reArticle' or mode=='reArticleUpdate'}">
 					<tr class="tb-row" style="margin-bottom: 10px; ">
-						<td width="100" class="tb-title">원글 번호</td>
-						<td class="tb-content">${qnaNum}</td>
+						<td width="100" class="tb-title">원글 제목</td>
+						<td class="tb-content">${dto.subjectParent}</td>
 					</tr>
 					<tr class="tb-row" style="margin-bottom: 10px; ">
 						<td width="100" class="tb-title">원글 카테고리</td>
-						<td class="tb-content">${categoryName}</td>
+						<td class="tb-content">${dto.categoryName}</td>
 					</tr>
 				</c:if>
-				<c:if test="${sessionScope.member.userId!='admin' and mode!='reArticle' }">
+				<c:if test="${sessionScope.member.userId!='admin' and mode!='reArticle' and mode!='reArticleUpdate'}">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">분류</td>
 					<td class="tb-content">
 						<select name="category" class="boxTF" style="border-radius: 3px; width: 20%; height: 100%; border: 1px solid #ccc; margin-right: 10px;">
-						<option value="all">전체</option>
+						<option value="all" ${dto.category=="all"?"selected='selected'":"" }>전체</option>
 							<optgroup label="플래너">
-								<option value="plan">여행 계획</option>
+								<option value="plan" ${dto.category=="plan"?"selected='selected'":"" }>여행 계획</option>
 							</optgroup>
 							<optgroup label="관광정보">
-								<option value="food">맛집</option>
-								<option value="room">숙박</option>
-								<option value="sight">명소</option>
+								<option value="food" ${dto.category=="food"?"selected='selected'":"" }>맛집</option>
+								<option value="room" ${dto.category=="room"?"selected='selected'":"" }>숙박</option>
+								<option value="sight" ${dto.category=="sight"?"selected='selected'":"" }>명소</option>
 							</optgroup>
 							<optgroup label="기타">
-								<option value="other">기타</option>
+								<option value="other" ${dto.category=="other"?"selected='selected'":"" }>기타</option>
 							</optgroup>
 						</select>
   				 	</td>
 				</tr>
 				</c:if>
+				<c:if test="${sessionScope.member.userId!='admin' and mode!='reArticle' and mode!='reArticleUpdate'}">
 					<tr class="tb-row">
 						<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 						<td class="tb-content"><input type="text" name="subject"
 							maxlength="100" class="boxTF" style="padding: 5px 5px;"
 							value="${dto.subject}"></td>
 					</tr>
+					</c:if>
 					<tr class="tb-row">
 						<td width="100" class="tb-title">작성자</td>
 						<td class="tb-content">${sessionScope.member.userName}</td>
@@ -197,7 +199,7 @@ input[type=text], input[type=file] {
 								name="content" rows="12" id="content" class="boxTA"
 								style="width: 100%; height: 270px;">${dto.content}</textarea></td>
 					</tr>
-				<c:if test="${mode=='update'}">
+				<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
 				   <c:forEach var="vo" items="${listFile}">
 						  <tr id="f${vo.qnaFileNum}" height="40" style="border-bottom: 1px solid #cccccc;"> 
 						      <td class="tb-title" width="100" style="text-align: center;">첨부된파일</td>
@@ -223,15 +225,19 @@ input[type=text], input[type=file] {
 				style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 				<tr>
 					<td>
+					<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
 						<button type="button" class="btn btn-default"
 							style="padding: 6px 20px;"
-							onclick="javascript:location.href='<%=cp%>/qna/qna';">${mode=='update'?'수정취소':'등록취소'}</button>
-
+							onclick="javascript:location.href='<%=cp%>/qna/qna';">수정취소</button></c:if>
+<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
+						<button type="button" class="btn btn-default"
+							style="padding: 6px 20px;"
+							onclick="javascript:location.href='<%=cp%>/qna/article?qnaNum=${dto.qnaNum}';">등록취소</button></c:if>
 						<button type="submit" class="btn btn-danger"
 							style="margin-left: 5px;">
 							<img alt="" src="<%=cp%>/resource/images/check-mark.png"
-								style="width: 15px;"> ${mode=='update'?'수정완료':'작성완료'}
-						</button> <c:if test="${mode=='update'}">
+								style="width: 15px;"> ${mode=='update' or mode=='reArticleUpdate'?'수정완료':'작성완료'}
+						</button> <c:if test="${mode=='update' or mode=='reArticleUpdate'}">
 							<input type="hidden" name="qnaNum" value="${dto.qnaNum}">
 							<input type="hidden" name="saveFilename"
 								value="${dto.saveFilename}">
@@ -240,9 +246,10 @@ input[type=text], input[type=file] {
 							<input type="hidden" name="page" value="${page}">
 						</c:if>
 						
-						<c:if test="${mode=='reArticle'}">
-							<input type="hidden" name="answer" value="${qnaNum}">
-							<input type="hidden" name="category" value="${categoryNum}">
+						<c:if test="${mode=='reArticle' or mode=='reArticleUpdate'}">
+							<input type="hidden" name="answer" value="${dto.qnaNum}">
+							<input type="hidden" name="category" value="${dto.category}">
+							<input type="hidden" name="subject" value="${dto.subject}">
 						</c:if>
 					</td>
 				</tr>

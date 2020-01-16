@@ -7,7 +7,7 @@ public interface QnaService {
 	public void insertQna(Qna dto, String pathname) throws Exception;
 	public int dataCount(Map<String, Object> map);
 
-	int reArticleCount(Map<String, Object> map) throws Exception;
+	public int reArticleCount(Map<String, Object> map) throws Exception;
 	public List<Qna> listQna(Map<String, Object> map);
 	public List<Qna> listReQna(Map<String, Object> map);
 	public List<Qna> listQnaTop();
@@ -22,6 +22,7 @@ public interface QnaService {
 	
 	public void insertFile(Qna dto) throws Exception;
 	public List<Qna> listFile(int num);
+	public List<File> listFile1(int num);
 	public Qna readFile(int fileNum);
 	public void deleteFile(Map<String, Object> map) throws Exception;
 
