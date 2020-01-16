@@ -94,6 +94,7 @@ public class PlanController {
 											   HttpSession session,
 											   HttpServletRequest request) {
 		
+		int planNum=0;
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 
 		Map<String, Object> map=new HashMap<>();
@@ -103,12 +104,13 @@ public class PlanController {
 		map.put("title", title);
 		
 		try {
-			service.insertPlan(map);
+			planNum=service.insertPlan(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return map;
+		Map<String, Object> model1 = new HashMap<>();
+		model1.put("planNum", planNum);
+		return model1;
 	}
 	
 	// 세부계획 모달에서 장소 검색

@@ -8,7 +8,7 @@ public interface PlanService {
 	public int dataCount(Map<String, Object> map); // 역 개수
 	public List<Tour> listCategory(); // 대분류
 	public List<Tour> listDetailCate(Map<String, Object> map); // 소분류
-	public void insertPlan(Map<String, Object> map) throws Exception; // 세부계획 DB저장
+	public int insertPlan(Map<String, Object> map) throws Exception; // 세부계획 DB저장
 	public int placeDataCount(Map<String, Object> map); // 장소 개수
 	public List<Tour> listTour(Map<String, Object> map); // 장소 리스트(세부계획 모달 검색창에서 뿌려줌)
 	public void updateImage(Plan dto, String pathname) throws Exception; // jsp에서 submit한 이미지 파일을 db에 추가하기 위해서 필요한 것

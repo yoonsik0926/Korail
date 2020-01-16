@@ -727,20 +727,19 @@ $(function() {
 			return false;
 		}
 
-// 		var imageFileName = new FormData();
-// 		imageFileName.append("imageFileName", $("input[name=imageFileName]")[0].file[0]);
 		
 		var title=$("input[name='title']").val();
-// 		var imageFileName=$("input[name='imageFileName']").val();
 		var sDate=$("#datepicker").val();
 		
 		var jsonData=JSON.stringify(days);
-// 		console.log(jsonData);
 		var url="<%=cp%>/plan/insertTicketDay";
 		var query= {"days":jsonData, "sDate":sDate, "name":name, "title":title};
 // 		console.log(query);
 		var fn=function(data) {
 			alert("세부계획이 저장되었습니다.");
+			var f=document.imageSend;
+			var planNum=data.planNum;
+			f.planNum.value=planNum;
 			$("form[name='imageSend']").submit();
 		};
 		ajaxJSON(url, "get", query, fn);
@@ -867,11 +866,12 @@ function findTourThing(page){
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
 				<div style="z-index: 5; padding: 20px; position: absolute; width: 75%; background-color: white; background-color: rgba(255,255,255,0.5);">
-					<form name="imageSend" action="/plan/updateImage" method="post" enctype="multipart/form-data">
+					<form name="imageSend" action="<%=cp%>/plan/updateImage" method="post" enctype="multipart/form-data">
 						<div class="titleAndImage">
 							<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
-							<p> 대표 이미지 : <input type="file" accept="image/*" name="imageFileName" id="img_upload" style="display: inline-block;"> </p>
+							<p> 대표 이미지 : <input type="file" accept="image/*" name="upload" id="img_upload" style="display: inline-block;"> </p>
 						</div>
+						<input name="planNum" type="hidden">
 					</form>
 					<div style="width: 100%; height: 35px;">
 						<select name="locNum" style="width: 80px; height: 35px; float: left;">
@@ -1402,10 +1402,14 @@ $(function() {
 		var name=$(this).text();
 		var tel=$(this).next().text();
 		var address=$(this).next().next().text();
+		var cateNum=$("select[name='cateNum']").val();
+		
+// 		console.log(name+":"+tel+":"+address+":"+cateNum);
 		
 		$("input[name='name']").val(name);
 		$("input[name='tel']").val(tel);
 		$("input[name='address']").val(address);
+		$("input[name='cateNum']").val(cateNum);
 		
 		$(".closePlease").click();
 	});

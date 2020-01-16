@@ -60,12 +60,12 @@ public class PlanServiceImpl implements PlanService {
 	}
 	
 	@Override
-	public void insertPlan(Map<String, Object> map) throws Exception {
+	public int insertPlan(Map<String, Object> map) throws Exception {
 		
+		int planSeq=0;
 		try {
 			// insertPlan 추가
-			int planSeq=dao.selectOne("plan.planSeq");
-
+			planSeq=dao.selectOne("plan.planSeq");
 			String days=(String)map.get("days");
 			String userId=(String)map.get("userId");
 			String sDate=(String)map.get("sDate");
@@ -138,7 +138,7 @@ public class PlanServiceImpl implements PlanService {
 			e.printStackTrace();
 			throw e;
 		}
-		
+		return planSeq;
 	}
 
 	@Override
