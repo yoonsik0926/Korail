@@ -31,6 +31,9 @@
 		window.open(naver_share_url, 'Share on Naver',
 				'scrollbars=no, width=500, height=500');
 	}
+	</script>
+	
+	<script>
 	$(function() {
 		$(window).scroll(function() {
 			if ($(this).scrollTop() > 500) {
@@ -662,7 +665,7 @@ a#MOVE_TOP_BTN {
 		style="padding: 0; margin: 0; font-size: 1.025em;">
 		<div style="padding-bottom: 10px;"></div>
 			<div class="list-btn-nor2 upper-list" style="padding-bottom: 8px;">
-			<div class="fl">
+			<div class="fl" style="margin: 3px;">
 			<c:if test="${not empty preReadDto}">
 				<button type="button" class="btn btn-default"
 					onclick="javascript:location.href='<%=cp%>/qna/article?${query}&qnaNum=${preReadDto.qnaNum}';">
@@ -686,11 +689,11 @@ a#MOVE_TOP_BTN {
 				</c:if>
 				<c:if test="${dto.userId ==sessionScope.member.userId}">
 				<button type="button" class="btn btn-default"
-					onclick="update(${dto.qnaNum});">
+					onclick="update(${dto.qnaNum});" style="margin-left: 3px;">
 					수정</button></c:if>
 					<c:if test="${dto.userId ==sessionScope.member.userId or 'admin'==sessionScope.member.userId}">
 					<button type="button" class="btn btn-default"
-					onclick="deleteQna(${dto.qnaNum});">
+					onclick="deleteQna(${dto.qnaNum});" style="margin-left: 3px;">
 					삭제</button></c:if>
 				<button type="button" class="btn btn-default"
 					onclick="javascript:location.href='<%=cp%>/qna/qna?${query}';">
@@ -711,7 +714,7 @@ a#MOVE_TOP_BTN {
 						<span style="float: right;">
 						
 						<i class="fa fa-heart" style="width: 22px;"></i>&nbsp;${dto.bookmarkCount}
-						<i class="fas fa-comments"></i> 5(답글개수)
+						<i class="fas fa-comments" style="margin-left: 5px;"></i> ${reArticleSize}
 						
 						</span> </h3>
 					</td>
@@ -729,7 +732,7 @@ a#MOVE_TOP_BTN {
 				</tr>
 
 				<tr style="border-bottom: 0;">
-					<td colspan="3" height="40" align="center">${dto.myBookMark}
+					<td colspan="3" height="40" align="center">
 						<button type="button" class="btn btnSendBoardLike btn-default"
 							title="좋아요"
 							style="padding: 6px 8px; width: 60px; height: 60px; border-radius: 50%; margin-bottom: 5px;" 
@@ -796,7 +799,7 @@ a#MOVE_TOP_BTN {
 									</div>
 								</div>
 									<article 
-										class="list-group-item-text note-text">
+										class="list-group-item-text note-text" style="padding: 30px 0;">
 
 										${reArticle.content}
 

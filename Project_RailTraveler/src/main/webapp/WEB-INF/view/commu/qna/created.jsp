@@ -130,7 +130,7 @@ input[type=text], input[type=file] {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;"> 동행구하기 - 글쓰기</span>
+			<span style="padding: 10px 0px; display: block;"> 묻고 답하기 - 글쓰기</span>
 		</h3>
 	</div>
 
@@ -151,7 +151,7 @@ input[type=text], input[type=file] {
 				<c:if test="${mode=='reArticle' or mode=='reArticleUpdate'}">
 					<tr class="tb-row" style="margin-bottom: 10px; ">
 						<td width="100" class="tb-title">원글 제목</td>
-						<td class="tb-content">${dto.subjectParent}</td>
+						<td class="tb-content">${mode=='reArticle'?dto.subject : dto.subjectParent}</td>
 					</tr>
 					<tr class="tb-row" style="margin-bottom: 10px; ">
 						<td width="100" class="tb-title">원글 카테고리</td>
@@ -197,7 +197,11 @@ input[type=text], input[type=file] {
 							valign="top">내&nbsp;&nbsp;&nbsp;&nbsp;용</td>
 						<td valign="top" style="padding: 5px 1% 5px 10px;"><textarea
 								name="content" rows="12" id="content" class="boxTA"
-								style="width: 100%; height: 270px;">${dto.content}</textarea></td>
+								style="width: 100%; height: 270px;">
+								<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
+								${dto.content}
+								</c:if>
+								</textarea></td>
 					</tr>
 				<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
 				   <c:forEach var="vo" items="${listFile}">
@@ -228,11 +232,15 @@ input[type=text], input[type=file] {
 					<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
 						<button type="button" class="btn btn-default"
 							style="padding: 6px 20px;"
-							onclick="javascript:location.href='<%=cp%>/qna/qna';">수정취소</button></c:if>
-<c:if test="${mode=='update' or mode=='reArticleUpdate'}">
+							onclick="javascript:location.href='<%=cp%>/qna/article?qnaNum=${dto.qnaNum}';">수정취소</button></c:if>
+						<c:if test="${mode=='created'}">
 						<button type="button" class="btn btn-default"
 							style="padding: 6px 20px;"
 							onclick="javascript:location.href='<%=cp%>/qna/article?qnaNum=${dto.qnaNum}';">등록취소</button></c:if>
+						<c:if test="${mode=='reArticle'}">
+						<button type="button" class="btn btn-default"
+							style="padding: 6px 20px;"
+							onclick="javascript:location.href='<%=cp%>/qna/qna;">등록취소</button></c:if>
 						<button type="submit" class="btn btn-danger"
 							style="margin-left: 5px;">
 							<img alt="" src="<%=cp%>/resource/images/check-mark.png"

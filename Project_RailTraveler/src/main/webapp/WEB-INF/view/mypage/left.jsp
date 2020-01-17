@@ -41,7 +41,22 @@ $(function(){
 
 
 
-<h3><span style="font-family: Webdings">2</span> 마이페이지</h3>
+<div style="        box-shadow: 1px 1px 2px #333333;
+    background: #ffffff;
+    width: 100%;
+    color: white;
+    margin: 10px auto;
+    padding: 20px 10px;
+    display: block;
+    border: 1px solid;
+    border-radius: 5px;
+">
+<img alt="마이페이지로고" src="<%=cp%>/resource/images/IconMypage.png" style="    width: 28px;
+    position: absolute;
+    margin: 0 0 0 5px;">
+<img alt="마이페이지" src="<%=cp%>/resource/images/TitleMypage.png" style="width: 78%;
+    margin: 0px 0 0 41px;
+    padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/member/pwd" class="list-group-item">정보 수정</a>
     <a href="<%=cp%>/bookmark/tour" class="list-group-item book">나의 북마크</a>

@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -179,7 +178,6 @@ public class QnaController {
 			@RequestParam(defaultValue = "all") String condition, @RequestParam(defaultValue = "all") String category, @RequestParam(defaultValue = "") String keyword,
 			HttpServletResponse resp, Model model, HttpSession session) throws Exception {
 		
-		
 		keyword = URLDecoder.decode(keyword, "utf-8");
 
 		String query = "page=" + page;
@@ -196,6 +194,12 @@ public class QnaController {
 		
 		Qna dto = null;
 		dto = service.readQna(readMap);
+		System.out.println(dto.toString());
+		System.out.println(dto.toString());
+		System.out.println(dto.toString());
+		System.out.println(dto.toString());
+		System.out.println(dto.toString());
+		System.out.println(dto.toString());
 		List<Qna> listFile=service.listFile(qnaNum);
 		
 		model.addAttribute("listFile", listFile);
@@ -299,6 +303,10 @@ public class QnaController {
 				qna.setFiles(listFs);
 			}
 		}
+		int reArticleSize=0;
+		if(listReArticle != null) {
+			reArticleSize = listReArticle.size();
+		}
 		// 이전 글, 다음 글
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("category", category);
@@ -312,6 +320,7 @@ public class QnaController {
 		model.addAttribute("listReArticle", listReArticle);
 		model.addAttribute("reArticleCount", dataCount);
 		
+		model.addAttribute("reArticleSize", reArticleSize);
 		model.addAttribute("dto", dto);
 		model.addAttribute("files", files);
 		model.addAttribute("preReadDto", preReadDto);
@@ -396,12 +405,6 @@ public class QnaController {
 					Model model
 					) throws Exception {
 				
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
 				int rows=5;
 				int total_page=0;
 				int dataCount=0;
@@ -501,11 +504,6 @@ public class QnaController {
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("userId", info.getUserId());
 				map.put("qnaNum", qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
-				System.out.println(qnaNum);
 				service.deleteQna(map, pathname);
 				
 				return "redirect:/qna/qna?"+query;
