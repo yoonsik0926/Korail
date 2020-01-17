@@ -169,10 +169,10 @@ function myBookMarkList() {
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="커뮤니티로고" src="<%=cp%>/resource/images/TitleAdmin.png" style="    width: 28px;
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/IconAdmin.png" style="    width: 28px;
     position: absolute;
     margin: 0 0 0 5px;">
-<img alt="커뮤니티" src="<%=cp%>/resource/images/IconAdmin.png" style="width: 78%;
+<img alt="커뮤니티" src="<%=cp%>/resource/images/TitleAdmin.png" style="width: 78%;
     margin: 0px 0 0 41px;
     padding: 0;"></div>
 <div class="list-group">
