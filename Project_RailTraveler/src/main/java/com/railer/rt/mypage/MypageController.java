@@ -747,20 +747,6 @@ public class MypageController {
 	// 내가 쓴 게시물
 	@RequestMapping(value="/bbs/mybbs")
 	public String myBbs(
-			@RequestParam(defaultValue="1") int commuNum,
-			Model model) {
-		
-		
-		model.addAttribute("commuNum",commuNum);
-		
-		
-		model.addAttribute("subMenu", "8");
-		
-		return ".four.mypage.bbs.mybbs";
-	}
-	
-	@RequestMapping(value = "/bbs/list")
-	public String myBbsList(
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
 			@RequestParam(value = "condition", defaultValue = "all") String condition,
 			@RequestParam(value = "keyword", defaultValue = "") String keyword,
@@ -768,7 +754,7 @@ public class MypageController {
 			HttpSession session,
 			HttpServletRequest req, 
 			Model model) throws Exception {
-
+		
 		String cp = req.getContextPath();
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
@@ -822,7 +808,7 @@ public class MypageController {
 		}
 
 		String query = "";
-		
+		String listUrl = cp + "/bookmark/commu?commuNum="+commuNum;
 		String articleUrl = "";
 		
 		if(commuNum == 1) {
@@ -847,10 +833,11 @@ public class MypageController {
 			} else {
 				articleUrl = cp +"/friend/article?page="+current_page+"&"+query+"&friendNum=";
 			}
+			listUrl += query;
 		}
-		
-		// AJAX 용 페이징
-		String paging = myUtil.pagingMethod(current_page, total_page, "listMybbsPage");
+
+
+		String paging = myUtil.paging(current_page, total_page,listUrl);
 		
 		model.addAttribute("condition",condition);
 		model.addAttribute("keyword",keyword);
@@ -862,11 +849,12 @@ public class MypageController {
 		model.addAttribute("query",query);
 		model.addAttribute("commuNum",commuNum);
 		model.addAttribute("articleUrl",articleUrl);
-
 		
 		model.addAttribute("subMenu", "8");
-
-		return "/mypage/bbs/list";
+		
+		return ".four.mypage.bbs.mybbs";
 	}
+	
+	
 
 }
