@@ -776,10 +776,11 @@ $(function(){
 
 // 세부계획 모달에서 장소 검색
 function findTourThing(page){
+	
 	var detailcateNum=$("#detailTourCategory").val();
 	var tourKeyword=$("input[name='tourKeyword']").val();
 	var staNum=$(".ddiring").parent().attr("data-staNum");
-		
+	
 	var url="<%=cp%>/plan/searchPlace";
 	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
 
@@ -787,9 +788,9 @@ function findTourThing(page){
 		$("#listTour").empty();
 		for (var i = 0; i < data.list.length; i++) {
 			var tel=(data.list[i].tel==null? "":data.list[i].tel);
-			var imageFileName=(data.list[i].imagefilename==null? "":data.list[i].imagefilename);
+			
 			$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
-								 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;' data-tourNum="+data.list[i].tourNum+" data-imageFileName="+imageFileName+">"+data.list[i].name+"</td>"
+								 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;' data-tourNum="+data.list[i].tourNum+" data-imageFileName="+data.list[i].imagefilename+">"+data.list[i].name+"</td>"
 								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:100px;'>"+tel+"</td>"
 								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:240px;'>"+data.list[i].address+"</td>"
 								 +"</tr>"
@@ -934,7 +935,7 @@ $(document).ready(function() {
 			</div>
 		</div>		
 						<!-- 세부계획 Modal -->
-						<form name="detailPlanForm">
+						<form name="detailPlanForm" onSubmit="return false;">
 							<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog selectTime" role="document">
 							    <div class="modal-content selectTime">
@@ -967,7 +968,7 @@ $(document).ready(function() {
 							        	<input class="inputThing resultSearchingTour" name="name" autocomplete="off" readonly="readonly" placeholder="이름">
 							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail" data-backdrop="static">검색하기<i class="fas fa-search"></i></button>							     	
 							        </div>
-							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
+							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" alt="" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="tourNum" placeholder="투어넘" autocomplete="off" readonly="readonly" style="display: block;">
