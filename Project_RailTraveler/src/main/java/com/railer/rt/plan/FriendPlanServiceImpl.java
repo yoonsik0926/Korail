@@ -131,6 +131,56 @@ public class FriendPlanServiceImpl implements FriendPlanService{
 	}
 
 
+	@Override
+	public List<Plan> listBookmark(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("fplan.listBookmark",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public int bookmarkCount(Map<String, Object> map) throws Exception {
+		int dataCount = 0;
+		try {
+			dataCount = dao.selectOne("fplan.countBookmark",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataCount;
+	}
+
+
+	@Override
+	public List<Plan> listMyPlan(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("fplan.listMyPlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public int myPlanCount(Map<String, Object> map) throws Exception {
+		int dataCount = 0;
+		try {
+			dataCount = dao.selectOne("fplan.countMyPlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataCount;
+	}
+
+
 	
 
 }

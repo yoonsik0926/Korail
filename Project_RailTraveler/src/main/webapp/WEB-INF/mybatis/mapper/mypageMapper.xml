@@ -30,7 +30,8 @@
 	<sql id="where-list2">
 		<choose>
 			<when test="condition=='all'">
-				(INSTR(subject,#{keyword}) &gt; 0
+				(
+				INSTR(subject,#{keyword}) &gt; 0
 				OR
 				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
 				OR
@@ -40,7 +41,7 @@
 				)
 			</when>
 			<when test="condition=='subject'">
-				(INSTR(subject,#{keyword}) &gt; 0
+				INSTR(subject,#{keyword}) &gt; 0
 			</when>
 			<when test="condition=='content'">
 				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
@@ -79,8 +80,7 @@
 		join ticket t on t.ticketNum =
 		s.ticketNum
 		join member2 m on s.userNum = m.userNum
-		where m.userId =
-		#{userId}
+		where m.userId =#{userId}
 		<if test="keyword!='all'">
 			AND
 			<include refid="where-list" />
@@ -139,11 +139,13 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On q.qnaNum=fb.qnaNum
-				where q.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+			    <where>
+					q.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY q.qnaNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -170,11 +172,13 @@
 				boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 				GROUP BY boardNum
 				) fb On c.boardNum=fb.boardNum
-				where b.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					b.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY b.boardNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -197,11 +201,13 @@
 				SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 				GROUP BY friendNum
 				) fb On c.friendNum=fb.friendNum
-				where f.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY f.friendNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -227,11 +233,13 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On q.qnaNum=fb.qnaNum
-				where q.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+			    <where>
+					q.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 			</when>
 			<when test="commuName=='board'">
 				select nvl(count(*),0) from boardBookmark b
@@ -252,11 +260,14 @@
 				boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 				GROUP BY boardNum
 				) fb On c.boardNum=fb.boardNum
-				where b.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					b.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
+				
 			</when>
 			<when test="commuName=='friend'">
 				select nvl(count(*),0) from friendBookmark f
@@ -274,15 +285,18 @@
 				SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 				GROUP BY friendNum
 				) fb On c.friendNum=fb.friendNum
-				where f.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
 				</if>
+				</where>
 			</when>
 		</choose>
 
 	</select>
+
 
 	<!-- 내가 쓴 게시물 -->
 	<select id="listMyCommu" parameterType="map" resultType="com.railer.rt.mypage.Commu">
@@ -304,11 +318,13 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On f.qnaNum=fb.qnaNum
-			    <if test="keyword!=null and keyword!=''">
+				<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
 			    ORDER BY f.qnaNum DESC
       			OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -329,11 +345,13 @@
 			       SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 			       GROUP BY boardNum
 			    ) fb On f.boardNum=fb.boardNum
-			    <if test="keyword!=null and keyword!=''">
+			     <where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
 			    ORDER BY f.boardNum DESC
       			OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -355,11 +373,13 @@
 			         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 			         GROUP BY friendNum
 			      ) fb On f.friendNum=fb.friendNum
-			      <if test="keyword!=null and keyword!=''">
+			     <where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-			 	  </if>
-			      WHERE f.userId = #{userId}
+					</if>
+				</where>
 			      ORDER BY f.friendNum DESC
       			  OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -384,11 +404,14 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On f.qnaNum=fb.qnaNum
-			    <if test="keyword!=null and keyword!=''">
+			    <where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			   
 			</when>
 			<when test="commuName=='board'">
 				select nvl(count(*),0) FROM board f 
@@ -405,11 +428,15 @@
 			       SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 			       GROUP BY boardNum
 			    ) fb On f.boardNum=fb.boardNum
-			    <if test="keyword!=null and keyword!=''">
+			   	<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			    
+			    
 			</when>
 			<when test="commuName=='friend'">
 				select nvl(count(*),0) FROM friend f
@@ -426,11 +453,14 @@
 			         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 			         GROUP BY friendNum
 			      ) fb On f.friendNum=fb.friendNum
-			      <if test="keyword!=null and keyword!=''">
+			      <where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				  </if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			 
 			</when>
 		</choose>
 	</select>

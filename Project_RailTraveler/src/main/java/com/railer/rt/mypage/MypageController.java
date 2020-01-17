@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.railer.rt.common.MyUtil;
 import com.railer.rt.info.Station;
 import com.railer.rt.member.SessionInfo;
+import com.railer.rt.plan.FriendPlanService;
+import com.railer.rt.plan.Plan;
 import com.railer.rt.tour.Tour;
 import com.railer.rt.tour.TourService;
 
@@ -40,6 +42,9 @@ public class MypageController {
 	
 	@Autowired
 	private CommuService commuService;
+	
+	@Autowired
+	private FriendPlanService planService;
 
 	// 관광 정보 북마크
 	@RequestMapping(value = "/bookmark/tour")
@@ -189,9 +194,87 @@ public class MypageController {
 	@RequestMapping(value = "/bookmark/recommend")
 	public String bookmarkRecommend(Model model) {
 
+		
 		model.addAttribute("subMenu", "3");
 		model.addAttribute("subItems", "1");
+		
 		return ".four.mypage.bookmark.recommend";
+	}
+	
+	@RequestMapping(value = "/bookmark/recList")
+	public String bookmarkList(	
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "condition", defaultValue = "all") String condition,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			HttpServletRequest req,
+			HttpSession session,
+			Model model) throws Exception {
+		
+		String cp = req.getContextPath();
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
+		int rows = 8;
+		int total_page = 0;
+		int dataCount = 0;
+		String userId = info.getUserId();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		dataCount = planService.bookmarkCount(map);
+		
+		
+		if (dataCount != 0) {
+			total_page = myUtil.pageCount(rows, dataCount);
+		}
+
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+		
+		
+		map.put("offset", offset);
+		map.put("rows", rows);
+		
+		List<Plan> list = planService.listBookmark(map);
+				
+		String query = "";
+		String articleUrl = cp +"/friendPlan/detail?";
+		
+		if(keyword.length()!=0) {
+			query = "condition="+condition+"&keyword="+keyword+"&";
+		}
+		
+		if(query.length()!=0) {
+			articleUrl += query;
+		}
+		
+		// AJAX 용 페이징
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPlanBookmarkPage");
+		
+		model.addAttribute("list",list);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("page",current_page);
+		model.addAttribute("query",query);
+		model.addAttribute("condition",condition);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("articleUrl",articleUrl);
+		model.addAttribute("paging",paging);
+		
+		model.addAttribute("subMenu", "3");
+		model.addAttribute("subItems", "1");
+		
+		return "/mypage/bookmark/recList";
+		
 	}
 
 	
@@ -575,6 +658,7 @@ public class MypageController {
 		return model;
 	}
 
+	
 	// 나의 여행 계획
 	@RequestMapping(value = "/plan/plan")
 	public String myPlan(Model model) {
@@ -584,6 +668,80 @@ public class MypageController {
 		return ".four.mypage.plan.plan";
 	}
 
+	@RequestMapping(value = "/plan/myPlanList")
+	public String myPlanList(@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "condition", defaultValue = "all") String condition,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			HttpServletRequest req,
+			HttpSession session,
+			Model model) throws Exception {
+		
+		String cp = req.getContextPath();
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
+		int rows = 8;
+		int total_page = 0;
+		int dataCount = 0;
+		String userId = info.getUserId();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		dataCount = planService.myPlanCount(map);
+		
+		
+		if (dataCount != 0) {
+			total_page = myUtil.pageCount(rows, dataCount);
+		}
+
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+		
+		
+		map.put("offset", offset);
+		map.put("rows", rows);
+		
+		List<Plan> list = planService.listMyPlan(map);
+				
+		String query = "";
+		String articleUrl = cp +"/friendPlan/detail?";
+		
+		if(keyword.length()!=0) {
+			query = "condition="+condition+"&keyword="+keyword+"&";
+		}
+		
+		if(query.length()!=0) {
+			articleUrl += query;
+		}
+		
+		// AJAX 용 페이징
+		String paging = myUtil.pagingMethod(current_page, total_page, "listMyPlanPage");
+		
+		model.addAttribute("list",list);
+		model.addAttribute("dataCount",dataCount);
+		model.addAttribute("page",current_page);
+		model.addAttribute("query",query);
+		model.addAttribute("condition",condition);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("articleUrl",articleUrl);
+		model.addAttribute("paging",paging);
+		
+		
+		model.addAttribute("subMenu", "7");
+
+		return "/mypage/plan/myPlanList";
+	}
+	
 	
 	
 	// 내가 쓴 게시물

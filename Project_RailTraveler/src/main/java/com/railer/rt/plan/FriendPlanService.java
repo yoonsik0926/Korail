@@ -14,7 +14,16 @@ public interface FriendPlanService {
 	
 	public int calPrice(Map<String, Object> map) throws Exception;
 	
+	//플랜 북마크
 	public void likeFriendPlan(Map<String, Object> map) throws Exception;
 	public void disLikePlan(Map<String, Object> map) throws Exception;
 	public int checkLike(Map<String, Object> map) throws Exception;
+	
+	public List<Plan> listBookmark(Map<String, Object> map) throws Exception;
+	public int bookmarkCount(Map<String, Object> map) throws Exception;
+	
+	//내가 작성한 플랜
+	public List<Plan> listMyPlan(Map<String, Object> map) throws Exception;
+	public int myPlanCount(Map<String, Object> map) throws Exception;
+
 }
