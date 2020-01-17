@@ -96,7 +96,7 @@ System.out.print(cp);
                       <ul class="dropdown-menu">
                         <li><a href="<%=cp%>/member/totalList">유저 관리</a></li>
                         <li> <a href="<%=cp%>/singo/singo" >신고 목록</a></li>
-                        <li>  <a href="<%=cp%>/usermanagement/sale">매출관리</a></li>
+                        <li>  <a href="<%=cp%>/ticket/sale">매출관리</a></li>
                         
     
    

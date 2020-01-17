@@ -5,7 +5,8 @@ package com.railer.rt.ticket;
  *
  */
 public class Ticket {
-
+	
+	private int listNum;
 	private String userId;
 	private int userNum;
 	
@@ -35,6 +36,13 @@ public class Ticket {
 	
 	
 
+	
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
 	public String getCreated() {
 		return created;
 	}

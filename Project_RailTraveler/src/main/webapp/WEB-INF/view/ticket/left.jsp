@@ -13,7 +13,7 @@ display: none;
 
 <script type="text/javascript">
 $(function(){
-	var idx="${subMenu}"-1;
+	var idx="${subMenu}";
 	console.log("idx="+idx);
 	if(! idx) idx=0;
 	var subMenu=$(".list-group-item")[idx];
@@ -169,24 +169,18 @@ function myBookMarkList() {
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="커뮤니티로고" src="<%=cp%>/resource/images/Icontour.png" style="    width: 28px;
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/IconAdmin.png" style="    width: 28px;
     position: absolute;
     margin: 0 0 0 5px;">
-<img alt="커뮤니티" src="<%=cp%>/resource/images/Titletour.png" style="width: 78%;
+<img alt="커뮤니티" src="<%=cp%>/resource/images/TitleAdmin.png" style="width: 78%;
     margin: 0px 0 0 41px;
     padding: 0;"></div>
 <div class="list-group">
-    <a href="<%=cp%>/tour/sudo" class="list-group-item" onclick="show(this);">수도권</a>
-    <a href="<%=cp%>/tour/chungcheong" class="list-group-item">충청권</a>
-    <a href="<%=cp%>/tour/gangwon" class="list-group-item">강원권</a>    
-    <a href="<%=cp%>/tour/jeonla" class="list-group-item">전라권</a>
-    <a href="<%=cp%>/tour/gyeongsang" class="list-group-item">경상권</a>
+    <a href="<%=cp%>/member/totalList" class="list-group-item" onclick="show(this);">유저 관리</a>
+    <a href="<%=cp%>/singo/singo" class="list-group-item">신고 목록</a>
+    <a href="<%=cp%>/ticket/sale" class="list-group-item">매출관리</a>    
+
 </div> 
 
-<c:if test="${sessionScope.member.userId != null}">
-<div class="list-group">
-    <a style="font-size: 14px;" class="list-group-item" onclick="myBookMarkList();">나의 북마크</a>   
-</div> 
-</c:if>
 
 

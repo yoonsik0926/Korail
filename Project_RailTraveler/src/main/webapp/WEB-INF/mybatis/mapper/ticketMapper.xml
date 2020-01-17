@@ -10,8 +10,7 @@
 	</select>
 
 
-	<select id="selectedTicket"
-		resultType="com.railer.rt.ticket.Ticket">
+	<select id="selectedTicket" resultType="com.railer.rt.ticket.Ticket">
 		SELECT ticketNum, tDays, tname, tprice,
 		tamount,year,division
 		FROM ticket
@@ -51,4 +50,126 @@
 		join pay p on p.salenum = s.salenum join ticket t on t.ticketnum = s.ticketnum
 		where s.salenum =#{saleNum}
 	</select> 
-</mapper>
+	
+	<!--매출관리-->
+	
+	<sql id="where-list">
+		<choose>
+			<when test="condition == 'all' ">
+			   (  
+<!-- 				   (
+				   	S.CREATED = to_date(${keyword},'YYMMDD')
+			        OR 
+			        S.CREATED = to_date(${keyword},'YYYYMMDD')
+			       )
+		          OR  -->
+		          INSTR(t.tname, #{keyword}) &gt; 0
+		          OR 
+		          INSTR(userId, #{keyword}) &gt; 0 
+		        ) 
+		          
+			</when>
+			<when test="condition == 'created'">
+			   	(
+				   	S.CREATED = to_date(${keyword},'YYMMDD')
+			        OR 
+			        S.CREATED = to_date(${keyword},'YYYYMMDD')
+			       )
+			</when>
+			<when test="condition == 'name' ">
+			  	INSTR(t.tName, #{keyword}) &gt; 0
+			</when>
+			<when test="condition == 'userId'">
+			   INSTR(m.userId, #{keyword}) &gt; 0 
+			</when>
+
+<!-- 			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise> -->
+		</choose>
+	</sql> 
+	
+	
+	<select id="readPrice" parameterType="map" resultType="com.railer.rt.ticket.Revenue">
+		select '1월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=1
+		union all
+		select '2월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=2
+		union all
+		select '3월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=3
+		union all
+		select '4월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=4
+		union all
+		select '5월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=5
+		union all
+		select '6월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=6
+		union all
+		select '7월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=7
+		union all
+		select '8월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=8
+		union all
+		select '9월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=9
+		union all
+		select '10월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=10
+		union all
+		select '11월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=11
+		union all
+		select '12월' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum 
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy') and substr(sdate,6,2)=12
+		union all
+		select '총액' month , nvl(SUM(tprice),0) sale
+		from sale s join ticket t on s.ticketnum = t.ticketnum
+		where substr(sdate,1,4)= to_char(sysdate,'yyyy')
+	</select>
+	
+	<select id="saleCount" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) saleCount from sale s
+		join member2 m
+		on s.usernum = m.userNum
+		join ticket t
+		on t.ticketnum =s.ticketnum	
+		<where>
+		
+			<if test="keyword!=null and keyword!='' ">				
+				<include refid="where-list"/>
+			</if>
+		</where>  
+	</select>
+	
+	<select id="saleList" parameterType="map" resultType="com.railer.rt.ticket.Ticket">
+	select t.tname , userId ,t.tprice,year,s.created from sale s 
+		join member2 m
+		on s.usernum = m.userNum
+		join ticket t
+		on t.ticketnum =s.ticketnum
+			
+		<where>	
+			<include refid="where-list"/>
+		</where> 
+		order by s.created
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+
+		</mapper>

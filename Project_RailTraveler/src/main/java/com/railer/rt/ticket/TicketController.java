@@ -1,9 +1,11 @@
 package com.railer.rt.ticket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.railer.rt.common.MyUtil;
 import com.railer.rt.member.SessionInfo;
 
 @Controller("ticket.ticketController")
@@ -22,6 +25,8 @@ public class TicketController {
 	@Autowired
 	private TicketService service;
 	
+	@Autowired
+	private MyUtil myUtil;
 
 	@RequestMapping(value="/ticket/pay")
 	public String writeForm(Model model,HttpSession session) throws Exception {
@@ -46,6 +51,9 @@ public class TicketController {
 		String userId =info.getUserId();		
 		dto = service.readMember(userId);
 		
+		if(info.getUserId().equals("admin")) {
+			dto.setTel("000-0000-0000");
+		}
 		
 		//전화번호를 나눠서 저장
 		String[] tel = dto.getTel().split("-");
@@ -155,6 +163,124 @@ public class TicketController {
 
 		return ".ticket.paydone";
 	}
+	
+	//매출관리
+	//관리	
+		@RequestMapping(value="/ticket/sale", method=RequestMethod.GET)
+		public String aaa(Model model,@RequestParam(defaultValue="all") String condition,
+				@RequestParam(defaultValue="") String keyword,
+				HttpServletRequest req) {
+			
+			
+			//티켓별 매출을 가져와볼까?
+			
+			
+			
+			
+			model.addAttribute("subMenu", 2);
+			model.addAttribute("condition", condition);
+			model.addAttribute("keyword", keyword);
+			return ".four.ticket.ticket.sale";
+		}
+		
+		@RequestMapping(value="/ticket/saleList")
+		public String saleList(Model model,
+				@RequestParam(defaultValue="all") String condition,
+				@RequestParam(defaultValue="") String keyword,
+				@RequestParam(value="pageNo", defaultValue="1") int current_page,
+				HttpServletRequest req) {
+			
+			String cp = req.getContextPath();	
+
+			
+			Map<String,Object> map = new HashMap<>();
+			map.put("condition", condition);
+			map.put("keyword", keyword);
+			
+			
+			int rows = 5;
+			int total_page = 0;
+			int dataCount = 0;
+			
+						
+			//(데이터 구하기
+			dataCount = service.saleCount(map);
+		
+			//페이징처리
+			if (dataCount != 0)
+				total_page = myUtil.pageCount(rows, dataCount);
+
+			if (total_page < current_page)
+				current_page = total_page;
+			
+			int offset = (current_page - 1) * rows;
+			if (offset < 0)
+				offset = 0;
+			
+			map.put("offset", offset);
+			map.put("rows", rows);
+			
+			//유저 전체 목록 가져오기
+			List<Ticket> saleList = service.saleList(map);
+		
+			//리스트 번호 재정의
+	        int listNum, n = 0;
+	        for(Ticket dto : saleList) {
+	            listNum = dataCount - (offset + n);
+	            dto.setListNum(listNum);
+	            n++;
+	        };
+	        
+			// AJAX 용 페이징
+			String paging=myUtil.pagingMethod(current_page, total_page, "salelistPage");
+			
+
+			model.addAttribute("subMenu", 2);		
+			model.addAttribute("paging", paging);
+			model.addAttribute("saleList", saleList);
+			model.addAttribute("dataCount", dataCount);		
+			model.addAttribute("condition", condition);
+			model.addAttribute("keyword", keyword);
+								
+			return "/ticket/ticket/ajaxsaleList";
+		}
+		
+		
+		
+		@RequestMapping(value="/ticket/maingraph")
+		@ResponseBody
+		public Map<String, Object> line1() throws Exception{
+			Map<String, Object> model = new HashMap<String, Object>();			
+			List<Map<String, Object>> list = new ArrayList<>();
+			
+			
+			Map<String, Object> map;
+			map = new HashMap<>();
+			
+			//총매출 가져오기
+			List<Revenue> revenue = service.RevenueManagement(map);
+			map.put("name", "RT_2020년 총매출");
+			map.put("data", new double[] {
+					revenue.get(0).getSale(),
+					revenue.get(1).getSale(),
+					revenue.get(2).getSale(),
+					revenue.get(3).getSale(),
+					revenue.get(4).getSale(),
+					revenue.get(5).getSale(),
+					revenue.get(6).getSale(),
+					revenue.get(7).getSale(),
+					revenue.get(8).getSale(),
+					revenue.get(9).getSale(),
+					revenue.get(10).getSale(),
+					revenue.get(11).getSale()});
+			
+			list.add(map);
+			
+			
+			model.put("series", list);
+			return model;
+			
+		}
 	
 	
 	

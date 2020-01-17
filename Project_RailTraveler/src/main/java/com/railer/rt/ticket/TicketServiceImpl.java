@@ -2,6 +2,8 @@ package com.railer.rt.ticket;
 
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,6 +92,42 @@ public class TicketServiceImpl implements TicketService{
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Revenue> RevenueManagement(Map<String, Object> map) {
+		List<Revenue> list = null;
+		
+		try {
+			list = dao.selectList("ticket.readPrice", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int saleCount(Map<String, Object> map) {
+		int result = -1;
+		
+		try {
+			result = dao.selectOne("ticket.saleCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Ticket> saleList(Map<String, Object> map) {
+		List<Ticket> list = null;
+		
+		try {
+			list = dao.selectList("ticket.saleList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
  
 	
