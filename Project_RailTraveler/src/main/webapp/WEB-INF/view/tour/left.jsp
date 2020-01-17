@@ -164,16 +164,16 @@ function myBookMarkList() {
     width: 100%;
     color: white;
     margin: 10px auto;
-    padding: 20px 10px;
+    padding: 18px 10px;
     display: block;
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="커뮤니티로고" src="<%=cp%>/resource/images/Icontour.png" style="    width: 28px;
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/Icontour.png" style="    width: 31px;
     position: absolute;
-    margin: 0 0 0 5px;">
-<img alt="커뮤니티" src="<%=cp%>/resource/images/Titletour.png" style="width: 78%;
-    margin: 0px 0 0 41px;
+    margin: 0 0 0 28px;">
+<img alt="커뮤니티" src="<%=cp%>/resource/images/Titletour.png" style="width: 45%;
+    margin: 0px 0 0 75px;
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/tour/sudo" class="list-group-item" onclick="show(this);">수도권</a>

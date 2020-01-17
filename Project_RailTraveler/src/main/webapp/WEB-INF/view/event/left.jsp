@@ -14,7 +14,22 @@ $(function(){
 	$(subMenu).addClass("active");
 });
 </script>
-<h3><span style="font-family: Webdings">2</span> 이벤트 </h3>
+<div style="box-shadow: 1px 1px 2px #333333;
+    background: #ffffff;
+    width: 100%;
+    color: white;
+    margin: 10px auto;
+    padding: 18px 0px;
+    display: block;
+    border: 1px solid;
+    border-radius: 5px;
+">
+<img alt="여행계획로고" src="<%=cp%>/resource/images/Iconevent.png" style="width: 28px;
+    position: absolute;
+    margin: 0px 0 0 35px;">
+<img alt="여행계획" src="<%=cp%>/resource/images/Titleevent.png" style="width: 46%;
+    margin: 0px 0 0 80px;
+    padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/event/current" class="list-group-item" >진행중인 이벤트</a>
     <a href="<%=cp%>/event/last" class="list-group-item" >지난 이벤트</a>

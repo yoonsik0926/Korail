@@ -59,7 +59,7 @@ public class MyUtil {
 		
 		sb.append("<div style='text-align: center;'>");
     	
-		sb.append("<ul class='pagination'>");
+		sb.append("<ul class='pagination pagination-sm' style='margin: 10px 0;'>");
 		// 처음페이지, 이전(10페이지 전)
 		n=current_page-numPerBlock;
 		if(total_page > numPerBlock && currentPageSetup > 0) {
@@ -120,22 +120,23 @@ public class MyUtil {
 		sb.append("#paginate .numBox {border:1px solid #ccc;height:28px;font-weight:bold;text-decoration:none;padding:4px 7px 4px 7px;margin-left:3px;line-height:normal;vertical-align:middle;}");
 		sb.append("</style>");
 		
-		sb.append("<div id='paginate'>");
-        
+		sb.append("<div style='text-align: center;'>");
+    	
+		sb.append("<ul class='pagination pagination-sm' style='margin: 10px 0;'>");
         // 처음페이지, 이전(10페이지 전)
         n = current_page - numPerBlock;
         if ((total_page > numPerBlock) && (currentPageSetUp > 0)) {
-			sb.append("<a onclick='listPage(1);'>처음</a>");
-			sb.append("<a onclick='listPage("+n+");'>이전</a>");
+			sb.append("<li><a onclick='listPage(1);'><span aria-hidden='true'>&laquo;</span></a></li>");
+			sb.append("<li><a onclick='listPage("+n+");'><span aria-hidden='true'>&lt;</span></a></li>");
         }
 
         // 바로가기 페이지 구현
         page = currentPageSetUp + 1;
         while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
            if(page == current_page) {
-        	   sb.append("<span class='curBox'>"+page+"</span>");
+        	   sb.append("<li class='active'><span>"+page+"<span class='sr-only'>(current)</span></span></li>");
            } else {
-			   sb.append("<a onclick='listPage("+page+");' class='numBox'>"+page+"</a>");
+			   sb.append("<li><a onclick='listPage("+page+");' class='numBox'>"+page+"</a></li>");
            }
            page++;
         }
@@ -144,10 +145,12 @@ public class MyUtil {
         n = current_page + numPerBlock;
 		if(n>total_page) n=total_page;
         if (total_page - currentPageSetUp > numPerBlock) {
-			sb.append("<a onclick='listPage("+n+");'>다음</a>");
-			sb.append("<a onclick='listPage("+total_page+");'>끝</a>");
+			sb.append("<li><a onclick='listPage("+n+");'><span aria-hidden='true'>&gt;</span></a></li>");
+			sb.append("<li><a onclick='listPage("+total_page+");'><span aria-hidden='true'>»</span></a></li>");
         }
-		sb.append("</div>");
+        sb.append("</li>");
+   		sb.append("</div>");
+
 
         return sb.toString();
     }
@@ -182,8 +185,9 @@ public class MyUtil {
 		sb.append("#paginate .numBox {border:1px solid #ccc;height:28px;font-weight:bold;text-decoration:none;padding:4px 7px 4px 7px;margin-left:3px;line-height:normal;vertical-align:middle;}");
 		sb.append("</style>");
 		
-		sb.append("<div id='paginate'>");
-		sb.append("<ul class='pagination'>");
+		sb.append("<div style='text-align: center;'>");
+    	
+		sb.append("<ul class='pagination pagination-sm' style='margin: 10px 0;'>");
         
         // 처음페이지, 이전(10페이지 전)
         n = current_page - numPerBlock;
@@ -196,7 +200,7 @@ public class MyUtil {
         page = currentPageSetUp + 1;
         while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
            if(page == current_page) {
-        	   sb.append("<li><span class='curBox'>"+page+"</span></li>");
+        	   sb.append("<li class='active'><span>"+page+"<span class='sr-only'>(current)</span></span></li>");
            } else {
 			   sb.append("<li><a style='cursor: pointer'; onclick='"+methodName+"("+page+");' class='numBox'>"+page+"</a></li>");
            }
@@ -207,8 +211,8 @@ public class MyUtil {
         n = current_page + numPerBlock;
 		if(n>total_page) n=total_page;
         if (total_page - currentPageSetUp > numPerBlock) {
-			sb.append("<li><a onclick='"+methodName+"("+n+");'>다음</a></li>");
-			sb.append("<li><a onclick='"+methodName+"("+total_page+");'>끝</a></li>");
+			sb.append("<li><a onclick='"+methodName+"("+n+");'><span aria-hidden='true'>&gt;</span></a></li>");
+			sb.append("<li><a onclick='"+methodName+"("+total_page+");'><span aria-hidden='true'>»</span></a></li>");
         }
         sb.append("</li>");
 		sb.append("</div>");
@@ -248,7 +252,7 @@ public class MyUtil {
     	
     	sb.append("<div style='text-align: center;'>");
     	
-		sb.append("<ul class='pagination'>");
+		sb.append("<ul class='pagination pagination-sm' style='margin: 10px 0;'>");
     	// 처음페이지, 이전(10페이지 전)
     	n = current_page - numPerBlock;
     	if ((total_page > numPerBlock) && (currentPageSetUp > 0)) {

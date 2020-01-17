@@ -14,21 +14,21 @@ $(function(){
 	$(subMenu).addClass("active");
 });
 </script>
-<div style="        box-shadow: 1px 1px 2px #333333;
+<div style="box-shadow: 1px 1px 2px #333333;
     background: #ffffff;
     width: 100%;
     color: white;
     margin: 10px auto;
-    padding: 20px 10px;
+    padding: 16px 0px;
     display: block;
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="여행계획로고" src="<%=cp%>/resource/images/IconPlan.png" style="    width: 28px;
+<img alt="여행계획로고" src="<%=cp%>/resource/images/IconPlan.png" style="width: 32px;
     position: absolute;
-    margin: 0 0 0 5px;">
-<img alt="여행계획" src="<%=cp%>/resource/images/TitlePlan.png" style="width: 78%;
-    margin: 0px 0 0 41px;
+    margin: 0px 0 0 35px;">
+<img alt="여행계획" src="<%=cp%>/resource/images/TitlePlan.png" style="width: 40%;
+    margin: 0px 0 0 80px;
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/plan/write" class="list-group-item">나의 여행 플랜</a>

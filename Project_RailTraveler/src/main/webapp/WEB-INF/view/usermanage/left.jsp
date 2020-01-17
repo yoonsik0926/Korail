@@ -164,16 +164,16 @@ function myBookMarkList() {
     width: 100%;
     color: white;
     margin: 10px auto;
-    padding: 20px 10px;
+       padding: 19px 10px;
     display: block;
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="커뮤니티로고" src="<%=cp%>/resource/images/IconAdmin.png" style="    width: 28px;
+<img alt="커뮤니티로고" src="<%=cp%>/resource/images/IconAdmin.png" style="width: 31px;
     position: absolute;
-    margin: 0 0 0 5px;">
-<img alt="커뮤니티" src="<%=cp%>/resource/images/TitleAdmin.png" style="width: 78%;
-    margin: 0px 0 0 41px;
+    margin: 0 0 0 22px;">
+<img alt="커뮤니티" src="<%=cp%>/resource/images/TitleAdmin.png" style="width: 50%;
+    margin: 0px 0 0 63px;
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/member/totalList" class="list-group-item" onclick="show(this);">유저 관리</a>

@@ -135,8 +135,7 @@
 
 	</c:forEach>
 </ul>
-<div style="clear: both; height: 0pt; font: 0pt/0pt arial;"></div>
-<div style="" class="cc_paginate cmt" id="cmt_paginate">${paging }</div>
+<div>${paging }</div>
 
 
 <script>

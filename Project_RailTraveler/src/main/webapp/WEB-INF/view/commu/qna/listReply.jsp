@@ -42,13 +42,10 @@ td {
 						class="notifyReply">신고</span></td>
 				</tr>
 				</c:forEach>
-				<c:if test="${not empty paging}">
-				<tr height='35' style="border: 1px solid #cccccc;">
-					<td colspan="3">${paging}</td>
-				</tr>
-				</c:if>
-				
 		</table>
+		<c:if test="${not empty paging}">
+					${paging}>
+				</c:if>
 <!-- 		<nav> -->
 <!--   <ul class="pagination"> -->
 <!--     <li class="disabled"> -->

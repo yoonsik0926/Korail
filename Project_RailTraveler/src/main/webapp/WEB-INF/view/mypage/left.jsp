@@ -46,16 +46,16 @@ $(function(){
     width: 100%;
     color: white;
     margin: 10px auto;
-    padding: 20px 10px;
+    padding: 15px 10px;
     display: block;
     border: 1px solid;
     border-radius: 5px;
 ">
-<img alt="마이페이지로고" src="<%=cp%>/resource/images/IconMypage.png" style="    width: 28px;
+<img alt="마이페이지로고" src="<%=cp%>/resource/images/IconMypage.png" style="    width: 35px;
     position: absolute;
     margin: 0 0 0 5px;">
-<img alt="마이페이지" src="<%=cp%>/resource/images/TitleMypage.png" style="width: 78%;
-    margin: 0px 0 0 41px;
+<img alt="마이페이지" src="<%=cp%>/resource/images/TitleMypage.png" style="width: 70%;
+    margin: 0px 0 0 50px;
     padding: 0;"></div>
 <div class="list-group">
     <a href="<%=cp%>/member/pwd" class="list-group-item">정보 수정</a>
