@@ -31,6 +31,11 @@ $(function(){
 
 
 function searchList() {
+	if($("input[name=search]").val()=="search"){
+		alert("이전 검색어를 제거하여 리스트를 초기화해주세요.");
+/* 		resetList(); */
+		return;
+	}	
 	var f = document.searchForm;
 	
 	f.submit();
@@ -83,11 +88,12 @@ function resetList() {
 						<td width="200" colspan="5"
 							style="background: #fbfbfb; text-align: left; vertical-align: bottom; font-size: 14px; border-radius: 5px;">
  							<c:if test="${search=='search'}">
-							<span id="searchCount" style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
-								<span style="color: #ca4a0d;">${dataCount}건 </span> 
-								<img alt="" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="resetList()"
-								style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
-							</span>
+								<span id="searchCount" style="float: left; font-size: 16px; padding-top: 9px; vertical-align: bottom;">검색결과
+									<span style="color: #ca4a0d;">${dataCount}건 </span> 
+									<img alt="닫기" src="/Project_RailTraveler/resource/images/close_icon.png" onclick="resetList()"
+									style="background: #dadada; width: 20px; padding: 3px; cursor: pointer; border: 1px solid #cacaca; border-radius: 50%; margin-bottom: 2px;">
+									<input type="hidden" value="search" name="search">
+								</span>
 							</c:if>
 						
 							<form name="searchForm" action="<%=cp%>/bookmark/commu?${query}&commuNum=${commuNum}&page=${page}"
