@@ -1548,24 +1548,26 @@ function readURL(input) {
 	reader.readAsDataURL(input.files[0]);
 	}
 }
-
-// 대표 이미지가 바뀔때마다 미리보기 사진도 바꿔줌
 $("#img_upload").change(function(){
 	readURL(this);
 });
 
 
-// function readURL(input) {
-// 	if (input.files && input.files[0]) {
-// 		var reader = new FileReader();
+// 검색창에서 검색한 장소가 바뀔때마다 사진 바꿔주기
+function readURL2(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
 	  
-// 	  	reader.onload = function(e) {
-// 			$("input[name=]").attr('src', e.target.result);  
-// 	  	}
+	  	reader.onload = function(e) {
+			$("input[name='imageFileName']").attr('src', e.target.result);  
+	  	}
 	  
-// 	reader.readAsDataURL(input.files[0]);
-// 	}
-// }
+	reader.readAsDataURL(input.files[0]);
+	}
+}
+$("input[name='imageFileName']").change(function(){
+	readURL2(this);
+});
 </script>
 </body>
 </html>
