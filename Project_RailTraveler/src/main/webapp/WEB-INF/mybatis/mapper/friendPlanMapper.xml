@@ -57,7 +57,7 @@
 	</select>
 	
 	<select id="readPlan" parameterType="Integer" resultType="com.railer.rt.plan.Plan">
-		select sDate, to_char((to_date(sDate) + ticketDay),'yyyy-mm-dd') eDate, title, userId,ticketDay
+		select planNum,sDate, to_char((to_date(sDate) + ticketDay),'yyyy-mm-dd') eDate, title, userId,ticketDay
 		from plan p
 		where planNum = #{planNum}
 	</select>

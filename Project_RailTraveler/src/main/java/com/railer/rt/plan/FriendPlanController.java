@@ -42,7 +42,8 @@ public class FriendPlanController {
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
 			@RequestParam(value = "condition", defaultValue = "all") String condition,
 			@RequestParam(value = "keyword", defaultValue = "") String keyword,
-			HttpServletRequest req, 
+			HttpServletRequest req,
+			HttpSession session,
 			Model model) throws Exception {
 		
 		String cp = req.getContextPath();
@@ -115,6 +116,7 @@ public class FriendPlanController {
 			HttpServletRequest req,
 			Model model) throws Exception {
 		
+		
 		String cp = req.getContextPath();
 		
 		keyword = URLDecoder.decode(keyword, "utf-8");
@@ -137,8 +139,6 @@ public class FriendPlanController {
 		//역 이름, 시작 날짜, 종료 날짜, 경도, 위도, 일 수 (nthDay)
 		List<Plan> stationList = fPlanService.readStation(map);
 		
-		
-		
 		//가격 구하기
 		map.put("cateName", "명소");
 		int tourPrice = fPlanService.calPrice(map);
@@ -158,17 +158,37 @@ public class FriendPlanController {
 		//전체 금액
 		int totPrice = tourPrice + foodPrice + hotelPrice;
 
-	
 		//역 개수
 		int stationCount = fPlanService.stationCount(planNum);
 		int length = 173 + (182*(stationCount-2));
+		
+		//좋아요
+		HttpSession session = req.getSession();
+		if(session != null && session.getAttribute("member") != null && !session.getAttribute("member").equals("")) {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String userId = info.getUserId();
+			Map<String, Object> map2 = new HashMap<String, Object>();
+			map2.put("planNum", planNum);
+			map2.put("userId", userId);
+
+			//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
+			int likecheck = fPlanService.checkLike(map2);
+					
+			if(likecheck==0) {
+				model.addAttribute("like","dislike");
+			}else{
+				model.addAttribute("like","like");
+			}
+		}
+		
 		
 		model.addAttribute("dto",dto);
 		model.addAttribute("stationList",stationList);
 		model.addAttribute("tourList",tourList);
 		model.addAttribute("foodList",foodList);
 		model.addAttribute("hotelList",hotelList);
-
+		model.addAttribute("planNum",planNum);
+		
 		model.addAttribute("listUrl",listUrl);
 		model.addAttribute("tourPrice",tourPrice);
 		model.addAttribute("foodPrice",foodPrice);
@@ -190,23 +210,26 @@ public class FriendPlanController {
 			@RequestParam int planNum,
 			HttpSession session) throws Exception{
 		
-		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		Map<String, Object> model = new HashMap<>();
 		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("planNum", planNum);
-		map.put("userId", info.getUserId());
+		map.put("userId", userId);
 		
 
 		//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
 		int likecheck = fPlanService.checkLike(map);
 				
 		if(likecheck==0) {
-			fPlanService.likeFriendPlan(map);;			
+			fPlanService.likeFriendPlan(map);
 		}else{
-			fPlanService.disLikePlan(map);;
+			fPlanService.disLikePlan(map);
 		}
 		
-		Map<String, Object> model = new HashMap<>();
+		
 		model.put("likecheck", likecheck);	
 		
 		return model;

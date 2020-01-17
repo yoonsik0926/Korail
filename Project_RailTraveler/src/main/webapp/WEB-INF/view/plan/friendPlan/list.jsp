@@ -5,37 +5,6 @@
 <%
 	String cp = request.getContextPath();
 %>
-<script type="text/javascript">
-//좋아요 관리하는 에이작스
-function test(ob){
-	
-	var userId = "${sessionScope.member.userId}";
-
-	  if ( userId == "") {
-		  $("#likealarm").modal();
-		return;
-	  }
-	
-	var planNum = $(ob).closest("button").val();
-	  
-	var url = "<%=cp%>/friendPlan/like";
-	var query = "planNum="+planNum;
-	var fn = function(data){
-			if(data.likecheck==0){
-				ob.className = "fas fa-heart"; 
-			}
-			else if (data.likecheck==1){
-				ob.className = "far fa-heart";
-			}
-
-	}; 
-		
-	ajaxJSON(url, "get", query, fn);
-	
-};
-</script>
-
-
 
 		<c:forEach var="vo" items="${list}">
 			<div style="margin-top: 10px;">
@@ -63,21 +32,7 @@ function test(ob){
 										<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
 										<td style=" text-align: left;" colspan="2">${vo.staName}</td>
 									</tr>
-									<tr>
-										<td colspan="2" style="text-align: right;">
-											<button id="btn-${vo.planNum}" class="img-button find" value="${vo.planNum}" >
-											
-											   <c:choose>
-						       						<c:when test="${vo.likeuserId==sessionScope.member.userId}">
-												<i class="fas fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
-													</c:when>						
-													<c:otherwise>
-												<i class="far fa-heart" onclick="test(this);" style="font-size: 24px;color: tomato"></i>
-													</c:otherwise>
-												</c:choose>
-											</button>
-										</td>
-									</tr>
+
 								</table>
 							</div>
 						</div>
@@ -110,6 +65,10 @@ function test(ob){
 			</div>
 	
 			
+			
+			
+
+
 			
 		
 

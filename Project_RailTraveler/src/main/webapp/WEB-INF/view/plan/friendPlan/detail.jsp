@@ -62,6 +62,30 @@
 
 <script type="text/javascript">
 
+function ajaxJSON(url, type, query, fn) {
+	$.ajax({
+		type:type
+		,url:url
+		,data:query
+		,dataType:"json"
+		,success:function(data){
+
+			fn(data);
+		}
+	,beforeSend:function(jqXHR){
+		jqXHR.setRequestHeader("AJAX",true);
+	}
+	,error:function(jqXHR){
+		if(jqXHR.status==403){
+			login();
+			return false;
+			}
+		console.log("에러");
+		console.log(jqXHR.responseText);
+		}
+	});
+}
+
 
 
 //도시 이동 달력
@@ -202,6 +226,35 @@ $(function() {
 	
 });
 
+//좋아요 관리하는 에이작스
+function like(ob){
+	
+	var userId = "${sessionScope.member.userId}";
+
+	  if ( userId == "") {
+		  $("#likealarm").modal();
+		return;
+	  }
+	
+	var planNum = ${planNum};
+	  
+	var url = "<%=cp%>/friendPlan/like";
+	var query = "planNum="+planNum;
+	var fn = function(data){
+			if(data.likecheck==0){
+				ob.className = "fas fa-heart"; 
+			}
+			else if (data.likecheck==1){
+				confirm("북마크를 삭제하시겠습니까?");
+				ob.className = "far fa-heart";
+			}
+
+	}; 
+		
+	ajaxJSON(url, "get", query, fn);
+	
+};
+
 
 </script>
 
@@ -246,10 +299,28 @@ table th span {
 		
 			<div id="planName">
 				<h4 style="font-weight: 700; color: #5d5858;">
-					${dto.title==''or dto.title==null?'제목이 없는 여행 플랜':dto.title}<span
+					${dto.title==''or dto.title==null?'제목이 없는 여행 플랜':dto.title}
+					<span
 						style="font-family: 'Lobster', cursive !important; font-weight: 400; font-size: 18px; color: #b7b7b7;">&nbsp;&nbsp;by
-						${dto.userId}</span>
+						${dto.userId}&nbsp;&nbsp;&nbsp;&nbsp;
+					</span>
+					<span>
+						<button id="btn-${dto.planNum}" class="img-button find" value="${dto.planNum}" >			
+						   <c:choose>
+							   <c:when test="${sessionScope.member.userId!=null && like=='like'}">
+									<i class="fas fa-heart" onclick="like(this);" style="font-size: 24px;color: tomato"></i>
+								</c:when>						
+								<c:otherwise>
+									<i class="far fa-heart" onclick="like(this);" style="font-size: 24px;color: tomato"></i>
+								</c:otherwise>
+							</c:choose>
+						</button>
+					</span>
+					<span style="float: right; margin-right: 45px;">
+						<button id="back" class="btn btn-success" onclick="javascript:location.href='<%=cp%>/friendPlan/planlist';">목록으로</button>
+					</span>
 				</h4>
+				
 			</div>
 
 			<div id="planMap"
@@ -366,6 +437,38 @@ table th span {
 </div>
 
 </div>
+
+<!--Modal: modalPush-->
+<div class="modal fade  bd-example-modal-sm" id="likealarm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog modal-sm" role="document" style="width: 490px;">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center" style="padding: 5px 5px;">
+        <h5  class="heading" style="font-size:25px; font-weight: 700; margin: 5px 5px;">Rail Traveler</h5>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" style="padding: 5px 5px; margin-top: 30px;">
+        <i class="fas fa-bell fa-3x animated rotateIn mb-3"></i>
+
+        <p id="modaltext" style="font-size: 15px; font-weight:500; margin-top: 10px; margin-left: 10px;">회원에게만 제공되는 서비스입니다!</p>
+		<p id="modaltext" style="margin-top: 20px;">
+	
+		</p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center" >
+        <a type="button" href="<%=cp%>/member/login" class="btn  btn-info waves-effect" >로그인</a>
+        <a type="button" href="<%=cp%>/member/member" class="btn  btn-info waves-effect" >회원가입</a>
+        <a type="button" class="btn  btn-info waves-effect" data-dismiss="modal">닫기</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script type="text/javascript">
 var mapContainer = document.getElementById('planMap'), // 지도를 표시할 div  
