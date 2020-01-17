@@ -192,30 +192,11 @@ $(function() {
 			<c:forEach var="vo" items="${hotelList}">
 			{
 				title :"${vo.name} : ${vo.memo}",
-				start : "${vo.sDate} ${vo.sTime}:00",
-				end : "${vo.sDate} ${vo.eTime}:00",
+				start : "${vo.sDate} 00:00",
+				end : "${vo.sDate} 01:00",
 				color : "#9E9E9E"
 			},
 			</c:forEach>
-			
-			{
-				title :"숙소 1",
-				start : "2020-01-21 00:00",
-				end : "2020-01-21 01:00",
-				color : "#9E9E9E"
-			},
-			{
-				title :"숙소 2",
-				start : "2020-01-22 00:00",
-				end : "2020-01-22 01:00",
-				color : "#9E9E9E"
-			},
-			{
-				title :"숙소 3",
-				start : "2020-01-23 00:00",
-				end : "2020-01-23 01:00",
-				color : "#9E9E9E"
-			}
 			
 			
 		],
