@@ -804,6 +804,7 @@ function findTourThing(page){
 	ajaxJSON(url, "post", query, fn);
 };
 
+// 역 검색 탭 클릭시 타이틀, 대표 이미지, 최종저장버튼 탭 슬라이드 출력
 $(document).ready(function() {
 	$(".searchAndConnect").click(function() {
 		$(".titleAndImage").slideToggle("slow");
@@ -877,9 +878,7 @@ $(document).ready(function() {
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
 				<div id="pressMe">
-				
-					<div style="width: 1200px; height: 35px; margin-bottom: 30px; display: inline-block;" class="searchAndConnect">
-						<div style="width: 40%">
+					<div style="height: 35px; margin-bottom: 30px;" class="searchAndConnect">
 							<select name="locNum" style="width: 80px; height: 35px; float: left;">
 								<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
 								<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
@@ -891,11 +890,10 @@ $(document).ready(function() {
 							<input type="text" id="findStation" name="keyword" value="${keyword}"
 								style="width: 225px; padding: 0 8px; height: 35px; float:left; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
 								placeholder="검색할 역을 입력하세요"> <button class="findNow" style="width: 35px; height: 35px; font-size: 20px;"><i class="fas fa-search" style="max-width: 100%;"></i></button>
-						</div>
-						<div style="width: 20%; display: inline-block;">	
-							<p style="display: block;"><i class="fas fa-angle-down"></i></p>
-						</div>
-						<div id="userNameHere" style="width: 25%; display: inline-block;">
+<!-- 						<div style="width: 20%; display: inline-block;">	 -->
+<!-- 							<p style="display: block;"><i class="fas fa-angle-down"></i></p> -->
+<!-- 						</div> -->
+						<div id="userNameHere" style="width: 300px;">
 							<c:if test="${not empty sessionScope.member.userId}">
 								<span>${sessionScope.member.userName}(${sessionScope.member.userId})님 접속중...</span>
 							</c:if>
@@ -907,7 +905,7 @@ $(document).ready(function() {
 					
 					<form name="imageSend" action="<%=cp%>/plan/updateImage" method="post" enctype="multipart/form-data">
 						<div class="titleAndImage">
-							<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
+							<p> 플랜 이름 : <input type="text" name="title" autocomplete="off"> <button type="button" class="finalSave">최종저장</button></p>
 							<p> 대표 사진 : <input type="file" accept="image/*" name="upload" id="img_upload" style="display: inline-block;"> </p>
 							<p> 사진 미리보기 : <img id="image_section" style="max-width: 200px;"> </p>
 						</div>
@@ -969,7 +967,7 @@ $(document).ready(function() {
 							        	<input class="inputThing resultSearchingTour" name="name" autocomplete="off" readonly="readonly" placeholder="이름">
 							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>							     	
 							        </div>
-							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block;">
+							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="tourNum" placeholder="투어넘" autocomplete="off" readonly="readonly" style="display: block;">
@@ -977,7 +975,7 @@ $(document).ready(function() {
 							      	<input class="inputThing" type="hidden" name="detailCateNum" placeholder="세부카테넘" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" autocomplete="off" readonly="readonly" style="display: block;">
-							      	<input class="inputThing" type="text" name="memo" placeholder="메모" autocomplete="off" style="display: block;">
+							      	<input class="inputThing" type="text" name="memo" placeholder="메모" autocomplete="off" style="display: block; width: 80%; height: 100px;">
 							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" autocomplete="off" style="display: block;">
 							     </div>
 							      	<div class="modal-footer selectTime" style="float: left;">
@@ -1426,9 +1424,13 @@ $(function() {
 function saveDetail() {
 	var f=document.detailPlanForm;
 	
+	// 숫자 정규식
+	var regexp = /^[0-9]*$/
+	
 	var sTime=f.sTime.value;
 	var eTime=f.eTime.value;
-	console.log(sTime);
+	var price=f.price.value;
+	
 	var md={
 		cateNum:f.cateNum.value,
 		name:f.name.value,
@@ -1441,10 +1443,16 @@ function saveDetail() {
 		eTime:eTime,
 		price:f.price.value
 	}
+	
 	if(eTime-sTime<=0) {
 		alert("시작시간과 종료시간 설정을 올바르게 해주세요.");
 		return false;
 	}
+	if(! regexp.test(price)) {
+		alert("예상금액에는 숫자만 입력 가능합니다.");
+		return false;
+	}
+		
 	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9);
 	var staNum=$(".ddiring").parent().attr("data-staNum");
 	var index2=$(".ddiring").parent().attr("data-index");
