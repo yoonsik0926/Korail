@@ -779,8 +779,7 @@ function findTourThing(page){
 	var detailcateNum=$("#detailTourCategory").val();
 	var tourKeyword=$("input[name='tourKeyword']").val();
 	var staNum=$(".ddiring").parent().attr("data-staNum");
-	
-	
+		
 	var url="<%=cp%>/plan/searchPlace";
 	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
 
@@ -788,8 +787,9 @@ function findTourThing(page){
 		$("#listTour").empty();
 		for (var i = 0; i < data.list.length; i++) {
 			var tel=(data.list[i].tel==null? "":data.list[i].tel);
+			var imageFileName=(data.list[i].imagefilename==null? "":data.list[i].imagefilename);
 			$("#listTour").append("<tr style='font-size: 14px;' align='center'>"
-								 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;'>"+data.list[i].name+"</td>"
+								 +"		<td class='insertTourSearch' style='cursor: pointer; width:200px; height: 50px;' data-tourNum="+data.list[i].tourNum+" data-imageFileName="+imageFileName+">"+data.list[i].name+"</td>"
 								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:100px;'>"+tel+"</td>"
 								 +"		<td style='text-overflow:ellipsis; overflow:hidden; word-break:nowrap; width:240px;'>"+data.list[i].address+"</td>"
 								 +"</tr>"
@@ -878,7 +878,7 @@ $(document).ready(function() {
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
 				<div id="pressMe">
-					<div style="height: 35px; margin-bottom: 30px;" class="searchAndConnect">
+					<div style="height: 35px; margin-bottom: 15px;" class="searchAndConnect">
 							<select name="locNum" style="width: 80px; height: 35px; float: left;">
 								<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
 								<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
@@ -922,7 +922,7 @@ $(document).ready(function() {
 				<div id="detailPlanPlus" class="modal2" style="opacity: 0.85">
 					<div class="modal-detailPlanning">
 						<div class="moreDetailPlanList">
-							<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
+							<button type="button" class="btn btn-primary times" data-toggle="modal" data-backdrop="static" data-target="#selectTime">
 								<p>시간선택 및 세부일정 짜기</p>
 							</button>
 							<ul class="mdList"></ul>
@@ -965,7 +965,7 @@ $(document).ready(function() {
                            		<br>
 	                              	<div style="display: block;">
 							        	<input class="inputThing resultSearchingTour" name="name" autocomplete="off" readonly="readonly" placeholder="이름">
-							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail">검색하기<i class="fas fa-search"></i></button>							     	
+							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail" data-backdrop="static">검색하기<i class="fas fa-search"></i></button>							     	
 							        </div>
 							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" autocomplete="off" readonly="readonly" style="display: block;">
@@ -974,8 +974,9 @@ $(document).ready(function() {
 							      	<input class="inputThing" type="hidden" name="cateNum" placeholder="카테넘" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="detailCateNum" placeholder="세부카테넘" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="longitude" placeholder="위도" autocomplete="off" readonly="readonly" style="display: block;">
-							      	<input class="inputThing" type="hidden" name="latiitude" placeholder="경도" autocomplete="off" readonly="readonly" style="display: block;">
-							      	<input class="inputThing" type="text" name="memo" placeholder="메모" autocomplete="off" style="display: block; width: 80%; height: 100px;">
+							      	<input class="inputThing" type="hidden" name="latitude" placeholder="경도" autocomplete="off" readonly="readonly" style="display: block;">
+<!-- 							      	<input class="inputThing" type="text" name="memo" placeholder="메모" autocomplete="off" style="display: block; width: 80%; height: 100px;"> -->
+									<textarea name="memo" placeholder="메모" autocomplete="off" style="display: block; width: 80%; height: 100px; resize: none; margin-top: 10px;"></textarea>
 							      	<input class="inputThing" type="text" name="price" placeholder="예상금액" autocomplete="off" style="display: block;">
 							     </div>
 							      	<div class="modal-footer selectTime" style="float: left;">
@@ -1025,7 +1026,7 @@ $(document).ready(function() {
 									</thead>
 									<tbody id="listTour">
 										<tr style="font-size: 14px;" align="center">
-												<td>데이터가 없습니다.</td>
+												
 										</tr>
 									</tbody>
 									</table>
@@ -1310,6 +1311,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
     
 });
 </c:forEach>
+
 //지도 위에 표시되고 있는 마커를 모두 제거합니다
 function removeMarker() {
     for ( var i = 0; i < markers.length; i++ ) {
@@ -1407,13 +1409,18 @@ $(function() {
 		var tel=$(this).next().text();
 		var address=$(this).next().next().text();
 		var cateNum=$("select[name='cateNum']").val();
+		var tourNum=$(".insertTourSearch").attr("data-tourNum");
+		var imageFileName=$(".insertTourSearch").attr("data-imageFileName");
 		
-// 		console.log(name+":"+tel+":"+address+":"+cateNum);
+		console.log(name+":"+tel+":"+address+":"+cateNum+":"+tourNum+":"+imageFileName);
 		
 		$("input[name='name']").val(name);
 		$("input[name='tel']").val(tel);
 		$("input[name='address']").val(address);
 		$("input[name='cateNum']").val(cateNum);
+		$("input[name='tourNum']").val(tourNum);
+		$("input[name='imageFileName']").attr("src", imageFileName);
+		
 		
 		$(".closePlease").click();
 	});
@@ -1430,9 +1437,11 @@ function saveDetail() {
 	var sTime=f.sTime.value;
 	var eTime=f.eTime.value;
 	var price=f.price.value;
+// 	var tourNum=f.tourNum.value;
 	
 	var md={
 		cateNum:f.cateNum.value,
+// 		tourNum:tourNum,
 		name:f.name.value,
 		tel:f.tel.value,
 		address:f.address.value,
@@ -1441,8 +1450,10 @@ function saveDetail() {
 		memo:f.memo.value,
 		sTime:sTime,
 		eTime:eTime,
-		price:f.price.value
+		price:price
 	}
+	
+// 	console.log(tourNum);
 	
 	if(eTime-sTime<=0) {
 		alert("시작시간과 종료시간 설정을 올바르게 해주세요.");
@@ -1468,8 +1479,6 @@ function saveDetail() {
 					   +'</li>'
 					   );
 	
-	// console.log(days[ilcha-1][index][mdNum].name);
-	
 }
 
 // mdList에서 세부계획 클릭시 수정하는 모달로 이동
@@ -1492,13 +1501,12 @@ $(function() {
 		if(! cateNum) {
 			return false;
 		}
-// 		console.log(cateNum);
+		
 		var url="<%=cp%>/plan/listDetailTourCate";
 		var query="cateNum="+cateNum;
 		var fn=function(data) {
 			var listDetailCate=data.listDetailCate;
 			for(var i=0; i<listDetailCate.length; i++) {
-// 				console.log(listDetailCate[i].detailcateName);
 				$("#detailTourCategory").append("<option value='"+listDetailCate[i].detailcateNum+"'>"+listDetailCate[i].detailcateName+"</option>");
 			}
 		};
@@ -1527,6 +1535,8 @@ $(function() {
 	});
 });
 
+
+// 대표 이미지 삽입 후 미리보기 창에 띄워주기
 function readURL(input) {
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
@@ -1539,10 +1549,23 @@ function readURL(input) {
 	}
 }
 
+// 대표 이미지가 바뀔때마다 미리보기 사진도 바꿔줌
 $("#img_upload").change(function(){
 	readURL(this);
 });
 
+
+// function readURL(input) {
+// 	if (input.files && input.files[0]) {
+// 		var reader = new FileReader();
+	  
+// 	  	reader.onload = function(e) {
+// 			$("input[name=]").attr('src', e.target.result);  
+// 	  	}
+	  
+// 	reader.readAsDataURL(input.files[0]);
+// 	}
+// }
 </script>
 </body>
 </html>

@@ -74,8 +74,9 @@
 	
 	<!-- 세부계획 모달에서 장소 검색 -->
 	<select id="listTour" parameterType="map" resultType="com.railer.rt.plan.Tour">
-		SELECT tourNum, staNum, detailcateNum, name, tel, address
-		FROM tour
+		SELECT t.tourNum, staNum, detailcateNum, name, tel, address, imagefilename
+		FROM tour t
+		JOIN tourFile tf ON t.tourNum=tf.tourNum
 		<where>
 		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
 		AND INSTR(name, #{keyword}) &gt; 0
@@ -104,5 +105,10 @@
 	<delete id="deletePlan" parameterType="map">
 		DELETE FROM plan WHERE planNum=#{planNum}
 	</delete>
+	
+	<!-- 세부계획에서 검색한 장소의 사진을 가져오기 -->
+<!-- 	<select id="searchTourImage" parameterType="map" resultType="com.railer.rt.plan.Tour"> -->
+<!-- 		SELECT imageFileName FROM tourFile WHERE tourNum=#{tourNum} -->
+<!-- 	</select> -->
 	
 </mapper>
