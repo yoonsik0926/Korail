@@ -100,6 +100,14 @@ $(function(){
 //리플 등록
 $(function(){
 	$(".btnSendReply").click(function(){
+		
+		var userId = "${sessionScope.member.userId}";
+		
+		if (userId == "") {
+			  $("#likealarm").modal();
+			return;
+		}
+		
 		var eventNum="${dto.eventNum}";
 		var $tb = $(this).closest("table");
 		var content=$tb.find("textarea").val().trim();
@@ -250,81 +258,6 @@ $(function(){
 	});
 });
 
-	$(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
-	
-	//		var pandocki=$("#planListForm").children().length();
-	
-		$("#datepicker").datepicker({
-			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
-			altField:"#selectedDay1",
-			showAnim: "slide"
-		});
-		
-		$("body").on("change", "#datepicker", function(){
-	//			console.log($("#planListForm").children().eq(0).attr("class")!="planList1");
-	//			console.log(pandocki);
-	//			if(pandocki=0) {
-	//				alert("몇일차인지 먼저 선택해주세요.");
-	//			} 
-			var pandocki=$("#planListForm").find("div[class*='planList']");
-			if(! pandocki) {
-				alert("먼저 일차를 선택해주세요.");
-				return false;
-			}
-			
-		    var tempDate=$("#selectedDay1").val();
-		       
-		    for (var i = 1; i <= $("#selectDays").val(); i++) {
-		     	$("#selectedDay"+i).val(getDaysLater1(tempDate, i));
-			}
-		
-	    });
-		
-	});
-
-	//위에서 출발일자를 선택하면 나머지 일차에도 자동으로 날짜입력
-	//기준일부터 몇일 후(기준일 포함)
-	function getDaysLater1(sDate, days) {
-		var week = ['일', '월', '화', '수', '목', '금', '토'];
-		var y, m, d, s;
-		
-		var date=new Date();
-		
-		var regexp=/(\.)|(\-)|(\/)/g;
-		sDate=sDate.replace(regexp, "");
-		if(sDate.length!=8)
-		    return "";
-		
-		y = parseInt(sDate.substr(0, 4));
-		m = parseInt(sDate.substr(4, 2));
-		// d = parseInt(sDate.substr(6, 2))+parseInt(days);
-		d = parseInt(sDate.substr(6, 2))+parseInt(days)-1;
-		
-		date.setFullYear(y, m-1, d);
-		
-		y=date.getFullYear();
-		m=date.getMonth()+1;
-		dd=week[date.getDay()];
-		if(m<10) m="0"+m;
-		d=date.getDate();
-		if(d<10) d='0'+d;
-		
-		s=m+"월"+d+"일("+dd+")";
-		
-		return s;
-	}
-
-//일수 선택 모달
-function selectTripDay() {
-$('#selectingDay').show();
-};
-
-//팝업 Close 기능
-function close_pop(flag) {
- $('#selectingDay').hide();
-};
-
-
 </script>
 
 <style type="text/css">
@@ -339,10 +272,9 @@ function close_pop(flag) {
 }
 	
 </style>
-
-<div class="body-container" style="width: 700px; margin-left: auto; margin-right: auto;">
-    <div class="body-title">
-        <h3><i class="far fa-image"></i> 이벤트 보기 </h3>
+	<div class="body-container" style="width: 700px; margin-left: auto; margin-right: auto;">
+    		<div class="body-title">
+        	<h3><i class="far fa-image"></i> 이벤트 보기 </h3>
    
 			<table style="width: 100%; margin: 20px auto 0px; border-spacing: 0px; border-collapse: collapse;">
 			<tr height="35" style= "border-top: 2px solid #444444; border-bottom: 1px solid #cccccc;">
@@ -401,9 +333,11 @@ function close_pop(flag) {
 				    </td>
 				</tr>
 			</table>
-						
+			
+			<c:if test="${dto.comments==1}">						
 			<div>
 			
+			<!-- 댓글 -->			
 			<table style='width: 100%; margin: 15px auto 0px; border-spacing: 0px;'>
 				<tr height='30'> 
 					 <td align='left' >
@@ -421,10 +355,10 @@ function close_pop(flag) {
 				    </td>
 				 </tr>
 			</table>
-			    
+						    
 			<div id="listReply"></div>
 	       </div>
-	   								
+	</c:if>	   								
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">
 			    <td align="center">

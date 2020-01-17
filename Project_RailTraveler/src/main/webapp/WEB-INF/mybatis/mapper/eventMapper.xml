@@ -27,7 +27,7 @@
 	
 			
 	<update id="updateevent" parameterType="com.railer.rt.event.Event">
-		UPDATE event SET name=#{name}, content=#{content}, imageFilename=#{imageFilename},
+		UPDATE event SET name=#{name}, content=#{content}, comments=#{comments}, imageFilename=#{imageFilename},
 	 		sDate=#{sdate}, eDate=#{edate}
 		WHERE eventNum = #{eventNum}
 	</update> 
@@ -81,7 +81,7 @@
 	 </delete>
 	 
 	 <select id="readevent" parameterType="Integer" resultType="com.railer.rt.event.Event">
-		SELECT b.eventNum, name, content, sDate, eDate, imageFilename, hitCount,
+		SELECT b.eventNum, name, content, sDate, eDate, comments, imageFilename, hitCount,
 		NVL(eventLikeCount, 0) eventLikeCount
 	 	from event b
 	 	LEFT OUTER JOIN (
@@ -183,7 +183,7 @@
 			  FROM event
 			  ORDER BY hitCount DESC
 			 )
-			where rownum <![CDATA[<=]]>3
+			where rownum <![CDATA[<=]]>4
 	</select>
 	
 	<!-- 댓글 -->

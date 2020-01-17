@@ -84,8 +84,23 @@ jQuery(document).ready(function() {
 }
 	
 	function sendBoard() {
+                
         var f = document.boardForm;
 
+    	var str = f.name.value;
+        if(!str) {
+            alert("이벤트 제목을 입력해주세요. ");
+            f.name.focus();
+            return;
+        }
+
+    	str = f.content.value;
+        if(!str) {
+            alert("이벤트 내용을 입력하세요. ");
+            f.content.focus();
+            return;
+        }
+        
         f.action = "<%=cp%>/event/${mode}";
 
         f.submit();
@@ -164,8 +179,7 @@ input[type=text], input[type=file] {
 					</td>
 				</tr>
 			</table>
-			
-				
+							
 			<table class="tb-created">
 				<tr class="tb-row">
 					<td width="100" class="tb-title">제&nbsp;&nbsp;목</td>

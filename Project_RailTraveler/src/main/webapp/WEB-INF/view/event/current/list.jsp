@@ -13,12 +13,12 @@
 
 .sect-eventlist li{ float:left; color:#333333; letter-spacing:-1px;}
 .sect-eventlist li a{ display:block;}
-.sect-eventlist li img{ display:block; width:240px; height:200px;}
+.sect-eventlist li img{ display:block; width:270px; height:320px;}
 .sect-eventlist li p{ display:block; width:100%;white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
-.sect-eventlist li .date{ display:block; color:#717171; font-size:14px; letter-spacing:0px; }
+.sect-eventlist li .date{ display:block; color:black; font-size:14px; letter-spacing:0px; }
 .sect-eventlist li .date span{ display:inline-block; margin-right:5px; font-weight:300;}
 
-.sect-eventlist .box-contents{ margin-top:10px; line-height:1.6;}
+.sect-eventlist .box-contents{ padding-left:10px; margin-top:10px; line-height:1.6;}
 .sect-eventlist .box-contents p{ white-space:nowrap;}
 
 .type-section .type-list-event .type-list div{ float:left; position:relative; width:163px; text-align:center;}
@@ -35,10 +35,12 @@
 .search-section .input-area .btn-event-search{position:absolute; right:15px; top:50%; width:23px; height:22px; margin-top:-11px; background-image:url(/Project_RailTraveler/resource/img/search.jpg); background-repeat:no-repeat;}
 
 .sect-eventlist li{ 
-    width: 300px;
-    margin: 10px 30px 20px 10px;
-    padding: 10px;
-    padding-bottom: 30px;}
+    width: 280px;
+    border: 1px solid #e6e6e6;
+    padding: 5px 5px 5px 5px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    }
 
 ul {
    list-style: none;
@@ -110,7 +112,11 @@ ul {
 	-ms-transform: scale(1.2);
 	-o-transform: scale(1.2);
 	transform: scale(1.2);
-}   
+}
+
+.box-image:hover {
+box-shadow: 1px 1px 20px #ddd;
+}
 
 </style>
 
@@ -230,7 +236,7 @@ ul {
 						</form>
                      </div>
                 
-		    <div class="sect-eventlist" style="width: 1200px; margin: auto; padding-top: 100px; padding-left: 100px;
+		    	<div class="sect-eventlist" style="width: 1500px; margin: auto; padding-top: 100px; padding-left: 0px;
 		    		display: block; min-height: 350px; width: 100%">
 		    		
 		    		<div style="padding-left: 60px">
