@@ -500,6 +500,19 @@ div.timeSelect {
 .cateSelectAndSearch {
 	margin: 20px;
 }
+
+.titleAndImage {
+	display: none;
+}
+
+#pressMe {
+	z-index: 5;
+	padding: 15px 15px 0 15px;
+	position: absolute;
+	width: 75%;
+	background-color: white;
+	background-color: rgba(255,255,255,0.5);
+}
 </style>
 <script type="text/javascript">
 // 비회원일 경우 접근을 막는다.
@@ -519,7 +532,8 @@ $(function() {	// "mm"+'월'+"dd"+'일'+'('+"D"+')'
 		$("#datepicker").datepicker({
 			dateFormat:"yy"+"-"+"mm"+"-"+"dd",
 			altField:"#selectedDay1",
-			showAnim: "slide"
+			showAnim: "slide",
+			minDate:0
 		});
 		
 		$("body").on("change", "#datepicker", function(){
@@ -790,6 +804,11 @@ function findTourThing(page){
 	ajaxJSON(url, "post", query, fn);
 };
 
+$(document).ready(function() {
+	$(".searchAndConnect").click(function() {
+		$(".titleAndImage").slideToggle("slow");
+	});
+});
 </script>
 </head>
 
@@ -857,28 +876,26 @@ function findTourThing(page){
 
 
 			<div id="mapControllerRight" style="float: left; width: 75%;">
-				<div style="z-index: 5; padding: 20px; position: absolute; width: 75%; background-color: white; background-color: rgba(255,255,255,0.5);">
-					<form name="imageSend" action="<%=cp%>/plan/updateImage" method="post" enctype="multipart/form-data">
-						<div class="titleAndImage">
-							<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
-							<p> 대표 이미지 : <input type="file" accept="image/*" name="upload" id="img_upload" style="display: inline-block;"> </p>
+				<div id="pressMe">
+				
+					<div style="width: 1200px; height: 35px; margin-bottom: 30px; display: inline-block;" class="searchAndConnect">
+						<div style="width: 40%">
+							<select name="locNum" style="width: 80px; height: 35px; float: left;">
+								<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
+								<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
+								<option value="2" ${locNum=="2" ? "selected='selected'":""}>충청권</option>						
+								<option value="3" ${locNum=="3" ? "selected='selected'":""}>강원권</option>						
+								<option value="4" ${locNum=="4" ? "selected='selected'":""}>전라권</option>						
+								<option value="5" ${locNum=="5" ? "selected='selected'":""}>경상권</option>						
+							</select>
+							<input type="text" id="findStation" name="keyword" value="${keyword}"
+								style="width: 225px; padding: 0 8px; height: 35px; float:left; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
+								placeholder="검색할 역을 입력하세요"> <button class="findNow" style="width: 35px; height: 35px; font-size: 20px;"><i class="fas fa-search" style="max-width: 100%;"></i></button>
 						</div>
-						<input name="planNum" type="hidden">
-					</form>
-					<div style="width: 100%; height: 35px;">
-						<select name="locNum" style="width: 80px; height: 35px; float: left;">
-							<option value="0" ${locNum=="0" ? "selected='selected'":""}>전체</option>						
-							<option value="1" ${locNum=="1" ? "selected='selected'":""}>수도권</option>						
-							<option value="2" ${locNum=="2" ? "selected='selected'":""}>충청권</option>						
-							<option value="3" ${locNum=="3" ? "selected='selected'":""}>강원권</option>						
-							<option value="4" ${locNum=="4" ? "selected='selected'":""}>전라권</option>						
-							<option value="5" ${locNum=="5" ? "selected='selected'":""}>경상권</option>						
-						</select>
-						<input type="text" id="findStation" name="keyword" value="${keyword}"
-							style="width: 225px; padding: 0 8px; height: 35px; float:left; z-index: 4; font-size: 16px; border: none;" autocomplete="off"
-							placeholder="검색할 역을 입력하세요"> <button class="findNow" style="width: 35px; height: 35px; font-size: 20px;"><i class="fas fa-search" style="max-width: 100%;"></i></button>
-						
-						<div id="userNameHere">
+						<div style="width: 20%; display: inline-block;">	
+							<p style="display: block;"><i class="fas fa-angle-down"></i></p>
+						</div>
+						<div id="userNameHere" style="width: 25%; display: inline-block;">
 							<c:if test="${not empty sessionScope.member.userId}">
 								<span>${sessionScope.member.userName}(${sessionScope.member.userId})님 접속중...</span>
 							</c:if>
@@ -887,6 +904,16 @@ function findTourThing(page){
 							</c:if>
 						</div>
 					</div>
+					
+					<form name="imageSend" action="<%=cp%>/plan/updateImage" method="post" enctype="multipart/form-data">
+						<div class="titleAndImage">
+							<p> 플랜 이름 : <input type="text" name="title"> <button type="button" class="finalSave">최종저장</button></p>
+							<p> 대표 사진 : <input type="file" accept="image/*" name="upload" id="img_upload" style="display: inline-block;"> </p>
+							<p> 사진 미리보기 : <img id="image_section" style="max-width: 200px;"> </p>
+						</div>
+						<input name="planNum" type="hidden">
+					</form>
+					
 				</div>
 				
 				<div id="map" style="width: 100%; height: 100%; z-index: 2;"></div>
@@ -1058,11 +1085,10 @@ $(function() {
 // 맵에서 역 선택해서 일차계획에 추가하기
 $(function() {
 	$("body").on('click', ".insertStaPlan", function() {
-	
-	var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
-	var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
-	
 		if($("#planListForm").children().hasClass("activeGreen")) {
+			var ilcha=$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차
+			var ilchaFullname=".planListDetail"+$("div[class*='activeGreen']").attr("class").substring(8,9); // 일차가 들어간 클래스명
+			
 			if(days[ilcha-1].length>4) {
 				alert("최대로 추가 할 수 있는 역의 개수는 5개 입니다.");
 				return;
@@ -1085,7 +1111,7 @@ $(function() {
 			$(this).prevAll("button[class='close']").click(); // 추가하기 버튼을 누르면 오버레이에서 닫힘버튼 클릭
 		} else {
 			alert("역을 추가할 일차를 먼저 선택해주세요.");
-			return;
+			return false;
 		}
 	});
 });
@@ -1493,34 +1519,21 @@ $(function() {
 	});
 });
 
-// // form 태그 없이 이미지파일 첨부하기
-// function ajaxFileUpload() {
-// 	// 업로드 버튼이 클릭되면 파일 찾기 창을 띄운다.
-//     $("#img_upload").click();
-// }
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+	  
+	  	reader.onload = function(e) {
+			$('#image_section').attr('src', e.target.result);  
+	  	}
+	  
+	reader.readAsDataURL(input.files[0]);
+	}
+}
 
-// function ajaxFileChange() {
-//     // 파일이 선택되면 업로드를 진행한다.
-//     ajaxFileTransmit();
-// }
-// function ajaxFileTransmit() {
-//     var form = $("ajaxFrom")[0];
-//     var formData = new FormData(form);
-//     formData.append("message", "파일 확인 창 숨기기");
-//     formData.append("file", $("#img_upload")[0].files[0]);
-
-//     $.ajax({
-//           url : ""
-//         , type : "POST"
-//         , processData : false
-//         , contentType : false
-//         , data : formData
-//         , success:function(json) {
-//             var obj = JSON.parse(json);
-//         }
-//     });
-// }
-
+$("#img_upload").change(function(){
+	readURL(this);
+});
 
 </script>
 </body>

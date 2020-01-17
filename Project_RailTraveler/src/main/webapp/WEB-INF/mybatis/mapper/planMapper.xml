@@ -56,7 +56,7 @@
 	<!-- 몇일차 여행인지 추가하기(insert 1단계) -->
 	<insert id="insertPlan" parameterType="map">
 		INSERT INTO plan(planNum, userId, ticketDay, sDate, title, imageFileName)
-			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title}, #{imageFileName, jdbcType=VARCHAR})
+			VALUES(#{planNum}, #{userId}, #{ticketDay}, #{sDate}, #{title, jdbcType=VARCHAR}, #{imageFileName, jdbcType=VARCHAR})
 	</insert>
 	
 	<!-- 몇일차의 역과 세부계획 추가하기(insert 2단계) -->
@@ -68,7 +68,8 @@
 	<!-- 세부계획 내용 저장하기(insert 3단계)  -->
 	<insert id="insertMoreDetailPlan" parameterType="map">
 		INSERT INTO moreDetailPlan(mdpNum,detailPlanNum,cateNum,name,tel,address,longitude,latitude,memo,sTime,eTime,price)
-			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel},#{address},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR},#{memo},#{sTime},#{eTime},#{price})
+			VALUES(mdp_seq.NEXTVAL,#{detailPlanNum},#{cateNum},#{name},#{tel, jdbcType=VARCHAR},#{address, jdbcType=VARCHAR},#{longitude, jdbcType=VARCHAR},#{latitude, jdbcType=VARCHAR}
+			,#{memo, jdbcType=VARCHAR},#{sTime, jdbcType=VARCHAR},#{eTime, jdbcType=VARCHAR},#{price, jdbcType=VARCHAR})
 	</insert>
 	
 	<!-- 세부계획 모달에서 장소 검색 -->
@@ -103,12 +104,5 @@
 	<delete id="deletePlan" parameterType="map">
 		DELETE FROM plan WHERE planNum=#{planNum}
 	</delete>
-	
-	<!-- 세부계획 수정 -->
-	<update id="updateMoreDetailPlan" parameterType="map">
-		UPDATE moreDetailPlan SET cateNum=#{cateNum}, name=#{name}, tel=#{tel}, address=#{address}
-			longitude=#{longitude}, latitude=#{latitude}, memo=#{memo}, sTime=#{sTime}, eTime=#{eTime}, price=#{price}
-		WHERE detailPlanNum=#{detailPlanNum} AND mdpNum=#{mdpNum}
-	</update>
 	
 </mapper>
