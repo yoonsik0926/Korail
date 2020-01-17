@@ -92,7 +92,6 @@ $(function(){
 						<th width="200"><span>여행 일자</span></th>
 						<th width="80"><span>매수</span></th>
 						<th width="100"><span>상태</span></th>
-						<th width="80"><span>환불</span></th>
 						<th width="80"><span>스탬프</span></th>
 					</tr>
 				</thead>
@@ -106,7 +105,6 @@ $(function(){
 						<td>${vo.sDate} ~ ${vo.eDate}</td>
 						<td>1</td>
 						<td>예매 완료</td>
-						<td><button type="button" class="btn btn-danger">환불</button></td>
 						<td><button type="button" class="btn btn-success tstampBtn" value="${vo.saleNum}">스탬프</button></td>
 					</tr>
 					</c:forEach>

@@ -11,7 +11,7 @@
 				
 				<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
 					<div class="thumbnail" onclick="javascript:location.href='${articleUrl}planNum=${vo.planNum}&page=${page}'">
-						<img style="height: 200px; width: 100%;" src="<%=cp%>/uploads/plan/${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
+						<img style="height: 200px; width: 100%;" src="${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
 						<div class="caption" style="width: 100%">
 							<div style="margin-top: 10px">
 								<table style="width:100%; margin-top:10px; table-layout: fixed;">

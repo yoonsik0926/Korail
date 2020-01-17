@@ -198,4 +198,5 @@ public class PlanController {
     	
 		return "redirect:/friendPlan/planlist";
 	}
+	
 }

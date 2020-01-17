@@ -30,7 +30,8 @@
 	<sql id="where-list2">
 		<choose>
 			<when test="condition=='all'">
-				(INSTR(subject,#{keyword}) &gt; 0
+				(
+				INSTR(subject,#{keyword}) &gt; 0
 				OR
 				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
 				OR
@@ -40,7 +41,7 @@
 				)
 			</when>
 			<when test="condition=='subject'">
-				(INSTR(subject,#{keyword}) &gt; 0
+				INSTR(subject,#{keyword}) &gt; 0
 			</when>
 			<when test="condition=='content'">
 				DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
@@ -79,8 +80,7 @@
 		join ticket t on t.ticketNum =
 		s.ticketNum
 		join member2 m on s.userNum = m.userNum
-		where m.userId =
-		#{userId}
+		where m.userId =#{userId}
 		<if test="keyword!='all'">
 			AND
 			<include refid="where-list" />
@@ -139,11 +139,13 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On q.qnaNum=fb.qnaNum
-				where q.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+			    <where>
+					q.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY q.qnaNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -152,8 +154,7 @@
 					to_char(created,'YYYY-MM-DD') created,
 					NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
 				from boardBookmark b
-				join board c on b.boardNum =
-				c.boardNum
+				join board c on b.boardNum = c.boardNum
 				LEFT OUTER JOIN (
 				SELECT boardNum, COUNT(*) fileCount FROM
 				boardFile
@@ -170,11 +171,13 @@
 				boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 				GROUP BY boardNum
 				) fb On c.boardNum=fb.boardNum
-				where b.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					b.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY b.boardNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -197,11 +200,13 @@
 				SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 				GROUP BY friendNum
 				) fb On c.friendNum=fb.friendNum
-				where f.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 				ORDER BY f.friendNum DESC
 				OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
@@ -227,11 +232,13 @@
 			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
 			       GROUP BY qnaNum
 			    ) fb On q.qnaNum=fb.qnaNum
-				where q.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+			    <where>
+					q.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
 			</when>
 			<when test="commuName=='board'">
 				select nvl(count(*),0) from boardBookmark b
@@ -252,11 +259,14 @@
 				boardNum, COUNT(*) bookmarkCount FROM boardBookMark
 				GROUP BY boardNum
 				) fb On c.boardNum=fb.boardNum
-				where b.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					b.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
+					</if>
+				</where>
+				
 			</when>
 			<when test="commuName=='friend'">
 				select nvl(count(*),0) from friendBookmark f
@@ -274,93 +284,105 @@
 				SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
 				GROUP BY friendNum
 				) fb On c.friendNum=fb.friendNum
-				where f.userId = #{userId}
-				<if test="keyword!=null and keyword!=''">
+				<where>
+					f.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
 				</if>
+				</where>
 			</when>
 		</choose>
 
 	</select>
 
+
 	<!-- 내가 쓴 게시물 -->
 	<select id="listMyCommu" parameterType="map" resultType="com.railer.rt.mypage.Commu">
 		<choose>
 			<when test="commuName=='qna'">
-				SELECT f.qnaNum,c.userId,userName,subject,content,hitCount,to_char(f.created,'YYYY-MM-DD') created,
-            		NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
-			    FROM qna f 
-			    JOIN member2 c ON f.userId=c.userId
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
-			       GROUP BY qnaNum
-			    ) ff On f.qnaNum=ff.qnaNum
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
-			       GROUP BY qnaNum
-			    ) r On f.qnaNum=r.qnaNum
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
-			       GROUP BY qnaNum
-			    ) fb On f.qnaNum=fb.qnaNum
-			    <if test="keyword!=null and keyword!=''">
+				select c.qnaNum, c.userId, c.userId writer, subject, hitCount,
+					to_char(created,'YYYY-MM-DD') created,
+					NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+				from qna c
+				LEFT OUTER JOIN (
+					SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
+					GROUP BY qnaNum
+				) ff On c.qnaNum=ff.qnaNum
+				LEFT OUTER JOIN (
+					SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
+					GROUP BY qnaNum
+				) r On c.qnaNum=r.qnaNum
+				LEFT OUTER JOIN (
+					SELECT
+					qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
+					GROUP BY qnaNum
+				) fb On c.qnaNum=fb.qnaNum
+			     <where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
-			    ORDER BY f.qnaNum DESC
+					</if>
+				</where>
+			    ORDER BY c.qnaNum DESC
       			OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
 			<when test="commuName=='board'">
-				SELECT f.boardNum,c.userId,userName,subject,content,hitCount,to_char(f.created,'YYYY-MM-DD') created,
-            		NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
-			    FROM board f 
-			    JOIN member2 c ON f.userId=c.userId
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) fileCount FROM boardFile
-			       GROUP BY boardNum
-			    ) ff On f.boardNum=ff.boardNum
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) replyCount FROM boardReply
-			       GROUP BY boardNum
-			    ) r On f.boardNum=r.boardNum
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
-			       GROUP BY boardNum
-			    ) fb On f.boardNum=fb.boardNum
-			    <if test="keyword!=null and keyword!=''">
+				select c.boardNum, c.userId, c.userId writer, subject, hitCount,
+					to_char(created,'YYYY-MM-DD') created,
+					NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+				from board c
+				LEFT OUTER JOIN (
+					SELECT boardNum, COUNT(*) fileCount FROM boardFile
+					GROUP BY boardNum
+				) ff On c.boardNum=ff.boardNum
+				LEFT OUTER JOIN (
+					SELECT boardNum, COUNT(*) replyCount FROM boardReply
+					GROUP BY boardNum
+				) r On c.boardNum=r.boardNum
+				LEFT OUTER JOIN (
+					SELECT
+					boardNum, COUNT(*) bookmarkCount FROM boardBookMark
+					GROUP BY boardNum
+				) fb On c.boardNum=fb.boardNum
+			     <where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
-			    ORDER BY f.boardNum DESC
+					</if>
+				</where>
+			    ORDER BY c.boardNum DESC
       			OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
+			
 			<when test="commuName=='friend'">
-				SELECT f.friendNum,c.userId,userName,subject,content,hitCount,to_char(f.created,'YYYY-MM-DD') created, sDate, eDate, f.enable,
-		            NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,
-		           	CASE WHEN to_date(edate,'YYYY-MM-DD')&lt; to_date(to_char(sysdate,'YYYY-MM-DD'),'YYYY-MM-DD') then 1 else 0 end "validate"
-			      FROM friend f 
-			      JOIN member2 c ON f.userId=c.userId
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) fileCount FROM friendFile
-			         GROUP BY friendNum
-			      ) ff On f.friendNum=ff.friendNum
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) replyCount FROM friendReply
-			         GROUP BY friendNum
-			      ) r On f.friendNum=r.friendNum
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
-			         GROUP BY friendNum
-			      ) fb On f.friendNum=fb.friendNum
-			      <if test="keyword!=null and keyword!=''">
+				 select c.friendNum, c.userId, c.userId writer, subject, hitCount,
+					to_char(created,'YYYY-MM-DD') created, sDate, eDate, enable,
+					CASE WHEN to_date(eDate,'YYYY-MM-DD') &lt; to_date(to_char(SYSDATE,'YYYY-MM-DD'),'YYYY-MM-DD') then 1 else 0 end "validate",
+					NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
+				from friend c 
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) fileCount FROM friendFile
+					GROUP BY friendNum
+				) ff On c.friendNum=ff.friendNum
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) replyCount FROM friendReply
+					GROUP BY friendNum
+				) r On c.friendNum=r.friendNum
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
+					GROUP BY friendNum
+				) fb On c.friendNum=fb.friendNum
+			     <where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-			 	  </if>
-			      WHERE f.userId = #{userId}
-			      ORDER BY f.friendNum DESC
+					</if>
+				</where>
+			      ORDER BY c.friendNum DESC
       			  OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
 			</when>
 		</choose>
@@ -370,67 +392,76 @@
 	<select id="myCommuDataCount" parameterType="map" resultType="Integer">
 		<choose>
 			<when test="commuName=='qna'">
-				select nvl(count(*),0) from qna f
-				JOIN member2 c ON f.userId=c.userId
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
-			       GROUP BY qnaNum
-			    ) ff On f.qnaNum=ff.qnaNum
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
-			       GROUP BY qnaNum
-			    ) r On f.qnaNum=r.qnaNum
-			    LEFT OUTER JOIN (
-			       SELECT qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
-			       GROUP BY qnaNum
-			    ) fb On f.qnaNum=fb.qnaNum
-			    <if test="keyword!=null and keyword!=''">
+				select nvl(count(*),0) from qna c
+				LEFT OUTER JOIN (
+					SELECT qnaNum, COUNT(*) fileCount FROM qnaFile
+					GROUP BY qnaNum
+				) ff On c.qnaNum=ff.qnaNum
+				LEFT OUTER JOIN (
+					SELECT qnaNum, COUNT(*) replyCount FROM qnaReply
+					GROUP BY qnaNum
+				) r On c.qnaNum=r.qnaNum
+				LEFT OUTER JOIN (
+					SELECT
+					qnaNum, COUNT(*) bookmarkCount FROM qnaBookMark
+					GROUP BY qnaNum
+				) fb On c.qnaNum=fb.qnaNum
+			    <where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			   
 			</when>
 			<when test="commuName=='board'">
-				select nvl(count(*),0) FROM board f 
-			    JOIN member2 c ON f.userId=c.userId
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) fileCount FROM boardFile
-			       GROUP BY boardNum
-			    ) ff On f.boardNum=ff.boardNum
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) replyCount FROM boardReply
-			       GROUP BY boardNum
-			    ) r On f.boardNum=r.boardNum
-			    LEFT OUTER JOIN (
-			       SELECT boardNum, COUNT(*) bookmarkCount FROM boardBookMark
-			       GROUP BY boardNum
-			    ) fb On f.boardNum=fb.boardNum
-			    <if test="keyword!=null and keyword!=''">
+				select nvl(count(*),0)from board c
+				LEFT OUTER JOIN (
+					SELECT boardNum, COUNT(*) fileCount FROM boardFile
+					GROUP BY boardNum
+				) ff On c.boardNum=ff.boardNum
+				LEFT OUTER JOIN (
+					SELECT boardNum, COUNT(*) replyCount FROM boardReply
+					GROUP BY boardNum
+				) r On c.boardNum=r.boardNum
+				LEFT OUTER JOIN (
+					SELECT
+					boardNum, COUNT(*) bookmarkCount FROM boardBookMark
+					GROUP BY boardNum
+				) fb On c.boardNum=fb.boardNum
+			   	<where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				</if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			    
+			    
 			</when>
 			<when test="commuName=='friend'">
-				select nvl(count(*),0) FROM friend f
-				JOIN member2 c ON f.userId=c.userId
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) fileCount FROM friendFile
-			         GROUP BY friendNum
-			      ) ff On f.friendNum=ff.friendNum
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) replyCount FROM friendReply
-			         GROUP BY friendNum
-			      ) r On f.friendNum=r.friendNum
-			      LEFT OUTER JOIN (
-			         SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
-			         GROUP BY friendNum
-			      ) fb On f.friendNum=fb.friendNum
-			      <if test="keyword!=null and keyword!=''">
+				select nvl(count(*),0)from friend c 
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) fileCount FROM friendFile
+					GROUP BY friendNum
+				) ff On c.friendNum=ff.friendNum
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) replyCount FROM friendReply
+					GROUP BY friendNum
+				) r On c.friendNum=r.friendNum
+				LEFT OUTER JOIN (
+					SELECT friendNum, COUNT(*) bookmarkCount FROM friendBookMark
+					GROUP BY friendNum
+				) fb On c.friendNum=fb.friendNum
+			      <where>
+					c.userId = #{userId}
+					<if test="keyword!=null and keyword!=''">
 					and
 					<include refid="where-list2" />
-				  </if>
-			    WHERE f.userId = #{userId}
+					</if>
+				</where>
+			 
 			</when>
 		</choose>
 	</select>

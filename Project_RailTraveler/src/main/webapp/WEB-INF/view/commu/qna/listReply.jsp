@@ -47,5 +47,30 @@ td {
 					<td colspan="3">${paging}</td>
 				</tr>
 				</c:if>
+				
 		</table>
+<!-- 		<nav> -->
+<!--   <ul class="pagination"> -->
+<!--     <li class="disabled"> -->
+<!--       <span> -->
+<!--         <span aria-hidden="true">&laquo;</span> -->
+<!--       </span> -->
+<!--     </li> -->
+<!--     <li class="active"> -->
+<!--       <span>1 <span class="sr-only">(current)</span></span> -->
+<!--     </li> -->
+<!--   </ul> -->
+<!-- </nav> -->
+<!-- <nav> -->
+<!--   <ul class="pagination"> -->
+<!--     <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li> -->
+<!--     <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li> -->
+<!--     <li><a href="#">2</a></li> -->
+<!--    <li> -->
+<!--       <a href="#" aria-label="Next"> -->
+<!--         <span aria-hidden="true">&raquo;</span> -->
+<!--       </a> -->
+<!--     </li> -->
+<!--   </ul> -->
+<!-- </nav> -->
 		
