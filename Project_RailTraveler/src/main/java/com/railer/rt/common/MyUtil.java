@@ -57,21 +57,23 @@ public class MyUtil {
 		sb.append("#paginate .numBox {border:1px solid #ccc;height:28px;font-weight:bold;text-decoration:none;padding:4px 7px 4px 7px;margin-left:3px;line-height:normal;vertical-align:middle;}");
 		sb.append("</style>");
 		
-		sb.append("<div id='paginate'>");
+		sb.append("<div style='text-align: center;'>");
+    	
+		sb.append("<ul class='pagination'>");
 		// 처음페이지, 이전(10페이지 전)
 		n=current_page-numPerBlock;
 		if(total_page > numPerBlock && currentPageSetup > 0) {
-			sb.append("<a href='"+list_url+"page=1'>처음</a>");
-			sb.append("<a href='"+list_url+"page="+n+"'>이전</a>");
+			sb.append("<li><a href='"+list_url+"page=1'><span aria-hidden='true'>&lt;</span></a></li>");
+			sb.append("<li><a href='"+list_url+"page="+n+"'><span aria-hidden='true'>&laquo;</span></a></li>");
 		}
 		
 		// 바로가기
 		page=currentPageSetup+1;
 		while(page<=total_page && page <=(currentPageSetup+numPerBlock)) {
 			if(page==current_page) {
-				sb.append("<span class='curBox'>"+page+"</span>");
+				sb.append("<li class='active'><span>"+page+"<span class='sr-only'>(current)</span></span></li>");
 			} else {
-				sb.append("<a href='"+list_url+"page="+page+"' class='numBox'>"+page+"</a>");
+				sb.append("<li><a href='"+list_url+"page="+page+"' class='numBox'>"+page+"</a></li>");
 			}
 			page++;
 		}
@@ -80,9 +82,10 @@ public class MyUtil {
 		n=current_page+numPerBlock;
 		if(n>total_page) n=total_page;
 		if(total_page-currentPageSetup>numPerBlock) {
-			sb.append("<a href='"+list_url+"page="+n+"'>다음</a>");
-			sb.append("<a href='"+list_url+"page="+total_page+"'>끝</a>");
+			sb.append("<li><a href='"+list_url+"page="+n+"'><span aria-hidden='true'>&gt;</span></a></li>");
+			sb.append("<li><a href='"+list_url+"page="+total_page+"'><span aria-hidden='true'>»</span></a></li>");
 		}
+		sb.append("</ul>");
 		sb.append("</div>");
 	
 		return sb.toString();
@@ -180,21 +183,22 @@ public class MyUtil {
 		sb.append("</style>");
 		
 		sb.append("<div id='paginate'>");
+		sb.append("<ul class='pagination'>");
         
         // 처음페이지, 이전(10페이지 전)
         n = current_page - numPerBlock;
         if ((total_page > numPerBlock) && (currentPageSetUp > 0)) {
-			sb.append("<a onclick='"+methodName+"(1);'>처음</a>");
-			sb.append("<a onclick='"+methodName+"("+n+");'>이전</a>");
+			sb.append("<li><a onclick='"+methodName+"(1);'>처음</a></li>");
+			sb.append("<li><a onclick='"+methodName+"("+n+");'>이전</a></li>");
         }
 
         // 바로가기 페이지 구현
         page = currentPageSetUp + 1;
         while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
            if(page == current_page) {
-        	   sb.append("<span class='curBox'>"+page+"</span>");
+        	   sb.append("<li><span class='curBox'>"+page+"</span></li>");
            } else {
-			   sb.append("<a style='cursor: pointer'; onclick='"+methodName+"("+page+");' class='numBox'>"+page+"</a>");
+			   sb.append("<li><a style='cursor: pointer'; onclick='"+methodName+"("+page+");' class='numBox'>"+page+"</a></li>");
            }
            page++;
         }
@@ -203,9 +207,10 @@ public class MyUtil {
         n = current_page + numPerBlock;
 		if(n>total_page) n=total_page;
         if (total_page - currentPageSetUp > numPerBlock) {
-			sb.append("<a onclick='"+methodName+"("+n+");'>다음</a>");
-			sb.append("<a onclick='"+methodName+"("+total_page+");'>끝</a>");
+			sb.append("<li><a onclick='"+methodName+"("+n+");'>다음</a></li>");
+			sb.append("<li><a onclick='"+methodName+"("+total_page+");'>끝</a></li>");
         }
+        sb.append("</li>");
 		sb.append("</div>");
 
         return sb.toString();
@@ -241,22 +246,23 @@ public class MyUtil {
     	sb.append("#paginate .numBox {border:1px solid #ccc;height:28px;font-weight:bold;text-decoration:none;padding:4px 7px 4px 7px;margin-left:3px;line-height:normal;vertical-align:middle;}");
     	sb.append("</style>");
     	
-    	sb.append("<div id='paginate'>");
+    	sb.append("<div style='text-align: center;'>");
     	
+		sb.append("<ul class='pagination'>");
     	// 처음페이지, 이전(10페이지 전)
     	n = current_page - numPerBlock;
     	if ((total_page > numPerBlock) && (currentPageSetUp > 0)) {
-    		sb.append("<a onclick='"+methodName+"("+num+",1);'>처음</a>");
-    		sb.append("<a onclick='"+methodName+"("+num+","+n+");'>이전</a>");
+    		sb.append("<li><a onclick='"+methodName+"("+num+",1);'><span aria-hidden='true'>&laquo;</span></a></li>");
+    		sb.append("<li><a onclick='"+methodName+"("+num+","+n+");'><span aria-hidden='true'>&lt;</span></a></li>");
     	}
     	
     	// 바로가기 페이지 구현
     	page = currentPageSetUp + 1;
     	while((page <= total_page) && (page <= currentPageSetUp + numPerBlock)) {
     		if(page == current_page) {
-    			sb.append("<span class='curBox'>"+page+"</span>");
+    			sb.append("<li class='active'><span>"+page+"<span class='sr-only'>(current)</span></span></li>");
     		} else {
-    			sb.append("<a style='cursor: pointer'; onclick='"+methodName+"("+num+","+page+");' class='numBox'>"+page+"</a>");
+    			sb.append("<li><a style='cursor: pointer'; onclick='"+methodName+"("+num+","+page+");' class='numBox'>"+page+"</a></li>");
     		}
     		page++;
     	}
@@ -265,9 +271,10 @@ public class MyUtil {
     	n = current_page + numPerBlock;
     	if(n>total_page) n=total_page;
     	if (total_page - currentPageSetUp > numPerBlock) {
-    		sb.append("<a onclick='"+methodName+"("+num+","+n+");'>다음</a>");
-    		sb.append("<a onclick='"+methodName+"("+num+","+total_page+");'>끝</a>");
+    		sb.append("<li><a aria-label='Next' onclick='"+methodName+"("+num+","+n+");'><span aria-hidden='true'>&gt;</span></a></li>");
+    		sb.append("<li><a aria-label='Next' onclick='"+methodName+"("+num+","+total_page+");'><span aria-hidden='true'>»</span></a></li>");
     	}
+    	sb.append("</ul>");
     	sb.append("</div>");
     	
     	return sb.toString();
