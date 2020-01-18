@@ -10,28 +10,40 @@
 		<c:forEach var="vo" items="${list}">
 				<div class="col-md-6 col-md-6" style="max-width: 50%; min-height: 200px">
 					<div class="thumbnail" onclick="javascript:location.href='${articleUrl}planNum=${vo.planNum}&page=${page}'">
-						<img style="height: 320px; width: 100%;" src="<%=cp%>/uploads/plan/${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
-						<div class="caption" style="width: 100%">
-							<div style="margin-top: 10px">
-								<table style="width:100%; margin-top:10px; table-layout: fixed;">
-									<tr style="height: 40px;">
-										<td style="font-size: 18px; font-weight: 900; width: 80%;text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" colspan="2">${vo.title==''or vo.title==null?'제목이 없는 여행 플랜':vo.title}</td>
-									</tr>
-								</table>
+						<img style="height: 380px; width: 100%;" src="<%=cp%>/uploads/plan/${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
+						<div class="caption sombra_difuminada" style="width: 94%;
+    left: 3%;
+    height: 382px;
+    top: 1%;
+    font-weight: bold;
+    position: absolute;">
+    <div style="color: white;
+    text-shadow: 0 0 4px #000;
+    font: 1.8em TmonMonsori;    text-align: left;
+    padding: 5px 0 0 10px;">${vo.ticketDay} DAYS</div>
+							<div style="margin-top: 50px">
 								<table style="width:100%; margin-top:10px;">
-									<tr style="height: 30px;">
-										<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
-										<td style=" text-align: left;" colspan="2">${vo.writer}</td>
+									<tr style="height: 40px;">
+										<td style="padding: 25px 10px;
+    line-height: 40px;
+    text-align: center;
+        background: #ffffff85;
+    border-radius: 10px;
+    font-size: 25px;
+    font-weight: 900;
+    width: 80%; " colspan="2">${vo.title==''or vo.title==null?'제목이 없는 여행 플랜':vo.title}</td>
 									</tr>
-									<tr style="height: 30px;">
-										<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
-										<td style=" text-align: left;" colspan="2">${vo.sDate} ~ ${vo.eDate}</td>
+									<tr>
+										<td style="    font-weight: 400;
+    text-align: center;
+    font-size: 13px;
+    padding: 5px 0;"><span style="color: #ffffff;
+    background: #00000057;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 3px 10px;">|&nbsp;${vo.staName}&nbsp;|</span></td>
 									</tr>
-									<tr style="height: 30px;">
-										<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
-										<td style=" text-align: left;" colspan="2">${vo.staName}</td>
-									</tr>
-
 								</table>
 							</div>
 						</div>

@@ -222,7 +222,7 @@ public class PlanController {
 		
 		keyword = URLDecoder.decode(keyword, "utf-8");
 		
-		int rows = 8;
+		int rows = 4;
 		int total_page = 0;
 		int dataPlanCount = 0;
 		

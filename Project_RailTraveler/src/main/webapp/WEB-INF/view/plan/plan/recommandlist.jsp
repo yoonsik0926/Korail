@@ -54,7 +54,10 @@ function searchList(){
 	ajaxHTML(url, "get", query, selector);
 }
 
-
+function changeDays(ob) {
+	var $days = $("select[name=days]");
+	
+}
 </script>
 
 <style type="text/css">
@@ -66,6 +69,16 @@ function searchList(){
 	cursor: pointer;
 }
 
+
+.sombra_difuminada{
+    background: #ffffff79;
+    box-shadow: 0px 0px 1px rgba(0,0,0,1);
+    -webkit-transition-duration: 0.3s;
+}
+.sombra_difuminada:hover{
+background:#6e6e6e60;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.6);
+}
 </style>
 
 <div class="body-content-container">
@@ -77,6 +90,20 @@ function searchList(){
 
 	<div style="width: 100%;">
 		<div style="margin-bottom: 10px; height: 40px;">
+			<form name="dayForm" onchange="changeDays(this);" style="border: 1px solid #cccccc;
+    height: 36px;
+    border-radius: 3px;
+    float: left;">
+				<select name="days" class="boxTF" style="border-radius: 3px; width: 100%; height: 100%; border-left: 0;">
+					<option value="all">전체</option>
+					<option value="3">3일</option>
+					<option value="5">5일</option>
+					<option value="7">7일</option>
+						
+				</select>
+			</form>
+		
+		
 			<form name="searchForm" action="<%=cp%>/notice/list" method="post"
 				style="border: 1px solid #cccccc; height: 36px; border-radius: 3px; float: right;">
 				<select name="condition" class="boxTF"

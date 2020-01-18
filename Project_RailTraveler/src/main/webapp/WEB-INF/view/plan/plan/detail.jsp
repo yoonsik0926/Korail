@@ -311,32 +311,25 @@ table th span {
 						</button>
 					</span>
 					<span style="float: right; margin-right: 45px;">
-						<button id="back" class="btn btn-success" onclick="javascript:location.href='<%=cp%>/friendPlan/planlist';">목록으로</button>
+						<button id="back" class="btn btn-success" onclick="javascript:location.href='<%=cp%>/plan/recommand';">목록으로</button>
 					</span>
 				</h4>
 				
 			</div>
-
+<hr>
 			<div id="planMap"
 				style="width: 50%;
     margin: 0 auto; height: 500px; "></div>
 		</div>
-
-		<div style="width: 100%; display: inline-block; margin: 0 80px;">
-
-			<div
-				style="width: 25%; height: 80px; display: inline; float: left; vertical-align: middle; margin-right: 150px; margin-top: 40px; text-align: center; font-size: 18px; border: 1px #84c1fa solid; border-radius: 50px; background: #84c1fa; color: white;">
-				<table style="width: 100%; margin-top: 15px;">
-					<tr>
-						<td style="font-size: 30px; font-weight: 700;">${dto.ticketDay} Days</td>
-					</tr>
-				</table>
-			</div>
+<hr>
+		<div style="width: 100%; display: inline-block;">
 
 			<div
-				style="width: 50%; font-size: 18px; height: 80px; display: inline; float: left; vertical-align: middle; margin-top: 40px; margin-right: 50px; text-align: center; font-size: 18px; border: 1px #84c1fa solid; border-radius: 50px; background: #84c1fa; color: white;">
+				style="width: 100%; height: 80px; display: inline; float: left; vertical-align: middle; text-align: center; font-size: 18px; border: 1px #84c1fa solid; border-radius: 50px; background: #84c1fa; color: white;">
 				<table style="width: 100%; margin-top: 15px;">
 					<tr>
+						<td rowspan="2" style="font-size: 30px; font-weight: 700;border-right: 2px solid;">${dto.ticketDay} Days</td>
+						
 						<td style="font-weight: 700;"><i class="fas fa-coins"></i>&nbsp;&nbsp;총
 							예산</td>
 						<td style="font-weight: 700;"><i class="fas fa-utensils"></i>&nbsp;&nbsp;식비</td>
@@ -350,12 +343,11 @@ table th span {
 						<td>${tourPrice}원</td>
 						<td>${hotelPrice}원</td>
 					</tr>
-
 				</table>
-
 			</div>
-		</div>
 
+		</div>
+<hr>
 		<div style="width: 1200px; margin-top: 40px;">
 			<h4 style="font-weight: 700; color: #5d5858;">여행 루트</h4>
 
@@ -407,7 +399,7 @@ table th span {
 
 
 		</div>
-		
+		<hr>
 <div style="width: 1200px; margin-top: 40px;">
 <h4 style="font-weight: 700; color: #5d5858;">상세 일정</h4>
 
@@ -421,13 +413,31 @@ table th span {
 		<c:set var="cnt" value="0" />
 		<div class="media-left" style="position: relative;float: left; margin-right: 20px;">
 		<div style="border-radius: 5px; width:150px; height: 110px; border: 6px double;">
-			<img src="<%=cp%>/resource/images/station/${vo.imageFileName}" style="position: absolute;
-    top: 4%;
-    left: 4%;
-    width: 92%;
-    height: 77%;
-    border-radius: 0px;">
+			<img src="<%=cp%>/resource/images/station/${vo.imageFileName}" 
+			style="    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 139px;
+    height: 99px;
+    border-radius: 2px;">
 			</div><div style=" text-align: center; font: 1.2em TmonMonsori;">${vo.staName}역</div>
+			
+			
+			<div style="margin: 10px 50px;">
+<%-- 			<img alt="railway" src="<%=cp%>/resource/images/railway.png" style="width: 60px;display: block;"> --%>
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="railway" src="<%=cp%>/resource/images/railway1.png" style="width: 35px;display: block;    margin: 0 auto;">
+			<img alt="train" src="<%=cp%>/resource/images/subway.png" style="width: 50px;display: block;margin-top: 10px;">
+			
+			
+			</div>
 		</div>
 		  <div class="media-body" style="max-width: 60%;">
 		<ul class="bxslider">
@@ -435,7 +445,7 @@ table th span {
 		<c:forEach var="tl" items="${tourList}">
 		<c:if test="${tl.staNum==vo.staNum}">
 			<c:set var="cnt" value="${cnt + 1}"/>
-      <li><img src="${tl.imageFileName}"  alt="${tl.name}" title="" style=" width: 100%;">
+      <li style="height: 473px;"><img src="${tl.imageFileName}"  alt="${tl.name}" title="" style=" width: 100%;">
       
       <div style="left: 25px;
     width: 93%;
@@ -509,16 +519,6 @@ table th span {
 	
 	
 </div><!-- 끝~ -->
-
-<div style="width: 100%;">
-	<h4 style="font-weight: 700; color: #5d5858;">일정표</h4>
-	<div id='schLoading'>loading...</div>
-	<div id='scheduler'></div>
-</div>
-
-
-
-
 
 
 </div>

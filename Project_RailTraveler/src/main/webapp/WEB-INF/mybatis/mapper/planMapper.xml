@@ -131,7 +131,7 @@
 	
 <!-- 추천코스짜는중!!!!!!!!!!!!!!	 -->
 	<select id="listPlan" parameterType="map" resultType="com.railer.rt.plan.Plan">
-		select p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+		select p.ticketDay, p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
 			title, p.imageFileName, LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
 		from plan p
 		join detailPlan d on p.planNum = d.planNum
@@ -144,7 +144,7 @@
 			</if>
 			and p.userId='admin'
 		</where>
-		GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		GROUP BY p.ticketDay, p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
 		order by p.planNum
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
