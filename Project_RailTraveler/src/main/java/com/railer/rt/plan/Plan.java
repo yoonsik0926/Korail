@@ -25,6 +25,7 @@ public class Plan {
 	// MoreDetailPlan(세부계획 속 내용)
 	private int mdpNum;
 	private int cateNum;
+	private String cateName; 
 	private String name;
 	private String tel;
 	private String address;
@@ -89,6 +90,12 @@ public class Plan {
 	}
 	public void setCateNum(int cateNum) {
 		this.cateNum = cateNum;
+	}
+	public String getCateName() {
+		return cateName;
+	}
+	public void setCateName(String cateName) {
+		this.cateName = cateName;
 	}
 	public String getName() {
 		return name;

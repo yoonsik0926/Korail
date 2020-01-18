@@ -44,7 +44,7 @@ td {
 				</c:forEach>
 		</table>
 		<c:if test="${not empty paging}">
-					${paging}>
+					${paging}
 				</c:if>
 <!-- 		<nav> -->
 <!--   <ul class="pagination"> -->

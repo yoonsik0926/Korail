@@ -194,5 +194,153 @@ public class PlanServiceImpl implements PlanService {
 		}
 		
 	}
+	////////////////추천코스 짜는중
+	
+	@Override
+	public List<Plan> listPlan(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.listPlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	@Override
+	public int dataPlanCount(Map<String, Object> map) throws Exception {
+		int dataPlanCount = 0;
+		try {
+			dataPlanCount = dao.selectOne("plan.dataPlanCount",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataPlanCount;
+	}
+
+	@Override
+	public Plan readPlan(int planNum) throws Exception {
+		Plan dto = null;
+		try {
+			dto = dao.selectOne("plan.readPlan",planNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public List<Plan> readStation(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.readStation",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<Plan> readDetailPlan(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.readDetail",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	@Override
+	public int calPrice(Map<String, Object> map) throws Exception {
+		int price = 0;
+		try {
+			price = dao.selectOne("plan.calPrice",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return price;
+	}
+
+
+	@Override
+	public int stationCount(int planNum) throws Exception {
+		int stationCount = 0;
+		try {
+			stationCount = dao.selectOne("plan.stationCount",planNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return stationCount;
+	}
+
+
+	@Override
+	public void likeFriendPlan(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("plan.likePlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public void disLikePlan(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("plan.disLikePlan",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public int checkLike(Map<String, Object> map) throws Exception {
+		int check = 0;
+		try {
+			check = dao.selectOne("plan.checkLike",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return check;
+	}
+
+
+	@Override
+	public List<Plan> listBookmark(Map<String, Object> map) throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.listBookmark",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public int bookmarkCount(Map<String, Object> map) throws Exception {
+		int dataCount = 0;
+		try {
+			dataCount = dao.selectOne("plan.countBookmark",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataCount;
+	}
+	
+	
+	
+	
+	
+	
 
 }

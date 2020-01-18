@@ -2,6 +2,29 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="plan">
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='all'">
+				(INSTR(userName,#{keyword}) &gt; 0
+				OR
+				INSTR(staName, #{keyword}) &gt; 0
+				)
+			</when>
+			<when test="condition=='writer'">
+				INSTR(userName,#{keyword}) &gt; 0
+			</when>
+			<when test="condition=='station'">
+				INSTR(staName, #{keyword}) &gt; 0
+			</when>
+			<when test="condition=='sDate'">
+				 ( TO_CHAR(p.sDate, 'YYYYMMDD') = #{keyword}
+		          OR TO_CHAR(p.sDate, 'YYYY-MM-DD') = #{keyword} )
+			</when>
+			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
 	
    <!-- planNum 시퀀스번호 -->
    <select id="planSeq" resultType="Integer">
@@ -106,9 +129,192 @@
 		DELETE FROM plan WHERE planNum=#{planNum}
 	</delete>
 	
-	<!-- 세부계획에서 검색한 장소의 사진을 가져오기 -->
-<!-- 	<select id="searchTourImage" parameterType="map" resultType="com.railer.rt.plan.Tour"> -->
-<!-- 		SELECT imageFileName FROM tourFile WHERE tourNum=#{tourNum} -->
-<!-- 	</select> -->
+<!-- 추천코스짜는중!!!!!!!!!!!!!!	 -->
+	<select id="listPlan" parameterType="map" resultType="com.railer.rt.plan.Plan">
+		select p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+			title, p.imageFileName, LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+        join member2 m on m.userId = p.userId
+		join station s on d.staNum = s.staNum
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+			and p.userId='admin'
+		</where>
+		GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		order by p.planNum
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+
+	<!-- 추천코스 리스트 개수 -->
+	<select id="dataPlanCount" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) 
+        from(
+            select p.planNum
+            from plan p
+            join detailPlan d on p.planNum = d.planNum
+            join member2 m on m.userId = p.userId
+            join station s on d.staNum = s.staNum
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+			and p.userId='admin'
+		</where>
+		 GROUP BY p.planNum)
+	</select>
+	
+	<select id="readPlan" parameterType="Integer" resultType="com.railer.rt.plan.Plan">
+		select planNum,sDate, to_char((to_date(sDate) + ticketDay),'yyyy-mm-dd') eDate, title, userId,ticketDay
+		from plan p
+		where planNum = #{planNum}
+	</select>
+	
+	<select id="readStation" parameterType="map" resultType="com.railer.rt.plan.Plan">
+		select to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, to_char((to_date(p.sDate) + nthDay+1),'yyyy-mm-dd') eDate,
+			 nthDay, s.staNum,s.locNum,staName,s.imageFileName, latitude, longitude, p.planNum
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+        join location l on s.locNum = l.locNum
+		where p.planNum = #{planNum}
+        order by nthDay
+	</select>
+	
+	<select id="stationCount" parameterType="Integer" resultType="Integer">
+		select nvl(count(*),0) from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+		where p.planNum = #{planNum}
+        order by nthDay
+	</select>
+	
+	<select id="readDetail" parameterType="map" resultType="com.railer.rt.plan.Plan">
+	
+	 select p.planNum, to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate, 
+	    	cateName, m.name,memo,LPAD(sTime, 3) sTime,LPAD(eTime, 3) eTime,price, d.detailPlanNum, d.stanum,nthDay, tf.imageFileName
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
+		join tourCategory t on m.cateNum = t.cateNum
+		join (
+        select name, tourNum from tour)
+        tt on tt.name = m.name
+        join tourfile tf on tt.tourNum = tf.tourNum
+		where p.planNum = #{planNum}
+		order by nthDay,  d.detailPlanNum
+		
+		
+<!-- 		select p.planNum, to_char(to_date(p.sDate)+nthDay-1,'yyyy-mm-dd') sDate,  -->
+<!-- 	    	cateName, name,memo,LPAD(sTime, 3) sTime,LPAD(eTime, 3) eTime,price, imageFileName, d.detailPlanNum, d.stanum,nthDay -->
+<!-- 		from plan p -->
+<!-- 		join detailPlan d on p.planNum = d.planNum -->
+<!-- 		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum -->
+<!-- 		join tourCategory t on m.cateNum = t.cateNum -->
+<!-- 		where p.planNum = #{planNum} -->
+<!-- 		order by nthDay,  d.detailPlanNum -->
+		
+		
+	</select>
+	
+	<select id="calPrice" parameterType="Map" resultType="Integer">
+		select nvl(sum(price),0)
+        from plan p
+		join detailPlan d on p.planNum = d.planNum
+		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
+		join tourCategory t on m.cateNum = t.cateNum
+		where p.planNum = #{planNum} and cateName= #{cateName}
+		order by nthDay
+	</select>
+	
+	
+	<!-- 북마크 -->
+	<insert id="likePlan" parameterType="map">
+		insert into planbookmark(planNum,userId) values (#{planNum},#{userId})
+	</insert>
+	
+	<insert id="disLikePlan" parameterType="map">
+		delete from planbookmark where planNum = #{planNum} and userId= #{userId}
+	</insert>
+	
+	<select id="checkLike" parameterType="map" resultType="Integer">
+		select nvl(count(*),0)  from planbookmark where planNum = #{planNum} and userId= #{userId}
+	</select>
+	
+	<select id="listBookmark" parameterType="map" resultType="com.railer.rt.plan.Plan" >
+		select p.planNum, userName writer,title, p.sDate,
+		    to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+		    title, p.imageFileName,LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
+		from planbookmark b
+		join plan p on p.planNum = b.planNum
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+		join member2 m on m.userId = p.userId
+		<where>
+			b.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+		</where>
+		group by p.planNum, userName, p.sDate,title, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'),  p.imageFileName
+		order by p.planNum
+		offset #{offset} rows fetch first #{rows} rows only
+	</select>
+	
+	<select id="countBookmark" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) from planbookmark b
+		join plan p on p.planNum = b.planNum
+		join detailPlan d on p.planNum = d.planNum
+		join station s on d.staNum = s.staNum
+		join member2 m on m.userId = p.userId
+		<where>
+			b.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+		</where>
+	</select>
+	
+	<!-- 내가 작성한 플랜 -->
+	<select id="listMyPlan" parameterType="map" resultType="com.railer.rt.plan.Plan">
+		select p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+			title, p.imageFileName, LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+        join member2 m on m.userId = p.userId
+		join station s on d.staNum = s.staNum
+       	<where>
+			p.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+		</where>
+        GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		order by p.planNum
+	</select>
+	
+	<select id="countMyPlan" parameterType="map" resultType="Integer">
+		select nvl(count(*),0) from plan p
+		join detailPlan d on p.planNum = d.planNum
+        join member2 m on m.userId = p.userId
+		join station s on d.staNum = s.staNum
+		<where>
+			p.userId = #{userId}
+			<if test="keyword!=null and keyword!=''">
+				AND
+				<include refid="where-list" />
+			</if>
+		</where>
+	</select>
+	
+	
+	
 	
 </mapper>

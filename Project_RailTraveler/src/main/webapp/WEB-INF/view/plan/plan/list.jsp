@@ -1,79 +1,73 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page trimDirectiveWhitespaces="true" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-   String cp = request.getContextPath();
+	String cp = request.getContextPath();
 %>
-<html>
-<head>
-<style type="text/css">
 
-</style>
-<script type="text/javascript">
-/* $(document).ready(function(){
-	  var modalLayer = $("#modalLayer");
-	  var modalLink = $(".modalLink");
-	  var modalCont = $(".modalContent");
-	  var marginLeft = modalCont.outerWidth()/2;
-	  var marginTop = modalCont.outerHeight()/2; 
+<div style="margin: 10px 0;">
+		<c:forEach var="vo" items="${list}">
+				<div class="col-md-6 col-md-6" style="max-width: 50%; min-height: 200px">
+					<div class="thumbnail" onclick="javascript:location.href='${articleUrl}planNum=${vo.planNum}&page=${page}'">
+						<img style="height: 320px; width: 100%;" src="<%=cp%>/uploads/plan/${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
+						<div class="caption" style="width: 100%">
+							<div style="margin-top: 10px">
+								<table style="width:100%; margin-top:10px; table-layout: fixed;">
+									<tr style="height: 40px;">
+										<td style="font-size: 18px; font-weight: 900; width: 80%;text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" colspan="2">${vo.title==''or vo.title==null?'제목이 없는 여행 플랜':vo.title}</td>
+									</tr>
+								</table>
+								<table style="width:100%; margin-top:10px;">
+									<tr style="height: 30px;">
+										<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
+										<td style=" text-align: left;" colspan="2">${vo.writer}</td>
+									</tr>
+									<tr style="height: 30px;">
+										<td style="font-weight: 700; width:35%;"><i class="fas fa-calendar-alt" style="color: #bea2f5;"></i>&nbsp;여행 일자: </td>
+										<td style=" text-align: left;" colspan="2">${vo.sDate} ~ ${vo.eDate}</td>
+									</tr>
+									<tr style="height: 30px;">
+										<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
+										<td style=" text-align: left;" colspan="2">${vo.staName}</td>
+									</tr>
 
-	  modalLink.click(function(){
-	    modalLayer.fadeIn("slow");
-	    modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
-	    $(this).blur();
-	    $(".modalContent > a").focus(); 
-	    return false;
-	  });
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+			<div style="clear: both;"></div>
+</div>			
+<%-- 			<c:if test="${list.size()!=0 && list.size()%4!=0}"> --%>
+<%-- 				<c:forEach var="i" begin="${list.size()%4+1}" end="4"> --%>
+<!-- 					<div style="margin-top: 10px;"> -->
+<!-- 						<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px; border: none;"> -->
+<!-- 							<div class="thumbnail" style="height:390px;border: none;"> -->
+<!-- 								&nbsp; -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<%-- 				</c:forEach> --%>
+<%-- 			</c:if> --%>
 
-	  $(".modalContent > button").click(function(){
-	    modalLayer.fadeOut("slow");
-	    modalLink.focus();
-	  });		
-	}); */
+
+			<div style="width: 100%;">
+				<nav style="text-align: center;">
+					<ul class="pagination">
+						<li>${dataCount==0?"등록한 게시물이 없습니다.":paging}</li>
+					</ul>
+				</nav>
+			</div>
+	
+			
+			
+			
+
+
+			
+		
+
 	
 
-// $(document).on('click', '#abcd', function() {
-// 	$("#myFullsizeModal").show();
-// });
-
-</script>
-</head>
-<div class="body-content-container">
-     <div class="body-title">
-         <h3>${title} </h3>
-		<button type="button" class="btn btn-primary times" data-toggle="modal" data-target="#selectTime">
-								<p>시간선택 및 세부일정 짜기</p>
-							</button>
-     </div>
-</div>  
-     
-
-<!-- Modal -->
-<div class="modal fade" id="selectTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-							  <div class="modal-dialog" role="document">
-							    <div class="modal-content">
-							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							        <h4 class="modal-title" id="myModalLabel">Modal 제목</h4>
-							      </div>
-							      <div class="modal-body">
-							        Modal 내용
-							      </div>
-							      <div class="modal-footer">
-							        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-							      </div>
-							    </div>
-							  </div>
-							</div>
-
-
-
-     
-     
-     
-     
-     
-     
-
-</html>

@@ -12,4 +12,26 @@ public interface PlanService {
 	public int placeDataCount(Map<String, Object> map); // 장소 개수
 	public List<Tour> listTour(Map<String, Object> map); // 장소 리스트(세부계획 모달 검색창에서 뿌려줌)
 	public void updateImage(Plan dto, String pathname) throws Exception; // jsp에서 submit한 이미지 파일을 db에 추가하기 위해서 필요한 것
+
+	//추천코스
+	public List<Plan> listPlan(Map<String, Object> map) throws Exception;
+	public int dataPlanCount(Map<String, Object> map) throws Exception;
+	
+	public Plan readPlan(int planNum) throws Exception;
+	public List<Plan> readStation(Map<String, Object> map) throws Exception;
+	public int stationCount(int planNum) throws Exception;
+	public List<Plan> readDetailPlan(Map<String, Object> map) throws Exception;
+	
+	public int calPrice(Map<String, Object> map) throws Exception;
+	
+	//플랜 북마크
+	public void likeFriendPlan(Map<String, Object> map) throws Exception;
+	public void disLikePlan(Map<String, Object> map) throws Exception;
+	public int checkLike(Map<String, Object> map) throws Exception;
+	
+	public List<Plan> listBookmark(Map<String, Object> map) throws Exception;
+	public int bookmarkCount(Map<String, Object> map) throws Exception;
+	
+
+
 }

@@ -782,7 +782,7 @@ function findTourThing(page){
 		
 	var url="<%=cp%>/plan/searchPlace";
 	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
-
+	console.log(query);
 	var fn=function(data) {
 		$("#listTour").empty();
 		for (var i = 0; i < data.list.length; i++) {
@@ -967,7 +967,8 @@ $(document).ready(function() {
 							        	<input class="inputThing resultSearchingTour" name="name" autocomplete="off" readonly="readonly" placeholder="이름">
 							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail" data-backdrop="static">검색하기<i class="fas fa-search"></i></button>							     	
 							        </div>
-							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
+							      	<img id="imageFileName" style="display: block; width: 80%; height: 300px;" alt="장소사진">
+							      	<input class="inputThing" type="hidden" name="imageFileName" placeholder="장소사진" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="tourNum" placeholder="투어넘" autocomplete="off" readonly="readonly" style="display: block;">
@@ -1420,6 +1421,7 @@ $(function() {
 		$("input[name='cateNum']").val(cateNum);
 		$("input[name='tourNum']").val(tourNum);
 		$("input[name='imageFileName']").attr("src", imageFileName);
+		$("#imageFileName").attr("src", imageFileName);
 		
 		
 		$(".closePlease").click();
@@ -1560,6 +1562,7 @@ function readURL2(input) {
 	  
 	  	reader.onload = function(e) {
 			$("input[name='imageFileName']").attr('src', e.target.result);  
+			$("#imageFileName").attr('src', e.target.result);  
 	  	}
 	  
 	reader.readAsDataURL(input.files[0]);

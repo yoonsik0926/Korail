@@ -2,7 +2,9 @@ package com.railer.rt.plan;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -164,6 +166,7 @@ public class PlanController {
 		Map<String, Object> model1 = new HashMap<>();
 		model1.put("total_page", total_page);
 		model1.put("paging", paging);
+		model1.put("dataCount", dataCount);
 		
 		model1.put("list",list);
 		
@@ -175,13 +178,6 @@ public class PlanController {
 		model.addAttribute("subMenu", "1");
 		model.addAttribute("title", "친구의 여행 플랜");
 		return ".four.plan.plan.planlist";
-	}
-	
-	@RequestMapping(value="/plan/recommand") 
-	public String recommand(Model model) throws Exception {
-		model.addAttribute("subMenu", "2");
-		model.addAttribute("title", "추천 코스");
-		return ".four.plan.plan.list";
 	}
 	
 	@RequestMapping(value="/plan/updateImage", method=RequestMethod.POST)
@@ -196,7 +192,218 @@ public class PlanController {
 		} catch (Exception e) {
 		}
     	
-		return "redirect:/friendPlan/planlist";
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		if(info.getUserId()=="admin")
+			return "redirect:/plan/recommand";
+		else
+			return "redirect:/friendPlan/planlist";
+			
 	}
+	
+	
+
+	@RequestMapping(value="/plan/recommand") 
+	public String recommand(Model model) throws Exception {
+		model.addAttribute("subMenu", "2");
+		model.addAttribute("title", "추천 코스");
+		return ".four.plan.plan.recommandlist";
+	}
+	
+	@RequestMapping(value="/plan/list")
+	public String planlist(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "condition", defaultValue = "all") String condition,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			HttpServletRequest req,
+			HttpSession session,
+			Model model) throws Exception {
+		
+		String cp = req.getContextPath();
+		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
+		int rows = 8;
+		int total_page = 0;
+		int dataPlanCount = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		dataPlanCount = service.dataPlanCount(map);
+		
+		
+		if (dataPlanCount != 0) {
+			total_page = myUtil.pageCount(rows, dataPlanCount);
+		}
+
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int offset = (current_page - 1) * rows;
+		if (offset < 0)
+			offset = 0;
+		
+		map.put("offset", offset);
+		map.put("rows", rows);
+		
+		List<Plan> list = service.listPlan(map);
+				
+		String query = "";
+		String articleUrl = cp +"/plan/detail?";
+		
+		if(keyword.length()!=0) {
+			query = "condition="+condition+"&keyword="+keyword+"&";
+		}
+		
+		if(query.length()!=0) {
+			articleUrl += query;
+		}
+		
+		// AJAX 용 페이징
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPlanPage");
+		
+		model.addAttribute("list",list);
+		model.addAttribute("dataCount",dataPlanCount);
+		model.addAttribute("page",current_page);
+		model.addAttribute("query",query);
+		model.addAttribute("condition",condition);
+		model.addAttribute("keyword",keyword);
+		model.addAttribute("articleUrl",articleUrl);
+		model.addAttribute("paging",paging);
+		
+		model.addAttribute("subMenu", "2");
+		model.addAttribute("title", "추천 코스");
+		
+		return "/plan/plan/list";
+	}
+	
+	
+	@RequestMapping(value="/plan/detail")
+	public String detail(
+			@RequestParam int planNum,
+			@RequestParam String page,
+			@RequestParam(defaultValue="all") String condition,
+			@RequestParam(defaultValue="") String keyword,
+			HttpServletRequest req,
+			Model model) throws Exception {
+		
+		
+		String cp = req.getContextPath();
+		
+		keyword = URLDecoder.decode(keyword, "utf-8");
+		
+		String query = "page="+page;
+		if(keyword.length()!=0) {
+			query+="&condition="+condition+"&keyword="+URLEncoder.encode(keyword, "UTF-8");
+		}
+		
+		String listUrl = cp + "/plan/planlist?"+query;
+		
+		//여행 시작 날짜, 종료 날짜, 티켓 일수 ,userId, title
+		Plan dto = service.readPlan(planNum);
+		if(dto == null)
+			return "redirect:/plan/planlist";
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("planNum", planNum);
+		
+		//역 이름, 시작 날짜, 종료 날짜, 경도, 위도, 일 수 (nthDay)
+		List<Plan> stationList = service.readStation(map);
+		
+		//가격 구하기
+		map.put("cateName", "명소");
+		int tourPrice = service.calPrice(map);
+		map.remove("cateName");
+		
+		map.put("cateName", "맛집");
+		int foodPrice = service.calPrice(map);
+		map.remove("cateName");
+		
+		map.put("cateName", "숙소");
+		int hotelPrice = service.calPrice(map);
+		map.remove("cateName");
+		
+		//세부 일정
+		List<Plan> tourList = service.readDetailPlan(map);
+				
+		//전체 금액
+		int totPrice = tourPrice + foodPrice + hotelPrice;
+
+		//역 개수
+		int stationCount = service.stationCount(planNum);
+		int length = 173 + (182*(stationCount-2));
+		
+		//좋아요
+		HttpSession session = req.getSession();
+		if(session != null && session.getAttribute("member") != null && !session.getAttribute("member").equals("")) {
+			SessionInfo info=(SessionInfo)session.getAttribute("member");
+			String userId = info.getUserId();
+			Map<String, Object> map2 = new HashMap<String, Object>();
+			map2.put("planNum", planNum);
+			map2.put("userId", userId);
+
+			//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
+			int likecheck = service.checkLike(map2);
+					
+			if(likecheck==0) {
+				model.addAttribute("like","dislike");
+			}else{
+				model.addAttribute("like","like");
+			}
+		}
+		
+		model.addAttribute("dto",dto);
+		model.addAttribute("stationList",stationList);
+		model.addAttribute("tourList",tourList);
+		model.addAttribute("planNum",planNum);
+		
+		model.addAttribute("listUrl",listUrl);
+		model.addAttribute("tourPrice",tourPrice);
+		model.addAttribute("foodPrice",foodPrice);
+		model.addAttribute("hotelPrice",hotelPrice);
+		model.addAttribute("totPrice",totPrice);
+		model.addAttribute("length",length);
+		model.addAttribute("stationCount",stationCount);
+		
+		model.addAttribute("subMenu", "2");
+		model.addAttribute("title", "추천 코스");
+		
+		return ".four.plan.plan.detail";
+	}
+	
+	
+	@RequestMapping(value="/plan/like")
+	@ResponseBody
+	public Map<String, Object> likePlan(
+			@RequestParam int planNum,
+			HttpSession session) throws Exception{
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		String userId = info.getUserId();
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("planNum", planNum);
+		map.put("userId", userId);
+		
+
+		//좋아요를 했는지(1) 안했는지(0) 알기 위한 여부 체크 
+		int likecheck = service.checkLike(map);
+				
+		if(likecheck==0) {
+			service.likeFriendPlan(map);
+		}else{
+			service.disLikePlan(map);
+		}
+		
+		
+		model.put("likecheck", likecheck);	
+		
+		return model;
+	}
+	
+	
 	
 }
