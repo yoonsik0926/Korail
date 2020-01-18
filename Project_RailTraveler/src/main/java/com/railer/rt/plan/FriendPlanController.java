@@ -150,7 +150,7 @@ public class FriendPlanController {
 		//세부 일정
 		List<Plan> foodList = fPlanService.readDetailPlan(map);
 		
-		map.put("cateName", "숙소");
+		map.put("cateName", "숙박");
 		int hotelPrice = fPlanService.calPrice(map);
 		//세부 일정
 		List<Plan> hotelList = fPlanService.readDetailPlan(map);
@@ -160,7 +160,18 @@ public class FriendPlanController {
 
 		//역 개수
 		int stationCount = fPlanService.stationCount(planNum);
-		int length = 173 + (182*(stationCount-2));
+		int length = 0;
+		int length2 = 0;
+		
+		length = 173 + (182*(stationCount-3));
+		
+		if(stationCount>=6) {
+			if(stationCount%6==1) {
+				length2 = 0;
+			}
+			length2 = 173 + (182*(stationCount-7));
+		}
+		
 		
 		//좋아요
 		HttpSession session = req.getSession();
@@ -195,6 +206,7 @@ public class FriendPlanController {
 		model.addAttribute("hotelPrice",hotelPrice);
 		model.addAttribute("totPrice",totPrice);
 		model.addAttribute("length",length);
+		model.addAttribute("length2",length2);
 		model.addAttribute("stationCount",stationCount);
 		
 		model.addAttribute("subMenu", "1");

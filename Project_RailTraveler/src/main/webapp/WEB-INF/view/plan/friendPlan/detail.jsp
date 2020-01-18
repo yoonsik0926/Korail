@@ -173,36 +173,45 @@ $(function() {
 			
 			<c:forEach var="vo" items="${tourList}">
 				{
-					title :"${vo.name} : ${vo.memo}",
+					title :"<i class='fa fa-suitcase-rolling' style='font-size:15px;color:black;'></i><span style='font-size:13px; color:black;'>${vo.name}</span><div style='font-size:11px;'>${vo.memo}</div>",
 					start : "${vo.sDate} ${vo.sTime}:00",
 					end : "${vo.sDate} ${vo.eTime}:00",
-					color : "#8bc34a"
+					color : "#8bc34a",
+					icon: 'suitcase-rolling'
 				},
 			</c:forEach> 
 			
 			<c:forEach var="vo" items="${foodList}">
 				{
-					title :"${vo.name} : ${vo.memo}",
+					title :"<i class='fa fa-utensils' style='font-size:15px;color:black;'></i><span style='font-size:13px; color:black;'>${vo.name}</span><div style='font-size:11px;'>${vo.memo}</div>",
 					start : "${vo.sDate} ${vo.sTime}:00",
 					end : "${vo.sDate} ${vo.eTime}:00",
-					color : "#ffc107"
+					color : "#ffc107",
+					icon: 'utensils'
 				},
 			</c:forEach>
 				
 			<c:forEach var="vo" items="${hotelList}">
 			{
-				title :"${vo.name} : ${vo.memo}",
+				title :"<i class='fa fa-bed' style='font-size:15px;color:black;'></i><span style='font-size:13px; color:black;'>${vo.name}</span><div style='font-size:11px;'>${vo.memo}</div>",
 				start : "${vo.sDate} 00:00",
 				end : "${vo.sDate} 01:00",
-				color : "#9E9E9E"
+				color : "#9E9E9E",
+				icon: 'bed'
 			},
 			</c:forEach>
 			
 			
 		],
-
+		eventRender: function(event, element) {
+		     if(event.icon){          
+		        /* element.find(".fc-title").prepend("<i class='fa fa-"+event.icon+"'></i>"); */
+		        element.find(".fc-title").html(element.find('.fc-title').text());
+		     }
+		  },      
+			
 		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives' // 비영리기관라이선스
-
+		
 	});
 	
 });
@@ -394,7 +403,10 @@ table th span {
 					<!-- 점선 역 하나 추가 될 때마다 width 182px씩 증가  초기 width : 173px-->
 					<li
 						style="position: absolute; display: block; z-index: 1; top: 1147px; width:${length}px;  left: 474px; border-top: 2px dashed #696969;"></li>
-
+					<c:if test="dataCount>=6">
+						<li
+							style="position: absolute; display: block; z-index: 1; top: 1147px; width:${length2}px;  left: 474px; border-top: 2px dashed #696969;"></li>
+					</c:if>
 				</ul>
 
 			</div>

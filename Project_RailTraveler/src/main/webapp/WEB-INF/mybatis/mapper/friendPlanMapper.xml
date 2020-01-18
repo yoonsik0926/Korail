@@ -40,21 +40,24 @@
 			</if>
 		</where>
 		GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
-		order by p.planNum
+		order by p.planNum desc
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 
 	<select id="dataCount" parameterType="map" resultType="Integer">
-		select nvl(count(*),0) from plan p
-		join detailPlan d on p.planNum = d.planNum
-		join member2 m on m.userId = p.userId
-		join station s on s.staNum = d.staNum
-		<where>
-			<if test="keyword!=null and keyword!=''">
-				AND
-				<include refid="where-list" />
-			</if>
-		</where>
+		select nvl(count(*),0) from (
+			select nvl(count(*),0) from plan p
+			join detailPlan d on p.planNum = d.planNum
+			join member2 m on m.userId = p.userId
+			join station s on s.staNum = d.staNum
+			<where>
+				<if test="keyword!=null and keyword!=''">
+					AND
+					<include refid="where-list" />
+				</if>
+			</where>
+			GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		)
 	</select>
 	
 	<select id="readPlan" parameterType="Integer" resultType="com.railer.rt.plan.Plan">
@@ -134,23 +137,26 @@
 			</if>
 		</where>
 		group by p.planNum, userName, p.sDate,title, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'),  p.imageFileName
-		order by p.planNum
+		order by p.planNum desc
 		offset #{offset} rows fetch first #{rows} rows only
 	</select>
 	
 	<select id="countBookmark" parameterType="map" resultType="Integer">
-		select nvl(count(*),0) from planbookmark b
-		join plan p on p.planNum = b.planNum
-		join detailPlan d on p.planNum = d.planNum
-		join station s on d.staNum = s.staNum
-		join member2 m on m.userId = p.userId
-		<where>
-			b.userId = #{userId}
-			<if test="keyword!=null and keyword!=''">
-				AND
-				<include refid="where-list" />
-			</if>
-		</where>
+		select nvl(count(*),0) from (
+			select nvl(count(*),0) from planbookmark b
+			join plan p on p.planNum = b.planNum
+			join detailPlan d on p.planNum = d.planNum
+			join station s on d.staNum = s.staNum
+			join member2 m on m.userId = p.userId
+			<where>
+				b.userId = #{userId}
+				<if test="keyword!=null and keyword!=''">
+					AND
+					<include refid="where-list" />
+				</if>
+			</where>
+			group by p.planNum, userName, p.sDate,title, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'),  p.imageFileName
+		)
 	</select>
 	
 	<!-- 내가 작성한 플랜 -->
@@ -169,21 +175,23 @@
 			</if>
 		</where>
         GROUP BY p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
-		order by p.planNum
+		order by p.planNum desc
 	</select>
 	
 	<select id="countMyPlan" parameterType="map" resultType="Integer">
-		select nvl(count(*),0) from plan p
-		join detailPlan d on p.planNum = d.planNum
-        join member2 m on m.userId = p.userId
-		join station s on d.staNum = s.staNum
-		<where>
-			p.userId = #{userId}
-			<if test="keyword!=null and keyword!=''">
-				AND
-				<include refid="where-list" />
-			</if>
-		</where>
+		select nvl(count(*),0) from (
+			select nvl(count(*),0) from plan p
+			join detailPlan d on p.planNum = d.planNum
+	        join member2 m on m.userId = p.userId
+			join station s on d.staNum = s.staNum
+			<where>
+				p.userId = #{userId}
+				<if test="keyword!=null and keyword!=''">
+					AND
+					<include refid="where-list" />
+				</if>
+			</where>
+		)
 	</select>
 	
 </mapper>

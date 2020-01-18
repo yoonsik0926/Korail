@@ -11,7 +11,7 @@
 				
 				<div class="col-sm-6 col-md-4" style="max-width: 25%; min-height: 200px">
 					<div class="thumbnail" onclick="javascript:location.href='${articleUrl}planNum=${vo.planNum}&page=${page}'">
-						<img style="height: 200px; width: 100%;" src="${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
+						<img style="height: 200px; width: 100%;" src="<%=cp%>/uploads/plan/${vo.imageFileName}" onerror="this.src='<%=cp%>/resource/images/no-image.png'">
 						<div class="caption" style="width: 100%">
 							<div style="margin-top: 10px">
 								<table style="width:100%; margin-top:10px; table-layout: fixed;">
@@ -19,7 +19,7 @@
 										<td style="font-size: 18px; font-weight: 900; width: 80%;text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" colspan="2">${vo.title==''or vo.title==null?'제목이 없는 여행 플랜':vo.title}</td>
 									</tr>
 								</table>
-								<table style="width:100%; margin-top:10px;">
+								<table style="width:100%; margin-top:10px; table-layout: fixed">
 									<tr style="height: 30px;">
 										<td style="font-weight: 700;"><i class="fas fa-pen" style="color: #e190f1;"></i>&nbsp;작성자: </td>
 										<td style=" text-align: left;" colspan="2">${vo.writer}</td>
@@ -30,7 +30,7 @@
 									</tr>
 									<tr style="height: 30px;">
 										<td style="font-weight: 700;"><i class="fas fa-subway" style="color: #8abefa;"></i>&nbsp;경유역: </td>
-										<td style=" text-align: left;" colspan="2">${vo.staName}</td>
+										<td style="text-align: left;text-overflow:ellipsis; overflow:hidden; white-space:nowrap; " colspan="2">${vo.staName}</td>
 									</tr>
 
 								</table>
