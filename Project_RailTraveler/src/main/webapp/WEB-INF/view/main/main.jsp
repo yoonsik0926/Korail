@@ -409,27 +409,20 @@ figure.snip1132.hover img {
 		<div class="main2">
 			<div class="carousel" data-flickity='{"groupCells": true }'
 				style="height: 350px;">
+				<c:forEach var="vo" items="${fplanList}">
 				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
+					<img class="fPlan" src="<%=cp%>/uploads/plan/${vo.imageFileName}"  onerror="this.src='<%=cp%>/resource/images/empty.png'"  onclick="javascript:location.href='<%=cp%>/friendPlan/detail?planNum=${vo.planNum}'"/>
+				<div style="width: 100%;
+    padding: 10px;
+    left: 0%;
+    height: 60px;
+    bottom: 0%;
+    font-weight: bold;
+    position: absolute;
+    color: white;
+    background: #00000099;"><span style="margin: 0 auto;"> ${vo.ticketDay}일<br>${vo.title}</span></div>
 				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
-				<div class="carousel-cell">
-					<img class="fPlan" src="<%=cp%>/resource/img/friendPlan.PNG" />
-				</div>
+				</c:forEach>
 			</div>
 
 			<div style="text-align: center; margin: 30px 0;">
@@ -447,50 +440,19 @@ figure.snip1132.hover img {
 			</div>
 			
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
-				<div class="rc">
-					<figure class="snip1384">
-						<img src="<%=cp%>/resource/img/snow.jpg"/>
-						<figcaption>
-							<h3>겨울 분위기 가득 여행</h3>
-							<p>겨울 분위기를 느끼고 싶은 여러분들께 추천합니다!</p>
-							<i class="ion-ios-arrow-right"></i>
-						</figcaption>
-						<a href="#"></a>
-					</figure>
-				</div>
-				<div class="rc">
-					<figure class="snip1384">
-						<img src="<%=cp%>/resource/img/snow.jpg"/>
-						<figcaption>
-							<h3>겨울 분위기 가득 여행</h3>
-							<p>겨울 분위기를 느끼고 싶은 여러분들께 추천합니다!</p>
-							<i class="ion-ios-arrow-right"></i>
-						</figcaption>
-						<a href="#"></a>
-					</figure>
-				</div>
-				<div class="rc">
-					<figure class="snip1384">
-						<img src="<%=cp%>/resource/img/snow.jpg"/>
-						<figcaption>
-							<h3>겨울 분위기 가득 여행</h3>
-							<p>겨울 분위기를 느끼고 싶은 여러분들께 추천합니다!</p>
-							<i class="ion-ios-arrow-right"></i>
-						</figcaption>
-						<a href="#"></a>
-					</figure>
-				</div>
-				<div class="rc">
-					<figure class="snip1384">
-						<img src="<%=cp%>/resource/img/snow.jpg"/>
-						<figcaption>
-							<h3>겨울 분위기 가득 여행</h3>
-							<p>겨울 분위기를 느끼고 싶은 여러분들께 추천합니다!</p>
-							<i class="ion-ios-arrow-right"></i>
-						</figcaption>
-						<a href="#"></a>
-					</figure>
-				</div>
+				<c:forEach var="vo" items="${planList}">
+					<div class="rc">
+						<figure class="snip1384">
+							<img src="<%=cp%>/uploads/plan/${vo.imageFileName}" onclick="javascript:location.href='<%=cp%>/plan/detail?planNum=${vo.planNum}'"/>
+							<figcaption>
+								<h3>${vo.title}</h3>
+								<p>${vo.staName}</p>
+								<i class="ion-ios-arrow-right"></i>
+							</figcaption>
+							<a href="#"></a>
+						</figure>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
 
@@ -586,7 +548,7 @@ figure.snip1132.hover img {
 			<div class="notice" style="width: 46%; display: inline; float: left; margin-right: 80px;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">공지사항</button></td>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/">공지사항</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">

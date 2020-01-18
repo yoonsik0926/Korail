@@ -338,6 +338,26 @@ public class PlanServiceImpl implements PlanService {
 	}
 	
 	
+	@Override
+	public List<Plan> mainListPlan() throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.mainListPlan");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public List<Plan> mainFriendPlanList() throws Exception {
+		List<Plan> list = null;
+		try {
+			list = dao.selectList("plan.mainFriendPlanList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	
 	

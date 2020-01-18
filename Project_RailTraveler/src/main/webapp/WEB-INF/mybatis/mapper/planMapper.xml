@@ -145,7 +145,7 @@
 			and p.userId='admin'
 		</where>
 		GROUP BY p.ticketDay, p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
-		order by p.planNum
+		order by p.planNum desc
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 
@@ -314,7 +314,33 @@
 		</where>
 	</select>
 	
+	<!-- 	메인 친구와의 플랜 리스트 4개 (최신순) -->
+	<select id="mainFriendPlanList" resultType="com.railer.rt.plan.Plan">
+		select a.* from (select nvl(bmcnt,0) bmcnt, p.ticketDay, p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+			title, p.imageFileName, LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+        join member2 m on m.userId = p.userId
+		join station s on d.staNum = s.staNum
+		left outer join (select count(*) bmcnt,plannum from planbookmark group by plannum) pb on pb.plannum = p.plannum
+		GROUP BY bmcnt,p.ticketDay, p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		order by bmcnt desc, p.plannum desc)a where rownum<![CDATA[<]]>10
+	</select>
 	
+	
+	<!-- 	메인 추천코스 리스트 4개 (최신순) -->
+	<select id="mainListPlan" resultType="com.railer.rt.plan.Plan">
+		select a.* from(
+        select p.ticketDay, p.planNum, p.userId, userName writer,p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd') eDate, 
+			title, p.imageFileName, LISTAGG(staName, ',') WITHIN GROUP(ORDER BY p.planNum) staName
+		from plan p
+		join detailPlan d on p.planNum = d.planNum
+        join member2 m on m.userId = p.userId
+		join station s on d.staNum = s.staNum
+		where p.userId='admin'
+		GROUP BY p.ticketDay, p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
+		order by p.planNum)a where rownum <![CDATA[<]]>5
+	</select>
 	
 	
 </mapper>

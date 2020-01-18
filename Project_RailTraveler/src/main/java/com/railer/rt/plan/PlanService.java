@@ -33,5 +33,7 @@ public interface PlanService {
 	public int bookmarkCount(Map<String, Object> map) throws Exception;
 	
 
+	public List<Plan> mainListPlan() throws Exception;
+	public List<Plan> mainFriendPlanList() throws Exception;
 
 }

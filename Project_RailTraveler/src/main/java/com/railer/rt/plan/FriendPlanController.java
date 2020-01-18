@@ -110,7 +110,7 @@ public class FriendPlanController {
 	@RequestMapping(value="/friendPlan/detail")
 	public String detail(
 			@RequestParam int planNum,
-			@RequestParam String page,
+			@RequestParam(defaultValue="1") String page,
 			@RequestParam(defaultValue="all") String condition,
 			@RequestParam(defaultValue="") String keyword,
 			HttpServletRequest req,

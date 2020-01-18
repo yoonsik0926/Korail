@@ -36,7 +36,7 @@ public class Plan {
 	private String eTime;
 	private String price; // 예상가격
 
-	
+	private int bmcnt; 	//북마크개수
 	public int getPlanNum() {
 		return planNum;
 	}
