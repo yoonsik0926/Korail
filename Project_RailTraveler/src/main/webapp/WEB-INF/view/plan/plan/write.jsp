@@ -208,18 +208,18 @@ body::-webkit-scrollbar {
 
 .plusStation {
 	padding: 5px;
-	width: 350px;
-	height: 150px;
+	width: 400px;
+    height: 220px;
 	margin: 10px;
-	border: 1px solid black;
+/* 	border: 1px solid black; */
 	background: white;
 }
 
 .insertStaPlan {
 	width: 100%;
 	height: 30px;
-	border: 1px solid black;
-	background: #80808075;
+/* 	border: 1px solid black; */
+	background: #e0ec1e75;
 	display: block;
 	float: left;
 	margin:10px;
@@ -234,9 +234,9 @@ body::-webkit-scrollbar {
 }
 
 .staContent {
-	width:100px;
-	height:100px;
-	border:1px solid black;
+	width: 220px;
+    height: 160px;
+/* 	border:1px solid black; */
 	display:block;
 	float:left;
 	margin-right:10px;
@@ -247,9 +247,9 @@ body::-webkit-scrollbar {
 }
 
 .staName {
-	width: 200px;
-	height: 100px;
-	border: 1px solid black;
+	width: 130px;
+/*     height: 160px; */
+/* 	border: 1px solid black; */
 	display: block;
 	float: left;
 }
@@ -512,6 +512,15 @@ div.timeSelect {
 	width: 75%;
 	background-color: white;
 	background-color: rgba(255,255,255,0.5);
+}
+
+.stationInfo {
+	width: 150px;
+    height: 50px;
+    display: inline-block;
+    text-align: center;
+    font-size: 30px;
+    margin: 20 20 20 0;
 }
 </style>
 <script type="text/javascript">
@@ -1102,8 +1111,8 @@ $(function() {
 			}
 			var ob={staNum:staNum};
 			days[ilcha-1].push(ob);
-			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().text()+"' data-staNum='"+staNum+"' data-index='"+(days[ilcha-1].length-1)+"'>"
-								   +$(this).prev().text()
+			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().find("p").eq(0).text()+"' data-staNum='"+staNum+"' data-index='"+(days[ilcha-1].length-1)+"'>"
+								   +"<p class='stationInfo'>"+$(this).prev().find("p").eq(0).text()+"</p>"
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
@@ -1279,7 +1288,8 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
         $plusStation.append($staContent);
         $plusStation.append($staName);
         $($staContent).append($stationImage);
-        $($staName).append("${dto.staName}");
+        $($staName).append("<p style='width: 130px; font-size: 25px; white-space: normal; margin-top: 15px;'>${dto.staName}역</p>"
+        				  +"<p style='font-size: 16px; white-space: normal; margin-top: 15px;'>${dto.staAddress}</p>");
         $($staName).attr("data-staNum", ${dto.staNum});
 		$plusStation.append($insertStaPlan);
 		
