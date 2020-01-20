@@ -34,6 +34,7 @@
         join member2 m on m.userId = p.userId
 		join station s on d.staNum = s.staNum
 		<where>
+			p.userId != 'admin'
 			<if test="keyword!=null and keyword!=''">
 				AND
 				<include refid="where-list" />
@@ -51,6 +52,7 @@
 			join member2 m on m.userId = p.userId
 			join station s on s.staNum = d.staNum
 			<where>
+				p.userId != 'admin'
 				<if test="keyword!=null and keyword!=''">
 					AND
 					<include refid="where-list" />
