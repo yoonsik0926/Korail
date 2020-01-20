@@ -205,7 +205,7 @@
 		join tourCategory t on m.cateNum = t.cateNum
 		join (
         select name, tourNum from tour)
-        tt on tt.name = m.name
+        tt on tt.name = m.name and d.staNum=tt.staNum
         join tourfile tf on tt.tourNum = tf.tourNum
 		where p.planNum = #{planNum}
 		order by nthDay,  d.detailPlanNum
@@ -325,6 +325,7 @@
         join member2 m on m.userId = p.userId
 		join station s on d.staNum = s.staNum
 		left outer join (select count(*) bmcnt,plannum from planbookmark group by plannum) pb on pb.plannum = p.plannum
+		where p.userId!='admin'
 		GROUP BY bmcnt,p.ticketDay, p.planNum, p.userId, userName, p.sDate, to_char((to_date(p.sDate) + ticketDay),'yyyy-mm-dd'), title, p.imageFileName	
 		order by bmcnt desc, p.plannum desc)a where rownum<![CDATA[<]]>10
 	</select>
