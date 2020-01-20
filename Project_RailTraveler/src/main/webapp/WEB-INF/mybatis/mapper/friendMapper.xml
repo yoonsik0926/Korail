@@ -53,7 +53,7 @@
 	parameter Type : 없음
 	return type : Friend dto-->
 	<select id="listFriendTop" resultType="com.railer.rt.commu.friend.Friend">
-       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created
+       SELECT f.friendNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -86,7 +86,7 @@
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="listFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created, sDate, eDate, f.enable,
+      SELECT f.friendNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created, sDate, eDate, f.enable,
       		deleted, deleteId,
             NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,
            	CASE WHEN to_date(edate,'YYYY-MM-DD')&lt; to_date(to_char(sysdate,'YYYY-MM-DD'),'YYYY-MM-DD') then 1 else 0 end "validate"
@@ -118,7 +118,7 @@
 	parameter Type : 정수
 	result Type : Friend DTO-->
 	<select id="readFriend" parameterType="map"  resultType="com.railer.rt.commu.friend.Friend">
-		SELECT f.friendNum,f.userId,userName,subject,content,hitCount,f.created,sDate, eDate,f.enable, notice, NVL(fileCount,0) fileCount
+		SELECT f.friendNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created,sDate, eDate,f.enable, notice, NVL(fileCount,0) fileCount
             ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark,
            	CASE WHEN to_date(edate,'YYYY-MM-DD')&lt; to_date(to_char(sysdate,'YYYY-MM-DD'),'YYYY-MM-DD') then 1 else 0 end "validate"
       FROM friend f 
@@ -155,7 +155,7 @@
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="preReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT friendNum, subject,f.created 
+      SELECT friendNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created 
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -174,7 +174,7 @@
 	parameter Type : map
 	result Type : Friend DTO-->
 	<select id="nextReadFriend" parameterType="map" resultType="com.railer.rt.commu.friend.Friend">
-      SELECT friendNum, subject,f.created 
+      SELECT friendNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created 
       FROM friend f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -280,7 +280,7 @@
 	
 	<!-- 댓글 리스트 -->
 	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.friend.FriendReply">
-select friendReplyNum, userId, userName, friendNum, content, created, NVL(answer,0) answer, 
+select friendReplyNum, userId, userName, friendNum, content, TO_CHAR(created,'YYYY-MM-DD hh:mm:ss') created, NVL(answer,0) answer, 
 secret, NVL(answerCount, 0) answerCount, deleted, deleteId
 from(
 select friendReplyNum, fr.userId, userName, fr.friendNum, content, fr.created, fr.answer, secret, NVL(answerCount, 0) answerCount

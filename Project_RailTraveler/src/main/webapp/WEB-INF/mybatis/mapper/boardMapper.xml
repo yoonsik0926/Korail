@@ -50,7 +50,7 @@
 	parameter Type : 없음
 	return type : Board dto-->
 	<select id="listBoardTop" resultType="com.railer.rt.commu.board.Board">
-       SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created
+       SELECT f.boardNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created
       FROM board f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -83,7 +83,7 @@
 	parameter Type : map
 	result Type : Board DTO-->
 	<select id="listBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
-      SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created, deleteId,
+      SELECT f.boardNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created, deleteId,
             NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount
       FROM board f 
       JOIN member2 m2 ON f.userId=m2.userId
@@ -113,7 +113,7 @@
 	parameter Type : 정수
 	result Type : Board DTO-->
 	<select id="readBoard" parameterType="map"  resultType="com.railer.rt.commu.board.Board">
-		SELECT f.boardNum,f.userId,userName,subject,content,hitCount,f.created, NVL(fileCount,0) fileCount
+		SELECT f.boardNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created, NVL(fileCount,0) fileCount
             ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
       FROM board f 
       JOIN member2 m2 ON f.userId=m2.userId
@@ -149,7 +149,7 @@
 	parameter Type : map
 	result Type : Board DTO-->
 	<select id="preReadBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
-      SELECT boardNum, subject,f.created 
+      SELECT boardNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created 
       FROM board f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -168,7 +168,7 @@
 	parameter Type : map
 	result Type : Board DTO-->
 	<select id="nextReadBoard" parameterType="map" resultType="com.railer.rt.commu.board.Board">
-      SELECT boardNum, subject,f.created 
+      SELECT boardNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created  
       FROM board f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -273,7 +273,7 @@
 	<!-- 댓글 리스트 -->
 	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.board.BoardReply">
 
-select boardReplyNum, fr.userId, userName, fr.boardNum, content, fr.created, fr.answer,
+select boardReplyNum, fr.userId, userName, fr.boardNum, content, TO_CHAR(fr.created,'YYYY-MM-DD hh:mm:ss') created, fr.answer,
  NVL(answerCount, 0) answerCount, deleteId	from boardReply fr
 	JOIN MEMBER2 m2 on m2.userId = fr.userId
 	LEFT OUTER JOIN (

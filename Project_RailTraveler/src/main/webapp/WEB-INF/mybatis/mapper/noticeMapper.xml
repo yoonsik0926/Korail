@@ -85,7 +85,7 @@
 	parameter Type : 정수
 	result Type : Notice DTO-->
 	<select id="readNotice" parameterType="Integer"  resultType="com.railer.rt.commu.notice.Notice">
-		SELECT n.noticeNum,n.userId,userName,subject,content,hitCount,n.created, NVL(fileCount,0) fileCount
+		SELECT n.noticeNum,n.userId,userName,subject,content,hitCount,TO_CHAR(n.created,'YYYY-MM-DD hh:mm:ss') created, NVL(fileCount,0) fileCount
       FROM notice n 
       JOIN member2 m2 ON n.userId=m2.userId
       LEFT OUTER JOIN (
@@ -108,7 +108,7 @@
 	parameter Type : map
 	result Type : Notice DTO-->
 	<select id="preReadNotice" parameterType="map" resultType="com.railer.rt.commu.notice.Notice">
-      SELECT noticeNum, subject,n.created 
+      SELECT noticeNum, subject,TO_CHAR(n.created,'YYYY-MM-DD hh:mm:ss') created 
       FROM notice n 
       JOIN member2 m2 ON n.userId=m2.userId
       <where>
@@ -125,7 +125,7 @@
 	parameter Type : map
 	result Type : Notice DTO-->
 	<select id="nextReadNotice" parameterType="map" resultType="com.railer.rt.commu.notice.Notice">
-      SELECT noticeNum, subject,n.created 
+      SELECT noticeNum, subject,TO_CHAR(n.created,'YYYY-MM-DD hh:mm:ss') created
       FROM notice n 
       JOIN member2 m2 ON n.userId=m2.userId
       <where>
