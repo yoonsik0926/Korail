@@ -204,7 +204,7 @@
 		join moreDetailPlan m on d.detailPlanNum = m.detailPlanNum
 		join tourCategory t on m.cateNum = t.cateNum
 		join (
-        select name, tourNum from tour)
+        select name, tourNum, staNum from tour)
         tt on tt.name = m.name and d.staNum=tt.staNum
         join tourfile tf on tt.tourNum = tf.tourNum
 		where p.planNum = #{planNum}
