@@ -163,7 +163,7 @@ public class FriendPlanController {
 		int length = 0;
 		int length2 = 0;
 		
-		length = 173 + (182*(stationCount-3));
+		length = 173 + (182*(stationCount-2));
 		
 		if(stationCount>=6) {
 			if(stationCount%6==1) {
