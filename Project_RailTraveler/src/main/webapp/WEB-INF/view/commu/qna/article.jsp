@@ -806,13 +806,14 @@ a#MOVE_TOP_BTN {
 									</article>
 									
 									<c:if test="${not empty reArticle.files}">
-										<div style="border: 1px solid">
+										<div style="border-left: 5px double;
+    padding: 10px;">
 											<h5>첨부파일 [${reArticle.fileCount}] </h5>
 										<c:forEach var="fl" items="${reArticle.files}">
-											<ul>
-											<li><a href="<%=cp%>/qna/download?qnaFileNum=${fl.qnaFileNum}">
-						<i class="far fa-arrow-alt-circle-down"></i></a>
-						${fl.originalFilename}
+											<ul style="padding: 5px;">
+											<li style="list-style: none;"><a href="<%=cp%>/qna/download?qnaFileNum=${fl.qnaFileNum}">
+						<i class="far fa-arrow-alt-circle-down"></i>
+						${fl.originalFilename}</a>
 						(<fmt:formatNumber
 								value="${fl.fileSize/1024}" pattern="0.00" />KByte)
 						</li>

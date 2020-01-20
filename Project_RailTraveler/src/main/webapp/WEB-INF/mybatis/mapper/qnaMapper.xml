@@ -13,8 +13,9 @@
 	<!-- qna 게시물을 insert
 	parameter Type : QnaDTO-->
 	<insert id="insertQna" parameterType="com.railer.rt.commu.qna.Qna">
-		INSERT INTO qna(qnaNum, userId, subject, content, answer, category)
+	INSERT INTO qna(qnaNum, userId, subject, content, answer, category)
 		VALUES(#{qnaNum}, #{userId}, #{subject}, #{content}, #{answer, jdbcType=INTEGER},#{category, jdbcType=VARCHAR})
+
 	</insert>
 	
 	<!--qna 첨부파일을 insert
@@ -49,7 +50,7 @@
 	parameter Type : 없음
 	return type : Qna dto-->
 	<select id="listQnaTop" resultType="com.railer.rt.commu.qna.Qna">
-       SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,f.created
+       SELECT f.qnaNum,f.userId,userName,subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -124,7 +125,7 @@
          <if test="category!='all'">
             and f.category=#{category}
          </if>
-            and f.answer=0
+            and f.answer =0
          	and f.userid!='admin'
       </where>
       ORDER BY f.qnaNum DESC
@@ -135,7 +136,7 @@
 	parameter Type : map
 	result Type : Qna DTO-->
 	<select id="listReQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
-      SELECT f.qnaNum,f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,f.created, deleteId, f.answer, f.enable, f.category, categoryName,
+      SELECT f.qnaNum,j.enable, f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created, deleteId, f.answer, f.enable, f.category, categoryName,
             NVL(fileCount,0) fileCount, NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount, NVL(myBookMark,0) myBookMark 
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
@@ -159,11 +160,13 @@
          SELECT qnaNum, 1 myBookMark FROM qnaBookMark
          where userid=#{userId}
       ) fb1 On f.qnaNum=fb1.qnaNum
+      left outer join (select enable, qnaNum from qna where enable is not null)j 
+      on f.qnaNum=j.enable
       <where>
          f.answer=#{answer}
          and f.userid!='admin'
       </where>
-      ORDER BY f.qnaNum DESC
+      ORDER BY j.enable , f.qnaNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY
    </select>
 	
@@ -171,7 +174,7 @@
 	parameter Type : 정수
 	result Type : Qna DTO-->
 	<select id="readQna" parameterType="map"  resultType="com.railer.rt.commu.qna.Qna">
-		SELECT f.qnaNum,f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,f.created, f.answer, f.enable, f.category,
+		SELECT f.qnaNum,f.userId,userName, qp.subject subjectParent, f.subject,content,hitCount,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created, f.answer, f.enable, f.category,
 		 categoryName, NVL(fileCount,0) fileCount
             ,NVL(replyCount,0) replyCount, NVL(bookmarkCount,0) bookmarkCount,nvl(myBookMark,0) myBookMark
       FROM qna f 
@@ -223,7 +226,7 @@
 	parameter Type : map
 	result Type : Qna DTO-->
 	<select id="preReadQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
-      SELECT qnaNum, subject,f.created 
+      SELECT qnaNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -245,7 +248,7 @@
 	parameter Type : map
 	result Type : Qna DTO-->
 	<select id="nextReadQna" parameterType="map" resultType="com.railer.rt.commu.qna.Qna">
-      SELECT qnaNum, subject,f.created 
+      SELECT qnaNum, subject,TO_CHAR(f.created,'YYYY-MM-DD hh:mm:ss') created
       FROM qna f 
       JOIN member2 m2 ON f.userId=m2.userId
       <where>
@@ -347,7 +350,7 @@
 	
 	<!-- 댓글 리스트 -->
 	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.qna.QnaReply">
-select qnaReplyNum, fr.userId, userName, qnaNum, content, fr.created, deleteId
+select qnaReplyNum, fr.userId, userName, qnaNum, content, TO_CHAR(fr.created,'YYYY-MM-DD hh:mm:ss') created, deleteId
 from qnaReply fr
 	JOIN MEMBER2 m2 on m2.userId = fr.userId
 	WHERE fr.qnaNum=#{qnaNum}
@@ -384,7 +387,7 @@ from qnaReply fr
       SELECT a.* from (SELECT n.qnaNum,n.userId,userName,subject, n.created
       FROM qna n 
       JOIN member2 m2 ON n.userId=m2.userId
-      WHERE answer=0
+      WHERE answer =0
       ORDER BY n.qnaNum DESC)a where rownum <![CDATA[<]]> 6
    </select>
 </mapper>

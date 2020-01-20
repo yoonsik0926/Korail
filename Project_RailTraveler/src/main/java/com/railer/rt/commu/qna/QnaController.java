@@ -166,6 +166,10 @@ public class QnaController {
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		try {
 			dto.setUserId(info.getUserId());
+			System.out.println(dto.toString());
+			System.out.println(dto.toString());
+			System.out.println(dto.toString());
+			System.out.println(dto.toString());
 			service.insertQna(dto, pathname);
 		} catch (Exception e) {
 			e.printStackTrace();

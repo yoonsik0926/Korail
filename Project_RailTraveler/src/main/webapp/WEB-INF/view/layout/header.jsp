@@ -110,8 +110,7 @@ System.out.print(cp);
               <ul class="nav navbar-nav navbar-right">
                <c:if test="${not empty sessionScope.member}">
                     <li class="dropdown">
-                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown" style="FONT-SIZE: 30px;
-    FONT-FAMILY: Gungsuh,궁서;
+                      <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown" style="font: 1.5em TmonMonsori;
     COLOR: #fff;
     text-shadow: 0 0 20px #fefcc9, 10px -10px 30px #feec85, -20px -20px 40px #ffae34, 20px -40px 50px #ec760c, -20px -60px 60px #cd4606, 0 -80px 70px #973716, 10px -90px 80px #451b0e;
                       ">${sessionScope.member.userName}<b class="caret"></b></a>

@@ -272,9 +272,7 @@
 	
 	<!-- 댓글 리스트 -->
 	<select id="listReply" parameterType="map" resultType="com.railer.rt.commu.board.BoardReply">
-select boardReplyNum, userId, userName, boardNum, content, created, NVL(answer,0) answer, 
-NVL(answerCount, 0) answerCount, deleteId
-from(
+
 select boardReplyNum, fr.userId, userName, fr.boardNum, content, fr.created, fr.answer,
  NVL(answerCount, 0) answerCount, deleteId	from boardReply fr
 	JOIN MEMBER2 m2 on m2.userId = fr.userId
@@ -283,9 +281,7 @@ select boardReplyNum, fr.userId, userName, fr.boardNum, content, fr.created, fr.
 			FROM boardReply WHERE  answer!=0 GROUP BY  answer
 		) a ON fr.boardReplyNum = a.answer
 	WHERE fr.boardNum=#{boardNum}
-   	ORDER BY boardReplyNum DESC) 
-  	START WITH answer =0
-	CONNECT BY PRIOR boardReplyNum =answer
+   	ORDER BY boardReplyNum DESC
  	OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 	
