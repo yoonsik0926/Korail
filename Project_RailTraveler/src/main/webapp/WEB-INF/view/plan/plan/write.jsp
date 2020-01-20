@@ -978,7 +978,8 @@ $(document).ready(function() {
 							        	<input class="inputThing resultSearchingTour" name="name" autocomplete="off" readonly="readonly" placeholder="이름">
 							        	<button type="button" class="btn findDetail" data-toggle="modal" data-target="#searchDetail" data-backdrop="static">검색하기<i class="fas fa-search"></i></button>							     	
 							        </div>
-							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" alt="" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;">
+							        <img id="tourImage" onerror="this.src='<%=cp%>/resource/images/no-image.png'" style="display: block; width: 80%; height: 300px; margin-top=10px;">
+<!-- 							      	<input class="inputThing" type="image" name="imageFileName" placeholder="장소사진" alt="" autocomplete="off" readonly="readonly" style="display: block; width: 80%; height: 300px;"> -->
 							        <input class="inputThing" type="tel" name="tel" placeholder="전화번호" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="text" name="address" placeholder="주소" autocomplete="off" readonly="readonly" style="display: block;">
 							      	<input class="inputThing" type="hidden" name="tourNum" placeholder="투어넘" autocomplete="off" readonly="readonly" style="display: block;">
@@ -992,7 +993,7 @@ $(document).ready(function() {
 							     </div>
 							      	<div class="modal-footer selectTime" style="float: left;">
 							      		<button type="button" class="btn btn-default" onclick="saveDetail();">저장</button>
-							        	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+							        	<button type="button" class="btn btn-default closeModal" data-dismiss="modal">닫기</button>
 							      	</div>
 							      </div>
 							     
@@ -1150,7 +1151,7 @@ $(function() {
 			
 			for(var i in days[ilcha-1][index].detailList) {
 				$(".mdList").append('<li>'
-								   +	'<input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index].detailList[i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'">'
+								   +	'<input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+days[ilcha-1][index].detailList[i].name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index+'" data-mdNum="'+i+'" data-toggle="modal" data-target="#selectTime">'
 								   +	'<button type="button" class="btn btn-default mdplanDelete" style="height:80px;">삭제</button>'
 								   +'</li>'
 								   );
@@ -1166,16 +1167,6 @@ $(function() {
 	});
 });
 
-$(function() {
-	$("body").on('click', ".times", function() {
-		/* if($(this).attr('class').indexOf('chosenTime')==-1) {
-			$(this).addClass("chosenTime");
-		} else {
-			$(this).removeClass("chosenTime");
-		} */
-	});
-});
-
 
 $("#endNow").change(function() {
 	var sTime=$("#startNow option:selected").val();
@@ -1186,61 +1177,8 @@ $("#endNow").change(function() {
 		alert("종료시간은 시작시간보다 빠를 수 없습니다.");
 		return false;
 	}
-	
-	if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(0)").index()) {
-		for(var i=sTime; i<=eTime; i++) {
-			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenFirst");
-			var coloredTime=$("[class*='chosen']").text().trim().split(" ");	
-		}
-	
-	} else if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(1)").index()) {
-		for(var i=sTime; i<=eTime; i++) {
-			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenSecond");
-			var coloredTime=$("[class*='chosen']").text().trim().split(" ");
-			
-// 			for(var j=0; j<coloredTime.length; j++) {	
-// 				if(coloredTime[j]=i) {
-// 					alert("다른역의 시간과 중복됩니다!");
-// 					return false;
-// 				}
-// 			}
-			
-		}
-		
-		
-	} else if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(2)").index()) {
-		for(var i=sTime; i<=eTime; i++) {
-			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenThird");
-		}
-	} else if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(3)").index()) {
-		for(var i=sTime; i<=eTime; i++) {
-			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenFourth");
-		}
-	} else if($("[class*='ddiring']").parent().index()==$(".pickedStation:eq(4)").index()) {
-		for(var i=sTime; i<=eTime; i++) {
-			$(".times[data-time='"+i+"']").attr("class","times "+i+" chosenFifth");
-		}
-	}
-	
-	
-	
-	console.log($("[class*='chosen']").text().trim().split(" "));
-	
-	
-// 	for(var j=0; j<coloredTime.length; j++) {
-// 		if(coloredTime==(coloredTime[j])) {
-// 			alert("다른역의 시간과 중복됩니다!");
-// 			return false;
-// 		}
-// 	}
-	
-// 	if($(".times").attr("class")) {
-// 		alert("시간이 겹치지않게 설정해주세요.");
-// 		return;
-// 	}
-	
-	
 });
+
 var markers = [];
 var customOverlays =[];
 
@@ -1284,6 +1222,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
         var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/${dto.imageFilename}" "width=800px, height=800px">');
         var $staName=$('<div class="staName" />')
 		var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
+        
 		
         $plusStation.append($close);
         $plusStation.append($staContent);
@@ -1291,7 +1230,7 @@ geocoder.addressSearch('${dto.staAddress}', function(result, status) {
         $($staContent).append($stationImage);
         $($staName).append("<p style='width: 130px; font-size: 25px; white-space: normal; margin-top: 15px;'>${dto.staName}역</p>"
         				  +"<p style='font-size: 16px; white-space: normal; margin-top: 15px;'>${dto.staAddress}</p>");
-        $($staName).attr("data-staNum", ${dto.staNum});
+        $($staName).attr("data-staNum", '${dto.staNum}');
 		$plusStation.append($insertStaPlan);
 		
         $close.append($span);
@@ -1343,11 +1282,12 @@ function drawMap(searchList) {
 	removeCustomOverlay();
 	
 	searchList.forEach(function(element){
-// 		console.log(searchList[i]);
+		console.log(searchList);
 		var add = element.staAddress;
 		var staName = element.staName;
 		var staNum = element.staNum;
 		var imgf = element.imageFilename;
+		console.log(add+":"+staName+":"+staNum+":"+imgf);
 		geocoder.addressSearch(add, function(result, status) {
 
 		    // 정상적으로 검색이 완료됐으면 
@@ -1369,10 +1309,10 @@ function drawMap(searchList) {
 		        	customOverlay.setMap(null);
 		        };
 		        var $plusStation=$('<div class="plusStation" />');
-		        var $close=$('<button type="button" onclick="close(this);" class="close" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
+		        var $close=$('<button type="button" onclick="close(this);" class="close" id="closeOverlay" aria-label="Close" style="font-size:30px;" />').click(closeOverlay);
 		        var $span=$('<span aria-hidden="true">&times;</span>');
 		        var $staContent=$('<div class="staContent" />');
-		        var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/'+imgf+'" width=800px, height=800px>');
+		        var $stationImage=$('<img id="imgControll" name="imgControll" onclick="fnImgPop(this.src)" src="<%=cp%>/resource/images/station/'+imgf+'" "width=800px, height=800px">');
 		        var $staName=$('<div class="staName" />')
 				var $insertStaPlan=$('<div class="insertStaPlan">추가하기</div>');
 				
@@ -1380,12 +1320,15 @@ function drawMap(searchList) {
 		        $plusStation.append($staContent);
 		        $plusStation.append($staName);
 		        $($staContent).append($stationImage);
-		        $($staName).append(staName);
-		        $($staName).attr("data-staNum", staNum);
+		        $($staName).append("<p style='width: 130px; font-size: 25px; white-space: normal; margin-top: 15px;'>"+staName+"역</p>"
+      				  			  +"<p style='font-size: 16px; white-space: normal; margin-top: 15px;'>"+add+"</p>");
+      			$($staName).attr("data-staNum", staNum);
 				$plusStation.append($insertStaPlan);
 				
 		        $close.append($span);
 		        
+		        console.log('${dto.staNum}');
+		        console.log('${dto.staName}');
 		        var content=$plusStation[0];
 		        
 		        var customOverlay = new kakao.maps.CustomOverlay({
@@ -1403,14 +1346,13 @@ function drawMap(searchList) {
 					    map.panTo(pos);
 					    
 		         	$('.plusStation').parent().css('margin', '-200px 0px 0px -185px');
-		         	$('.plusStation').parent().show();
+// 		         	$('.plusStation').parent().show();
 		         	
-					});
+				});
 		        markers.push(marker);
 		        customOverlays.push(customOverlay);
 		    }
 		});
-		
 	});
 }
 
@@ -1420,19 +1362,18 @@ $(function() {
 		var name=$(this).text();
 		var tel=$(this).next().text();
 		var address=$(this).next().next().text();
-		var cateNum=$("select[name='cateNum']").val();
-		var tourNum=$(".insertTourSearch").attr("data-tourNum");
-		var imageFileName=$(".insertTourSearch").attr("data-imageFileName");
+		var cateNum=$("select[id='tourCategory']").val();
+		var tourNum=$(this).attr("data-tourNum");
+		var imageFileName=$(this).attr("data-imageFileName");
 		
-		console.log(name+":"+tel+":"+address+":"+cateNum+":"+tourNum+":"+imageFileName);
+// 		console.log(name+":"+tel+":"+address+":"+cateNum+":"+tourNum+":"+imageFileName);
 		
 		$("input[name='name']").val(name);
 		$("input[name='tel']").val(tel);
 		$("input[name='address']").val(address);
 		$("input[name='cateNum']").val(cateNum);
 		$("input[name='tourNum']").val(tourNum);
-		$("input[name='imageFileName']").attr("src", imageFileName);
-		
+		$("#tourImage").attr("src", imageFileName);
 		
 		$(".closePlease").click();
 	});
@@ -1485,20 +1426,26 @@ function saveDetail() {
 	var mdNum=days[ilcha-1][index2].detailList.length-1;
 	$(".mdList").append('<li>'
 					   +	'<div>'
-					   +  		'<input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index2+'" data-mdNum="'+mdNum+'">'
+					   +  		'<input class="inputThing moreDetail" readonly="readonly" style="cursor:pointer" value="'+md.name+'" data-days="'+ilcha+'" data-staNum="'+staNum+'" data-index="'+index2+'" data-mdNum="'+mdNum+'" data-toggle="modal" data-target="#selectTime">'
 					   +  		'<button type="button" class="btn btn-default mdplanDelete" style="height:80px;">삭제</button>'
 					   +	'</div>'
 					   +'</li>'
 					   );
+	
+	// 저장과 동시에 모달창에 입력되있는 정보들은 초기화
+// 	for(var i=0; i<10; i++) {
+// 		$("form[name='detailPlanForm']")[i].reset();
+// 	}
+	document.detailPlanForm.reset();
+	$("#tourImage").attr("src", "");
 	
 }
 
 // mdList에서 세부계획 클릭시 수정하는 모달로 이동
 $(function() {
 	$("body").on("click", ".inputThing.moreDetail", function() {
-		alert("들어감");
-		console.log($("input[id='img_upload']").val());
-		console.log($("input[name='title']").val());
+// 		alert("들어감");
+// 		$(this).attr("data-target='#selectTime'");
 	});
 });
 
@@ -1539,7 +1486,7 @@ $(function() {
 		var index=$("div[class*='ddiring']").parent().attr("data-index"); // 일차에 추가된 역의 인덱스
 		var dpIndex=$(this).prev().attr("data-index"); // 세부계획 인덱스
 		
-		$(this).parent().parent().remove(); // 추가된 세부계획 틀 삭제
+		$(this).parent().empty(); // 추가된 세부계획 틀 삭제
 		
 		days[ilcha-1][index].detailList.splice(dpIndex,1); // 추가된 세부계획 내용을 배열에서 삭제
 		
@@ -1547,6 +1494,17 @@ $(function() {
 	});
 });
 
+// 세부계획 모달창 닫기 클릭시 모달창 내용 초기화
+// $(function() {
+// 	$("body").on("click", ".closeModal", function() {
+// 		for(var i=0; i<10; i++) {
+// 			$("form[name='detailPlanForm']")[i].reset();
+// 		}
+// 		$("textarea[name='memo']").reset();
+// 		$("input[name='imageFileName']").attr('src',"");
+// 		alert("리셋 성공");
+// 	});
+// });
 
 // 대표 이미지 삽입 후 미리보기 창에 띄워주기
 function readURL(input) {
@@ -1566,20 +1524,20 @@ $("#img_upload").change(function(){
 
 
 // 검색창에서 검색한 장소가 바뀔때마다 사진 바꿔주기
-function readURL2(input) {
-	if (input.files && input.files[0]) {
-		var reader = new FileReader();
+// function readURL2(input) {
+// 	if (input.files && input.files[0]) {
+// 		var reader = new FileReader();
 	  
-	  	reader.onload = function(e) {
-			$("input[name='imageFileName']").attr('src', e.target.result);  
-	  	}
+// 	  	reader.onload = function(e) {
+// 			$("#tourImage").attr('src', e.target.result);  
+// 	  	}
 	  
-	reader.readAsDataURL(input.files[0]);
-	}
-}
-$("input[name='imageFileName']").change(function(){
-	readURL2(this);
-});
+// 	reader.readAsDataURL(input.files[0]);
+// 	}
+// }
+// $("input[name='imageFileName']").change(function(){
+// 	readURL2(this);
+// });
 </script>
 </body>
 </html>
