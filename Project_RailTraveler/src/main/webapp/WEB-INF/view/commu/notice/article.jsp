@@ -572,7 +572,7 @@ a {
 <div class="body-content-container">
 	<div class="page-three-title mt40">
 		<h3 class="fs26">
-			<span style="padding: 10px 0px; display: block;">자유게시판</span>
+			<span style="padding: 10px 0px; display: block;">공지게시판</span>
 		</h3>
 	</div>
 

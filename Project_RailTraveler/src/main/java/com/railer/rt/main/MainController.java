@@ -2,7 +2,9 @@ package com.railer.rt.main;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import com.railer.rt.commu.notice.Notice;
 import com.railer.rt.commu.notice.NoticeService;
 import com.railer.rt.commu.qna.Qna;
 import com.railer.rt.commu.qna.QnaService;
+import com.railer.rt.event.Event;
+import com.railer.rt.event.EventServiceImpl;
 import com.railer.rt.plan.Plan;
 import com.railer.rt.plan.PlanService;
 
@@ -33,6 +37,8 @@ public class MainController {
 	private QnaService qnaService;
 	@Autowired
 	private FriendService friendService;
+	@Autowired
+	private EventServiceImpl eventService;
 	@RequestMapping(value="/main", method=RequestMethod.GET)
 	public String method(Model model) {
 		
@@ -127,12 +133,29 @@ public class MainController {
 			e.printStackTrace();
 		}
 		
+		
+		
+        Map<String, Object> map = new HashMap<String, Object>();
+		map.put("offset", 0);
+		map.put("rows", 1);
+
+        List<Event> eventList = null;
+		try {
+			eventList = eventService.listMainEvent(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		model.addAttribute("planList",planList);
 		model.addAttribute("fplanList",fplanList);
 		model.addAttribute("noticeList",noticeList);
 		model.addAttribute("boardList",boardList);
 		model.addAttribute("qnaList",qnaList);
 		model.addAttribute("friendList",friendList);
+		model.addAttribute("eventList",eventList);
 		return ".mainLayout";
 	}
 }

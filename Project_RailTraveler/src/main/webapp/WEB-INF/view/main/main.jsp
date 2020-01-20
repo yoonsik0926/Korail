@@ -561,10 +561,10 @@ figure.snip1132.hover img {
 		 		 </tr>
 		 		 <c:forEach var="vo" items="${noticeList}">
 		 		 <tr align="center">
-		 		 	<td>${vo.subject}
+		 		 	<td><a style="color: #666; " href="<%=cp%>/notice/article?noticeNum=${vo.noticeNum}">${vo.subject}
 		 		 	<c:if test="${vo.gap<1}">
 						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
-		 		 	</td>
+		 		 	</a></td>
 		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
 		 		 	<td>${vo.created}</td>
 		 		 </tr>
@@ -586,10 +586,10 @@ figure.snip1132.hover img {
 		 		 </tr>
 		 		 <c:forEach var="vo" items="${qnaList}">
 		 		 <tr align="center">
-		 		 	<td>${vo.subject}
+		 		 	<td><a style="color: #666; " href="<%=cp%>/qna/article?qnaNum=${vo.qnaNum}">${vo.subject}
 		 		 	<c:if test="${vo.gap<1}">
 						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
-		 		 	</td>
+		 		 	</a></td>
 		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
 		 		 	<td>${vo.created}</td>
 		 		 </tr>
@@ -615,10 +615,10 @@ figure.snip1132.hover img {
 		 		 </tr>
 		 		 <c:forEach var="vo" items="${boardList}">
 		 		 <tr align="center">
-		 		 	<td>${vo.subject}
+		 		 	<td><a style="color: #666; " href="<%=cp%>/board/article?boardNum=${vo.boardNum}">${vo.subject}
 		 		 	<c:if test="${vo.gap<1}">
 						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
-		 		 	</td>
+		 		 	</a></td>
 		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
 		 		 	<td>${vo.created}</td>
 		 		 </tr>
@@ -640,10 +640,10 @@ figure.snip1132.hover img {
 		 		 </tr>
 		 		 <c:forEach var="vo" items="${friendList}">
 		 		 <tr align="center">
-		 		 	<td>${vo.subject}
+		 		 	<td><a style="color: #666; " href="<%=cp%>/friend/article?friendNum=${vo.friendNum}">${vo.subject}
 		 		 	<c:if test="${vo.gap<1}">
 						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
-		 		 	</td>
+		 		 	</a></td>
 		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
 		 		 	<td>${vo.created}</td>
 		 		 </tr>
@@ -665,22 +665,11 @@ figure.snip1132.hover img {
 			
 			<div class="carousel" data-flickity='{"groupCells": true }'
 				style="height: 350px;">
+				 <c:forEach var="vo" items="${eventList}">
 				<div class="carousel-cell2">
-					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
+					<img class="event" src="<%=cp%>/uploads/event/${vo.imageFilename}"  onerror="this.src='<%=cp%>/resource/images/empty.png'"  onclick="javascript:location.href='<%=cp%>/event/article?mode=0&eventNum=${vo.eventNum}'" />
 				</div>
-				<div class="carousel-cell2">
-					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
-				</div>
-				<div class="carousel-cell2">
-					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
-				</div>
-				<div class="carousel-cell2">
-					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
-				</div>
-				<div class="carousel-cell2">
-					<img class="event" src="https://i.pinimg.com/originals/3b/e3/08/3be30875f940cbb48a74e5ff6581bbfa.jpg" />
-				</div>
-
+				</c:forEach>
 
 		</div>
 		</div>

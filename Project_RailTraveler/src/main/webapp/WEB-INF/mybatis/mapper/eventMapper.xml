@@ -242,5 +242,13 @@
 		SELECT NVL(COUNT(*), 0)
 		FROM eventReply WHERE answer = #{answer}
 	</select>
+	
+	<select id="listMainevent" parameterType="map" resultType="com.railer.rt.event.Event">
+	select a.* from (SELECT eventNum, name, content, sDate, eDate, imageFilename 
+	 from event
+	 		WHERE TO_DATE(eDate, 'YYYY-MM-DD') &gt;= SYSDATE	
+		 )a where rownum <![CDATA[<]]> 8
+	 		ORDER BY eventNum DESC	
+	 </select>
 			
 </mapper>

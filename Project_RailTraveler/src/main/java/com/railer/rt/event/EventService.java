@@ -25,5 +25,6 @@ public interface EventService {
 	public int replyAnswerCount(int answer);
 	
 	
+	public List<Event> listMainEvent(Map<String, Object> map);
 	
 } 

@@ -159,7 +159,7 @@ public class NoticeController {
 	
 	@RequestMapping(value="/notice/article", method=RequestMethod.GET)
 	public String article(@RequestParam int noticeNum,
-            @RequestParam String page,
+            @RequestParam(defaultValue="1") String page,
             @RequestParam(defaultValue="all") String condition,
             @RequestParam(defaultValue="") String keyword,
             @CookieValue(defaultValue="0") int cnum,

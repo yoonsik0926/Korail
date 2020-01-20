@@ -239,4 +239,18 @@ public class EventServiceImpl implements EventService {
 		}
 		return result;
 	}
+	
+	@Override
+	public List<Event> listMainEvent(Map<String, Object> map) {
+		List<Event> list=null;
+		
+		try{
+			list=dao.selectList("event.listMainevent", map);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
 }
