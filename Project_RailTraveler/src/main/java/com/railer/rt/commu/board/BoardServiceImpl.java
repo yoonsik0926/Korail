@@ -318,4 +318,15 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return list;
 	}
+	
+	@Override
+	public List<Board> listMainBoard() {
+		List<Board> list = null;
+		try {
+			list = dao.selectList("board.listMainBoard");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

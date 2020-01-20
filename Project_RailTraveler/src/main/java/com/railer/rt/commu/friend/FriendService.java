@@ -34,4 +34,7 @@ public interface FriendService {
 	public int replyCount(Map<String, Object> map) throws Exception;
 	public List<FriendReply> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;
+	
+
+	public List<Friend> listMainFriend();
 }

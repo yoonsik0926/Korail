@@ -20,4 +20,6 @@ public interface NoticeService {
 	public List<Notice> listFile(int num);
 	public Notice readFile(int fileNum);
 	public void deleteFile(Map<String, Object> map) throws Exception;
+	
+	public List<Notice> listMainNotice();
 }

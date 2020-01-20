@@ -308,4 +308,11 @@ select boardReplyNum, fr.userId, userName, fr.boardNum, content, fr.created, fr.
 			boardReplyNum = #{boardReplyNum}
 		</if>
 	</delete>
+	
+	<select id="listMainBoard" resultType="com.railer.rt.commu.board.Board">
+      SELECT a.* from (SELECT n.boardNum,n.userId,userName,subject, n.created
+      FROM board n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      ORDER BY n.boardNum DESC)a where rownum <![CDATA[<]]> 6
+   </select>
 </mapper>

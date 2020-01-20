@@ -38,4 +38,6 @@ public interface QnaService {
 	public List<QnaReply> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;
 	void updateEnable(Map<String, Object> map) throws Exception;
+	
+	public List<Qna> listMainQna();
 }

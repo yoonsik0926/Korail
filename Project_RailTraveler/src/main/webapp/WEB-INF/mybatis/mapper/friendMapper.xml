@@ -316,4 +316,12 @@ CONNECT BY PRIOR friendReplyNum =   answer
 			friendReplyNum = #{friendReplyNum}
 		</if>
 	</delete>
+	<select id="listMainFriend" resultType="com.railer.rt.commu.friend.Friend">
+      SELECT a.* from (SELECT n.friendNum,n.userId,userName,subject, n.created
+      FROM friend n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      ORDER BY n.friendNum DESC)a where rownum <![CDATA[<]]> 6
+   </select>
+	
+	
 </mapper>

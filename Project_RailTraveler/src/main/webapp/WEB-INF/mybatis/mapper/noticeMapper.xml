@@ -175,4 +175,11 @@
 	<delete id="deleteFile" parameterType="map">
 		DELETE FROM noticeFile WHERE ${field}=#{num}
 	</delete>
+	
+	<select id="listMainNotice" resultType="com.railer.rt.commu.notice.Notice">
+      SELECT a.* from (SELECT n.noticeNum,n.userId,userName,subject, n.created
+      FROM notice n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      ORDER BY n.noticeNum DESC)a where rownum <![CDATA[<]]> 6
+   </select>
 </mapper>

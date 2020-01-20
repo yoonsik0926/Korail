@@ -328,4 +328,16 @@ public class FriendServiceImpl implements FriendService {
 		}
 		return list;
 	}
+	
+	@Override
+	public List<Friend> listMainFriend() {
+		List<Friend> list = null;
+		try {
+			list = dao.selectList("friend.listMainFriend");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

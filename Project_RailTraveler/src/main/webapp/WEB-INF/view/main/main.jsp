@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
 %>
@@ -431,7 +432,7 @@ figure.snip1132.hover img {
 					플래너 시작</button>
 			</div>
 		</div>
-
+	
 		<div class="main3" style="margin-top: 100px;">
 			<div class="page-three-title mt40">
 				<h4 class="fs26">
@@ -441,7 +442,7 @@ figure.snip1132.hover img {
 			
 			<div style="display: inline-block; width: 100%; margin: 0 10px;">
 				<c:forEach var="vo" items="${planList}">
-					<div class="rc">
+					<div class="rc" onclick="javascript:location.href='<%=cp%>/plan/detail?planNum=${vo.planNum}';">
 						<figure class="snip1384">
 							<img src="<%=cp%>/uploads/plan/${vo.imageFileName}" onclick="javascript:location.href='<%=cp%>/plan/detail?planNum=${vo.planNum}'"/>
 							<figcaption>
@@ -548,104 +549,51 @@ figure.snip1132.hover img {
 			<div class="notice" style="width: 46%; display: inline; float: left; margin-right: 80px;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/">공지사항</button></td>
+		 			<td style="border-right: 2px solid #cccccc;">
+		 			<button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/notice/notice'">공지사항</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
 		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
-			      <td width="60">번호</td>
 			      <td >제목</td>
 			      <td width="100">작성자</td>
 			      <td width="100">작성일</td>
-			      <td width="60">조회수</td>
 		 		 </tr>
+		 		 <c:forEach var="vo" items="${noticeList}">
 		 		 <tr align="center">
-		 		 	<td>1</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
+		 		 	<td>${vo.subject}
+		 		 	<c:if test="${vo.gap<1}">
+						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
+		 		 	</td>
+		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
+		 		 	<td>${vo.created}</td>
 		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>2</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>3</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>4</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>5</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
+		 		 </c:forEach>
 			</table>
 			</div>
 			
 			<div class="qna" style="width: 46%; display: inline; float: left;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">묻고 답하기</button></td>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/qna/qna'">묻고 답하기</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
 		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
-			      <td width="60">번호</td>
 			      <td >제목</td>
 			      <td width="100">작성자</td>
 			      <td width="100">작성일</td>
-			      <td width="60">조회수</td>
 		 		 </tr>
+		 		 <c:forEach var="vo" items="${qnaList}">
 		 		 <tr align="center">
-		 		 	<td>1</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
+		 		 	<td>${vo.subject}
+		 		 	<c:if test="${vo.gap<1}">
+						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
+		 		 	</td>
+		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
+		 		 	<td>${vo.created}</td>
 		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>2</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>3</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>4</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>5</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
+		 		 </c:forEach>
 			</table>
 			</div>
 			
@@ -656,104 +604,50 @@ figure.snip1132.hover img {
 			<div class="board" style="width: 46%; display: inline; float: left; margin-right: 80px;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">자유 게시판</button></td>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/board/board'">자유 게시판</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
 		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
-			      <td width="60">번호</td>
 			      <td >제목</td>
 			      <td width="100">작성자</td>
 			      <td width="100">작성일</td>
-			      <td width="60">조회수</td>
 		 		 </tr>
+		 		 <c:forEach var="vo" items="${boardList}">
 		 		 <tr align="center">
-		 		 	<td>1</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
+		 		 	<td>${vo.subject}
+		 		 	<c:if test="${vo.gap<1}">
+						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
+		 		 	</td>
+		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
+		 		 	<td>${vo.created}</td>
 		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>2</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>3</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>4</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>5</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
+		 		 </c:forEach>
 			</table>
 			</div>
 			
 			<div class="friend" style="width: 46%; display: inline; float: left;">
 			<table style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse; border:2px solid #cccccc; border-bottom: none; ">
 				<tr>
-		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="#">동행 구하기</button></td>
+		 			<td style="border-right: 2px solid #cccccc;"><button class="commu" type="button" onclick="javascript:location.href='<%=cp%>/qna/qna'">동행 구하기</button></td>
 		 		</tr>
 			</table>
  			<table class="table table-striped" style="margin-left: 10px; border-spacing: 0px; border-collapse: collapse;">
 		 		<tr align="center" bgcolor="#eeeeee" height="35" style="font-weight:800; border-top: 2px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
-			      <td width="60">번호</td>
 			      <td >제목</td>
 			      <td width="100">작성자</td>
 			      <td width="100">작성일</td>
-			      <td width="60">조회수</td>
 		 		 </tr>
+		 		 <c:forEach var="vo" items="${friendList}">
 		 		 <tr align="center">
-		 		 	<td>1</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
+		 		 	<td>${vo.subject}
+		 		 	<c:if test="${vo.gap<1}">
+						<img alt="" src="<%=cp%>/resource/images/commu/new1.png" style="width: 17px;"> </c:if>
+		 		 	</td>
+		 		 	<td>(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)</td>
+		 		 	<td>${vo.created}</td>
 		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>2</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>3</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>4</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
-		 		 <tr align="center">
-		 		 	<td>5</td>
-		 		 	<td>제목입니다</td>
-		 		 	<td>이유진</td>
-		 		 	<td>2019-12-11</td>
-		 		 	<td>1</td>
-		 		 </tr>
+		 		 </c:forEach>
 			</table>
 			</div>
 			

@@ -358,4 +358,15 @@ public class QnaServiceImpl implements QnaService {
 			throw e;
 		}
 	}
+	
+	@Override
+	public List<Qna> listMainQna() {
+		List<Qna> list = null;
+		try {
+			list = dao.selectList("qna.listMainQna");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

@@ -379,4 +379,12 @@ from qnaReply fr
 	<update id="updateEnable" parameterType="map">
 		update Qna set enable=#{enable} WHERE qnaNum=#{qnaNum}
 	</update>
+	
+	<select id="listMainQna" resultType="com.railer.rt.commu.qna.Qna">
+      SELECT a.* from (SELECT n.qnaNum,n.userId,userName,subject, n.created
+      FROM qna n 
+      JOIN member2 m2 ON n.userId=m2.userId
+      WHERE answer=0
+      ORDER BY n.qnaNum DESC)a where rownum <![CDATA[<]]> 6
+   </select>
 </mapper>
