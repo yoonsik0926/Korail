@@ -102,7 +102,9 @@
 		JOIN tourFile tf ON t.tourNum=tf.tourNum
 		<where>
 		detailcateNum=#{detailcateNum} AND staNum=#{staNum}
-		AND INSTR(name, #{keyword}) &gt; 0
+		<if test="keyword!='' and keyword!=null">
+			AND INSTR(name, #{keyword}) &gt; 0
+		</if>
 		</where>
       ORDER BY tourNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY

@@ -643,42 +643,42 @@ function getNumber(day) {
 								+"<ul class='planListDetail"+i+" leftThing' data-day='"+i+"'></ul>"
 								);
 		
-		$(".planListDetail"+i).sortable({
-			placeholder:"movingEnd",
-			start: function(event,ui) {
-				startIndex=ui.item.index();
-				console.log(startIndex);
-			},
-			update: function(event, ui) {
-		    	var day = ui.item.parent().attr("data-day");
-		    	var temp = new Array();
-		    	temp[day-1] = new Array();
+// 		$(".planListDetail"+i).sortable({
+// 			placeholder:"movingEnd",
+// 			start: function(event,ui) {
+// 				startIndex=ui.item.index();
+// 				console.log(startIndex);
+// 			},
+// 			update: function(event, ui) {
+// 		    	var day = ui.item.parent().attr("data-day");
+// 		    	var temp = new Array();
+// 		    	temp[day-1] = new Array();
 		    	
-		    	ui.item.parent().find("li").each(function(index){
-// 		    		var orindex = $(this).attr("data-index");
-		    		oriStaNum = $(this).attr("data-staNum");
-		    		var oob={oriStaNum:oriStaNum};
-		    		temp[day-1].push(oob);
-		    		temp[day-1][index].detailList = new Array();
-		    		temp[day-1][index].oriStaNum = days[day-1][startIndex].oriStaNum;
-		    		temp[day-1][index].detailList = days[day-1][startIndex].detailList.slice();
+// 		    	ui.item.parent().find("li").each(function(index){
+// // 		    		var orindex = $(this).attr("data-index");
+// 		    		oriStaNum = $(this).attr("data-staNum");
+// 		    		var oob={oriStaNum:oriStaNum};
+// 		    		temp[day-1].push(oob);
+// 		    		temp[day-1][index].detailList = new Array();
+// 		    		temp[day-1][index].oriStaNum = days[day-1][startIndex].oriStaNum;
+// 		    		temp[day-1][index].detailList = days[day-1][startIndex].detailList.slice();
 		    		
-		    		$(this).attr("data-index",index);
-		    		$(this).attr("data-staNum",oriStaNum);
-		    	});
-		    	days.length=0;
-		    	days=JSON.parse(JSON.stringify(temp));
-				console.log(days);
-		    }
-		});
+// 		    		$(this).attr("data-index",index);
+// 		    		$(this).attr("data-staNum",oriStaNum);
+// 		    	});
+// 		    	days.length=0;
+// 		    	days=JSON.parse(JSON.stringify(temp));
+// 				console.log(days);
+// 		    }
+// 		});
 		
-		$(".planListDetail"+i).droppable({
-			out: function(event, ui){
-				ab=days.splice(startIndex);
-				console.log(ab);
-				console.log
-			}
-		});
+// 		$(".planListDetail"+i).droppable({
+// 			out: function(event, ui){
+// 				ab=days.splice(startIndex);
+// 				console.log(ab);
+// 				console.log
+// 			}
+// 		});
 		
 	}
 
@@ -786,12 +786,13 @@ $(function(){
 // 세부계획 모달에서 장소 검색
 function findTourThing(page){
 	
+	var cateNum=$("#tourCategory").val();
 	var detailcateNum=$("#detailTourCategory").val();
 	var tourKeyword=$("input[name='tourKeyword']").val();
 	var staNum=$(".ddiring").parent().attr("data-staNum");
 		
 	var url="<%=cp%>/plan/searchPlace";
-	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum};
+	var query={"detailcateNum":detailcateNum, "keyword":tourKeyword, "page":page, "staNum":staNum, "cateNum":cateNum};
 	console.log(query);
 	var fn=function(data) {
 		$("#listTour").empty();

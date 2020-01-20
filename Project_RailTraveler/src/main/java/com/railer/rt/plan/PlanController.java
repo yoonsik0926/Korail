@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -110,15 +109,18 @@ public class PlanController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		Map<String, Object> model1 = new HashMap<>();
 		model1.put("planNum", planNum);
 		return model1;
+		
 	}
 	
 	// 세부계획 모달에서 장소 검색
 	@RequestMapping(value="/plan/searchPlace")
 	@ResponseBody
 	public Map<String, Object> searchPlace(@RequestParam(value="page", defaultValue="1") int current_page,
+										   @RequestParam int cateNum,
 										   @RequestParam int detailcateNum,
 										   @RequestParam int staNum,
 										   @RequestParam String keyword,
@@ -139,6 +141,7 @@ public class PlanController {
 		map.put("staNum", staNum);
 		map.put("detailcateNum", detailcateNum);
 		map.put("keyword", keyword);
+		map.put("cateNum", cateNum);
 		
 		dataCount=service.placeDataCount(map);
 		if(dataCount!=0) {
@@ -193,7 +196,7 @@ public class PlanController {
 		}
     	
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
-		if(info.getUserId()=="admin")
+		if(info.getUserId().equals("admin"))
 			return "redirect:/plan/recommand";
 		else
 			return "redirect:/friendPlan/planlist";
