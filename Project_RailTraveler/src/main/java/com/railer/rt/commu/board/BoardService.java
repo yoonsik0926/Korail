@@ -16,6 +16,7 @@ public interface BoardService {
 	
 	public void updateBoard(Board dto, String pathname) throws Exception;
 	public void deleteBoard(Map<String, Object> map, String pathname) throws Exception;
+	public void deleteBoardAD(Map<String, Object> map, String pathname) throws Exception;
 	
 	public void insertFile(Board dto) throws Exception;
 	public List<Board> listFile(int num);
@@ -23,6 +24,7 @@ public interface BoardService {
 	public void deleteFile(Map<String, Object> map) throws Exception;
 
 	public void insertBoardBookmark(Map<String, Object> paramMap) throws Exception;
+	public List<Board> listBoardBookmark(int num);
 	public void deleteBoardBookmark(Map<String, Object> map) throws Exception;
 	public int bookmarkCount(int friendNum) throws Exception ;
 	

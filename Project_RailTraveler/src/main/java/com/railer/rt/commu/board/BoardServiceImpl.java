@@ -183,6 +183,32 @@ public class BoardServiceImpl implements BoardService {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void deleteBoardAD(Map<String, Object> datamap, String pathname) throws Exception {
+		try {
+			String snum = String.valueOf(datamap.get("boardNum"));
+			int num = Integer.parseInt(snum);
+			// 파일 지우기
+			List<Board> list = listFile(num);
+			if (list != null) {
+				for (Board dto : list) {
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+			}
+			// 파일 테이블지우기
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("field", "boardNum");
+			map.put("num", num);
+			deleteFile(map);
+			
+			// 게시물지우기
+			dao.deleteData("board.deleteBoardAD", datamap);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 원래 안빼고 위의 insertBoard에서 가능...
@@ -237,6 +263,17 @@ public class BoardServiceImpl implements BoardService {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	@Override
+	public List<Board> listBoardBookmark(int num) {
+		List<Board> list = null;
+		try {
+			list = dao.selectList("board.listBoardBookmark", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	@Override

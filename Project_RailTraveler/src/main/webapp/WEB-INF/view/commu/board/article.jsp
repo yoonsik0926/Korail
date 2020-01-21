@@ -825,6 +825,22 @@ a {
 .cmlist li.reply {
     padding-left: 29px;
 }
+
+#main-area .m-tcol-c {
+    color: #666;
+    word-wrap: break-word;
+}
+
+.box-reply3 .tit {
+    margin: 12px 0 8px;
+    padding: 0;
+    font-size: 12px;
+}
+ul, ol, dl, li, dd, dt, p, form, div {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 </style>
 
 <!--Modal: 신고 모달-->
@@ -1193,8 +1209,8 @@ a {
 									<td id=><a href="#"
 										class="b m-tcol-c like like_lst_btn " id="likeItMemberBtn" style="top: -3px;
     color: tomato;
-    position: relative;">좋아요<i
-											class="fas fa-caret-down" style="margin: 5px;"></i></a>
+    position: relative;" onclick="bookmarkList('${dto.boardNum}');">좋아요<i
+											class="fas fa-caret-down" style="margin: 5px;" id="likeIt"></i></a>
 										<div class="u_likeit_list_module _reactionModule"
 											style="visibility: visible;">
 											<a href="#" class="u_likeit_list_btn _button off btnSendBoardLike"
@@ -1216,20 +1232,7 @@ a {
 							<tbody>
 								<tr>
 									<td>
-										<div id="spiButton" data-style="type_c" class="naver-splugin"
-											data-url="https://cafe.naver.com/ite/653777"
-											data-title="답변이 어떻게 달리는지 확인 하는 게시물" data-likeserviceid="CAFE"
-											data-likecontentsid="11672934_ite_653777"
-											data-option="{textClass: 'm-tcol-c', align: 'right', onLoginRedirect: parent.openLoginLayer}"
-											data-cafe-source-type="111"
-											data-cafe-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
-											data-blog-source-type="111"
-											data-blog-source-title="답변이 어떻게 달리는지 확인 하는 게시물"
-											data-blog-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=blog"
-											data-cafe-proxy-url="https://cafe.naver.com/CafeScrapContent.nhn?clubid=11672934&amp;articleid=653777&amp;type=cafe"
-											data-me-display="off"
-											data-oninitialize="splugin_oninitialize();"
-											splugin-id="2779035978"></div>
+										<div id="spiButton" data-style="type_c" class="naver-splugin"></div>
 									</td>
 									<td><i class="far fa-share-square btnSendBoardLike"
 										onclick="snsShare();"
@@ -1246,7 +1249,18 @@ a {
 				</div>
 
 
-
+				<div>
+					<div id="likeItMemberArea" class="box-reply3 bg-color" style="display: block;    padding: 11px 24px 27px 24px;background-color: #f9f9f9;">
+	<div id="likeItMemberList" class="like_area" style="display: block;">
+		<h3 class="tit m-tcol-c">이 글에 좋아요한 멤버</h3>
+		<div class="filter-30 board-box-line-dashed"></div>
+		<ul id="memberList" class="like_list"><li class="">홍길동</li></ul>
+		<div class="board-box-line-dashed"></div>
+	</div>
+	<div id="likeItEmptyList" class="like_empty" style="display: none;">이 글에 좋아요한 멤버가 없습니다. 가장먼저 좋아요를 눌러보세요.</div>
+</div>
+				
+				</div>
 
 
 				<div class="box-reply2 bg-color u_cbox" id="eNvhT"
@@ -1254,9 +1268,7 @@ a {
 					<!-- 댓글 리스트  -->
 						<div id="listReply"></div>
 
-
-
-<div style="padding-top: 20px;">
+			<div style="padding-top: 20px;" id="replyForm">
 					<table class="cminput" style="width: 100%;">
 						<tbody>
 							<tr>
@@ -1429,6 +1441,44 @@ a {
 
 			location.href=url;
 		}
+	function bookmarkList(boardNum) {
 		
+	}
+	function listBookMark() {
+		var url = "'<%=cp%>/board/listBoardBookmark'";
+		var query = "'boardNum=${dto.boardNum}'";
+		var fn = function (data) {
+			var list = data.bookmarkList;
+			for (var i = 0; i < list.length; i++) {
+				console.log(data);
+				console.log(data);
+				console.log(data);
+				console.log(data);
+				console.log(data);
+				console.log(data);
+			}
+		};
 		
+		ajaxJSON(url, "get", query, selector);
+	}	
+
+// 	box-reply2
+// 	replyForm
+	function displayReplyForm(num){
+		var cs = "#likeItMemberArea";
+		
+		var $cs = $(cs);
+			if($(cs).is(":visible")){
+				$(".box-reply2").css("display","block");
+				$("#replyForm").css("display","block");
+				$(cs).css("display","none");
+			}else{
+				$(".box-reply2").css("display","none");
+				$("#replyForm").css("display","none");
+				$(cs).css("display","block");
+			}
+			
+
+			ajaxJSON(url, "get", query, fn);
+	};
 </script>

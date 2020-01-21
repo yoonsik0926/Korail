@@ -2,6 +2,7 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String cp = request.getContextPath();
 %>
@@ -189,7 +190,8 @@ text-decoration: underline;
 							
 							기간 : ${dto.sDate}  ~  ${dto.eDate}</span>
 						</td>
-						<td>${dto.userName}</td>
+						<td><c:out value="${fn:substring(dto.userName, 0, fn:length(dto.userName) - 1)}" />**
+														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)</td>
 						<td>${dto.created}</td>
 						<td>${dto.hitCount}</td>
 						</c:if>

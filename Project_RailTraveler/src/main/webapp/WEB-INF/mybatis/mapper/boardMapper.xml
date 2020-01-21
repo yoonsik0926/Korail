@@ -215,6 +215,13 @@
 		update board set deleteID=#{userId} WHERE boardNum=#{boardNum}
 	</update>
 	
+	<!--
+	parameter Type : 정수
+	result Type : board DTO-->
+	<delete id="deleteBoardAD" parameterType="map">
+		DELETE FROM board  WHERE boardNum=#{boardNum}
+	</delete>
+	
 	<!--동행게시판 게시물의 파일 삭제 (게시물 수정)
 	parameter Type : map-->
 	<delete id="deleteFile" parameterType="map">
@@ -227,6 +234,10 @@
 		INSERT INTO boardBookmark(boardNum, userId)
 		VALUES(#{boardNum}, #{userId})
 	</insert>
+	
+	<select id="listBoardBookmark" parameterType="Integer" resultType="com.railer.rt.commu.board.Board"> 
+		select boardNum, userId from BoardBookmark where boardNum=#{boardNum};
+	</select>
 	
 	<!-- 동행게시판 게시물을 delete
 	parameter Type : BoardDTO-->

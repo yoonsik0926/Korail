@@ -520,7 +520,10 @@ public class BoardController {
 				map.put("userId", info.getUserId());
 				map.put("boardNum", boardNum);
 				
-				service.deleteBoard(map, pathname);
+				if(info.getUserId().equals("admin"))
+					service.deleteBoardAD(map, pathname);
+				else 
+					service.deleteBoard(map, pathname);
 				
 				return "redirect:/board/board?"+query;
 			}
@@ -617,6 +620,24 @@ public class BoardController {
 					model.put("state", "false");
 				}
 				
+				return model;
+			}
+			
+			@RequestMapping(value="/board/listBoardBookmark", method=RequestMethod.POST)
+			@ResponseBody
+			public Map<String, Object> listBoardBookmark(
+					@RequestParam int boardNum,
+					HttpServletResponse resp,
+					HttpSession session) throws Exception {
+				Map<String, Object> model = new HashMap<>(); 
+				List<Board> list=null;
+				try {
+					// 좋아요 리스트 
+					list = service.listBoardBookmark(boardNum);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				model.put("bookmarkList", list);
 				return model;
 			}
 }

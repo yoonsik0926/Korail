@@ -1107,9 +1107,7 @@ a {
 													<td class="pc2w"><img alt=""
 														src="<%=cp%>/resource/images/commu/profileImg.png"
 														width="30"></td>
-													<td class="p-nick"><a href="#" class="m-tcol-c b"
-														onclick="ui(event, 'rufl95',3,'겨링','11672934','me', 'false', 'true', 'ite', 'false', '3'); return false;">${dto.userName}
-														
+													<td class="p-nick"><a href="#" class="m-tcol-c b"><c:out value="${fn:substring(dto.userName, 0, fn:length(dto.userName) - 1)}" />**
 														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)</a></td>
 												</tr>
 											</tbody>
