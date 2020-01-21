@@ -27,22 +27,37 @@
 		<intercept-url pattern="/" access="permitAll"/>
 		<intercept-url pattern="/index.jsp" access="permitAll"/>
 		<intercept-url pattern="/main" access="permitAll"/>
-		<intercept-url pattern="/plan/**" access="permitAll"/>
+		
+		<intercept-url pattern="/naeillo/**" access="permitAll"/>
+		<intercept-url pattern="/station/**" access="permitAll"/>
+		
+		<intercept-url pattern="/tour/**" access="permitAll"/>
+		
 		<intercept-url pattern="/board/**" access="permitAll"/>
 		<intercept-url pattern="/notice/**" access="permitAll"/>
 		<intercept-url pattern="/qna/**" access="permitAll"/>
 		<intercept-url pattern="/friend/**" access="permitAll"/>
-		<intercept-url pattern="/tour/**" access="permitAll"/>
-		<intercept-url pattern="/mail/**" access="permitAll"/>
+		
+		<intercept-url pattern="/plan/**" access="permitAll"/>
+		<intercept-url pattern="/friendPlan/**" access="permitAll"/>
+		
+		<intercept-url pattern="/event/**" access="permitAll"/>
+		
+		<intercept-url pattern="/bookmark/**" access="permitAll"/>
 		<intercept-url pattern="/ticket/**" access="permitAll"/>
-		<intercept-url pattern="/tour/**" access="permitAll"/>
-		<intercept-url pattern="/member/*" access="permitAll"/>
+		<intercept-url pattern="/stamp/**" access="permitAll"/>
+		<intercept-url pattern="/bbs/**" access="permitAll"/>
+		
+		
 		<intercept-url pattern="/resource/**" access="permitAll"/>
 		<intercept-url pattern="/uploads/**" access="permitAll"/>
 		
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/singo/singo" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/member/totalList" access="hasRole('ROLE_ADMIN')"/>
+		
+		<intercept-url pattern="/member/*" access="permitAll"/>
+		<intercept-url pattern="/mail/**" access="permitAll"/>
 		
 		
 		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>

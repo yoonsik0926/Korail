@@ -42,8 +42,8 @@
 															</div></td>
 													<td class="p-nick"><a href="#" 
 														class="m-tcol-c _rosRestrict _nickUI" style="font-size: 12px;
-    font-weight: 600;"><c:out value="${fn:substring(dto.userName, 0, fn:length(dto.userName) - 1)}" />**
-														(<c:out value="${fn:substring(dto.userId, 0, fn:length(dto.userId) - 3)}" />***)
+    font-weight: 600;"><c:out value="${fn:substring(vo.userName, 0, fn:length(vo.userName) - 1)}" />*
+														(<c:out value="${fn:substring(vo.userId, 0, fn:length(vo.userId) - 3)}" />***)
 										
 														</a>
 														<c:if test="${writer==vo.userId}">
