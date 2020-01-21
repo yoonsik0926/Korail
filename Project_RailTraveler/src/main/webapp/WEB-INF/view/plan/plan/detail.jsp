@@ -391,7 +391,7 @@ table th span {
 
                <!-- 점선 역 하나 추가 될 때마다 width 182px씩 증가  초기 width : 173px-->
                <li
-                  style="position: absolute; display: block; z-index: 1; top: 1147px; width:${length}px;  left: 474px; border-top: 2px dashed #696969;"></li>
+                  style="position: absolute; display: block; z-index: 1; top: 1202px; width:${length}px;  left: 474px; border-top: 2px dashed #696969;"></li>
    <li style="clear: both;"></li>
             </ul>
 
