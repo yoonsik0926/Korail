@@ -323,7 +323,7 @@ public class PlanController {
 		int foodPrice = service.calPrice(map);
 		map.remove("cateName");
 		
-		map.put("cateName", "숙소");
+		map.put("cateName", "숙박");
 		int hotelPrice = service.calPrice(map);
 		map.remove("cateName");
 		
