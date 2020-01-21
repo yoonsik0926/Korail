@@ -133,7 +133,7 @@ text-decoration: underline;
 				<tr class="lbo_li lbo_legend lbo_legend_like">
 					<th width="75" style="padding-left: 1.5%;">번호</th>
 					<th><span style="padding-left: 10px;">제목</span></th>
-					<th width="120"><span>작성자</span></th>
+					<th width="100"><span>작성자</span></th>
 					<th width="100"><span>작성일</span></th>
 					<th width="80"><span>조회수</span></th>
 				</tr>

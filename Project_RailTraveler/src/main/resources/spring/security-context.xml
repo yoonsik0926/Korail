@@ -36,14 +36,15 @@
 		<intercept-url pattern="/mail/**" access="permitAll"/>
 		<intercept-url pattern="/ticket/**" access="permitAll"/>
 		<intercept-url pattern="/tour/**" access="permitAll"/>
-		<intercept-url pattern="/member/login" access="permitAll"/>
-		<intercept-url pattern="/member/member" access="permitAll"/>
-		<intercept-url pattern="/member/userIdCheck" access="permitAll"/>
-		<intercept-url pattern="/member/complete" access="permitAll"/>
-		
+		<intercept-url pattern="/member/*" access="permitAll"/>
 		<intercept-url pattern="/resource/**" access="permitAll"/>
+		<intercept-url pattern="/uploads/**" access="permitAll"/>
 		
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/singo/singo" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/member/totalList" access="hasRole('ROLE_ADMIN')"/>
+		
+		
 		<intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
 		
 		<form-login
