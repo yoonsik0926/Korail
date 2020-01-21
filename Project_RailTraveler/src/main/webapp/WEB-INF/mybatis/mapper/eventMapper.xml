@@ -176,10 +176,10 @@
 	
 	<!-- 슬라이드 조회순 보여주기 -->
 	<select id="rankEvent" parameterType="map" resultType="com.railer.rt.event.Event">
- 		SELECT hitCount, imageFilename
+ 		SELECT eventNum, hitCount, imageFilename
 			FROM
 			 (
-			  SELECT hitCount, imageFilename
+			  SELECT eventNum, hitCount, imageFilename
 			  FROM event
 			  ORDER BY hitCount DESC
 			 )
