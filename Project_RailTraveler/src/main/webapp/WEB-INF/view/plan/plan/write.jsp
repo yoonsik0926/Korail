@@ -1114,7 +1114,7 @@ $(function() {
 			var ob={staNum:staNum};
 			days[ilcha-1].push(ob);
 			$(ilchaFullname).append("<li class='pickedStation' data-staName='"+$(this).prev().find("p").eq(0).text()+"' data-staNum='"+staNum+"' data-index='"+(days[ilcha-1].length-1)+"'>"
-								   +"<p class='stationInfo'>"+$(this).prev().find("p").eq(0).text()+"</p>"
+								   +	"<p class='stationInfo'>"+$(this).prev().find("p").eq(0).text()+"</p>"
 								   +	"<div class='pickedStationDetail"+staNum+" plusWriting'><i class='fas fa-plus-circle'></i></div>"
 								   +"</li>"
 								   );
@@ -1127,6 +1127,33 @@ $(function() {
 	});
 });
 
+// 일차에 추가된 역 클릭시 삭제여부를 묻고 예를 누르면 삭제
+$(function() {
+	$("body").on("click", ".stationInfo", function() {
+		console.log(days);
+		if(! confirm("추가한 역을 지우시겠습니까?")) {
+			return false;
+		}
+		var index=$(this).parent().parent().attr("class").substring(14,15)-1; // days 첫번째 index
+		var staNum=$(this).parent().attr("data-staNum"); // 역 번호
+		var thisIndex=$(this).parent().attr("data-index"); // 클릭한 녀석의 index
+		var indexLength=$(this).parent().parent().find('li').length; // 삭제하고자 하는 녀석이 속한 일차에 추가된 역의 개수
+		
+		days[index].splice(thisIndex,1); // 배열에서 값 삭제
+		
+		$(this).parent().remove(); // 삭제
+		
+// 		console.log(index+":"+staNum+":"+thisIndex);
+// 		console.log(days);
+// 		console.log(indexLength);
+		
+		// 삭제 후 안에서 for문을 돌려서 index 값을 다시 정렬시키는 과정
+		for(var i=0; i<indexLength-1; i++) {
+			$(".activeGreen").next().find("li").eq(i).attr("data-index",i);
+		}
+		console.log(days);
+	});
+});
 // 세부계획 디테일 모달
 $(function() {
 	$("body").on('click', ".plusWriting", function() {
