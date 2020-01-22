@@ -188,13 +188,15 @@ $(function() {
     	todayHighlight: true,
     	showMonthAfterYear: true,
     	changeYear: true //콤보박스에서 년 선택 가능
-    	,changeMonth: true //콤보박스에서 월 선택 가능      
+    	,changeMonth: true //콤보박스에서 월 선택 가능
+    	,yearRange: "-50:+0"
+    	,defaultDate: '2000-01-01'
     	
         
     });                    
     
 
-    $('[data-toggle="datepicker"]').datepicker('setDate', '-19Y');           
+    $('[data-toggle="datepicker"]').datepicker('setDate', '-50Y');           
 });
 
 </script>
