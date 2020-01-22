@@ -89,7 +89,7 @@
 		SELECT NVL(COUNT(*),0)
 		FROM qna f
 		JOIN member2 m2 ON f.userId=m2.userId 
-		where f.answer=#{qnaNum}
+		where f.answer=#{qnaNum} and deleteId is null
 	</select>
 	
 	<!--해당 범위 안의 동행게시판 게시물을 가져오는, 해당 페이지의 동행게시판 게시물 리스트
@@ -164,7 +164,7 @@
       on f.qnaNum=j.enable
       <where>
          f.answer=#{answer}
-         and f.userid!='admin'
+         and f.userid!='admin' and deleteId is null
       </where>
       ORDER BY j.enable , f.qnaNum DESC
       OFFSET #{offset} ROWS fETCH FIRST #{rows} ROWS ONLY

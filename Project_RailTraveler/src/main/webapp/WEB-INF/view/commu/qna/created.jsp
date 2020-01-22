@@ -179,7 +179,7 @@ input[type=text], input[type=file] {
   				 	</td>
 				</tr>
 				</c:if>
-				<c:if test="${sessionScope.member.userId=='admin' and mode!='reArticle' and mode!='reArticleUpdate'}">
+				<c:if test="${mode!='reArticle' and mode!='reArticleUpdate'}">
 					<tr class="tb-row">
 						<td width="100" class="tb-title">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 						<td class="tb-content"><input type="text" name="subject"
