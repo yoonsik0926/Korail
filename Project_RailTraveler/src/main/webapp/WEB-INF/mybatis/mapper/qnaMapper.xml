@@ -195,8 +195,8 @@
          GROUP BY qnaNum
       ) fb On f.qnaNum=fb.qnaNum
       LEFT OUTER JOIN (
-        SELECT qnaNum, 1 myBookMark FROM qnaBookMark
-         where userId=#{userId} 
+        SELECT qnaNum,1 myBookMark FROM qnaBookMark
+         where userId=#{userId}  and qnaNum=#{qnaNum}
       ) fb1 On f.qnaNum=fb1.qnaNum
        JOIN category ct ON ct.category=f.category
       where

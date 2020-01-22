@@ -964,7 +964,7 @@ ul, ol, dl, li, dd, dt, p, form, div {
 					<div class="form-control-line">
 						<input type="text" id="sns_copy_url"
 							class="_sns_copy_url form-control"
-							value="https://hiconnectpeople.com/30/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&amp;bmode=view&amp;idx=2828226&amp;t=board"
+							value="https://"
 							readonly="readonly">
 						<button type="button"
 							class="_sns_copy_btn sns_copy_btn btn btn-default"
@@ -1249,18 +1249,18 @@ ul, ol, dl, li, dd, dt, p, form, div {
 				</div>
 
 
-				<div>
-					<div id="likeItMemberArea" class="box-reply3 bg-color" style="display: block;    padding: 11px 24px 27px 24px;background-color: #f9f9f9;">
-	<div id="likeItMemberList" class="like_area" style="display: block;">
-		<h3 class="tit m-tcol-c">이 글에 좋아요한 멤버</h3>
-		<div class="filter-30 board-box-line-dashed"></div>
-		<ul id="memberList" class="like_list"><li class="">홍길동</li></ul>
-		<div class="board-box-line-dashed"></div>
-	</div>
-	<div id="likeItEmptyList" class="like_empty" style="display: none;">이 글에 좋아요한 멤버가 없습니다. 가장먼저 좋아요를 눌러보세요.</div>
-</div>
+<!-- 				<div> -->
+<!-- 					<div id="likeItMemberArea" class="box-reply3 bg-color" style="display: block;    padding: 11px 24px 27px 24px;background-color: #f9f9f9;"> -->
+<!-- 	<div id="likeItMemberList" class="like_area" style="display: block;"> -->
+<!-- 		<h3 class="tit m-tcol-c">이 글에 좋아요한 멤버</h3> -->
+<!-- 		<div class="filter-30 board-box-line-dashed"></div> -->
+<!-- 		<ul id="memberList" class="like_list"><li class="">홍길동</li></ul> -->
+<!-- 		<div class="board-box-line-dashed"></div> -->
+<!-- 	</div> -->
+<!-- 	<div id="likeItEmptyList" class="like_empty" style="display: none;">이 글에 좋아요한 멤버가 없습니다. 가장먼저 좋아요를 눌러보세요.</div> -->
+<!-- </div> -->
 				
-				</div>
+<!-- 				</div> -->
 
 
 				<div class="box-reply2 bg-color u_cbox" id="eNvhT"

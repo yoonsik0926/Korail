@@ -397,7 +397,7 @@ figure.snip1132.hover img {
 		$(this).removeClass("hover");
 	});
 </script>
-
+<body class="">
 	<div class="container tim-container"
 		style="max-width: 1200px; padding-top: 100px">
 		<div class="main1">

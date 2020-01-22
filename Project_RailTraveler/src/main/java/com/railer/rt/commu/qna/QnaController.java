@@ -264,7 +264,7 @@ public class QnaController {
 		readMap.put("qnaNum", qnaNum);
 		
 		Qna dto = service.readQna(readMap);
-
+		
 		if (dto == null) {
 			return "redirect:/qna/qna?" + query;
 		}
