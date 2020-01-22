@@ -346,7 +346,7 @@ $(function(){
 				</tr>
 				<tr>
 				   	<td style='padding:5px 5px 0px;'>
-						<textarea class='boxTA' style='width:99%; height: 70px;'></textarea>
+						<textarea class='boxTA' style='width:100%; height: 70px;'></textarea>
 				    </td>
 				</tr>
 				<tr>

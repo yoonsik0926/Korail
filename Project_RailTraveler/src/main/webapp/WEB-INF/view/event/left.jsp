@@ -33,5 +33,5 @@ $(function(){
 <div class="list-group">
     <a href="<%=cp%>/event/current" class="list-group-item" >진행중인 이벤트</a>
     <a href="<%=cp%>/event/last" class="list-group-item" >지난 이벤트</a>
-    <a href="<%=cp%>/event/announce" class="list-group-item" >당첨자 발표</a>
+    
 </div> 
