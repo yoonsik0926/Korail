@@ -89,19 +89,25 @@ public class QnaController {
 				Date endDate = new Date();
 				long gap;	// 최근 게시물 표시
 				int listNum, n = 0;
-				for (Qna dto : list) {
-					listNum = dataCount - (offset + n);
-					dto.setListNum(listNum);
-
-					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Date beginDate = formatter.parse(dto.getCreated());
-					// 날짜 차이 (시간)
-					gap = (endDate.getTime() - beginDate.getTime()) / (60 * 60 * 1000);
-					dto.setGap(gap);
-					dto.setCreated(dto.getCreated().substring(0, 10));
-					n++;
-				} 
 				
+				try {
+					for (Qna dto : list) {
+						listNum = dataCount - (offset + n);
+						dto.setListNum(listNum);
+
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Date beginDate = formatter.parse(dto.getCreated());
+						// 날짜 차이 (시간)
+						gap = (endDate.getTime() - beginDate.getTime()) / (60 * 60 * 1000);
+						dto.setGap(gap);
+						dto.setCreated(dto.getCreated().substring(0, 10));
+						n++;
+					} 
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+				try {
 				//공지사항 맥이기
 				for (Qna dto : noticeList) {
 
@@ -113,7 +119,9 @@ public class QnaController {
 					dto.setCreated(dto.getCreated().substring(0, 10));
 				}
 				
-
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
 				String query = "";
 				String listUrl;
 				String articleUrl;

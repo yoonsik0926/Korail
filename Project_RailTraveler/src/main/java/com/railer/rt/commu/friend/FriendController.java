@@ -95,6 +95,7 @@ public class FriendController {
 		Date endDate = new Date();
 		long gap;	// 최근 게시물 표시
 		int listNum, n = 0;
+		try {
 		for (Friend dto : list) {
 			listNum = dataCount - (offset + n);
 			dto.setListNum(listNum);
@@ -106,8 +107,11 @@ public class FriendController {
 			dto.setGap(gap);
 			dto.setCreated(dto.getCreated().substring(0, 10));
 			n++;
-		} 
+		} }catch (Exception e) {
+			// TODO: handle exception
+		}
 		
+		try {
 		for (Friend dto : noticeList) {
 
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -116,6 +120,8 @@ public class FriendController {
 			gap = (endDate.getTime() - beginDate.getTime()) / (60 * 60 * 1000);
 			dto.setGap(gap);
 			dto.setCreated(dto.getCreated().substring(0, 10));
+		}}catch (Exception e) {
+			// TODO: handle exception
 		}
 		
 

@@ -91,6 +91,7 @@ public class BoardController {
 				Date endDate = new Date();
 				long gap;	// 최근 게시물 표시
 				int listNum, n = 0;
+				try {
 				for (Board dto : list) {
 					listNum = dataCount - (offset + n);
 					dto.setListNum(listNum);
@@ -102,8 +103,11 @@ public class BoardController {
 					dto.setGap(gap);
 					dto.setCreated(dto.getCreated().substring(0, 10));
 					n++;
-				} 
+				} }catch (Exception e) {
+					// TODO: handle exception
+				}
 				
+				try {
 				//공지사항 맥이기
 				for (Board dto : noticeList) {
 
@@ -113,6 +117,8 @@ public class BoardController {
 					gap = (endDate.getTime() - beginDate.getTime()) / (60 * 60 * 1000);
 					dto.setGap(gap);
 					dto.setCreated(dto.getCreated().substring(0, 10));
+				}}catch (Exception e) {
+					// TODO: handle exception
 				}
 				
 

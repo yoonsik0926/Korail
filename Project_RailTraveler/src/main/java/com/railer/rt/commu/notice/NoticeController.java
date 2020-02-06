@@ -90,6 +90,7 @@ public class NoticeController {
 		Date endDate = new Date();
 		long gap;
 		int listNum, n = 0;
+		try {
 		for (Notice dto : list) {
 			listNum = dataCount - (offset + n);
 			dto.setListNum(listNum);
@@ -102,7 +103,9 @@ public class NoticeController {
 			dto.setCreated(dto.getCreated().substring(0, 10));
 			n++;
 		}
-
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 		String query = "";
 		String listUrl;
 		String articleUrl;
